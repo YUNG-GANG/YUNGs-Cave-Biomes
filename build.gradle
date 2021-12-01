@@ -19,15 +19,15 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	mappings minecraft.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// ClothConfig
-//	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}"
+	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}"
 
 	// ModMenu
-//	modImplementation ("com.terraformersmc:modmenu:${project.mod_menu_version}") { transitive = false }
+	modImplementation ("com.terraformersmc:modmenu:${project.mod_menu_version}") { transitive = false }
 
 	// YUNG's API - required dependency
 //	modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${project.yungs_api_version}"
@@ -44,6 +44,7 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
 	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
 	it.options.release = 17
+	it.options.encoding = "UTF-8"
 }
 
 java {
