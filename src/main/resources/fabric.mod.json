@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes"
+    ],
+    "client": [
+      "com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesClient"
     ]
   },
   "mixins": [

@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModConfig;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
@@ -15,5 +16,6 @@ public class YungsCaveBiomes implements ModInitializer {
 		// See any of my mods (esp. more recent ones) to see how I typically split up mod init classes.
 		// Feel free to modify this structure or use one that you are more comfortable with.
 		YCBModConfig.init();
+		YCBModBlocks.init();
 	}
 }
