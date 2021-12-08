@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.FrostLilyBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.IcicleBlock;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -23,10 +24,21 @@ public class YCBModBlocks {
         .strength(0.5f)
         .dynamicShape());
 
+    public static final Block FROST_LILY = new FrostLilyBlock(FabricBlockSettings
+            .of(Material.ICE, MaterialColor.ICE)
+            .noOcclusion()
+            .dynamicShape()
+            .instabreak()
+            .sound(SoundType.GLASS));
+
     public static void init() {
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"), ICICLE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "frost_lily"), FROST_LILY);
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"),
                 new BlockItem(ICICLE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "frost_lily"),
+                new BlockItem(FROST_LILY, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
     }
 }

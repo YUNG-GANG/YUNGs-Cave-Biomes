@@ -6,5 +6,6 @@ import net.minecraft.client.renderer.RenderType;
 public class YCBModClient {
     public static void init() {
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.ICICLE, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.FROST_LILY, RenderType.cutout());
     }
 }

@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:block/coral_fan",
+	"textures": {
+		"fan": "yungscavebiomes:block/frost_lily"
+	}
+}
