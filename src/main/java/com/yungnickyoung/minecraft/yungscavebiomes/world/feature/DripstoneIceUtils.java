@@ -80,10 +80,6 @@ public class DripstoneIceUtils {
         if (isDripstoneBase(levelAccessor.getBlockState(blockPos.relative(direction.getOpposite())))) {
             BlockPos.MutableBlockPos mutableBlockPos = blockPos.mutable();
             buildBaseToTipColumn(direction, i, bl, blockState -> {
-                if (blockState.is(YCBModBlocks.ICICLE)) {
-                    blockState = blockState.setValue(PointedDripstoneBlock.WATERLOGGED, Boolean.valueOf(levelAccessor.isWaterAt(mutableBlockPos)));
-                }
-
                 levelAccessor.setBlock(mutableBlockPos, blockState, 2);
                 mutableBlockPos.move(direction);
             });
@@ -93,7 +89,7 @@ public class DripstoneIceUtils {
     protected static boolean placeDripstoneBlockIfPossible(LevelAccessor levelAccessor, BlockPos blockPos) {
         BlockState blockState = levelAccessor.getBlockState(blockPos);
         if (blockState.is(BlockTags.DRIPSTONE_REPLACEABLE)) {
-            levelAccessor.setBlock(blockPos, Blocks.ICE.defaultBlockState(), 2);
+            levelAccessor.setBlock(blockPos, Blocks.PACKED_ICE.defaultBlockState(), 2);
             return true;
         } else {
             return false;
@@ -109,7 +105,7 @@ public class DripstoneIceUtils {
     }
 
     public static boolean isDripstoneBase(BlockState blockState) {
-        return blockState.is(Blocks.ICE) || blockState.is(BlockTags.DRIPSTONE_REPLACEABLE);
+        return blockState.is(Blocks.PACKED_ICE) || blockState.is(BlockTags.DRIPSTONE_REPLACEABLE);
     }
 
     public static boolean isEmptyOrWater(BlockState blockState) {

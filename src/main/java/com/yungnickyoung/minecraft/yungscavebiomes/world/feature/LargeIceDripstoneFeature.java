@@ -161,7 +161,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeDripstoneConfiguratio
                                 BlockPos blockPos = windOffsetter.offset(mutableBlockPos);
                                 if (DripstoneIceUtils.isEmptyOrWaterOrLava(worldGenLevel, blockPos)) {
                                     bl = true;
-                                    Block block = Blocks.ICE;
+                                    Block block = Blocks.PACKED_ICE;
                                     worldGenLevel.setBlock(blockPos, block.defaultBlockState(), 2);
                                 } else if (bl && worldGenLevel.getBlockState(blockPos).is(BlockTags.BASE_STONE_OVERWORLD)) {
                                     break;
