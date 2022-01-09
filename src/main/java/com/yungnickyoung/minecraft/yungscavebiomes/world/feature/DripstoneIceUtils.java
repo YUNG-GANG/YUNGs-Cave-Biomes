@@ -49,6 +49,9 @@ public class DripstoneIceUtils {
         }
     }
 
+    protected static boolean isEmpty(LevelAccessor levelAccessor, BlockPos blockPos) {
+        return levelAccessor.isStateAtPosition(blockPos, BlockState::isAir);
+    }
     protected static boolean isEmptyOrWater(LevelAccessor levelAccessor, BlockPos blockPos) {
         return levelAccessor.isStateAtPosition(blockPos, DripstoneIceUtils::isEmptyOrWater);
     }

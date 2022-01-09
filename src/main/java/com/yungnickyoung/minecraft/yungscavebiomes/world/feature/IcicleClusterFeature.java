@@ -33,7 +33,7 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
         BlockPos blockPos = featurePlaceContext.origin();
         DripstoneClusterConfiguration dripstoneClusterConfiguration = featurePlaceContext.config();
         Random random = featurePlaceContext.random();
-        if (!DripstoneIceUtils.isEmptyOrWater(worldGenLevel, blockPos)) {
+        if (!DripstoneIceUtils.isEmpty(worldGenLevel, blockPos)) {
             return false;
         } else {
             int i = dripstoneClusterConfiguration.height.sample(random);
