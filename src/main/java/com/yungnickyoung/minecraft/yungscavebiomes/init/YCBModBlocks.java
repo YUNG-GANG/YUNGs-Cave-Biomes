@@ -29,6 +29,7 @@ public class YCBModBlocks {
             .noOcclusion()
             .dynamicShape()
             .instabreak()
+            .lightLevel(blockState -> 10)
             .sound(SoundType.GLASS));
 
     public static void init() {
