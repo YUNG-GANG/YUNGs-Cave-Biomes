@@ -22,7 +22,7 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature FROST_LILY = YCBModConfiguredFeatures.FROST_LILY.placed(
-            CountPlacement.of(60),
+            CountPlacement.of(40),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.DOWN,
