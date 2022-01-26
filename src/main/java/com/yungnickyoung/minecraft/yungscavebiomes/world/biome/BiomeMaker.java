@@ -56,4 +56,23 @@ public class BiomeMaker {
         Music music = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES);
         return biome(Biome.Precipitation.RAIN, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
     }
+
+    public static Biome marbleCaves() {
+        MobSpawnSettings.Builder builder = new MobSpawnSettings.Builder();
+        BiomeDefaultFeatures.dripstoneCavesSpawns(builder);
+        BiomeGenerationSettings.Builder builder2 = new BiomeGenerationSettings.Builder();
+        globalOverworldGeneration(builder2);
+        BiomeDefaultFeatures.addPlainGrass(builder2);
+        BiomeDefaultFeatures.addDefaultOres(builder2, true);
+        BiomeDefaultFeatures.addDefaultSoftDisks(builder2);
+        BiomeDefaultFeatures.addPlainVegetation(builder2);
+        BiomeDefaultFeatures.addDefaultMushrooms(builder2);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(builder2);
+
+        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_WATER_POOL);
+        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_WATER_SPRING);
+
+        Music music = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES);
+        return biome(Biome.Precipitation.RAIN, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
+    }
 }

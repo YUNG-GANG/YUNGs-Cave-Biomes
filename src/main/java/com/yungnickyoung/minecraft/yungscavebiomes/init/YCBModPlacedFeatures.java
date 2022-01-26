@@ -57,12 +57,28 @@ public class YCBModPlacedFeatures {
             BiomeFilter.biome()
     );
 
+    public static final PlacedFeature MARBLE_WATER_POOL = YCBModConfiguredFeatures.MARBLE_CAVE_WATER_POOL.placed(
+            CountPlacement.of(75),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature MARBLE_WATER_SPRING = YCBModConfiguredFeatures.SPRING_MARBLE_WATER.placed(
+            CountPlacement.of(60), InSquarePlacement.spread(), PlacementUtils.RANGE_10_10, BiomeFilter.biome()
+    );
+
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
         register("frost_lily", FROST_LILY);
         register("ice_patch", ICE_PATCH);
         register("ice_patch_ceiling", ICE_PATCH_CEILING);
         register("icicles", ICICLES);
+        register("marble_water_pool", MARBLE_WATER_POOL);
+        register("marble_water_spring", MARBLE_WATER_SPRING);
     }
 
     private static void register(String name, PlacedFeature obj) {

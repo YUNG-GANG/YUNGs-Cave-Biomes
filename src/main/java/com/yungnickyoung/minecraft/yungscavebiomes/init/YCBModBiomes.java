@@ -10,9 +10,11 @@ import net.minecraft.world.level.biome.Biome;
 
 public class YCBModBiomes {
     public static final ResourceKey<Biome> ICE_CAVES = register("ice_caves");
+    public static final ResourceKey<Biome> MARBLE_CAVES = register("marble_caves");
 
     public static void init() {
         register(ICE_CAVES, BiomeMaker.iceCaves());
+        register(MARBLE_CAVES, BiomeMaker.marbleCaves());
     }
 
     private static ResourceKey<Biome> register(String string) {

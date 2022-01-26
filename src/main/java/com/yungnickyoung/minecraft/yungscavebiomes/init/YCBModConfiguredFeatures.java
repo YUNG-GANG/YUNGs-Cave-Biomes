@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
+import com.google.common.collect.ImmutableSet;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import net.minecraft.world.level.material.Fluids;
 
 public class YCBModConfiguredFeatures {
     public static ConfiguredFeature<LargeDripstoneConfiguration, ?> LARGE_ICICLE = YCBModFeatures.LARGE_ICICLE.configured(
@@ -79,6 +81,27 @@ public class YCBModConfiguredFeatures {
                     3,
                     8));
 
+    public static final ConfiguredFeature<?, ?> MARBLE_CAVE_WATER_POOL = Feature.WATERLOGGED_VEGETATION_PATCH.configured(
+            new VegetationPatchConfiguration(
+                    BlockTags.LUSH_GROUND_REPLACEABLE.getName(),
+                    BlockStateProvider.simple(Blocks.DIORITE),
+                    () -> NO_OP.placed(),
+                    CaveSurface.FLOOR,
+                    ConstantInt.of(3),
+                    0.8F,
+                    5,
+                    0.1F,
+                    UniformInt.of(4, 7),
+                    0.7F));
+
+    public static final ConfiguredFeature<SpringConfiguration, ?> SPRING_MARBLE_WATER =
+            Feature.SPRING.configured(
+                    new SpringConfiguration(
+                            Fluids.WATER.defaultFluidState(), false, 4, 1,
+                            ImmutableSet.of(Blocks.STONE, Blocks.DIORITE)
+                    )
+            );
+
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
@@ -87,6 +110,8 @@ public class YCBModConfiguredFeatures {
         register("ice_patch", ICE_PATCH);
         register("ice_patch_ceiling", ICE_PATCH_CEILING);
         register("icicles", ICICLES);
+        register("marble_cave_water_pool", MARBLE_CAVE_WATER_POOL);
+        register("spring_marble_water", SPRING_MARBLE_WATER);
     }
 
     private static void register(String name, ConfiguredFeature<?, ?> obj) {
