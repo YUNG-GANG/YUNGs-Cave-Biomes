@@ -84,7 +84,7 @@ public class YCBModConfiguredFeatures {
     public static final ConfiguredFeature<?, ?> MARBLE_CAVE_WATER_POOL = Feature.WATERLOGGED_VEGETATION_PATCH.configured(
             new VegetationPatchConfiguration(
                     BlockTags.LUSH_GROUND_REPLACEABLE.getName(),
-                    BlockStateProvider.simple(Blocks.DIORITE),
+                    BlockStateProvider.simple(YCBModBlocks.TRAVERTINE),
                     () -> NO_OP.placed(),
                     CaveSurface.FLOOR,
                     ConstantInt.of(3),
@@ -98,10 +98,35 @@ public class YCBModConfiguredFeatures {
             Feature.SPRING.configured(
                     new SpringConfiguration(
                             Fluids.WATER.defaultFluidState(), false, 4, 1,
-                            ImmutableSet.of(Blocks.STONE, Blocks.DIORITE)
+                            ImmutableSet.of(Blocks.STONE, YCBModBlocks.TRAVERTINE)
                     )
             );
 
+    public static final ConfiguredFeature<VegetationPatchConfiguration, ?> MARBLE_PATCH = Feature.VEGETATION_PATCH.configured(
+            new VegetationPatchConfiguration(
+                    BlockTags.MOSS_REPLACEABLE.getName(),
+                    BlockStateProvider.simple(YCBModBlocks.MARBLE),
+                    NO_OP::placed, CaveSurface.FLOOR,
+                    UniformInt.of(3, 4),
+                    0.0F,
+                    5,
+                    0.8F,
+                    UniformInt.of(4, 7),
+                    0.3F)
+    );
+
+    public static final ConfiguredFeature<VegetationPatchConfiguration, ?> MARBLE_PATCH_CEILING = Feature.VEGETATION_PATCH.configured(
+            new VegetationPatchConfiguration(
+                    BlockTags.MOSS_REPLACEABLE.getName(),
+                    BlockStateProvider.simple(YCBModBlocks.MARBLE),
+                    NO_OP::placed, CaveSurface.CEILING,
+                    UniformInt.of(3, 4),
+                    0.0F,
+                    5,
+                    0.8F,
+                    UniformInt.of(4, 7),
+                    0.3F)
+    );
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
@@ -112,6 +137,8 @@ public class YCBModConfiguredFeatures {
         register("icicles", ICICLES);
         register("marble_cave_water_pool", MARBLE_CAVE_WATER_POOL);
         register("spring_marble_water", SPRING_MARBLE_WATER);
+        register("marble_patch", MARBLE_PATCH);
+        register("marble_patch_ceiling", MARBLE_PATCH_CEILING);
     }
 
     private static void register(String name, ConfiguredFeature<?, ?> obj) {

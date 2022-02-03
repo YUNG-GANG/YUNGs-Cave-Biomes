@@ -4,13 +4,11 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.worldgen.features.CaveFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.*;
 
 public class YCBModPlacedFeatures {
@@ -71,6 +69,25 @@ public class YCBModPlacedFeatures {
             CountPlacement.of(60), InSquarePlacement.spread(), PlacementUtils.RANGE_10_10, BiomeFilter.biome()
     );
 
+    public static final PlacedFeature MARBLE_PATCH = YCBModConfiguredFeatures.MARBLE_PATCH.placed(
+            CountPlacement.of(150),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature MARBLE_PATCH_CEILING = YCBModConfiguredFeatures.MARBLE_PATCH_CEILING.placed(
+            CountPlacement.of(150),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+            BiomeFilter.biome()
+    );
+
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
         register("frost_lily", FROST_LILY);
@@ -79,6 +96,8 @@ public class YCBModPlacedFeatures {
         register("icicles", ICICLES);
         register("marble_water_pool", MARBLE_WATER_POOL);
         register("marble_water_spring", MARBLE_WATER_SPRING);
+        register("marble_patch", MARBLE_PATCH);
+        register("marble_patch_ceiling", MARBLE_PATCH_CEILING);
     }
 
     private static void register(String name, PlacedFeature obj) {
