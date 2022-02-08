@@ -67,13 +67,12 @@ public class YCBModBlocks {
                 new BlockItem(FROST_LILY, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "marble"),
-                new BlockItem(MARBLE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
+                new BlockItem(MARBLE, new FabricItemSettings().group(CreativeModeTab.TAB_BUILDING_BLOCKS)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "travertine"),
-                new BlockItem(TRAVERTINE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
+                new BlockItem(TRAVERTINE, new FabricItemSettings().group(CreativeModeTab.TAB_BUILDING_BLOCKS)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "rare_ice"),
-                new BlockItem(RARE_ICE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
-
+                new BlockItem(RARE_ICE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
     }
 }

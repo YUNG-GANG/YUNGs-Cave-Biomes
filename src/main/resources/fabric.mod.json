@@ -22,7 +22,7 @@
       "com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes"
     ],
     "client": [
-      "com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesClient"
+      "com.yungnickyoung.minecraft.yungscavebiomes.client.YungsCaveBiomesClient"
     ]
   },
   "mixins": [
