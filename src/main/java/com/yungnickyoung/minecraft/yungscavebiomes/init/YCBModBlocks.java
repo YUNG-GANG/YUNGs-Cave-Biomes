@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.init;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.FrostLilyBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.IcicleBlock;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.RareIceBlock;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
@@ -44,11 +45,20 @@ public class YCBModBlocks {
             .strength(1.5f, 6.0f)
             .sound(SoundType.CALCITE));
 
+    public static final Block RARE_ICE = new RareIceBlock(FabricBlockSettings
+            .of(Material.ICE_SOLID, MaterialColor.ICE)
+            .friction(0.98f)
+            .lightLevel((blockState) -> 7)
+            .requiresCorrectToolForDrops()
+            .strength(3f)
+            .sound(SoundType.GLASS));
+
     public static void init() {
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"), ICICLE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "frost_lily"), FROST_LILY);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "marble"), MARBLE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "travertine"), TRAVERTINE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "rare_ice"), RARE_ICE);
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"),
                 new BlockItem(ICICLE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
@@ -61,6 +71,9 @@ public class YCBModBlocks {
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "travertine"),
                 new BlockItem(TRAVERTINE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "rare_ice"),
+                new BlockItem(RARE_ICE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
 
     }
 }
