@@ -15,6 +15,7 @@ public class YungsCaveBiomesClient implements ClientModInitializer {
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.ICICLE, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.FROST_LILY, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.RARE_ICE, RenderType.translucent());
         EntityRendererRegistry.register(YCBModEntities.ICE_CUBE, IceCubeRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(IceCubeRenderer.LAYER_LOCATION, IceCubeModel::createBodyLayer);
     }

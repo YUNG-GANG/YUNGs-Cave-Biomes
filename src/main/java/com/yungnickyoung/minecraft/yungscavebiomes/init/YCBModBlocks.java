@@ -48,7 +48,8 @@ public class YCBModBlocks {
     public static final Block RARE_ICE = new RareIceBlock(FabricBlockSettings
             .of(Material.ICE_SOLID, MaterialColor.ICE)
             .friction(0.98f)
-            .lightLevel((blockState) -> 7)
+            .noOcclusion()
+            .lightLevel((blockState) -> 11)
             .requiresCorrectToolForDrops()
             .strength(3f)
             .sound(SoundType.GLASS));

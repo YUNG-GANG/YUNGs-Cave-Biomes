@@ -4,6 +4,7 @@
   "package": "com.yungnickyoung.minecraft.yungscavebiomes.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinBlock",
     "MixinNoiseBasedChunkGenerator",
     "MixinNoiseSampler",
     "MixinOverworldBiomeBuilder"

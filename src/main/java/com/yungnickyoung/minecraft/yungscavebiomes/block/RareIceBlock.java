@@ -1,19 +1,18 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-public class RareIceBlock extends Block {
+public class RareIceBlock extends HalfTransparentBlock {
     public RareIceBlock(Properties properties) {
         super(properties);
     }
