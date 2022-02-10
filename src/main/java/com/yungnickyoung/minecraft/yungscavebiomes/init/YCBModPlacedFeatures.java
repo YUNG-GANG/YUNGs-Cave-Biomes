@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.placement.*;
 
 public class YCBModPlacedFeatures {
     public static final PlacedFeature LARGE_ICICLE = YCBModConfiguredFeatures.LARGE_ICICLE.placed(
-            CountPlacement.of(UniformInt.of(10, 48)),
+            CountPlacement.of(UniformInt.of(28, 64)),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             BiomeFilter.biome()

@@ -3,6 +3,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 import com.mojang.serialization.Codec;
 import java.util.Optional;
 import java.util.Random;
+
+import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -143,6 +145,10 @@ public class LargeIceDripstoneFeature extends Feature<LargeDripstoneConfiguratio
         }
 
         void placeBlocks(WorldGenLevel worldGenLevel, Random random, LargeIceDripstoneFeature.WindOffsetter windOffsetter) {
+            boolean hasRareIce = random.nextFloat() < 0.4;
+            if (this.getHeightAtRadius(0) < 6) {
+                hasRareIce = false;
+            }
             for(int i = -this.radius; i <= this.radius; ++i) {
                 for(int j = -this.radius; j <= this.radius; ++j) {
                     float f = Mth.sqrt((float)(i * i + j * j));
@@ -162,6 +168,17 @@ public class LargeIceDripstoneFeature extends Feature<LargeDripstoneConfiguratio
                                 if (DripstoneIceUtils.isEmptyOrWaterOrLava(worldGenLevel, blockPos)) {
                                     bl = true;
                                     Block block = Blocks.PACKED_ICE;
+
+                                    if (hasRareIce) {
+                                        double progress = (double)m / (double)k;
+                                        if (i == 0 && j == 0 && m == (int)(k / 2.2)) {
+                                            block = YCBModBlocks.RARE_ICE;
+                                        } else if (progress > 0.3 + random.nextDouble() * 0.04) {
+                                            block = Blocks.ICE;
+                                        }
+                                    }
+
+
                                     worldGenLevel.setBlock(blockPos, block.defaultBlockState(), 2);
                                 } else if (bl && worldGenLevel.getBlockState(blockPos).is(BlockTags.BASE_STONE_OVERWORLD)) {
                                     break;
@@ -173,7 +190,6 @@ public class LargeIceDripstoneFeature extends Feature<LargeDripstoneConfiguratio
                     }
                 }
             }
-
         }
 
         boolean isSuitableForWind(LargeDripstoneConfiguration largeDripstoneConfiguration) {
