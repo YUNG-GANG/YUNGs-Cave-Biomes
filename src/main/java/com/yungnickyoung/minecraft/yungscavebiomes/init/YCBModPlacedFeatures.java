@@ -49,7 +49,7 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature ICICLES = YCBModConfiguredFeatures.ICICLES.placed(
-            CountPlacement.of(UniformInt.of(72, 144)),
+            CountPlacement.of(UniformInt.of(144, 216)),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             BiomeFilter.biome()
