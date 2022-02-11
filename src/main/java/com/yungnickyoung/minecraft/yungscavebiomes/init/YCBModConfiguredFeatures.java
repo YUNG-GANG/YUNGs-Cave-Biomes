@@ -28,9 +28,9 @@ public class YCBModConfiguredFeatures {
                     0.45F, // Vanilla is 0.33F, but we want bigger!
                     UniformFloat.of(0.3F, 0.9F),
                     UniformFloat.of(0.4F, 1.0F),
-                    UniformFloat.of(0.0F, 0.3F),
+                    UniformFloat.of(0.2F, 0.6F),
                     4,
-                    0.6F
+                    0.3F
             ));
 
     public static final ConfiguredFeature<SimpleBlockConfiguration, ?> FROST_LILY = Feature.SIMPLE_BLOCK.configured(

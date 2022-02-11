@@ -205,7 +205,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeDripstoneConfiguratio
         WindOffsetter(int i, Random random, FloatProvider floatProvider) {
             this.originY = i;
             float f = floatProvider.sample(random);
-            float g = Mth.randomBetween(random, 0.0F, (float) Math.PI);
+            float g = Mth.randomBetween(random, 0.0F, (float) Math.PI * 2);
             this.windSpeed = new Vec3((double)(Mth.cos(g) * f), 0.0, (double)(Mth.sin(g) * f));
         }
 
