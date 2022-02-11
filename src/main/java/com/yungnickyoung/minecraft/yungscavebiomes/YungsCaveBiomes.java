@@ -11,18 +11,14 @@ public class YungsCaveBiomes implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		// Here, I typically call static 'init' methods from classes in the 'init' package.
-		// See any of my mods (esp. more recent ones) to see how I typically split up mod init classes.
-		// Feel free to modify this structure or use one that you are more comfortable with.
 		YCBModConfig.init();
 		YCBModBlocks.init();
 		YCBModItems.init();
 		YCBModEntities.init();
-
+		YCBModSounds.init();
 		YCBModFeatures.init();
 		YCBModConfiguredFeatures.init();
 		YCBModPlacedFeatures.init();
-
 		YCBModBiomes.init();
 	}
 }

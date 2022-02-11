@@ -1,0 +1,11 @@
+{
+  "music.overworld.ice_caves": {
+    "sounds": [
+      {
+        "name": "yungscavebiomes:sloping_mountains",
+        "stream": true,
+        "volume": 1
+      }
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModPlacedFeatures;
+import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModSounds;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.sounds.Music;
@@ -53,7 +54,7 @@ public class BiomeMaker {
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICICLES);
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.FROST_LILY);
 
-        Music music = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES);
+        Music music = Musics.createGameMusic(YCBModSounds.MUSIC_BIOME_ICE_CAVES);
         return biome(Biome.Precipitation.RAIN, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
     }
 

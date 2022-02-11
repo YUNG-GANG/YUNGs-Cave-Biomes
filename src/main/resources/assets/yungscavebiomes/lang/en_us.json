@@ -1,9 +1,12 @@
 {
+  "biome.yungscavebiomes.ice_caves": "Frosted Caves",
+
   "block.yungscavebiomes.icicle": "Icicle",
   "block.yungscavebiomes.frost_lily": "Frost Lily",
   "block.yungscavebiomes.marble": "Marble",
   "block.yungscavebiomes.travertine": "Travertine",
   "block.yungscavebiomes.rare_ice": "Enchanted Ice",
+
   "entity.yungscavebiomes.ice_cube": "Ice Cube",
   "item.yungscavebiomes.ice_cube_spawn_egg": "Ice Cube Spawn Egg"
 }
