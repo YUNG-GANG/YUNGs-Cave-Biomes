@@ -1,17 +1,16 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.IcicleClusterFeature;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneFeature;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.LargeDripstoneConfiguration;
 
 public class YCBModFeatures {
-    public static Feature<LargeDripstoneConfiguration> LARGE_ICICLE = new LargeIceDripstoneFeature(LargeDripstoneConfiguration.CODEC);
+    public static Feature<LargeIceDripstoneConfiguration> LARGE_ICICLE = new LargeIceDripstoneFeature(LargeIceDripstoneConfiguration.CODEC);
     public static Feature<DripstoneClusterConfiguration> ICICLE_CLUSTER = new IcicleClusterFeature(DripstoneClusterConfiguration.CODEC);
 
     public static void init() {

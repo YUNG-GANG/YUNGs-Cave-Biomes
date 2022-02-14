@@ -13,7 +13,21 @@ import net.minecraft.world.level.levelgen.placement.*;
 
 public class YCBModPlacedFeatures {
     public static final PlacedFeature LARGE_ICICLE = YCBModConfiguredFeatures.LARGE_ICICLE.placed(
-            CountPlacement.of(UniformInt.of(28, 64)),
+            CountPlacement.of(UniformInt.of(21, 48)),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature TILTED_ICICLE = YCBModConfiguredFeatures.TILTED_ICICLE.placed(
+            CountPlacement.of(UniformInt.of(21, 48)),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature SMALL_ICICLE = YCBModConfiguredFeatures.SMALL_ICICLE.placed(
+            CountPlacement.of(UniformInt.of(21, 48)),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             BiomeFilter.biome()
@@ -26,7 +40,8 @@ public class YCBModPlacedFeatures {
             EnvironmentScanPlacement.scanningFor(Direction.DOWN,
                     BlockPredicate.solid(),
                     BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-            RandomOffsetPlacement.vertical(ConstantInt.of(1)), BiomeFilter.biome()
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+            BiomeFilter.biome()
     );
 
     public static final PlacedFeature ICE_PATCH = YCBModConfiguredFeatures.ICE_PATCH.placed(
@@ -90,6 +105,8 @@ public class YCBModPlacedFeatures {
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
+        register("large_icicle_tilted", TILTED_ICICLE);
+        register("small_icicle", SMALL_ICICLE);
         register("frost_lily", FROST_LILY);
         register("ice_patch", ICE_PATCH);
         register("ice_patch_ceiling", ICE_PATCH_CEILING);

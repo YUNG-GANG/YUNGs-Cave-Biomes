@@ -3,7 +3,6 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModPlacedFeatures;
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModSounds;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
@@ -49,13 +48,15 @@ public class BiomeMaker {
         BiomeDefaultFeatures.addDefaultExtraVegetation(builder2);
 
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.LARGE_ICICLE);
+        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.TILTED_ICICLE);
+        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SMALL_ICICLE);
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICE_PATCH);
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICE_PATCH_CEILING);
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICICLES);
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.FROST_LILY);
 
         Music music = Musics.createGameMusic(YCBModSounds.MUSIC_BIOME_ICE_CAVES);
-        return biome(Biome.Precipitation.RAIN, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
+        return biome(Biome.Precipitation.SNOW, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
     }
 
     public static Biome marbleCaves() {
