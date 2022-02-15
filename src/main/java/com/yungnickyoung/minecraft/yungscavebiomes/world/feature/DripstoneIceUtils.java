@@ -15,32 +15,47 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 
 public class DripstoneIceUtils {
-    protected static double getDripstoneHeight(double d, double e, double f, double g) {
-        if (d < g) {
-            d = g;
+    /**
+     * Returns the expected height at a distance from the center of a circle with the given radius.
+     * @param radialDistance x-z distance from the center
+     * @param radius Radius of the circle
+     * @param scale Dripstone scale
+     * @param bluntness Dripstone bluntness
+     * @return height at given radial distance
+     */
+    protected static double getDripstoneHeight(double radialDistance, double radius, double scale, double bluntness) {
+        if (radialDistance < bluntness) {
+            radialDistance = bluntness;
         }
 
         double h = 0.384;
-        double i = d / e * 0.384;
+        double i = radialDistance / radius * h;
         double j = 0.75 * Math.pow(i, 1.3333333333333333);
         double k = Math.pow(i, 0.6666666666666666);
         double l = 0.3333333333333333 * Math.log(i);
-        double m = f * (j - k - l);
+        double m = scale * (j - k - l);
         m = Math.max(m, 0.0);
-        return m / 0.384 * e;
+        return m / h * radius;
     }
 
-    protected static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel worldGenLevel, BlockPos blockPos, int i) {
+    /**
+     * Searches radially outward in the x-z plane to ensure there is no nearby water, lava, or air.
+     * @param worldGenLevel The WorldGenLevel
+     * @param blockPos Center position of the radial search
+     * @param radius Search radius
+     * @return false if any water, lava, or air is encountered; true otherwise
+     */
+    protected static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel worldGenLevel, BlockPos blockPos, int radius) {
         if (isEmptyOrWaterOrLava(worldGenLevel, blockPos)) {
             return false;
         } else {
             float f = 6.0F;
-            float g = 6.0F / (float)i;
+            float increment = 6.0F / (float)radius;
 
-            for(float h = 0.0F; h < (float) (Math.PI * 2); h += g) {
-                int j = (int)(Mth.cos(h) * (float)i);
-                int k = (int)(Mth.sin(h) * (float)i);
-                if (isEmptyOrWaterOrLava(worldGenLevel, blockPos.offset(j, 0, k))) {
+            for (float theta = 0.0F; theta < (float) (Math.PI * 2); theta += increment) {
+                int dx = (int)(Mth.cos(theta) * (float)radius);
+                int dz = (int)(Mth.sin(theta) * (float)radius);
+                if (isEmptyOrWaterOrLava(worldGenLevel, blockPos.offset(dx, 0, dz))) {
                     return false;
                 }
             }
@@ -62,34 +77,34 @@ public class DripstoneIceUtils {
 
     protected static void buildBaseToTipColumn(Direction direction, int i, boolean bl, Consumer<BlockState> consumer) {
         if (i >= 3) {
-            consumer.accept(createPointedDripstone(direction, DripstoneThickness.BASE));
+            consumer.accept(createIcicle(direction, DripstoneThickness.BASE));
 
             for(int j = 0; j < i - 3; ++j) {
-                consumer.accept(createPointedDripstone(direction, DripstoneThickness.MIDDLE));
+                consumer.accept(createIcicle(direction, DripstoneThickness.MIDDLE));
             }
         }
 
         if (i >= 2) {
-            consumer.accept(createPointedDripstone(direction, DripstoneThickness.FRUSTUM));
+            consumer.accept(createIcicle(direction, DripstoneThickness.FRUSTUM));
         }
 
         if (i >= 1) {
-            consumer.accept(createPointedDripstone(direction, bl ? DripstoneThickness.TIP_MERGE : DripstoneThickness.TIP));
+            consumer.accept(createIcicle(direction, bl ? DripstoneThickness.TIP_MERGE : DripstoneThickness.TIP));
         }
 
     }
 
-    protected static void growPointedDripstone(LevelAccessor levelAccessor, BlockPos blockPos, Direction direction, int i, boolean bl) {
-        if (isDripstoneBase(levelAccessor.getBlockState(blockPos.relative(direction.getOpposite())))) {
-            BlockPos.MutableBlockPos mutableBlockPos = blockPos.mutable();
+    protected static void growIcicle(LevelAccessor levelAccessor, BlockPos blockPos, Direction direction, int i, boolean bl) {
+        if (isIcicleBase(levelAccessor.getBlockState(blockPos.relative(direction.getOpposite())))) {
+            BlockPos.MutableBlockPos mutable = blockPos.mutable();
             buildBaseToTipColumn(direction, i, bl, blockState -> {
-                levelAccessor.setBlock(mutableBlockPos, blockState, 2);
-                mutableBlockPos.move(direction);
+                levelAccessor.setBlock(mutable, blockState, 2);
+                mutable.move(direction);
             });
         }
     }
 
-    protected static boolean placeDripstoneBlockIfPossible(LevelAccessor levelAccessor, BlockPos blockPos) {
+    protected static boolean placePackedIceIfPossible(LevelAccessor levelAccessor, BlockPos blockPos) {
         BlockState blockState = levelAccessor.getBlockState(blockPos);
         if (blockState.is(BlockTags.DRIPSTONE_REPLACEABLE)) {
             levelAccessor.setBlock(blockPos, Blocks.PACKED_ICE.defaultBlockState(), 2);
@@ -99,15 +114,15 @@ public class DripstoneIceUtils {
         }
     }
 
-    private static BlockState createPointedDripstone(Direction direction, DripstoneThickness dripstoneThickness) {
+    private static BlockState createIcicle(Direction direction, DripstoneThickness dripstoneThickness) {
         return YCBModBlocks.ICICLE.defaultBlockState().setValue(PointedDripstoneBlock.THICKNESS, dripstoneThickness);
     }
 
     public static boolean isDripstoneBaseOrLava(BlockState blockState) {
-        return isDripstoneBase(blockState) || blockState.is(Blocks.LAVA);
+        return isIcicleBase(blockState) || blockState.is(Blocks.LAVA);
     }
 
-    public static boolean isDripstoneBase(BlockState blockState) {
+    public static boolean isIcicleBase(BlockState blockState) {
         return blockState.is(Blocks.PACKED_ICE) || blockState.is(BlockTags.DRIPSTONE_REPLACEABLE);
     }
 

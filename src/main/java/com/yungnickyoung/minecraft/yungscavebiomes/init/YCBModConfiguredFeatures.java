@@ -2,9 +2,9 @@ package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.google.common.collect.ImmutableSet;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ClampedNormalFloat;
@@ -20,17 +20,49 @@ import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.material.Fluids;
 
 public class YCBModConfiguredFeatures {
-    public static ConfiguredFeature<LargeDripstoneConfiguration, ?> LARGE_ICICLE = YCBModFeatures.LARGE_ICICLE.configured(
-            new LargeDripstoneConfiguration(
+    public static ConfiguredFeature<LargeIceDripstoneConfiguration, ?> LARGE_ICICLE = YCBModFeatures.LARGE_ICICLE.configured(
+            new LargeIceDripstoneConfiguration(
                     30,
                     UniformInt.of(4, 19),
                     UniformFloat.of(0.4F, 2.0F),
                     0.45F, // Vanilla is 0.33F, but we want bigger!
                     UniformFloat.of(0.3F, 0.9F),
                     UniformFloat.of(0.4F, 1.0F),
-                    UniformFloat.of(0.2F, 0.6F),
+                    UniformFloat.of(0.0F, 0.3F),
                     4,
-                    0.3F
+                    0.6F,
+                    UniformFloat.of(0.0F, (float) (Math.PI * 2)),
+                    0.4f
+            ));
+
+    public static ConfiguredFeature<LargeIceDripstoneConfiguration, ?> TILTED_ICICLE = YCBModFeatures.LARGE_ICICLE.configured(
+            new LargeIceDripstoneConfiguration(
+                    30,
+                    UniformInt.of(4, 19),
+                    UniformFloat.of(0.4F, 2.0F),
+                    0.45F,
+                    UniformFloat.of(0.6F, 0.9F),
+                    UniformFloat.of(0.6F, 1.0F),
+                    UniformFloat.of(0.3F, 0.6F),
+                    8,
+                    0.5F,
+                    UniformFloat.of(0.0F, (float) (Math.PI * 2)),
+                    0.4f
+            ));
+
+    public static ConfiguredFeature<LargeIceDripstoneConfiguration, ?> SMALL_ICICLE = YCBModFeatures.LARGE_ICICLE.configured(
+            new LargeIceDripstoneConfiguration(
+                    30,
+                    UniformInt.of(4, 5),
+                    UniformFloat.of(0.6F, 0.61F),
+                    0.8F,
+                    UniformFloat.of(0.6F, 1.0F),
+                    UniformFloat.of(0.6F, 1.0F),
+                    UniformFloat.of(0.0F, 0.3F),
+                    4,
+                    0.4F,
+                    UniformFloat.of(0.0F, (float) (Math.PI * 2)),
+                    0.1f
             ));
 
     public static final ConfiguredFeature<SimpleBlockConfiguration, ?> FROST_LILY = Feature.SIMPLE_BLOCK.configured(
@@ -85,7 +117,7 @@ public class YCBModConfiguredFeatures {
             new VegetationPatchConfiguration(
                     BlockTags.LUSH_GROUND_REPLACEABLE.getName(),
                     BlockStateProvider.simple(YCBModBlocks.TRAVERTINE),
-                    () -> NO_OP.placed(),
+                    NO_OP::placed,
                     CaveSurface.FLOOR,
                     ConstantInt.of(3),
                     0.8F,
@@ -130,6 +162,8 @@ public class YCBModConfiguredFeatures {
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
+        register("large_icicle_tilted", TILTED_ICICLE);
+        register("small_icicle", SMALL_ICICLE);
         register("frost_lily", FROST_LILY);
         register("no_op", NO_OP);
         register("ice_patch", ICE_PATCH);
