@@ -98,7 +98,7 @@ public class YCBModConfiguredFeatures {
             Feature.SPRING.configured(
                     new SpringConfiguration(
                             Fluids.WATER.defaultFluidState(), false, 4, 1,
-                            ImmutableSet.of(Blocks.STONE, YCBModBlocks.TRAVERTINE)
+                            ImmutableSet.of(Blocks.STONE, YCBModBlocks.TRAVERTINE, YCBModBlocks.MARBLE)
                     )
             );
 

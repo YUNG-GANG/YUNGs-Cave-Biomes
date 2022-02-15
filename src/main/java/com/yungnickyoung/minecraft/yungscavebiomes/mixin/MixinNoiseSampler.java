@@ -6,16 +6,20 @@ import net.minecraft.core.Registry;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.levelgen.NoiseSampler;
 import net.minecraft.world.level.levelgen.TerrainInfo;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(NoiseSampler.class)
-public class MixinNoiseSampler implements NoiseSamplerBiomeHolder {
+public abstract class MixinNoiseSampler implements NoiseSamplerBiomeHolder {
+    @Shadow public abstract Climate.TargetPoint sample(int i, int j, int k);
+
     // NoiseSamplerBiomeHolder impl
     private BiomeSource ycbBiomeSource;
     private Registry<Biome> ycbBiomeRegistry;
@@ -23,6 +27,11 @@ public class MixinNoiseSampler implements NoiseSamplerBiomeHolder {
     @Override
     public BiomeSource getBiomeSource() {
         return this.ycbBiomeSource;
+    }
+
+    @Override
+    public Registry<Biome> getBiomeRegistry() {
+        return this.ycbBiomeRegistry;
     }
 
     @Override
@@ -51,7 +60,7 @@ public class MixinNoiseSampler implements NoiseSamplerBiomeHolder {
                 boolean found = false;
                 int interp = 0;
 
-                if (y <= 2) {
+                if (y <= 1) {
                     for (int x1 = -1; x1 <= 1; x1++) {
                         for (int z1 = -1; z1 <= 1; z1++) {
                             Biome biome = this.ycbBiomeSource.getNoiseBiome(x + x1, y, z + z1, (NoiseSampler) (Object) this);

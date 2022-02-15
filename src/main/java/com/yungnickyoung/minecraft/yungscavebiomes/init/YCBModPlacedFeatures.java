@@ -30,7 +30,7 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature ICE_PATCH = YCBModConfiguredFeatures.ICE_PATCH.placed(
-            CountPlacement.of(150),
+            CountPlacement.of(250),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
@@ -40,7 +40,7 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature ICE_PATCH_CEILING = YCBModConfiguredFeatures.ICE_PATCH_CEILING.placed(
-            CountPlacement.of(150),
+            CountPlacement.of(250),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
@@ -66,21 +66,21 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature MARBLE_WATER_SPRING = YCBModConfiguredFeatures.SPRING_MARBLE_WATER.placed(
-            CountPlacement.of(60), InSquarePlacement.spread(), PlacementUtils.RANGE_10_10, BiomeFilter.biome()
+            CountPlacement.of(120), InSquarePlacement.spread(), PlacementUtils.RANGE_10_10, BiomeFilter.biome()
     );
 
     public static final PlacedFeature MARBLE_PATCH = YCBModConfiguredFeatures.MARBLE_PATCH.placed(
-            CountPlacement.of(150),
+            CountPlacement.of(250),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
-                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                    BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
             RandomOffsetPlacement.vertical(ConstantInt.of(1)),
             BiomeFilter.biome()
     );
 
     public static final PlacedFeature MARBLE_PATCH_CEILING = YCBModConfiguredFeatures.MARBLE_PATCH_CEILING.placed(
-            CountPlacement.of(150),
+            CountPlacement.of(250),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
