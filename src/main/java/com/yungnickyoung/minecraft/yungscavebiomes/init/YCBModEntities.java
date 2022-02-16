@@ -21,6 +21,6 @@ public class YCBModEntities {
     );
 
     public static void init() {
-        FabricDefaultAttributeRegistry.register(ICE_CUBE, IceCubeEntity.createMobAttributes());
+        FabricDefaultAttributeRegistry.register(ICE_CUBE, IceCubeEntity.createAttributes());
     }
 }
