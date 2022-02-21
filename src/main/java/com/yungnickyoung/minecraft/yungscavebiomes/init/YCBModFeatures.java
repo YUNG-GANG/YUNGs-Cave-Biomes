@@ -1,9 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.IcicleClusterFeature;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneFeature;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.*;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -12,10 +10,12 @@ import net.minecraft.world.level.levelgen.feature.configurations.DripstoneCluste
 public class YCBModFeatures {
     public static Feature<LargeIceDripstoneConfiguration> LARGE_ICICLE = new LargeIceDripstoneFeature(LargeIceDripstoneConfiguration.CODEC);
     public static Feature<DripstoneClusterConfiguration> ICICLE_CLUSTER = new IcicleClusterFeature(DripstoneClusterConfiguration.CODEC);
+    public static Feature<SphereReplaceConfig> SPHERE_REPLACE = new SphereReplaceFeature(SphereReplaceConfig.CODEC);
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
         register("icicle_cluster", ICICLE_CLUSTER);
+        register("sphere_replace", SPHERE_REPLACE);
     }
 
     private static void register(String name, Feature<?> obj) {

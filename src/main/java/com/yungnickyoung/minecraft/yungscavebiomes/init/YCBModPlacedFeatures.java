@@ -4,10 +4,12 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.features.CaveFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.*;
 
@@ -81,7 +83,11 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature MARBLE_WATER_SPRING = YCBModConfiguredFeatures.SPRING_MARBLE_WATER.placed(
-            CountPlacement.of(120), InSquarePlacement.spread(), PlacementUtils.RANGE_10_10, BiomeFilter.biome()
+            CountPlacement.of(80),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_10_10,
+            EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            BiomeFilter.biome()
     );
 
     public static final PlacedFeature MARBLE_PATCH = YCBModConfiguredFeatures.MARBLE_PATCH.placed(
@@ -94,7 +100,7 @@ public class YCBModPlacedFeatures {
             BiomeFilter.biome()
     );
 
-    public static final PlacedFeature MARBLE_PATCH_CEILING = YCBModConfiguredFeatures.MARBLE_PATCH_CEILING.placed(
+    public static final PlacedFeature TRAVERTINE_PATCH = YCBModConfiguredFeatures.TRAVERTINE_PATCH.placed(
             CountPlacement.of(250),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
@@ -102,6 +108,14 @@ public class YCBModPlacedFeatures {
             RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
             BiomeFilter.biome()
     );
+
+    public static final PlacedFeature MARBLE_GLOW_LICHEN = YCBModConfiguredFeatures.MARBLE_GLOW_LICHEN.placed(
+                CountPlacement.of(UniformInt.of(104, 157)),
+                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                InSquarePlacement.spread(),
+                SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13),
+                BiomeFilter.biome()
+        );
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
@@ -114,7 +128,8 @@ public class YCBModPlacedFeatures {
         register("marble_water_pool", MARBLE_WATER_POOL);
         register("marble_water_spring", MARBLE_WATER_SPRING);
         register("marble_patch", MARBLE_PATCH);
-        register("marble_patch_ceiling", MARBLE_PATCH_CEILING);
+        register("travertine_patch", TRAVERTINE_PATCH);
+        register("marble_glow_lichen", MARBLE_GLOW_LICHEN);
     }
 
     private static void register(String name, PlacedFeature obj) {

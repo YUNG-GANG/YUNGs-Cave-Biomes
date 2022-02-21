@@ -23,7 +23,7 @@ public class MixinAquifer {
 
     @Inject(method = "computeFluid", at = @At("HEAD"), cancellable = true)
     private void ycbAquiferFluids(int x, int y, int z, CallbackInfoReturnable<Aquifer.FluidStatus> cir) {
-        if (y > -4 && y < 32) {
+        if (y > -4 && y < 36) {
 
             NoiseSamplerBiomeHolder holder = (NoiseSamplerBiomeHolder) ((NoiseChunkAccessor) (this.noiseChunk)).getSampler();
             BiomeSource source = holder.getBiomeSource();

@@ -1,10 +1,13 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.SphereReplaceConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ClampedNormalFloat;
@@ -18,6 +21,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.material.Fluids;
+
+import java.util.List;
 
 public class YCBModConfiguredFeatures {
     public static ConfiguredFeature<LargeIceDripstoneConfiguration, ?> LARGE_ICICLE = YCBModFeatures.LARGE_ICICLE.configured(
@@ -134,30 +139,27 @@ public class YCBModConfiguredFeatures {
                     )
             );
 
-    public static final ConfiguredFeature<VegetationPatchConfiguration, ?> MARBLE_PATCH = Feature.VEGETATION_PATCH.configured(
-            new VegetationPatchConfiguration(
-                    BlockTags.MOSS_REPLACEABLE.getName(),
-                    BlockStateProvider.simple(YCBModBlocks.MARBLE),
-                    NO_OP::placed, CaveSurface.FLOOR,
-                    UniformInt.of(3, 4),
-                    0.0F,
-                    5,
-                    0.8F,
-                    UniformInt.of(4, 7),
-                    0.3F)
+    public static final ConfiguredFeature<SphereReplaceConfig, ?> MARBLE_PATCH = YCBModFeatures.SPHERE_REPLACE.configured(
+            new SphereReplaceConfig(
+                    ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
+                    YCBModBlocks.MARBLE.defaultBlockState(),
+                    7
+            )
     );
 
-    public static final ConfiguredFeature<VegetationPatchConfiguration, ?> MARBLE_PATCH_CEILING = Feature.VEGETATION_PATCH.configured(
-            new VegetationPatchConfiguration(
-                    BlockTags.MOSS_REPLACEABLE.getName(),
-                    BlockStateProvider.simple(YCBModBlocks.MARBLE),
-                    NO_OP::placed, CaveSurface.CEILING,
-                    UniformInt.of(3, 4),
-                    0.0F,
-                    5,
-                    0.8F,
-                    UniformInt.of(4, 7),
-                    0.3F)
+    public static final ConfiguredFeature<SphereReplaceConfig, ?> TRAVERTINE_PATCH = YCBModFeatures.SPHERE_REPLACE.configured(
+            new SphereReplaceConfig(
+                    ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
+                    YCBModBlocks.TRAVERTINE.defaultBlockState(),
+                    7
+            )
+    );
+
+    public static final ConfiguredFeature<GlowLichenConfiguration, ?> MARBLE_GLOW_LICHEN = Feature.GLOW_LICHEN.configured(
+                    new GlowLichenConfiguration(
+                            20, false, true, true, 0.5F,
+                            List.of(YCBModBlocks.TRAVERTINE, YCBModBlocks.MARBLE)
+                    )
     );
 
     public static void init() {
@@ -172,7 +174,8 @@ public class YCBModConfiguredFeatures {
         register("marble_cave_water_pool", MARBLE_CAVE_WATER_POOL);
         register("spring_marble_water", SPRING_MARBLE_WATER);
         register("marble_patch", MARBLE_PATCH);
-        register("marble_patch_ceiling", MARBLE_PATCH_CEILING);
+        register("travertine_patch", TRAVERTINE_PATCH);
+        register("marble_glow_lichen", MARBLE_GLOW_LICHEN);
     }
 
     private static void register(String name, ConfiguredFeature<?, ?> obj) {
