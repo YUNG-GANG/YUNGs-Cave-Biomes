@@ -7,5 +7,14 @@
         "volume": 1
       }
     ]
+  },
+  "music.overworld.desert_caves": {
+    "sounds": [
+      {
+        "name": "yungscavebiomes:antique",
+        "stream": true,
+        "volume": 1
+      }
+    ]
   }
 }
