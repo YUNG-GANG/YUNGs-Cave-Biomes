@@ -28,10 +28,13 @@ public abstract class MixinOverworldBiomeBuilder {
 
     @Shadow @Final private Climate.Parameter UNFROZEN_RANGE;
 
+    @Shadow @Final private Climate.Parameter[] temperatures;
+
     @Inject(method = "addUndergroundBiomes", at = @At("HEAD"))
     private void addYCBBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> consumer, CallbackInfo ci) {
         this.addUndergroundBiome(consumer, this.FROZEN_RANGE, this.FULL_RANGE, Climate.Parameter.span(0.8F, 1.0F), this.FULL_RANGE, this.FULL_RANGE, 0.0F, YCBModBiomes.ICE_CAVES);
         this.addUndergroundBiome(consumer, this.FROZEN_RANGE, this.FULL_RANGE, Climate.Parameter.span(-1.05F, -0.19F), this.FULL_RANGE, this.FULL_RANGE, 0.0F, YCBModBiomes.MARBLE_CAVES);
+        this.addUndergroundBiome(consumer, this.temperatures[4], this.FULL_RANGE, Climate.Parameter.span(0.2F, 0.7F), Climate.Parameter.span(0.2F, 1.0F), this.FULL_RANGE, 0.0F, YCBModBiomes.DESERT_CAVES);
     }
 
     @Inject(method = "addUndergroundBiome", at = @At("HEAD"), cancellable = true)

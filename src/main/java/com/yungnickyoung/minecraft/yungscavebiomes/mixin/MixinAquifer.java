@@ -23,15 +23,19 @@ public class MixinAquifer {
 
     @Inject(method = "computeFluid", at = @At("HEAD"), cancellable = true)
     private void ycbAquiferFluids(int x, int y, int z, CallbackInfoReturnable<Aquifer.FluidStatus> cir) {
+        // Target multiple aquifer cells to prevent water level artifacts
         if (y > -4 && y < 36) {
 
+            // Gather data that we need
             NoiseSamplerBiomeHolder holder = (NoiseSamplerBiomeHolder) ((NoiseChunkAccessor) (this.noiseChunk)).getSampler();
             BiomeSource source = holder.getBiomeSource();
             Registry<Biome> biomes = holder.getBiomeRegistry();
 
-            // TODO: why is it null? it should always be defined!
             if (biomes != null) {
+                // Find biome
                 Biome biome = source.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z), holder);
+
+                // Make aquifer at y16 if marble caves is found
                 if (biomes.getResourceKey(biome).get() == YCBModBiomes.MARBLE_CAVES) {
                     cir.setReturnValue(new Aquifer.FluidStatus(16, Blocks.WATER.defaultBlockState()));
                 }

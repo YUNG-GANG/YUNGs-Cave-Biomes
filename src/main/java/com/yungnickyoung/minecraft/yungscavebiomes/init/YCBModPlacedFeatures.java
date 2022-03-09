@@ -11,6 +11,7 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.*;
 
 public class YCBModPlacedFeatures {
@@ -117,6 +118,46 @@ public class YCBModPlacedFeatures {
                 BiomeFilter.biome()
         );
 
+    public static final PlacedFeature SANDSTONE_GLOW_LICHEN = YCBModConfiguredFeatures.SANDSTONE_GLOW_LICHEN.placed(
+            CountPlacement.of(UniformInt.of(104, 157)),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            InSquarePlacement.spread(),
+            SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature SANDSTONE_PATCH = YCBModConfiguredFeatures.SANDSTONE_PATCH.placed(
+            CountPlacement.of(250),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+            BiomeFilter.biome()
+    );
+
+    // Needed twice to make sure everything is covered
+    public static final PlacedFeature SANDSTONE_PATCH2 = YCBModConfiguredFeatures.SANDSTONE_PATCH.placed(
+            CountPlacement.of(250),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature CACTUS_PATCH = YCBModConfiguredFeatures.CACTUS_PATCH.placed(
+            CountPlacement.of(250),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+            BiomeFilter.biome()
+    );
+
+
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
         register("large_icicle_tilted", TILTED_ICICLE);
@@ -130,6 +171,10 @@ public class YCBModPlacedFeatures {
         register("marble_patch", MARBLE_PATCH);
         register("travertine_patch", TRAVERTINE_PATCH);
         register("marble_glow_lichen", MARBLE_GLOW_LICHEN);
+        register("sandstone_glow_lichen", SANDSTONE_GLOW_LICHEN);
+        register("sandstone_patch", SANDSTONE_PATCH);
+        register("sandstone_patch_2", SANDSTONE_PATCH2);
+        register("cactus_patch", CACTUS_PATCH);
     }
 
     private static void register(String name, PlacedFeature obj) {

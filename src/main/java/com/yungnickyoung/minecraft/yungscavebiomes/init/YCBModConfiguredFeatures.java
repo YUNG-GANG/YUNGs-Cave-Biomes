@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.List;
@@ -155,11 +156,30 @@ public class YCBModConfiguredFeatures {
             )
     );
 
+    public static final ConfiguredFeature<SphereReplaceConfig, ?> SANDSTONE_PATCH = YCBModFeatures.SPHERE_REPLACE.configured(
+            new SphereReplaceConfig(
+                    ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
+                    Blocks.SANDSTONE.defaultBlockState(),
+                    7
+            )
+    );
+
     public static final ConfiguredFeature<GlowLichenConfiguration, ?> MARBLE_GLOW_LICHEN = Feature.GLOW_LICHEN.configured(
                     new GlowLichenConfiguration(
                             20, false, true, true, 0.5F,
                             List.of(YCBModBlocks.TRAVERTINE, YCBModBlocks.MARBLE)
                     )
+    );
+
+    public static final ConfiguredFeature<GlowLichenConfiguration, ?> SANDSTONE_GLOW_LICHEN = Feature.GLOW_LICHEN.configured(
+            new GlowLichenConfiguration(
+                    20, false, true, true, 0.5F,
+                    List.of(Blocks.SANDSTONE)
+            )
+    );
+
+    public static final ConfiguredFeature<NoneFeatureConfiguration, ?> CACTUS_PATCH = YCBModFeatures.CACTUS_PATCH.configured(
+            NoneFeatureConfiguration.INSTANCE
     );
 
     public static void init() {
@@ -176,6 +196,9 @@ public class YCBModConfiguredFeatures {
         register("marble_patch", MARBLE_PATCH);
         register("travertine_patch", TRAVERTINE_PATCH);
         register("marble_glow_lichen", MARBLE_GLOW_LICHEN);
+        register("sandstone_glow_lichen", SANDSTONE_GLOW_LICHEN);
+        register("sandstone_patch", SANDSTONE_PATCH);
+        register("cactus_patch", CACTUS_PATCH);
     }
 
     private static void register(String name, ConfiguredFeature<?, ?> obj) {
