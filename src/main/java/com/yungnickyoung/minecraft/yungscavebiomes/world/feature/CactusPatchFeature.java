@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 
 import com.mojang.serialization.Codec;
+import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
@@ -22,11 +23,11 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
         Random random = context.random();
 
         // Check for sandstone below
-        if (!level.getBlockState(pos.below()).is(Blocks.SANDSTONE)) {
+        if (!level.getBlockState(pos.below()).is(YCBModBlocks.ANCIENT_SAND)) {
             return false;
         }
 
-        level.setBlock(pos, Blocks.SAND.defaultBlockState(), 3);
+        level.setBlock(pos, YCBModBlocks.ANCIENT_SAND.defaultBlockState(), 3);
 
         // Make most cases not have cacti
         if (random.nextInt(3) > 0) {

@@ -14,6 +14,7 @@ public class YungsCaveBiomes implements ModInitializer {
 		YCBModConfig.init();
 		YCBModBlocks.init();
 		YCBModItems.init();
+		YCBModParticles.init();
 		YCBModEntities.init();
 		YCBModSounds.init();
 		YCBModFeatures.init();

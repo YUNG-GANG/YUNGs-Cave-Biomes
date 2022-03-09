@@ -159,7 +159,7 @@ public class YCBModConfiguredFeatures {
     public static final ConfiguredFeature<SphereReplaceConfig, ?> SANDSTONE_PATCH = YCBModFeatures.SPHERE_REPLACE.configured(
             new SphereReplaceConfig(
                     ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
-                    Blocks.SANDSTONE.defaultBlockState(),
+                    YCBModBlocks.ANCIENT_SAND.defaultBlockState(),
                     7
             )
     );
@@ -174,7 +174,7 @@ public class YCBModConfiguredFeatures {
     public static final ConfiguredFeature<GlowLichenConfiguration, ?> SANDSTONE_GLOW_LICHEN = Feature.GLOW_LICHEN.configured(
             new GlowLichenConfiguration(
                     20, false, true, true, 0.5F,
-                    List.of(Blocks.SANDSTONE)
+                    List.of(YCBModBlocks.ANCIENT_SAND)
             )
     );
 

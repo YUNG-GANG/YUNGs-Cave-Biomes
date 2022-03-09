@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.AncientSandBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.FrostLilyBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.IcicleBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.RareIceBlock;
@@ -54,12 +55,21 @@ public class YCBModBlocks {
             .strength(3f)
             .sound(SoundType.GLASS));
 
+    public static final Block ANCIENT_SAND = new AncientSandBlock(0x663818, FabricBlockSettings
+            .of(Material.SAND, MaterialColor.TERRACOTTA_ORANGE)
+            .strength(0.5f)
+            .sound(SoundType.SAND));
+
     public static void init() {
+        // Blocks
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"), ICICLE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "frost_lily"), FROST_LILY);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "marble"), MARBLE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "travertine"), TRAVERTINE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "rare_ice"), RARE_ICE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sand"), ANCIENT_SAND);
+
+        // Items
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"),
                 new BlockItem(ICICLE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
@@ -75,5 +85,8 @@ public class YCBModBlocks {
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "rare_ice"),
                 new BlockItem(RARE_ICE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sand"),
+                new BlockItem(ANCIENT_SAND, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
     }
 }
