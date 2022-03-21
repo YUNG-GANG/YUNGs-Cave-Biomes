@@ -75,7 +75,7 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
 //            if (blockState.getBlock() instanceof FallingBlock) {
 //                color = ((FallingBlock)blockState.getBlock()).getDustColor(blockState, clientLevel, blockPos);
 //            }
-            int color = 0x663818;
+            int color = 0xd1b482;
             float r = (float)(color >> 16 & 0xFF) / 255.0f;
             float g = (float)(color >> 8 & 0xFF) / 255.0f;
             float b = (float)(color & 0xFF) / 255.0f;

@@ -3,6 +3,10 @@
   "values": [
     "yungscavebiomes:marble",
     "yungscavebiomes:travertine",
-    "yungscavebiomes:rare_ice"
+    "yungscavebiomes:rare_ice",
+    "yungscavebiomes:ancient_sandstone",
+    "yungscavebiomes:brittle_ancient_sandstone",
+    "yungscavebiomes:cut_ancient_sandstone",
+    "yungscavebiomes:layered_ancient_sandstone"
   ]
 }

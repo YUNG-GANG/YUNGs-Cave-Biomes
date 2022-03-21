@@ -7,6 +7,10 @@
   "block.yungscavebiomes.travertine": "Travertine",
   "block.yungscavebiomes.rare_ice": "Enchanted Ice",
   "block.yungscavebiomes.ancient_sand": "Ancient Sand",
+  "block.yungscavebiomes.ancient_sandstone": "Ancient Sandstone",
+  "block.yungscavebiomes.cut_ancient_sandstone": "Cut Ancient Sandstone",
+  "block.yungscavebiomes.layered_ancient_sandstone": "Layered Ancient Sandstone",
+  "block.yungscavebiomes.brittle_ancient_sandstone": "Brittle Ancient Sandstone",
 
   "entity.yungscavebiomes.ice_cube": "Ice Cube",
   "item.yungscavebiomes.ice_cube_spawn_egg": "Ice Cube Spawn Egg"
