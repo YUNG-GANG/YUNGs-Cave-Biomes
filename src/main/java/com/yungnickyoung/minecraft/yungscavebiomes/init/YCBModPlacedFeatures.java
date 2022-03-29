@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.material.Fluids;
 
 public class YCBModPlacedFeatures {
     public static final PlacedFeature LARGE_ICICLE = YCBModConfiguredFeatures.LARGE_ICICLE.placed(
@@ -130,6 +132,7 @@ public class YCBModPlacedFeatures {
             CountPlacement.of(250),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+
             EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
                     BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
             RandomOffsetPlacement.vertical(ConstantInt.of(1)),
@@ -157,6 +160,16 @@ public class YCBModPlacedFeatures {
             BiomeFilter.biome()
     );
 
+    public static final PlacedFeature WATER_SURFACE_ICE_FRAGMENT = YCBModConfiguredFeatures.WATER_SURFACE_ICE_FRAGMENT.placed(
+            CountPlacement.of(250),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.matchesFluid(Fluids.WATER, BlockPos.ZERO),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 32),
+            RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+            BiomeFilter.biome()
+    );
+
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
@@ -175,6 +188,7 @@ public class YCBModPlacedFeatures {
         register("sandstone_patch", SANDSTONE_PATCH);
         register("sandstone_patch_2", SANDSTONE_PATCH2);
         register("cactus_patch", CACTUS_PATCH);
+        register("water_surface_ice_fragment", WATER_SURFACE_ICE_FRAGMENT);
     }
 
     private static void register(String name, PlacedFeature obj) {

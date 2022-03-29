@@ -182,6 +182,10 @@ public class YCBModConfiguredFeatures {
             NoneFeatureConfiguration.INSTANCE
     );
 
+    public static final ConfiguredFeature<NoneFeatureConfiguration, ?> WATER_SURFACE_ICE_FRAGMENT = YCBModFeatures.WATER_SURFACE_ICE_FRAGMENT.configured(
+            NoneFeatureConfiguration.INSTANCE
+    );
+
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
         register("large_icicle_tilted", TILTED_ICICLE);
