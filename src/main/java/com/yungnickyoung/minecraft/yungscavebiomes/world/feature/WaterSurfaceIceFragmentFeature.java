@@ -28,7 +28,7 @@ public class WaterSurfaceIceFragmentFeature extends Feature<NoneFeatureConfigura
     private static final float ICE_FRAGMENT_NOISE_FREQUENCY = 1.0f / 12.0f;
 
     // N.5 radii produce nicer circles: https://www.redblobgames.com/grids/circle-drawing/
-    private static final float EFFECTIVE_MAX_RANGE_RADIUS_SQ = (int)((MAX_FLOOD_RADIUS + 0.5f) * (MAX_FLOOD_RADIUS + 0.5f));
+    private static final int EFFECTIVE_MAX_RANGE_RADIUS_SQ = (int)((MAX_FLOOD_RADIUS + 0.5f) * (MAX_FLOOD_RADIUS + 0.5f));
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
@@ -64,7 +64,7 @@ public class WaterSurfaceIceFragmentFeature extends Feature<NoneFeatureConfigura
 
         public void execute(BlockPos origin, WorldGenLevel level) {
 
-            // Initialize for a new flood-fill over the ice surface shard noise
+            // Initialize for a new flood-fill over the ice surface fragment noise
             this.floodQueue.clear();
             Arrays.fill(visited, false);
 
