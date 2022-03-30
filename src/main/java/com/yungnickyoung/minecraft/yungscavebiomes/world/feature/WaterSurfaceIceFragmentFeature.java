@@ -24,7 +24,7 @@ public class WaterSurfaceIceFragmentFeature extends Feature<NoneFeatureConfigura
     private static final int MAX_FLOOD_DIAMETER = MAX_FLOOD_RADIUS * 2 + 1;
 
     // Ice fragment cellular noise parameters.
-    private static final float ICE_FRAGMENT_SEPARATION = 0.15f;
+    private static final float ICE_FRAGMENT_SEPARATION = 0.2f;
     private static final float ICE_FRAGMENT_NOISE_FREQUENCY = 1.0f / 12.0f;
 
     // N.5 radii produce nicer circles: https://www.redblobgames.com/grids/circle-drawing/
