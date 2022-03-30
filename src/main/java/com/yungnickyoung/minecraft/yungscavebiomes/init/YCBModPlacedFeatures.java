@@ -4,15 +4,16 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.worldgen.features.CaveFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.*;
+
+import java.util.List;
 
 public class YCBModPlacedFeatures {
     public static final PlacedFeature LARGE_ICICLE = YCBModConfiguredFeatures.LARGE_ICICLE.placed(
@@ -111,12 +112,12 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature MARBLE_GLOW_LICHEN = YCBModConfiguredFeatures.MARBLE_GLOW_LICHEN.placed(
-                CountPlacement.of(UniformInt.of(104, 157)),
-                PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-                InSquarePlacement.spread(),
-                SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13),
-                BiomeFilter.biome()
-        );
+            CountPlacement.of(UniformInt.of(104, 157)),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            InSquarePlacement.spread(),
+            SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13),
+            BiomeFilter.biome()
+    );
 
     public static final PlacedFeature SANDSTONE_GLOW_LICHEN = YCBModConfiguredFeatures.SANDSTONE_GLOW_LICHEN.placed(
             CountPlacement.of(UniformInt.of(104, 157)),
@@ -157,6 +158,26 @@ public class YCBModPlacedFeatures {
             BiomeFilter.biome()
     );
 
+    public static final PlacedFeature WATER_SURFACE_ICE_FRAGMENT = YCBModConfiguredFeatures.WATER_SURFACE_ICE_FRAGMENT.placed(
+            CountPlacement.of(250),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.matchesBlocks(List.of(Blocks.WATER, Blocks.ICE)),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 32),
+            RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature WATER_SURFACE_ICE_FRAGMENT2 = YCBModConfiguredFeatures.WATER_SURFACE_ICE_FRAGMENT.placed(
+            CountPlacement.of(250),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.matchesBlocks(List.of(Blocks.WATER, Blocks.ICE)),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 32),
+            RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+            BiomeFilter.biome()
+    );
+
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
@@ -175,6 +196,8 @@ public class YCBModPlacedFeatures {
         register("sandstone_patch", SANDSTONE_PATCH);
         register("sandstone_patch_2", SANDSTONE_PATCH2);
         register("cactus_patch", CACTUS_PATCH);
+        register("water_surface_ice_fragment", WATER_SURFACE_ICE_FRAGMENT);
+        register("water_surface_ice_fragment2", WATER_SURFACE_ICE_FRAGMENT2);
     }
 
     private static void register(String name, PlacedFeature obj) {
