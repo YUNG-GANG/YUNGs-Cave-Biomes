@@ -41,12 +41,7 @@ public class WaterSurfaceIceFragmentFeature extends Feature<NoneFeatureConfigura
         return false;
     }
 
-    private static final ThreadLocal<IceFragmentFiller> iceFragmentFillerThreadLocal = new ThreadLocal<>() {
-        @Override
-        protected IceFragmentFiller initialValue() {
-            return new IceFragmentFiller();
-        }
-    };
+    private static final ThreadLocal<IceFragmentFiller> iceFragmentFillerThreadLocal = ThreadLocal.withInitial(IceFragmentFiller::new);
 
     private static class IceFragmentFiller {
         private final Queue<BlockPos> floodQueue;
