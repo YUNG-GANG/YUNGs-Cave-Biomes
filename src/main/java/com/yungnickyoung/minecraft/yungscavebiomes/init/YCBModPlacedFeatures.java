@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.features.CaveFeatures;
+import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -148,12 +149,31 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature CACTUS_PATCH = YCBModConfiguredFeatures.CACTUS_PATCH.placed(
-            CountPlacement.of(250),
+            CountPlacement.of(150),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
                     BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
             RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature BRITTLE_SANDSTONE_REPLACE = YCBModConfiguredFeatures.BRITTLE_SANDSTONE_REPLACE.placed(
+            CountPlacement.of(100),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature DEAD_BUSH_SPREAD = VegetationFeatures.PATCH_DEAD_BUSH.placed(
+            CountPlacement.of(150),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
             BiomeFilter.biome()
     );
 
@@ -175,6 +195,8 @@ public class YCBModPlacedFeatures {
         register("sandstone_patch", SANDSTONE_PATCH);
         register("sandstone_patch_2", SANDSTONE_PATCH2);
         register("cactus_patch", CACTUS_PATCH);
+        register("brittle_sandstone_replace", BRITTLE_SANDSTONE_REPLACE);
+        register("dead_bush_spread", DEAD_BUSH_SPREAD);
     }
 
     private static void register(String name, PlacedFeature obj) {

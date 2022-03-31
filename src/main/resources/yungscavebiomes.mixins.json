@@ -7,6 +7,7 @@
     "MixinAquifer",
     "MixinBlock",
     "MixinCactusBlock",
+    "MixinDeadBushBlock",
     "MixinNoiseBasedChunkGenerator",
     "MixinNoiseSampler",
     "MixinOverworldBiomeBuilder",

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.MultisurfaceSphereReplaceConfig;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.SphereReplaceConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
@@ -156,10 +157,12 @@ public class YCBModConfiguredFeatures {
             )
     );
 
-    public static final ConfiguredFeature<SphereReplaceConfig, ?> SANDSTONE_PATCH = YCBModFeatures.SPHERE_REPLACE.configured(
-            new SphereReplaceConfig(
+    public static final ConfiguredFeature<MultisurfaceSphereReplaceConfig, ?> SANDSTONE_PATCH = YCBModFeatures.MULTISURFACE_SPHERE_REPLACE.configured(
+            new MultisurfaceSphereReplaceConfig(
                     ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
                     YCBModBlocks.ANCIENT_SAND.defaultBlockState(),
+                    YCBModBlocks.LAYERED_ANCIENT_SANDSTONE.defaultBlockState(),
+                    YCBModBlocks.ANCIENT_SANDSTONE.defaultBlockState(),
                     7
             )
     );
@@ -174,12 +177,20 @@ public class YCBModConfiguredFeatures {
     public static final ConfiguredFeature<GlowLichenConfiguration, ?> SANDSTONE_GLOW_LICHEN = Feature.GLOW_LICHEN.configured(
             new GlowLichenConfiguration(
                     20, false, true, true, 0.5F,
-                    List.of(YCBModBlocks.ANCIENT_SAND)
+                    List.of(YCBModBlocks.ANCIENT_SAND, YCBModBlocks.LAYERED_ANCIENT_SANDSTONE, YCBModBlocks.ANCIENT_SANDSTONE)
             )
     );
 
     public static final ConfiguredFeature<NoneFeatureConfiguration, ?> CACTUS_PATCH = YCBModFeatures.CACTUS_PATCH.configured(
             NoneFeatureConfiguration.INSTANCE
+    );
+
+    public static final ConfiguredFeature<SphereReplaceConfig, ?> BRITTLE_SANDSTONE_REPLACE = YCBModFeatures.SPHERE_REPLACE.configured(
+            new SphereReplaceConfig(
+                    ImmutableList.of(YCBModBlocks.ANCIENT_SANDSTONE),
+                    YCBModBlocks.BRITTLE_ANCIENT_SANDSTONE.defaultBlockState(),
+                    7
+            )
     );
 
     public static void init() {
@@ -198,6 +209,7 @@ public class YCBModConfiguredFeatures {
         register("marble_glow_lichen", MARBLE_GLOW_LICHEN);
         register("sandstone_glow_lichen", SANDSTONE_GLOW_LICHEN);
         register("sandstone_patch", SANDSTONE_PATCH);
+        register("brittle_sandstone_replace", BRITTLE_SANDSTONE_REPLACE);
         register("cactus_patch", CACTUS_PATCH);
     }
 

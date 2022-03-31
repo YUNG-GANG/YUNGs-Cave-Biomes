@@ -22,25 +22,50 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos pos = context.origin();
         Random random = context.random();
 
-        // Check for sandstone below
-        if (!level.getBlockState(pos.below()).is(YCBModBlocks.ANCIENT_SAND)) {
-            return false;
-        }
+        for (int j = 0; j < 24; j++) {
+            // Triangle 5x3x5 spread
+            BlockPos local = pos.offset(
+                    random.nextInt(6) - random.nextInt(6),
+                    random.nextInt(4) - random.nextInt(4),
+                    random.nextInt(6) - random.nextInt(6)
+            );
 
-        level.setBlock(pos, YCBModBlocks.ANCIENT_SAND.defaultBlockState(), 3);
-
-        // Make most cases not have cacti
-        if (random.nextInt(3) > 0) {
-            return false;
-        }
-
-        // Cactus patch
-        for (int i = 0; i < random.nextInt(3); i++) {
-            if (!level.getBlockState(pos.above(1 + i)).isAir()) {
-                return false;
+            // Check for sandstone below
+            if (!level.getBlockState(local.below()).is(YCBModBlocks.ANCIENT_SAND)) {
+                continue;
             }
 
-            level.setBlock(pos.above(1 + i), Blocks.CACTUS.defaultBlockState(), 3);
+            // Make most cases not have cacti
+            if (random.nextInt(3) > 1) {
+                continue;
+            }
+
+            level.setBlock(local.below(), YCBModBlocks.ANCIENT_SAND.defaultBlockState(), 3);
+
+            // Cactus patch
+            for (int i = 0; i < random.nextInt(3); i++) {
+                if (!level.getBlockState(local.above(i)).isAir()) {
+                    continue;
+                }
+
+                if (!level.getBlockState(local.above(i).north()).isAir()) {
+                    continue;
+                }
+
+                if (!level.getBlockState(local.above(i).east()).isAir()) {
+                    continue;
+                }
+
+                if (!level.getBlockState(local.above(i).west()).isAir()) {
+                    continue;
+                }
+
+                if (!level.getBlockState(local.above(i).south()).isAir()) {
+                    continue;
+                }
+
+                level.setBlock(local.above(i), Blocks.CACTUS.defaultBlockState(), 3);
+            }
         }
 
         return false;

@@ -99,6 +99,9 @@ public class BiomeMaker {
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.CACTUS_PATCH);
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_GLOW_LICHEN);
 
+        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.BRITTLE_SANDSTONE_REPLACE);
+        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.DEAD_BUSH_SPREAD);
+
         Music music = Musics.createGameMusic(YCBModSounds.MUSIC_BIOME_DESERT_CAVES);
         return biome(Biome.Precipitation.NONE, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
     }

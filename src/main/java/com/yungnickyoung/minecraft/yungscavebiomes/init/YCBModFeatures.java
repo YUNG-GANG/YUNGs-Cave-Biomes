@@ -13,12 +13,14 @@ public class YCBModFeatures {
     public static Feature<DripstoneClusterConfiguration> ICICLE_CLUSTER = new IcicleClusterFeature(DripstoneClusterConfiguration.CODEC);
     public static Feature<SphereReplaceConfig> SPHERE_REPLACE = new SphereReplaceFeature(SphereReplaceConfig.CODEC);
     public static Feature<NoneFeatureConfiguration> CACTUS_PATCH = new CactusPatchFeature(NoneFeatureConfiguration.CODEC);
+    public static Feature<MultisurfaceSphereReplaceConfig> MULTISURFACE_SPHERE_REPLACE = new MultisurfaceSphereReplaceFeature(MultisurfaceSphereReplaceConfig.CODEC);
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
         register("icicle_cluster", ICICLE_CLUSTER);
         register("sphere_replace", SPHERE_REPLACE);
         register("cactus_patch", CACTUS_PATCH);
+        register("multisurface_sphere_replace", MULTISURFACE_SPHERE_REPLACE);
     }
 
     private static void register(String name, Feature<?> obj) {
