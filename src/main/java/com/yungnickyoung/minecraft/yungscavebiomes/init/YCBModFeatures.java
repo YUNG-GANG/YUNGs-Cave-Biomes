@@ -14,6 +14,7 @@ public class YCBModFeatures {
     public static Feature<SphereReplaceConfig> SPHERE_REPLACE = new SphereReplaceFeature(SphereReplaceConfig.CODEC);
     public static Feature<NoneFeatureConfiguration> CACTUS_PATCH = new CactusPatchFeature(NoneFeatureConfiguration.CODEC);
     public static Feature<MultisurfaceSphereReplaceConfig> MULTISURFACE_SPHERE_REPLACE = new MultisurfaceSphereReplaceFeature(MultisurfaceSphereReplaceConfig.CODEC);
+    public static Feature<NoneFeatureConfiguration> WATER_SURFACE_ICE_FRAGMENT = new WaterSurfaceIceFragmentFeature(NoneFeatureConfiguration.CODEC);
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
@@ -21,6 +22,7 @@ public class YCBModFeatures {
         register("sphere_replace", SPHERE_REPLACE);
         register("cactus_patch", CACTUS_PATCH);
         register("multisurface_sphere_replace", MULTISURFACE_SPHERE_REPLACE);
+        register("water_surface_ice_fragment", WATER_SURFACE_ICE_FRAGMENT);
     }
 
     private static void register(String name, Feature<?> obj) {

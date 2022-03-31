@@ -30,7 +30,7 @@ dependencies {
 	modImplementation ("com.terraformersmc:modmenu:${project.mod_menu_version}") { transitive = false }
 
 	// YUNG's API - required dependency
-//	modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${project.yungs_api_version}"
+	modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${project.yungs_api_version}"
 }
 
 processResources {
