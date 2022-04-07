@@ -1,10 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
-import com.yungnickyoung.minecraft.yungscavebiomes.block.BrittleAncientSandstoneBlock;
-import com.yungnickyoung.minecraft.yungscavebiomes.block.FrostLilyBlock;
-import com.yungnickyoung.minecraft.yungscavebiomes.block.IcicleBlock;
-import com.yungnickyoung.minecraft.yungscavebiomes.block.RareIceBlock;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
@@ -81,6 +78,26 @@ public class YCBModBlocks {
             .requiresCorrectToolForDrops()
             .strength(0.8f));
 
+    public static final Block PRICKLY_PEAR_CACTUS = new Block(FabricBlockSettings
+            .of(Material.CACTUS)
+            .ticksRandomly()
+            .sounds(SoundType.WOOL)
+            .strength(0.4f));
+
+    public static final Block PRICKLY_VINES = new PricklyVinesBlock(FabricBlockSettings
+            .of(Material.PLANT)
+            .ticksRandomly()
+            .noCollision()
+            .breakInstantly()
+            .sounds(SoundType.WEEPING_VINES));
+
+    public static final Block PRICKLY_VINES_PLANT = new PricklyVinesPlantBlock(FabricBlockSettings
+            .of(Material.PLANT)
+            .ticksRandomly()
+            .noCollision()
+            .breakInstantly()
+            .sounds(SoundType.WEEPING_VINES));
+
     public static void init() {
         // Blocks
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"), ICICLE);
@@ -93,6 +110,9 @@ public class YCBModBlocks {
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_ancient_sandstone"), BRITTLE_ANCIENT_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "cut_ancient_sandstone"), CUT_ANCIENT_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_ancient_sandstone"), LAYERED_ANCIENT_SANDSTONE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_pear_cactus"), PRICKLY_PEAR_CACTUS);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_vines"), PRICKLY_VINES);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_vines_plant"), PRICKLY_VINES_PLANT);
 
         // Items
         Registry.register(Registry.ITEM,
@@ -125,5 +145,11 @@ public class YCBModBlocks {
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_ancient_sandstone"),
                 new BlockItem(LAYERED_ANCIENT_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_pear_cactus"),
+                new BlockItem(PRICKLY_PEAR_CACTUS, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_vines"),
+                new BlockItem(PRICKLY_VINES, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
     }
 }

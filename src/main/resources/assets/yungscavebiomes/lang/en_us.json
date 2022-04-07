@@ -1,5 +1,7 @@
 {
   "biome.yungscavebiomes.ice_caves": "Frosted Caves",
+  "biome.yungscavebiomes.marble_caves": "Marble Caves",
+  "biome.yungscavebiomes.desert_caves": "Lost Caves",
 
   "block.yungscavebiomes.icicle": "Icicle",
   "block.yungscavebiomes.frost_lily": "Frost Lily",
@@ -11,6 +13,8 @@
   "block.yungscavebiomes.cut_ancient_sandstone": "Cut Ancient Sandstone",
   "block.yungscavebiomes.layered_ancient_sandstone": "Layered Ancient Sandstone",
   "block.yungscavebiomes.brittle_ancient_sandstone": "Brittle Ancient Sandstone",
+  "block.yungscavebiomes.prickly_pear_cactus": "Prickly Pear Cactus",
+  "block.yungscavebiomes.prickly_vines": "Prickly Vines",
 
   "entity.yungscavebiomes.ice_cube": "Ice Cube",
   "item.yungscavebiomes.ice_cube_spawn_egg": "Ice Cube Spawn Egg"

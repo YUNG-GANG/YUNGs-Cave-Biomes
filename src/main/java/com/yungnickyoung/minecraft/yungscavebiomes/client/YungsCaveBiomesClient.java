@@ -20,6 +20,9 @@ public class YungsCaveBiomesClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.ICICLE, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.FROST_LILY, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.RARE_ICE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.PRICKLY_PEAR_CACTUS, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.PRICKLY_VINES, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.PRICKLY_VINES_PLANT, RenderType.cutout());
         EntityRendererRegistry.register(YCBModEntities.ICE_CUBE, IceCubeRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(IceCubeRenderer.LAYER_LOCATION, IceCubeModel::createBodyLayer);
         ParticleFactoryRegistry.getInstance().register(YCBModParticles.ANCIENT_DUST, FallingAncientDustParticle.Provider::new);

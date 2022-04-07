@@ -3,25 +3,27 @@ package com.yungnickyoung.minecraft.yungscavebiomes.init;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyVinesBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.MultisurfaceSphereReplaceConfig;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.SphereReplaceConfig;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.valueproviders.ClampedNormalFloat;
-import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.util.valueproviders.UniformFloat;
-import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RandomizedIntStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.List;
@@ -120,6 +122,10 @@ public class YCBModConfiguredFeatures {
                     3,
                     8));
 
+    public static final ConfiguredFeature<NoneFeatureConfiguration, ?> WATER_SURFACE_ICE_FRAGMENT = YCBModFeatures.WATER_SURFACE_ICE_FRAGMENT.configured(
+            NoneFeatureConfiguration.INSTANCE
+    );
+
     public static final ConfiguredFeature<?, ?> MARBLE_CAVE_WATER_POOL = Feature.WATERLOGGED_VEGETATION_PATCH.configured(
             new VegetationPatchConfiguration(
                     BlockTags.LUSH_GROUND_REPLACEABLE.getName(),
@@ -163,15 +169,15 @@ public class YCBModConfiguredFeatures {
                     YCBModBlocks.ANCIENT_SAND.defaultBlockState(),
                     YCBModBlocks.LAYERED_ANCIENT_SANDSTONE.defaultBlockState(),
                     YCBModBlocks.ANCIENT_SANDSTONE.defaultBlockState(),
-                    7
+                    12
             )
     );
 
     public static final ConfiguredFeature<GlowLichenConfiguration, ?> MARBLE_GLOW_LICHEN = Feature.GLOW_LICHEN.configured(
-                    new GlowLichenConfiguration(
-                            20, false, true, true, 0.5F,
-                            List.of(YCBModBlocks.TRAVERTINE, YCBModBlocks.MARBLE)
-                    )
+            new GlowLichenConfiguration(
+                    20, false, true, true, 0.5F,
+                    List.of(YCBModBlocks.TRAVERTINE, YCBModBlocks.MARBLE)
+            )
     );
 
     public static final ConfiguredFeature<GlowLichenConfiguration, ?> SANDSTONE_GLOW_LICHEN = Feature.GLOW_LICHEN.configured(
@@ -192,9 +198,34 @@ public class YCBModConfiguredFeatures {
                     7
             )
     );
-	
-	public static final ConfiguredFeature<NoneFeatureConfiguration, ?> WATER_SURFACE_ICE_FRAGMENT = YCBModFeatures.WATER_SURFACE_ICE_FRAGMENT.configured(
-            NoneFeatureConfiguration.INSTANCE
+
+    private static final WeightedStateProvider PRICKLY_VINES_BODY_PROVIDER = new WeightedStateProvider(
+            SimpleWeightedRandomList.<BlockState>builder()
+                    .add(YCBModBlocks.PRICKLY_VINES_PLANT.defaultBlockState(), 4)
+                    .add(YCBModBlocks.PRICKLY_VINES_PLANT.defaultBlockState(), 1)
+                    .build());
+
+    private static final RandomizedIntStateProvider PRICKLY_VINES_HEAD_PROVIDER = new RandomizedIntStateProvider(
+            new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+                    .add(YCBModBlocks.PRICKLY_VINES.defaultBlockState(), 4)
+                    .add(YCBModBlocks.PRICKLY_VINES.defaultBlockState(), 1)),
+            PricklyVinesBlock.AGE, UniformInt.of(23, 25));
+
+    public static final ConfiguredFeature<BlockColumnConfiguration, ?> PRICKLY_VINE = Feature.BLOCK_COLUMN.configured(
+            new BlockColumnConfiguration(
+                    List.of(BlockColumnConfiguration.layer(
+                            new WeightedListInt(
+                                    SimpleWeightedRandomList.<IntProvider>builder()
+                                            .add(UniformInt.of(0, 19), 2)
+                                            .add(UniformInt.of(0, 2), 3)
+                                            .add(UniformInt.of(0, 6), 10)
+                                            .build()),
+                                    PRICKLY_VINES_BODY_PROVIDER),
+                            BlockColumnConfiguration.layer(ConstantInt.of(1), PRICKLY_VINES_HEAD_PROVIDER)),
+                    Direction.DOWN,
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE,
+                    true
+            )
     );
 
     public static void init() {
@@ -206,6 +237,7 @@ public class YCBModConfiguredFeatures {
         register("ice_patch", ICE_PATCH);
         register("ice_patch_ceiling", ICE_PATCH_CEILING);
         register("icicles", ICICLES);
+        register("water_surface_ice_fragment", WATER_SURFACE_ICE_FRAGMENT);
         register("marble_cave_water_pool", MARBLE_CAVE_WATER_POOL);
         register("spring_marble_water", SPRING_MARBLE_WATER);
         register("marble_patch", MARBLE_PATCH);
@@ -215,6 +247,7 @@ public class YCBModConfiguredFeatures {
         register("sandstone_patch", SANDSTONE_PATCH);
         register("brittle_sandstone_replace", BRITTLE_SANDSTONE_REPLACE);
         register("cactus_patch", CACTUS_PATCH);
+        register("prickly_vine", PRICKLY_VINE);
     }
 
     private static void register(String name, ConfiguredFeature<?, ?> obj) {
