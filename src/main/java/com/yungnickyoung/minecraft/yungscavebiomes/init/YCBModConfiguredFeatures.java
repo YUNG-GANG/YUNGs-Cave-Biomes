@@ -228,6 +228,13 @@ public class YCBModConfiguredFeatures {
             )
     );
 
+    public static final ConfiguredFeature<ReplaceBlockConfiguration, ?> DISK_ROCK = YCBModFeatures.DISK_ROCK.configured(
+            new ReplaceBlockConfiguration(
+                    YCBModBlocks.LAYERED_ANCIENT_SANDSTONE.defaultBlockState(),
+                    YCBModBlocks.LAYERED_ANCIENT_SANDSTONE.defaultBlockState()
+            )
+    );
+
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
         register("large_icicle_tilted", TILTED_ICICLE);
@@ -248,6 +255,7 @@ public class YCBModConfiguredFeatures {
         register("brittle_sandstone_replace", BRITTLE_SANDSTONE_REPLACE);
         register("cactus_patch", CACTUS_PATCH);
         register("prickly_vine", PRICKLY_VINE);
+        register("disk_rock", DISK_ROCK);
     }
 
     private static void register(String name, ConfiguredFeature<?, ?> obj) {

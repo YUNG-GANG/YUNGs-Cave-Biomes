@@ -170,7 +170,7 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature CACTUS_PATCH = YCBModConfiguredFeatures.CACTUS_PATCH.placed(
-            CountPlacement.of(100),
+            CountPlacement.of(150),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
@@ -208,6 +208,16 @@ public class YCBModPlacedFeatures {
             BiomeFilter.biome()
     );
 
+    public static final PlacedFeature DISK_ROCK = YCBModConfiguredFeatures.DISK_ROCK.placed(
+            CountPlacement.of(15),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+            BiomeFilter.biome()
+    );
+
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
         register("large_icicle_tilted", TILTED_ICICLE);
@@ -230,6 +240,7 @@ public class YCBModPlacedFeatures {
         register("brittle_sandstone_replace", BRITTLE_SANDSTONE_REPLACE);
         register("dead_bush_spread", DEAD_BUSH_SPREAD);
         register("prickly_vines", PRICKLY_VINES);
+        register("disk_rock", DISK_ROCK);
     }
 
     private static void register(String name, PlacedFeature obj) {

@@ -45,23 +45,23 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
             // Cactus patch
             for (int i = 0; i < random.nextInt(3); i++) {
                 if (!level.getBlockState(local.above(i)).isAir()) {
-                    continue;
+                    break;
                 }
 
                 if (!level.getBlockState(local.above(i).north()).isAir()) {
-                    continue;
+                    break;
                 }
 
                 if (!level.getBlockState(local.above(i).east()).isAir()) {
-                    continue;
+                    break;
                 }
 
                 if (!level.getBlockState(local.above(i).west()).isAir()) {
-                    continue;
+                    break;
                 }
 
                 if (!level.getBlockState(local.above(i).south()).isAir()) {
-                    continue;
+                    break;
                 }
 
                 level.setBlock(local.above(i), Blocks.CACTUS.defaultBlockState(), 3);

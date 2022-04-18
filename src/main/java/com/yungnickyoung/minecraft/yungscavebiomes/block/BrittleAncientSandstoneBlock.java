@@ -17,7 +17,7 @@ public class BrittleAncientSandstoneBlock extends Block {
 
     @Override
     public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
-        if (random.nextInt(12) == 0 && FallingBlock.isFree(level.getBlockState(blockPos.below()))) {
+        if (random.nextInt(36) == 0 && FallingBlock.isFree(level.getBlockState(blockPos.below()))) {
             double d = (double)blockPos.getX() + random.nextDouble();
             double e = (double)blockPos.getY() - 0.05;
             double f = (double)blockPos.getZ() + random.nextDouble();

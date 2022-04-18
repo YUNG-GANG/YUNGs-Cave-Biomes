@@ -32,16 +32,20 @@ public class DiskRockFeature extends Feature<ReplaceBlockConfiguration> {
         // 3 - 7
         int radXZ = random.nextInt(5) + 3;
         int radY = random.nextInt(2) + (int) (radXZ / 1.5);
+        double aRadY = radY;
+
+        double taperPercent = random.nextDouble() * 0.4;
 
         for (int x = -radXZ; x <= radXZ; x++) {
             for (int z = -radXZ; z <= radXZ; z++) {
+
                 for (int y = -radY; y <= radY; y++) {
                     double dx = x / (double) radXZ;
                     double dz = z / (double) radXZ;
-                    double dy = y / (double) radY;
+                    double dy = y / (double) aRadY;
 
                     // Make y a bit smaller
-                    dy *= 1.15;
+                    dy *= 1.05;
 
                     double noiseHere = noise.getValue(x + pos.getX(), y + pos.getY(), z + pos.getZ()) * 0.1;
 
@@ -52,6 +56,8 @@ public class DiskRockFeature extends Feature<ReplaceBlockConfiguration> {
                             level.setBlock(local, state, 3);
                         }
                     }
+
+                    aRadY += taperPercent;
                 }
             }
         }
