@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SandBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
@@ -78,11 +79,16 @@ public class YCBModBlocks {
             .requiresCorrectToolForDrops()
             .strength(0.8f));
 
-    public static final Block PRICKLY_PEAR_CACTUS = new Block(FabricBlockSettings
+    public static final Block PRICKLY_PEAR_CACTUS = new PricklyPearCactusBlock(FabricBlockSettings
             .of(Material.CACTUS)
             .ticksRandomly()
             .sounds(SoundType.WOOL)
             .strength(0.4f));
+
+    public static final Block POTTED_PRICKLY_PEAR_CACTUS = new FlowerPotBlock(PRICKLY_PEAR_CACTUS, FabricBlockSettings
+            .of(Material.DECORATION)
+            .instabreak()
+            .noOcclusion());
 
     public static final Block PRICKLY_VINES = new PricklyVinesBlock(FabricBlockSettings
             .of(Material.PLANT)
@@ -111,6 +117,7 @@ public class YCBModBlocks {
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "cut_ancient_sandstone"), CUT_ANCIENT_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_ancient_sandstone"), LAYERED_ANCIENT_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_pear_cactus"), PRICKLY_PEAR_CACTUS);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "potted_prickly_pear_cactus"), POTTED_PRICKLY_PEAR_CACTUS);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_vines"), PRICKLY_VINES);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_vines_plant"), PRICKLY_VINES_PLANT);
 
