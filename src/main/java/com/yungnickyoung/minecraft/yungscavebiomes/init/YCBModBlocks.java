@@ -64,8 +64,18 @@ public class YCBModBlocks {
             .requiresCorrectToolForDrops()
             .strength(0.8f));
 
-    public static final Block BRITTLE_ANCIENT_SANDSTONE = new BrittleAncientSandstoneBlock(FabricBlockSettings
+    public static final Block BRITTLE_ANCIENT_SANDSTONE = new BrittleSandstoneBlock(0xd1b482, FabricBlockSettings
             .of(Material.STONE, MaterialColor.SAND)
+            .requiresCorrectToolForDrops()
+            .strength(0.5f));
+
+    public static final Block BRITTLE_SANDSTONE = new BrittleSandstoneBlock(14406560, FabricBlockSettings
+            .of(Material.STONE, MaterialColor.SAND)
+            .requiresCorrectToolForDrops()
+            .strength(0.5f));
+
+    public static final Block BRITTLE_RED_SANDSTONE = new BrittleSandstoneBlock(11098145, FabricBlockSettings
+            .of(Material.STONE, MaterialColor.COLOR_ORANGE)
             .requiresCorrectToolForDrops()
             .strength(0.5f));
 
@@ -76,6 +86,16 @@ public class YCBModBlocks {
 
     public static final Block LAYERED_ANCIENT_SANDSTONE = new Block(FabricBlockSettings
             .of(Material.STONE, MaterialColor.SAND)
+            .requiresCorrectToolForDrops()
+            .strength(0.8f));
+
+    public static final Block LAYERED_SANDSTONE = new Block(FabricBlockSettings
+            .of(Material.STONE, MaterialColor.SAND)
+            .requiresCorrectToolForDrops()
+            .strength(0.8f));
+
+    public static final Block LAYERED_RED_SANDSTONE = new Block(FabricBlockSettings
+            .of(Material.STONE, MaterialColor.COLOR_ORANGE)
             .requiresCorrectToolForDrops()
             .strength(0.8f));
 
@@ -114,8 +134,12 @@ public class YCBModBlocks {
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sand"), ANCIENT_SAND);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sandstone"), ANCIENT_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_ancient_sandstone"), BRITTLE_ANCIENT_SANDSTONE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_sandstone"), BRITTLE_SANDSTONE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_red_sandstone"), BRITTLE_RED_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "cut_ancient_sandstone"), CUT_ANCIENT_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_ancient_sandstone"), LAYERED_ANCIENT_SANDSTONE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_sandstone"), LAYERED_SANDSTONE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_red_sandstone"), LAYERED_RED_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_pear_cactus"), PRICKLY_PEAR_CACTUS);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "potted_prickly_pear_cactus"), POTTED_PRICKLY_PEAR_CACTUS);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_vines"), PRICKLY_VINES);
@@ -147,11 +171,23 @@ public class YCBModBlocks {
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_ancient_sandstone"),
                 new BlockItem(BRITTLE_ANCIENT_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
         Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_sandstone"),
+                new BlockItem(BRITTLE_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_red_sandstone"),
+                new BlockItem(BRITTLE_RED_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+        Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "cut_ancient_sandstone"),
                 new BlockItem(CUT_ANCIENT_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_ancient_sandstone"),
                 new BlockItem(LAYERED_ANCIENT_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_sandstone"),
+                new BlockItem(LAYERED_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_red_sandstone"),
+                new BlockItem(LAYERED_RED_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_pear_cactus"),
                 new BlockItem(PRICKLY_PEAR_CACTUS, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));

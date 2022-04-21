@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FallingBlock;
@@ -10,9 +11,12 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
-public class BrittleAncientSandstoneBlock extends Block {
-    public BrittleAncientSandstoneBlock(BlockBehaviour.Properties properties) {
+public class BrittleSandstoneBlock extends Block {
+    private final int dustColor;
+
+    public BrittleSandstoneBlock(int dustColor, BlockBehaviour.Properties properties) {
         super(properties);
+        this.dustColor = dustColor;
     }
 
     @Override
@@ -21,7 +25,11 @@ public class BrittleAncientSandstoneBlock extends Block {
             double d = (double)blockPos.getX() + random.nextDouble();
             double e = (double)blockPos.getY() - 0.05;
             double f = (double)blockPos.getZ() + random.nextDouble();
-            level.addParticle(YCBModParticles.ANCIENT_DUST, d, e, f, 0.0, 0.0, 0.0);
+            level.addParticle(new BlockParticleOption(YCBModParticles.ANCIENT_DUST, blockState), d, e, f, 0.0, 0.0, 0.0);
         }
+    }
+
+    public int getDustColor() {
+        return this.dustColor;
     }
 }

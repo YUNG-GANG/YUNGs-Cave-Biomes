@@ -1,9 +1,14 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.block.BrittleSandstoneBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class FallingAncientDustParticle extends TextureSheetParticle {
@@ -52,11 +57,11 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
             this.oRoll = 0.0f;
         }
         this.move(this.xd, this.yd, this.zd);
-        this.yd -= (double)0.003f;
-        this.yd = Math.max(this.yd, (double)-0.14f);
+        this.yd -= 0.003f;
+        this.yd = Math.max(this.yd, -0.14f);
     }
 
-    public static class Provider implements ParticleProvider<SimpleParticleType> {
+    public static class Provider implements ParticleProvider<BlockParticleOption> {
         private final SpriteSet sprite;
 
         public Provider(SpriteSet spriteSet) {
@@ -65,17 +70,16 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
 
         @Override
         @Nullable
-        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double xo, double yo, double zo, double dx, double dy, double dz) {
-//            BlockState blockState = simpleParticleType.getState();
-//            if (!blockState.isAir() && blockState.getRenderShape() == RenderShape.INVISIBLE) {
-//                return null;
-//            }
-//            BlockPos blockPos = new BlockPos(xo, yo, zo);
-//            int color = Minecraft.getInstance().getBlockColors().getColor(blockState, clientLevel, blockPos);
-//            if (blockState.getBlock() instanceof FallingBlock) {
-//                color = ((FallingBlock)blockState.getBlock()).getDustColor(blockState, clientLevel, blockPos);
-//            }
-            int color = 0xd1b482;
+        public Particle createParticle(BlockParticleOption blockParticleOption, ClientLevel clientLevel, double xo, double yo, double zo, double dx, double dy, double dz) {
+            BlockState blockState = blockParticleOption.getState();
+            if (!blockState.isAir() && blockState.getRenderShape() == RenderShape.INVISIBLE) {
+                return null;
+            }
+            BlockPos blockPos = new BlockPos(xo, yo, zo);
+            int color = Minecraft.getInstance().getBlockColors().getColor(blockState, clientLevel, blockPos);
+            if (blockState.getBlock() instanceof BrittleSandstoneBlock) {
+                color = ((BrittleSandstoneBlock)blockState.getBlock()).getDustColor();
+            }
             float r = (float)(color >> 16 & 0xFF) / 255.0f;
             float g = (float)(color >> 8 & 0xFF) / 255.0f;
             float b = (float)(color & 0xFF) / 255.0f;
