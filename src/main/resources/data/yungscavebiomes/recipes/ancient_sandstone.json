@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "yungscavebiomes:ancient_sand"
+    }
+  },
+  "result": {
+    "item": "yungscavebiomes:ancient_sandstone",
+    "count": 1
+  }
+}
