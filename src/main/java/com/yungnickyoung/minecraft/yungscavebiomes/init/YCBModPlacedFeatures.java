@@ -170,7 +170,17 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature CACTUS_PATCH = YCBModConfiguredFeatures.CACTUS_PATCH.placed(
-            CountPlacement.of(150),
+            CountPlacement.of(100),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature PRICKLY_PEAR_CACTUS_PATCH = YCBModConfiguredFeatures.PRICKLY_PEAR_CACTUS_PATCH.placed(
+            CountPlacement.of(50),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
@@ -180,7 +190,7 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature BRITTLE_SANDSTONE_REPLACE = YCBModConfiguredFeatures.BRITTLE_SANDSTONE_REPLACE.placed(
-            CountPlacement.of(100),
+            CountPlacement.of(150),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(),
@@ -199,7 +209,7 @@ public class YCBModPlacedFeatures {
     );
 
     public static final PlacedFeature PRICKLY_VINES = YCBModConfiguredFeatures.PRICKLY_VINE.placed(
-            CountPlacement.of(60),
+            CountPlacement.of(120),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.hasSturdyFace(Direction.DOWN),
@@ -237,6 +247,7 @@ public class YCBModPlacedFeatures {
         register("sandstone_patch", SANDSTONE_PATCH);
         register("sandstone_patch_2", SANDSTONE_PATCH2);
         register("cactus_patch", CACTUS_PATCH);
+        register("prickly_pear_cactus_patch", PRICKLY_PEAR_CACTUS_PATCH);
         register("brittle_sandstone_replace", BRITTLE_SANDSTONE_REPLACE);
         register("dead_bush_spread", DEAD_BUSH_SPREAD);
         register("prickly_vines", PRICKLY_VINES);

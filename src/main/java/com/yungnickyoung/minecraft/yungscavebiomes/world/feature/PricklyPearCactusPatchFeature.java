@@ -3,7 +3,9 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -11,33 +13,33 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 import java.util.Random;
 
-public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
-    public CactusPatchFeature(Codec<NoneFeatureConfiguration> codec) {
+public class PricklyPearCactusPatchFeature extends Feature<NoneFeatureConfiguration> {
+    public PricklyPearCactusPatchFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
     }
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel level = context.level();
-        BlockPos pos = context.origin();
+        BlockPos origin = context.origin();
         Random random = context.random();
 
         int maxCacti = 3;
 
-        for (int j = 0; j < 16; j++) {
+        for (int i = 0; i < 10; i++) {
             if (maxCacti <= 0) {
                 return true;
             }
 
             // Triangle 5x3x5 spread
-            BlockPos local = pos.offset(
+            BlockPos pos = origin.offset(
                     random.nextInt(6) - random.nextInt(6),
                     random.nextInt(4) - random.nextInt(4),
                     random.nextInt(6) - random.nextInt(6)
             );
 
             // Check for sandstone below
-            if (!level.getBlockState(local.below()).is(YCBModBlocks.ANCIENT_SAND)) {
+            if (!level.getBlockState(pos.below()).is(YCBModBlocks.ANCIENT_SAND)) {
                 continue;
             }
 
@@ -46,36 +48,19 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
                 continue;
             }
 
-            level.setBlock(local.below(), YCBModBlocks.ANCIENT_SAND.defaultBlockState(), 3);
+            // Ensure no adjacent cacti to help spread out distribution
+            boolean isAdjacentCactus = false;
 
-            // Attempt to place cactus
-            boolean placedCactus = false;
-            for (int i = 0; i < random.nextInt(3); i++) {
-                if (!level.getBlockState(local.above(i)).isAir()) {
+            for (Direction direction : Direction.Plane.HORIZONTAL) {
+                Block block = level.getBlockState(pos.relative(direction)).getBlock();
+                if (block == YCBModBlocks.PRICKLY_PEAR_CACTUS || block == Blocks.CACTUS) {
+                    isAdjacentCactus = true;
                     break;
                 }
-
-                if (!level.getBlockState(local.above(i).north()).isAir()) {
-                    break;
-                }
-
-                if (!level.getBlockState(local.above(i).east()).isAir()) {
-                    break;
-                }
-
-                if (!level.getBlockState(local.above(i).west()).isAir()) {
-                    break;
-                }
-
-                if (!level.getBlockState(local.above(i).south()).isAir()) {
-                    break;
-                }
-
-                level.setBlock(local.above(i), Blocks.CACTUS.defaultBlockState(), 3);
-                placedCactus = true;
             }
 
-            if (placedCactus) {
+            if (!isAdjacentCactus) {
+                level.setBlock(pos, YCBModBlocks.PRICKLY_PEAR_CACTUS.defaultBlockState(), 3);
                 maxCacti--;
             }
         }

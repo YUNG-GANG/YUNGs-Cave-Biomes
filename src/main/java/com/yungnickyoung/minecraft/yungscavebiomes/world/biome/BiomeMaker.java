@@ -99,6 +99,7 @@ public class BiomeMaker {
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_PATCH2);
 
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.CACTUS_PATCH);
+        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.PRICKLY_PEAR_CACTUS_PATCH);
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_GLOW_LICHEN);
 
         builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.BRITTLE_SANDSTONE_REPLACE);

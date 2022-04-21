@@ -191,6 +191,10 @@ public class YCBModConfiguredFeatures {
             NoneFeatureConfiguration.INSTANCE
     );
 
+    public static final ConfiguredFeature<NoneFeatureConfiguration, ?> PRICKLY_PEAR_CACTUS_PATCH = YCBModFeatures.PRICKLY_PEAR_CACTUS_PATCH.configured(
+            NoneFeatureConfiguration.INSTANCE
+    );
+
     public static final ConfiguredFeature<SphereReplaceConfig, ?> BRITTLE_SANDSTONE_REPLACE = YCBModFeatures.SPHERE_REPLACE.configured(
             new SphereReplaceConfig(
                     ImmutableList.of(YCBModBlocks.ANCIENT_SANDSTONE),
@@ -254,6 +258,7 @@ public class YCBModConfiguredFeatures {
         register("sandstone_patch", SANDSTONE_PATCH);
         register("brittle_sandstone_replace", BRITTLE_SANDSTONE_REPLACE);
         register("cactus_patch", CACTUS_PATCH);
+        register("prickly_pear_cactus_patch", PRICKLY_PEAR_CACTUS_PATCH);
         register("prickly_vine", PRICKLY_VINE);
         register("disk_rock", DISK_ROCK);
     }
