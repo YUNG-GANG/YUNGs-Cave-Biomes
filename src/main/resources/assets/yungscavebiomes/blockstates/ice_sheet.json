@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "yungscavebiomes:block/ice_sheet",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "yungscavebiomes:block/ice_sheet"
+    },
+    "facing=south": {
+      "model": "yungscavebiomes:block/ice_sheet",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "yungscavebiomes:block/ice_sheet",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "yungscavebiomes:block/ice_sheet_up"
+    },
+    "facing=down": {
+      "model": "yungscavebiomes:block/ice_sheet_down"
+    }
+  }
+}

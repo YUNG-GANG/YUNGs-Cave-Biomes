@@ -19,6 +19,7 @@ public class YungsCaveBiomesClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.ICICLE, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.FROST_LILY, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.RARE_ICE, RenderType.translucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.ICE_SHEET, RenderType.translucent());
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.PRICKLY_PEAR_CACTUS, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.POTTED_PRICKLY_PEAR_CACTUS, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(YCBModBlocks.PRICKLY_VINES, RenderType.cutout());

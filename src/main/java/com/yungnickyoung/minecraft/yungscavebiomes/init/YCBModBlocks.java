@@ -4,14 +4,14 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FlowerPotBlock;
-import net.minecraft.world.level.block.SandBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
@@ -52,6 +52,13 @@ public class YCBModBlocks {
             .lightLevel((blockState) -> 11)
             .requiresCorrectToolForDrops()
             .strength(3f)
+            .sound(SoundType.GLASS));
+
+    public static final Block ICE_SHEET = new IceSheetBlock(FabricBlockSettings
+            .of(Material.ICE_SOLID, MaterialColor.ICE)
+            .friction(0.98f)
+            .noOcclusion()
+            .strength(0.5f)
             .sound(SoundType.GLASS));
 
     public static final Block ANCIENT_SAND = new SandBlock(0xd1b482, FabricBlockSettings
@@ -131,6 +138,7 @@ public class YCBModBlocks {
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "marble"), MARBLE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "travertine"), TRAVERTINE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "rare_ice"), RARE_ICE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "ice_sheet"), ICE_SHEET);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sand"), ANCIENT_SAND);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sandstone"), ANCIENT_SANDSTONE);
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_ancient_sandstone"), BRITTLE_ANCIENT_SANDSTONE);
@@ -161,6 +169,9 @@ public class YCBModBlocks {
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "rare_ice"),
                 new BlockItem(RARE_ICE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "ice_sheet"),
+                new BlockItem(ICE_SHEET, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sand"),
                 new BlockItem(ANCIENT_SAND, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
