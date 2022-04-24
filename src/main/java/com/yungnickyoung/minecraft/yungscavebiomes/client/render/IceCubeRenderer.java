@@ -3,13 +3,12 @@ package com.yungnickyoung.minecraft.yungscavebiomes.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.model.IceCubeModel;
-import com.yungnickyoung.minecraft.yungscavebiomes.entity.IceCubeEntity;
+import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.monster.Slime;
 
 public class IceCubeRenderer extends MobRenderer<IceCubeEntity, IceCubeModel<IceCubeEntity>> {
     public static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation(YungsCaveBiomes.MOD_ID, "textures/entity/ice_cube/ice_cube.png");
