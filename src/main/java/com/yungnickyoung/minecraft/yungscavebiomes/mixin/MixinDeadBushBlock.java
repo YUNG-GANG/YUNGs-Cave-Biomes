@@ -11,6 +11,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Allow dead bush blocks to be placed on ancient sand.
+ */
 @Mixin(DeadBushBlock.class)
 public class MixinDeadBushBlock {
     @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)

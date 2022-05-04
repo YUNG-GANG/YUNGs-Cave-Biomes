@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
+package com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor;
 
 import net.minecraft.world.level.levelgen.NoiseChunk;
 import net.minecraft.world.level.levelgen.NoiseSampler;

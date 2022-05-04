@@ -1,25 +1,55 @@
 {
-  "variants": {
-    "facing=east": {
-      "model": "yungscavebiomes:block/ice_sheet",
-      "y": 90
+  "multipart": [
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet_up"
+      }
     },
-    "facing=north": {
-      "model": "yungscavebiomes:block/ice_sheet"
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet_down"
+      }
     },
-    "facing=south": {
-      "model": "yungscavebiomes:block/ice_sheet",
-      "y": 180
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet"
+      }
     },
-    "facing=west": {
-      "model": "yungscavebiomes:block/ice_sheet",
-      "y": 270
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet",
+        "y": 180
+      }
     },
-    "facing=up": {
-      "model": "yungscavebiomes:block/ice_sheet_up"
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet",
+        "y": 90
+      }
     },
-    "facing=down": {
-      "model": "yungscavebiomes:block/ice_sheet_down"
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet",
+        "y": 270
+      }
     }
-  }
+  ]
 }

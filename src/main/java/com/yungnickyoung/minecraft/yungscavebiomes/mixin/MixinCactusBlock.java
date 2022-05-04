@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Allow cactus blocks to be placed on ancient sand.
+ */
 @Mixin(CactusBlock.class)
 public class MixinCactusBlock {
     @Inject(method = "canSurvive", at = @At("TAIL"), cancellable = true)

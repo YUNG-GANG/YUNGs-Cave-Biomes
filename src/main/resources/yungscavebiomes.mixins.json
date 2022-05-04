@@ -11,7 +11,7 @@
     "MixinNoiseBasedChunkGenerator",
     "MixinNoiseSampler",
     "MixinOverworldBiomeBuilder",
-    "NoiseChunkAccessor"
+    "accessor.NoiseChunkAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -11,19 +11,53 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Utilities for creating new biomes.
+ */
 public class BiomeMaker {
-    protected static int calculateSkyColor(float f) {
-        float g = f / 3.0F;
+    protected static int calculateSkyColor(float temperature) {
+        float g = temperature / 3.0F;
         g = Mth.clamp(g, -1.0F, 1.0F);
         return Mth.hsvToRgb(0.62222224F - g * 0.05F, 0.5F + g * 0.1F, 1.0F);
     }
 
-    private static Biome biome(Biome.Precipitation precipitation, Biome.BiomeCategory biomeCategory, float f, float g, MobSpawnSettings.Builder builder, BiomeGenerationSettings.Builder builder2, @Nullable Music music) {
-        return biome(precipitation, biomeCategory, f, g, 4159204, 329011, builder, builder2, music);
+    private static Biome biome(Biome.Precipitation precipitation,
+                               Biome.BiomeCategory biomeCategory,
+                               float temperature,
+                               float downfall,
+                               MobSpawnSettings.Builder mobSpawnSettingsBuilder,
+                               BiomeGenerationSettings.Builder biomeGenerationSettingsBuilder,
+                               @Nullable Music music
+    ) {
+        return biome(precipitation, biomeCategory, temperature, downfall, 4159204, 329011,
+                mobSpawnSettingsBuilder, biomeGenerationSettingsBuilder, music);
     }
 
-    private static Biome biome(Biome.Precipitation precipitation, Biome.BiomeCategory biomeCategory, float f, float g, int i, int j, MobSpawnSettings.Builder builder, BiomeGenerationSettings.Builder builder2, @Nullable Music music) {
-        return (new Biome.BiomeBuilder()).precipitation(precipitation).biomeCategory(biomeCategory).temperature(f).downfall(g).specialEffects((new BiomeSpecialEffects.Builder()).waterColor(i).waterFogColor(j).fogColor(12638463).skyColor(calculateSkyColor(f)).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).backgroundMusic(music).build()).mobSpawnSettings(builder.build()).generationSettings(builder2.build()).build();
+    private static Biome biome(Biome.Precipitation precipitation,
+                               Biome.BiomeCategory biomeCategory,
+                               float temperature,
+                               float downfall,
+                               int waterColor,
+                               int waterFogColor,
+                               MobSpawnSettings.Builder mobSpawnSettingsBuilder,
+                               BiomeGenerationSettings.Builder biomeGenerationSettingsBuilder,
+                               @Nullable Music music
+    ) {
+        return new Biome.BiomeBuilder()
+                .precipitation(precipitation)
+                .biomeCategory(biomeCategory)
+                .temperature(temperature)
+                .downfall(downfall)
+                .specialEffects(new BiomeSpecialEffects.Builder()
+                        .waterColor(waterColor)
+                        .waterFogColor(waterFogColor)
+                        .fogColor(12638463)
+                        .skyColor(calculateSkyColor(temperature))
+                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
+                        .backgroundMusic(music).build())
+                .mobSpawnSettings(mobSpawnSettingsBuilder.build())
+                .generationSettings(biomeGenerationSettingsBuilder.build())
+                .build();
     }
 
     private static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {
@@ -36,78 +70,81 @@ public class BiomeMaker {
     }
 
     public static Biome iceCaves() {
-        MobSpawnSettings.Builder builder = new MobSpawnSettings.Builder();
-        BiomeDefaultFeatures.dripstoneCavesSpawns(builder);
-        BiomeGenerationSettings.Builder builder2 = new BiomeGenerationSettings.Builder();
-        globalOverworldGeneration(builder2);
-        BiomeDefaultFeatures.addPlainGrass(builder2);
-        BiomeDefaultFeatures.addDefaultOres(builder2, true);
-        BiomeDefaultFeatures.addDefaultSoftDisks(builder2);
-        BiomeDefaultFeatures.addPlainVegetation(builder2);
-        BiomeDefaultFeatures.addDefaultMushrooms(builder2);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(builder2);
+        MobSpawnSettings.Builder mobSpawnSettingsBuilder = new MobSpawnSettings.Builder();
+        BiomeDefaultFeatures.dripstoneCavesSpawns(mobSpawnSettingsBuilder);
+        BiomeGenerationSettings.Builder biomeSettingsBuilder = new BiomeGenerationSettings.Builder();
+        globalOverworldGeneration(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addPlainGrass(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultOres(biomeSettingsBuilder, true);
+        BiomeDefaultFeatures.addDefaultSoftDisks(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addPlainVegetation(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultMushrooms(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeSettingsBuilder);
 
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.LARGE_ICICLE);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.TILTED_ICICLE);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SMALL_ICICLE);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICE_PATCH);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICE_PATCH_CEILING);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.FROST_LILY);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.WATER_SURFACE_ICE_FRAGMENT);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.WATER_SURFACE_ICE_FRAGMENT2);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICICLES);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.LARGE_ICICLE);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.TILTED_ICICLE);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SMALL_ICICLE);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICE_PATCH);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICE_PATCH_CEILING);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.FROST_LILY);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.WATER_SURFACE_ICE_FRAGMENT);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.WATER_SURFACE_ICE_FRAGMENT2);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICICLES);
 
         Music music = Musics.createGameMusic(YCBModSounds.MUSIC_BIOME_ICE_CAVES);
-        return biome(Biome.Precipitation.SNOW, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
+        return biome(Biome.Precipitation.SNOW, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F,
+                mobSpawnSettingsBuilder, biomeSettingsBuilder, music);
     }
 
     public static Biome marbleCaves() {
-        MobSpawnSettings.Builder builder = new MobSpawnSettings.Builder();
-        BiomeDefaultFeatures.dripstoneCavesSpawns(builder);
-        BiomeGenerationSettings.Builder builder2 = new BiomeGenerationSettings.Builder();
-        globalOverworldGeneration(builder2);
-        BiomeDefaultFeatures.addPlainGrass(builder2);
-        BiomeDefaultFeatures.addDefaultOres(builder2, true);
-        BiomeDefaultFeatures.addDefaultSoftDisks(builder2);
-        BiomeDefaultFeatures.addPlainVegetation(builder2);
-        BiomeDefaultFeatures.addDefaultMushrooms(builder2);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(builder2);
+        MobSpawnSettings.Builder mobSpawnSettingsBuilder = new MobSpawnSettings.Builder();
+        BiomeDefaultFeatures.dripstoneCavesSpawns(mobSpawnSettingsBuilder);
+        BiomeGenerationSettings.Builder biomeSettingsBuilder = new BiomeGenerationSettings.Builder();
+        globalOverworldGeneration(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addPlainGrass(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultOres(biomeSettingsBuilder, true);
+        BiomeDefaultFeatures.addDefaultSoftDisks(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addPlainVegetation(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultMushrooms(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeSettingsBuilder);
 
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_WATER_POOL);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_WATER_SPRING);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_PATCH);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.TRAVERTINE_PATCH);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_GLOW_LICHEN);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_WATER_POOL);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_WATER_SPRING);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_PATCH);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.TRAVERTINE_PATCH);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.MARBLE_GLOW_LICHEN);
 
         Music music = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES);
-        return biome(Biome.Precipitation.RAIN, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
+        return biome(Biome.Precipitation.RAIN, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F,
+                mobSpawnSettingsBuilder, biomeSettingsBuilder, music);
     }
 
     public static Biome ancientCaves() {
-        MobSpawnSettings.Builder builder = new MobSpawnSettings.Builder();
-        BiomeDefaultFeatures.dripstoneCavesSpawns(builder);
-        BiomeGenerationSettings.Builder builder2 = new BiomeGenerationSettings.Builder();
-        globalOverworldGeneration(builder2);
-        BiomeDefaultFeatures.addPlainGrass(builder2);
-        BiomeDefaultFeatures.addDefaultOres(builder2, true);
-        BiomeDefaultFeatures.addDefaultSoftDisks(builder2);
-        BiomeDefaultFeatures.addPlainVegetation(builder2);
-        BiomeDefaultFeatures.addDefaultMushrooms(builder2);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(builder2);
+        MobSpawnSettings.Builder mobSpawnSettingsBuilder = new MobSpawnSettings.Builder();
+        BiomeDefaultFeatures.dripstoneCavesSpawns(mobSpawnSettingsBuilder);
+        BiomeGenerationSettings.Builder biomeSettingsBuilder = new BiomeGenerationSettings.Builder();
+        globalOverworldGeneration(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addPlainGrass(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultOres(biomeSettingsBuilder, true);
+        BiomeDefaultFeatures.addDefaultSoftDisks(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addPlainVegetation(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultMushrooms(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeSettingsBuilder);
 
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_PATCH);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_PATCH2);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_PATCH);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_PATCH2);
 
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.CACTUS_PATCH);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.PRICKLY_PEAR_CACTUS_PATCH);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_GLOW_LICHEN);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.CACTUS_PATCH);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.PRICKLY_PEAR_CACTUS_PATCH);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.SANDSTONE_GLOW_LICHEN);
 
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.BRITTLE_SANDSTONE_REPLACE);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.DEAD_BUSH_SPREAD);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.PRICKLY_VINES);
-        builder2.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.DISK_ROCK);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.BRITTLE_SANDSTONE_REPLACE);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.DEAD_BUSH_SPREAD);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.PRICKLY_VINES);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.DISK_ROCK);
 
         Music music = Musics.createGameMusic(YCBModSounds.MUSIC_BIOME_DESERT_CAVES);
-        return biome(Biome.Precipitation.NONE, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F, builder, builder2, music);
+        return biome(Biome.Precipitation.NONE, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F,
+                mobSpawnSettingsBuilder, biomeSettingsBuilder, music);
     }
 }

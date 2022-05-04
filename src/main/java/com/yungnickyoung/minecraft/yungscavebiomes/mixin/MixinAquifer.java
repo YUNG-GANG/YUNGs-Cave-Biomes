@@ -1,13 +1,13 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBiomes;
+import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.NoiseChunkAccessor;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Aquifer;
 import net.minecraft.world.level.levelgen.NoiseChunk;
 import org.spongepowered.asm.mixin.Final;
@@ -17,6 +17,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Enforces a constant aquifer at y=16 in marble caves biome.
+ */
 @Mixin(Aquifer.NoiseBasedAquifer.class)
 public class MixinAquifer {
     @Shadow @Final private NoiseChunk noiseChunk;

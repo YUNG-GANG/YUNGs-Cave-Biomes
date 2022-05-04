@@ -2,16 +2,20 @@ package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.*;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.property.IceSheetFaces;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.SandBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.RedstoneSide;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
@@ -59,7 +63,10 @@ public class YCBModBlocks {
             .friction(0.98f)
             .noOcclusion()
             .strength(0.5f)
+            .lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 7 : 0)
             .sound(SoundType.GLASS));
+
+    public static EnumProperty<IceSheetFaces> FACES = EnumProperty.create("ice_sheet_faces", IceSheetFaces.class);
 
     public static final Block ANCIENT_SAND = new SandBlock(0xd1b482, FabricBlockSettings
             .of(Material.SAND, MaterialColor.SAND)
