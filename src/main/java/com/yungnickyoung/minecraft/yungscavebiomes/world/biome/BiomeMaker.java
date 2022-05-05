@@ -3,6 +3,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModPlacedFeatures;
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModSounds;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import net.minecraft.data.worldgen.placement.CavePlacements;
+import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
@@ -64,9 +66,20 @@ public class BiomeMaker {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(builder);
         BiomeDefaultFeatures.addDefaultCrystalFormations(builder);
         BiomeDefaultFeatures.addDefaultMonsterRoom(builder);
-        BiomeDefaultFeatures.addDefaultUndergroundVariety(builder);
         BiomeDefaultFeatures.addDefaultSprings(builder);
         BiomeDefaultFeatures.addSurfaceFreezing(builder);
+    }
+
+    private static void addUndergroundVarietyNoGlowLichen(BiomeGenerationSettings.Builder builder) {
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_DIRT);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_GRAVEL);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_GRANITE_UPPER);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_GRANITE_LOWER);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_DIORITE_UPPER);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_DIORITE_LOWER);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_ANDESITE_UPPER);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_ANDESITE_LOWER);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_TUFF);
     }
 
     public static Biome iceCaves() {
@@ -74,6 +87,7 @@ public class BiomeMaker {
         BiomeDefaultFeatures.dripstoneCavesSpawns(mobSpawnSettingsBuilder);
         BiomeGenerationSettings.Builder biomeSettingsBuilder = new BiomeGenerationSettings.Builder();
         globalOverworldGeneration(biomeSettingsBuilder);
+        addUndergroundVarietyNoGlowLichen(biomeSettingsBuilder);
         BiomeDefaultFeatures.addPlainGrass(biomeSettingsBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeSettingsBuilder, true);
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeSettingsBuilder);
@@ -101,6 +115,7 @@ public class BiomeMaker {
         BiomeDefaultFeatures.dripstoneCavesSpawns(mobSpawnSettingsBuilder);
         BiomeGenerationSettings.Builder biomeSettingsBuilder = new BiomeGenerationSettings.Builder();
         globalOverworldGeneration(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultUndergroundVariety(biomeSettingsBuilder);
         BiomeDefaultFeatures.addPlainGrass(biomeSettingsBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeSettingsBuilder, true);
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeSettingsBuilder);
@@ -124,6 +139,7 @@ public class BiomeMaker {
         BiomeDefaultFeatures.dripstoneCavesSpawns(mobSpawnSettingsBuilder);
         BiomeGenerationSettings.Builder biomeSettingsBuilder = new BiomeGenerationSettings.Builder();
         globalOverworldGeneration(biomeSettingsBuilder);
+        BiomeDefaultFeatures.addDefaultUndergroundVariety(biomeSettingsBuilder);
         BiomeDefaultFeatures.addPlainGrass(biomeSettingsBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeSettingsBuilder, true);
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeSettingsBuilder);

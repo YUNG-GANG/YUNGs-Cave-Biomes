@@ -5,15 +5,22 @@
         "up": "true"
       },
       "apply": {
-        "model": "yungscavebiomes:block/ice_sheet_up"
+        "model": "yungscavebiomes:block/ice_sheet",
+        "x": 270
       }
     },
     {
       "when": {
-        "down": "true"
+        "up": "false",
+        "north": "false",
+        "west": "false",
+        "south": "false",
+        "east": "false",
+        "down": "false"
       },
       "apply": {
-        "model": "yungscavebiomes:block/ice_sheet_down"
+        "model": "yungscavebiomes:block/ice_sheet",
+        "x": 270
       }
     },
     {
@@ -26,7 +33,57 @@
     },
     {
       "when": {
+        "up": "false",
+        "north": "false",
+        "west": "false",
+        "south": "false",
+        "east": "false",
+        "down": "false"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet"
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "false",
+        "north": "false",
+        "west": "false",
+        "south": "false",
+        "east": "false",
+        "down": "false"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet",
+        "y": 270
+      }
+    },
+    {
+      "when": {
         "south": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "up": "false",
+        "north": "false",
+        "west": "false",
+        "south": "false",
+        "east": "false",
+        "down": "false"
       },
       "apply": {
         "model": "yungscavebiomes:block/ice_sheet",
@@ -44,11 +101,39 @@
     },
     {
       "when": {
-        "west": "true"
+        "up": "false",
+        "north": "false",
+        "west": "false",
+        "south": "false",
+        "east": "false",
+        "down": "false"
       },
       "apply": {
         "model": "yungscavebiomes:block/ice_sheet",
-        "y": 270
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "up": "false",
+        "north": "false",
+        "west": "false",
+        "south": "false",
+        "east": "false",
+        "down": "false"
+      },
+      "apply": {
+        "model": "yungscavebiomes:block/ice_sheet",
+        "x": 90
       }
     }
   ]
