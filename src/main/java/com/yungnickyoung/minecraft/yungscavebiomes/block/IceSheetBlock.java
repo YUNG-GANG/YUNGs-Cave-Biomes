@@ -2,8 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
@@ -29,35 +28,41 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
-        if (blockState.getValue(WATERLOGGED)) {
-            levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+    public BlockState updateShape(BlockState thisState, Direction directionToNeighbor, BlockState neighborState, LevelAccessor levelAccessor, BlockPos thisPos, BlockPos neighborPos) {
+        if (thisState.getValue(WATERLOGGED)) {
+            levelAccessor.scheduleTick(thisPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }
-        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+        return super.updateShape(thisState, directionToNeighbor, neighborState, levelAccessor, thisPos, neighborPos);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        BlockState blockState = super.getStateForPlacement(blockPlaceContext);
-        if (blockState == null) return null;
-        BlockPos blockPos = blockPlaceContext.getClickedPos();
-        Level level = blockPlaceContext.getLevel();
-
-        // Query all adjacent blocks for glowing state
-        for (Map.Entry<Direction, BooleanProperty> entry : PipeBlock.PROPERTY_BY_DIRECTION.entrySet()) {
-            Direction direction = entry.getKey();
-            BooleanProperty property = entry.getValue();
-            if (blockState.getValue(property)) {
-                BlockPos adjacentPos = blockPos.relative(direction);
-                Block adjacentBlock = level.getBlockState(adjacentPos).getBlock();
-                boolean isAdjacentBlockOre = adjacentBlock instanceof OreBlock || adjacentBlock instanceof RedStoneOreBlock;
-                if (isAdjacentBlockOre) {
-                    return blockState.setValue(GLOWING, true);
-                }
-            }
+    public BlockState getStateForPlacement(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction neighborDirection) {
+        if (!this.isFaceSupported(neighborDirection)) {
+            return null;
         }
 
-        return blockState;
+        BlockState updatedState;
+        BlockPos neighborPos = blockPos.relative(neighborDirection);
+
+        if (blockState.is(this)) {
+            updatedState = blockState;
+        } else {
+            updatedState = blockState.getFluidState().isSourceOfType(Fluids.WATER)
+                    ? this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, true)
+                    : this.defaultBlockState();
+        }
+
+        if (canAttachTo(blockGetter, neighborDirection, neighborPos, blockGetter.getBlockState(neighborPos))) {
+            updatedState = updatedState.setValue(getFaceProperty(neighborDirection), true);
+            Block adjacentBlock = blockGetter.getBlockState(neighborPos).getBlock();
+            if (adjacentBlock instanceof OreBlock || adjacentBlock instanceof RedStoneOreBlock) {
+                updatedState = updatedState.setValue(GLOWING, true);
+            }
+        } else {
+            updatedState = null;
+        }
+
+        return updatedState;
     }
 
     @Override
@@ -108,8 +113,7 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         return PushReaction.DESTROY;
     }
 
-    @Override
-    public boolean canBeReplaced(BlockState blockState, BlockPlaceContext blockPlaceContext) {
-        return !blockPlaceContext.getItemInHand().is(Items.GLOW_LICHEN) || super.canBeReplaced(blockState, blockPlaceContext);
+    private static boolean canAttachTo(BlockGetter blockGetter, Direction direction, BlockPos blockPos, BlockState blockState) {
+        return Block.isFaceFull(blockState.getCollisionShape(blockGetter, blockPos), direction.getOpposite());
     }
 }

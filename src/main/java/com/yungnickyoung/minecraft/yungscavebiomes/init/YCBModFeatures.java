@@ -18,6 +18,7 @@ public class YCBModFeatures {
     public static Feature<MultisurfaceSphereReplaceConfig> MULTISURFACE_SPHERE_REPLACE = new MultisurfaceSphereReplaceFeature(MultisurfaceSphereReplaceConfig.CODEC);
     public static Feature<NoneFeatureConfiguration> WATER_SURFACE_ICE_FRAGMENT = new WaterSurfaceIceFragmentFeature(NoneFeatureConfiguration.CODEC);
     public static Feature<ReplaceBlockConfiguration> DISK_ROCK = new DiskRockFeature(ReplaceBlockConfiguration.CODEC);
+    public static Feature<IceSheetConfiguration> ICE_SHEET_REPLACE = new IceSheetFeature(IceSheetConfiguration.CODEC);
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
@@ -28,6 +29,7 @@ public class YCBModFeatures {
         register("multisurface_sphere_replace", MULTISURFACE_SPHERE_REPLACE);
         register("water_surface_ice_fragment", WATER_SURFACE_ICE_FRAGMENT);
         register("disk_rock", DISK_ROCK);
+        register("ice_sheet_replace", ICE_SHEET_REPLACE);
     }
 
     private static void register(String name, Feature<?> obj) {

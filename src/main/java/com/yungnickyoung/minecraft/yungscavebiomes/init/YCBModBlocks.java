@@ -19,7 +19,7 @@ import net.minecraft.world.level.material.MaterialColor;
 public class YCBModBlocks {
     /** Blocks **/
     public static final Block ICICLE = new IcicleBlock(FabricBlockSettings
-        .of(Material.STONE, MaterialColor.ICE)
+        .of(Material.ICE, MaterialColor.ICE)
         .noOcclusion()
         .sound(SoundType.GLASS)
         .randomTicks()
@@ -56,10 +56,11 @@ public class YCBModBlocks {
             .sound(SoundType.GLASS));
 
     public static final Block ICE_SHEET = new IceSheetBlock(FabricBlockSettings
-            .of(Material.ICE_SOLID, MaterialColor.ICE)
+            .of(Material.TOP_SNOW, MaterialColor.ICE)
             .friction(0.98f)
             .noOcclusion()
-            .strength(0.5f)
+            .noCollission()
+            .strength(0.3f)
             .lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 3 : 0)
             .sound(SoundType.GLASS));
 

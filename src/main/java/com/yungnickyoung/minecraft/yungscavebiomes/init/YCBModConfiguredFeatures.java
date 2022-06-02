@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyVinesBlock;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.IceSheetConfiguration;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.MultisurfaceSphereReplaceConfig;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.SphereReplaceConfig;
@@ -106,6 +107,10 @@ public class YCBModConfiguredFeatures {
                     0.8F,
                     UniformInt.of(4, 7),
                     0.3F)
+    );
+
+    public static final ConfiguredFeature<IceSheetConfiguration, ?> ICE_SHEET_REPLACE = YCBModFeatures.ICE_SHEET_REPLACE.configured(
+            new IceSheetConfiguration(8)
     );
 
     public static final ConfiguredFeature<DripstoneClusterConfiguration, ?> ICICLES = YCBModFeatures.ICICLE_CLUSTER.configured(
@@ -247,6 +252,7 @@ public class YCBModConfiguredFeatures {
         register("no_op", NO_OP);
         register("ice_patch", ICE_PATCH);
         register("ice_patch_ceiling", ICE_PATCH_CEILING);
+        register("ice_sheet_replace", ICE_SHEET_REPLACE);
         register("icicles", ICICLES);
         register("water_surface_ice_fragment", WATER_SURFACE_ICE_FRAGMENT);
         register("marble_cave_water_pool", MARBLE_CAVE_WATER_POOL);

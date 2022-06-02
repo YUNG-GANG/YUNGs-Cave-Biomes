@@ -63,8 +63,29 @@ public class YCBModPlacedFeatures {
             CountPlacement.of(250),
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-            EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+            EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
             RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature ICE_SHEET_REPLACE = YCBModConfiguredFeatures.ICE_SHEET_REPLACE.placed(
+            CountPlacement.of(250),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+            BiomeFilter.biome()
+    );
+
+    public static final PlacedFeature ICE_SHEET_REPLACE_2 = YCBModConfiguredFeatures.ICE_SHEET_REPLACE.placed(
+            CountPlacement.of(250),
+            InSquarePlacement.spread(),
+            PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+            EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                    BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
+            RandomOffsetPlacement.vertical(ConstantInt.of(1)),
             BiomeFilter.biome()
     );
 
@@ -235,6 +256,8 @@ public class YCBModPlacedFeatures {
         register("frost_lily", FROST_LILY);
         register("ice_patch", ICE_PATCH);
         register("ice_patch_ceiling", ICE_PATCH_CEILING);
+        register("ice_sheet_replace", ICE_SHEET_REPLACE);
+        register("ice_sheet_replace_2", ICE_SHEET_REPLACE_2);
         register("icicles", ICICLES);
         register("water_surface_ice_fragment", WATER_SURFACE_ICE_FRAGMENT);
         register("water_surface_ice_fragment2", WATER_SURFACE_ICE_FRAGMENT2);

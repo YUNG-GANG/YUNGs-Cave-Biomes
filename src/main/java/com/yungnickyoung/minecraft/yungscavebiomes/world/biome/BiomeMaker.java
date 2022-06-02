@@ -3,7 +3,6 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModPlacedFeatures;
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModSounds;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
@@ -88,12 +87,9 @@ public class BiomeMaker {
         BiomeGenerationSettings.Builder biomeSettingsBuilder = new BiomeGenerationSettings.Builder();
         globalOverworldGeneration(biomeSettingsBuilder);
         addUndergroundVarietyNoGlowLichen(biomeSettingsBuilder);
-        BiomeDefaultFeatures.addPlainGrass(biomeSettingsBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeSettingsBuilder, true);
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeSettingsBuilder);
-        BiomeDefaultFeatures.addPlainVegetation(biomeSettingsBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeSettingsBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeSettingsBuilder);
 
         biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.LARGE_ICICLE);
         biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.TILTED_ICICLE);
@@ -104,6 +100,8 @@ public class BiomeMaker {
         biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.WATER_SURFACE_ICE_FRAGMENT);
         biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.WATER_SURFACE_ICE_FRAGMENT2);
         biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, YCBModPlacedFeatures.ICICLES);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, YCBModPlacedFeatures.ICE_SHEET_REPLACE);
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, YCBModPlacedFeatures.ICE_SHEET_REPLACE_2);
 
         Music music = Musics.createGameMusic(YCBModSounds.MUSIC_BIOME_ICE_CAVES);
         return biome(Biome.Precipitation.SNOW, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F,
