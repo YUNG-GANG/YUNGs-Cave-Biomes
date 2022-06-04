@@ -34,5 +34,6 @@
     "minecraft": "1.18.x",
     "cloth-config2": ">=6.0.42",
     "java": ">=17"
-  }
+  },
+  "accessWidener": "yungscavebiomes.aw"
 }
