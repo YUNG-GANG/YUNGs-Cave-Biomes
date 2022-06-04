@@ -1,9 +1,12 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
+import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.AbstractCauldronBlockAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Fallable;
@@ -24,6 +28,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -104,9 +110,26 @@ public class IcicleBlock extends Block implements Fallable {
      */
     @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+        maybeFillCauldron(blockState, serverLevel, blockPos, random.nextFloat());
         if (random.nextFloat() < 0.011377778f && isTop(blockState, serverLevel, blockPos)) {
             tryToGrowIcicle(blockState, serverLevel, blockPos);
         }
+    }
+
+    @Override
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
+        if (!canDrip(blockState)) {
+            return;
+        }
+
+        float chance = random.nextFloat();
+        if (chance > 0.12f) {
+            return;
+        }
+
+        getFluidAboveIcicle(level, blockPos)
+                .filter(fluid -> chance < 0.02f || canFillCauldron(fluid))
+                .ifPresent(fluid -> spawnDripParticle(level, blockPos, blockState, fluid));
     }
 
     @Override
@@ -206,6 +229,13 @@ public class IcicleBlock extends Block implements Fallable {
         return findBlockVertical(levelAccessor, blockPos, Direction.DOWN, state -> state.is(YCBModBlocks.ICICLE), IcicleBlock::isTip, searchDistance).orElse(null);
     }
 
+    @Nullable
+    private static BlockPos findRoot(LevelAccessor levelAccessor, BlockPos blockPos, int searchDistance) {
+        Predicate<BlockState> matchingPredicate = state -> state.is(YCBModBlocks.ICICLE);
+        Predicate<BlockState> stoppingPredicate = state -> !state.is(YCBModBlocks.ICICLE);
+        return findBlockVertical(levelAccessor, blockPos, Direction.UP, matchingPredicate, stoppingPredicate, searchDistance).orElse(null);
+    }
+
     private static boolean isValidPosition(LevelReader levelReader, BlockPos blockPos) {
         BlockPos posAbove = blockPos.relative(Direction.UP);
         BlockState blockStateAbove = levelReader.getBlockState(posAbove);
@@ -271,13 +301,14 @@ public class IcicleBlock extends Block implements Fallable {
     /**
      * Should be called with the TOP block in the icicle ONLY!
      */
-    private static void tryToGrowIcicle(BlockState topIcicleBlock, ServerLevel serverLevel, BlockPos topIcicleBlockPos) {
-        // Block above top block must be flowing water
-        BlockState blockAbove = serverLevel.getBlockState(topIcicleBlockPos.above());
-        if (!isFlowingWaterAbove(blockAbove, serverLevel.getBlockState(topIcicleBlockPos.above(2)))) return;
+    private static void tryToGrowIcicle(BlockState rootIcicleBlock, ServerLevel serverLevel, BlockPos rootIcicleBlockPos) {
+        // Block above top block must be source water
+        if (!canGrow(serverLevel.getBlockState(rootIcicleBlockPos.above(1)), serverLevel.getBlockState(rootIcicleBlockPos.above(2)))) {
+            return;
+        }
 
         // Find tip for this icicle
-        BlockPos tipPos = findTip(topIcicleBlock, serverLevel, topIcicleBlockPos, 6); // Icicles can grow up to 6 long naturally
+        BlockPos tipPos = findTip(rootIcicleBlock, serverLevel, rootIcicleBlockPos, 6); // Icicles can grow up to 6 long naturally
         if (tipPos == null || !isTip(serverLevel.getBlockState(tipPos))) return;
 
         // Make sure tip block is valid and has room to grow
@@ -285,10 +316,10 @@ public class IcicleBlock extends Block implements Fallable {
     }
 
     /**
-     * Icicles grow if flowing water is above the top (NOT source water)
+     * Icicles grow if an ice block is above the root, w/ a source block of water above that.
      */
-    private static boolean isFlowingWaterAbove(BlockState blockState, BlockState blockStateAbove) {
-        return blockState.is(YCBModBlocks.ICICLE) && blockStateAbove.is(Blocks.WATER) && !blockStateAbove.getFluidState().isSource();
+    private static boolean canGrow(BlockState blockState, BlockState blockStateAbove) {
+        return blockState.is(BlockTags.ICE) && blockStateAbove.is(Blocks.WATER) && blockStateAbove.getFluidState().isSource();
     }
 
     private static boolean doesTipHaveRoomToGrow(ServerLevel serverLevel, BlockPos tipPos) {
@@ -322,5 +353,78 @@ public class IcicleBlock extends Block implements Fallable {
             mutable.move(Direction.UP);
         }
         return size;
+    }
+
+    /******************************************
+     * Dripping utilities
+     ******************************************/
+
+    @Nullable
+    public static BlockPos findIcicleTipAboveCauldron(Level level, BlockPos blockPos) {
+        return findBlockVertical(level, blockPos, Direction.UP, BlockBehaviour.BlockStateBase::isAir, IcicleBlock::canDrip, 11).orElse(null);
+    }
+
+    private static boolean canDrip(BlockState blockState) {
+        return blockState.getBlock() == YCBModBlocks.ICICLE && blockState.getValue(THICKNESS) == DripstoneThickness.TIP;
+    }
+
+    private static Optional<Fluid> getFluidAboveIcicle(Level level, BlockPos blockPos) {
+        BlockPos rootPos = findRoot(level, blockPos, 11);
+        if (rootPos == null) return Optional.empty();
+        return Optional.of(level.getFluidState(rootPos.above()).getType());
+    }
+
+    private static boolean canFillCauldron(Fluid fluid) {
+        return fluid == Fluids.WATER;
+    }
+
+    private static void spawnDripParticle(Level level, BlockPos blockPos, BlockState blockState, Fluid fluid) {
+        Vec3 vec3 = blockState.getOffset(level, blockPos);
+        double d = 0.0625;
+        double x = (double)blockPos.getX() + 0.5 + vec3.x;
+        double y = (double)((float)(blockPos.getY() + 1) - 0.6875f) - d;
+        double z = (double)blockPos.getZ() + 0.5 + vec3.z;
+        level.addParticle(ParticleTypes.DRIPPING_DRIPSTONE_WATER, x, y, z, 0.0, 0.0, 0.0);
+    }
+
+    public static Fluid getCauldronFillFluidType(Level level, BlockPos blockPos) {
+        return getFluidAboveIcicle(level, blockPos).filter(IcicleBlock::canFillCauldron).orElse(null);
+    }
+
+    private static void maybeFillCauldron(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, float f) {
+        if (f > 0.17578125f) {
+            return;
+        }
+
+        if (!isTop(blockState, serverLevel, blockPos)) {
+            return;
+        }
+
+        Fluid fluid = getCauldronFillFluidType(serverLevel, blockPos);
+        if (fluid != Fluids.WATER) return;
+        float dripChance = 0.17578125f;
+        if (f >= dripChance) {
+            return;
+        }
+
+        // Determine tip pos
+        BlockPos tipPos = findTip(blockState, serverLevel, blockPos, 11);
+        if (tipPos == null) {
+            return;
+        }
+
+        // Determine cauldron pos
+        Predicate<BlockState> isValidCauldron = state -> state.getBlock() instanceof AbstractCauldronBlock
+                && ((AbstractCauldronBlockAccessor)state.getBlock()).callCanReceiveStalactiteDrip(fluid);
+        BlockPos cauldronPos = findBlockVertical(serverLevel, tipPos, Direction.DOWN, BlockStateBase::isAir, isValidCauldron, 11).orElse(null);
+        if (cauldronPos == null) {
+            return;
+        }
+
+        // Schedule cauldron tick
+        int yDist = tipPos.getY() - cauldronPos.getY();
+        int timeUntilCauldronTick = 50 + yDist;
+        BlockState cauldronBlockState = serverLevel.getBlockState(cauldronPos);
+        serverLevel.scheduleTick(cauldronPos, cauldronBlockState.getBlock(), timeUntilCauldronTick);
     }
 }
