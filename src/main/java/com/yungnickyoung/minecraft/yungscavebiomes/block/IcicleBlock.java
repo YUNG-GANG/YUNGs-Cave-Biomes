@@ -18,17 +18,16 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.AbstractCauldronBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Fallable;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -41,8 +40,9 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 
-public class IcicleBlock extends Block implements Fallable {
+public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlock {
     public static final EnumProperty<DripstoneThickness> THICKNESS = BlockStateProperties.DRIPSTONE_THICKNESS;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape BASE_SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
     private static final VoxelShape MIDDLE_SHAPE = Block.box(3.0, 0.0, 3.0, 13.0, 16.0, 13.0);
@@ -51,12 +51,14 @@ public class IcicleBlock extends Block implements Fallable {
 
     public IcicleBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(THICKNESS, DripstoneThickness.TIP));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(THICKNESS, DripstoneThickness.TIP)
+                .setValue(WATERLOGGED, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(THICKNESS);
+        builder.add(THICKNESS, WATERLOGGED);
     }
 
     @Override
@@ -66,6 +68,11 @@ public class IcicleBlock extends Block implements Fallable {
 
     @Override
     public BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState, LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
+        // Schedule fluid tick if waterlogged
+        if (currState.getValue(WATERLOGGED)) {
+            levelAccessor.scheduleTick(currPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+        }
+
         // We only care about vertical direction updates for icicles
         if (neighborDirection != Direction.UP && neighborDirection != Direction.DOWN) {
             return currState;
@@ -143,10 +150,14 @@ public class IcicleBlock extends Block implements Fallable {
         Level levelAccessor = blockPlaceContext.getLevel();
         if (!isValidPosition(levelAccessor, blockPlaceContext.getClickedPos())) return null;
 
+        // Determine waterlogged status
+        boolean isWaterlogged = levelAccessor.getFluidState(blockPlaceContext.getClickedPos()).getType() == Fluids.WATER;
+
+        // Determine thickness
         DripstoneThickness thickness = calculateIcicleThickness(levelAccessor, blockPlaceContext.getClickedPos());
         if (thickness == null) return null;
 
-        return this.defaultBlockState().setValue(THICKNESS, thickness);
+        return this.defaultBlockState().setValue(THICKNESS, thickness).setValue(WATERLOGGED, isWaterlogged);
     }
 
     @Override
@@ -194,6 +205,14 @@ public class IcicleBlock extends Block implements Fallable {
     @Override
     public Predicate<Entity> getHurtsEntitySelector() {
         return EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(EntitySelector.LIVING_ENTITY_STILL_ALIVE);
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState blockState) {
+        if (blockState.getValue(WATERLOGGED)) {
+            return Fluids.WATER.getSource(false);
+        }
+        return super.getFluidState(blockState);
     }
 
     /**
@@ -341,7 +360,9 @@ public class IcicleBlock extends Block implements Fallable {
     }
 
     private static void createIcicle(LevelAccessor levelAccessor, BlockPos blockPos, DripstoneThickness thickness) {
-        BlockState blockState = YCBModBlocks.ICICLE.defaultBlockState().setValue(THICKNESS, thickness);
+        BlockState blockState = YCBModBlocks.ICICLE.defaultBlockState()
+                .setValue(THICKNESS, thickness)
+                .setValue(WATERLOGGED, levelAccessor.getFluidState(blockPos).getType() == Fluids.WATER);
         levelAccessor.setBlock(blockPos, blockState, 3);
     }
 
@@ -365,7 +386,7 @@ public class IcicleBlock extends Block implements Fallable {
     }
 
     private static boolean canDrip(BlockState blockState) {
-        return blockState.getBlock() == YCBModBlocks.ICICLE && blockState.getValue(THICKNESS) == DripstoneThickness.TIP;
+        return blockState.getBlock() == YCBModBlocks.ICICLE && blockState.getValue(THICKNESS) == DripstoneThickness.TIP && !blockState.getValue(WATERLOGGED);
     }
 
     private static Optional<Fluid> getFluidAboveIcicle(Level level, BlockPos blockPos) {
