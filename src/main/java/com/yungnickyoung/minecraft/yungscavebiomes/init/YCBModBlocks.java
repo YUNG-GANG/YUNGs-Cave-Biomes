@@ -62,6 +62,7 @@ public class YCBModBlocks {
             .noCollission()
             .strength(0.3f)
             .lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 3 : 0)
+            .randomTicks()
             .sound(SoundType.GLASS));
 
     public static final Block ANCIENT_SAND = new SandBlock(0xd1b482, FabricBlockSettings
