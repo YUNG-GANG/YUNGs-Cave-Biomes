@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Map;
 
@@ -115,5 +117,10 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
 
     private static boolean canAttachTo(BlockGetter blockGetter, Direction direction, BlockPos blockPos, BlockState blockState) {
         return Block.isFaceFull(blockState.getCollisionShape(blockGetter, blockPos), direction.getOpposite());
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+        return  Block.box(0, 0, 0, 0, 0, 0);
     }
 }
