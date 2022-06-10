@@ -69,6 +69,7 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
                         if (updatedBlockState == null) {
                             continue;
                         }
+                        updatedBlockState = updatedBlockState.setValue(IceSheetBlock.GROWTH_DISTANCE, 3);
 
                         currState = updatedBlockState;
                         worldGenLevel.setBlock(currPos, updatedBlockState, 3);
