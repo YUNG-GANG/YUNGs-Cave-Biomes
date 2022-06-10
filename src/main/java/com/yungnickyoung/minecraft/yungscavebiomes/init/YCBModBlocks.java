@@ -2,16 +2,15 @@ package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.*;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FlowerPotBlock;
-import net.minecraft.world.level.block.SandBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
@@ -135,6 +134,11 @@ public class YCBModBlocks {
             .breakInstantly()
             .sounds(SoundType.WEEPING_VINES));
 
+    /** Creative tab */
+    public static final CreativeModeTab TAB_CAVEBIOMES = FabricItemGroupBuilder.build(
+            new ResourceLocation(YungsCaveBiomes.MOD_ID, "general"),
+            () -> new ItemStack(LAYERED_ANCIENT_SANDSTONE));
+
     public static void init() {
         // Blocks
         Registry.register(Registry.BLOCK, new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"), ICICLE);
@@ -160,54 +164,54 @@ public class YCBModBlocks {
         // Items
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "icicle"),
-                new BlockItem(ICICLE, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
+                new BlockItem(ICICLE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "frost_lily"),
-                new BlockItem(FROST_LILY, new FabricItemSettings().group(CreativeModeTab.TAB_DECORATIONS)));
-        Registry.register(Registry.ITEM,
-                new ResourceLocation(YungsCaveBiomes.MOD_ID, "marble"),
-                new BlockItem(MARBLE, new FabricItemSettings().group(CreativeModeTab.TAB_BUILDING_BLOCKS)));
-        Registry.register(Registry.ITEM,
-                new ResourceLocation(YungsCaveBiomes.MOD_ID, "travertine"),
-                new BlockItem(TRAVERTINE, new FabricItemSettings().group(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+                new BlockItem(FROST_LILY, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "rare_ice"),
-                new BlockItem(RARE_ICE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(RARE_ICE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "ice_sheet"),
-                new BlockItem(ICE_SHEET, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(ICE_SHEET, new FabricItemSettings().group(TAB_CAVEBIOMES)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "marble"),
+                new BlockItem(MARBLE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "travertine"),
+                new BlockItem(TRAVERTINE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sand"),
-                new BlockItem(ANCIENT_SAND, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(ANCIENT_SAND, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "ancient_sandstone"),
-                new BlockItem(ANCIENT_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(ANCIENT_SANDSTONE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_ancient_sandstone"),
-                new BlockItem(BRITTLE_ANCIENT_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
-        Registry.register(Registry.ITEM,
-                new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_sandstone"),
-                new BlockItem(BRITTLE_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
-        Registry.register(Registry.ITEM,
-                new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_red_sandstone"),
-                new BlockItem(BRITTLE_RED_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(BRITTLE_ANCIENT_SANDSTONE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "cut_ancient_sandstone"),
-                new BlockItem(CUT_ANCIENT_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(CUT_ANCIENT_SANDSTONE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_ancient_sandstone"),
-                new BlockItem(LAYERED_ANCIENT_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(LAYERED_ANCIENT_SANDSTONE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_sandstone"),
+                new BlockItem(BRITTLE_SANDSTONE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_sandstone"),
-                new BlockItem(LAYERED_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(LAYERED_SANDSTONE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
+        Registry.register(Registry.ITEM,
+                new ResourceLocation(YungsCaveBiomes.MOD_ID, "brittle_red_sandstone"),
+                new BlockItem(BRITTLE_RED_SANDSTONE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "layered_red_sandstone"),
-                new BlockItem(LAYERED_RED_SANDSTONE, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(LAYERED_RED_SANDSTONE, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_pear_cactus"),
-                new BlockItem(PRICKLY_PEAR_CACTUS, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(PRICKLY_PEAR_CACTUS, new FabricItemSettings().group(TAB_CAVEBIOMES)));
         Registry.register(Registry.ITEM,
                 new ResourceLocation(YungsCaveBiomes.MOD_ID, "prickly_vines"),
-                new BlockItem(PRICKLY_VINES, new FabricItemSettings().group(CreativeModeTab.TAB_MISC)));
+                new BlockItem(PRICKLY_VINES, new FabricItemSettings().group(TAB_CAVEBIOMES)));
     }
 }
