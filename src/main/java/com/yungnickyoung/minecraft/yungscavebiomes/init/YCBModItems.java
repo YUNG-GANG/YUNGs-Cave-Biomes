@@ -19,8 +19,8 @@ public class YCBModItems {
     public static final Item ICE_CUBE_SPAWN_EGG = new SpawnEggItem(YCBModEntities.ICE_CUBE, 10798332, 15002876, new FabricItemSettings().group(CreativeModeTab.TAB_MISC));
     public static final MobEffect FROZEN_EFFECT = new FrostMobEffect(200, 100, 600);
 
-    public static final Potion FROST_POTION = new Potion(YungsCaveBiomes.MOD_ID + ".frost", new MobEffectInstance(FROZEN_EFFECT));
-    public static final Potion STRONG_FROST_POTION = new Potion(YungsCaveBiomes.MOD_ID + ".strong_frost", new MobEffectInstance(FROZEN_EFFECT, 0, 1));
+    public static final Potion FROST_POTION = new Potion(YungsCaveBiomes.MOD_ID + ".frost", new MobEffectInstance(FROZEN_EFFECT, 0, 0, false, true, false));
+    public static final Potion STRONG_FROST_POTION = new Potion(YungsCaveBiomes.MOD_ID + ".strong_frost", new MobEffectInstance(FROZEN_EFFECT, 0, 1, false, true, false));
 
     public static void init() {
         // Items

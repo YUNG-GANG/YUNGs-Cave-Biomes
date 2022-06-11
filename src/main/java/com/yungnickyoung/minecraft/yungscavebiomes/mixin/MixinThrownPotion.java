@@ -80,7 +80,6 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
 
                                 currState = updatedBlockState;
                                 level.setBlock(currPos, updatedBlockState, 3);
-                                level.getChunk(currPos).markPosForPostprocessing(currPos);
                             }
                         }
                     }

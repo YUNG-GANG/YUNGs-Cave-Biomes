@@ -154,10 +154,10 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         return Block.isFaceFull(blockState.getCollisionShape(blockGetter, blockPos), direction.getOpposite());
     }
 
-    @Override
-    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return  Block.box(0, 0, 0, 0, 0, 0);
-    }
+//    @Override
+//    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+//        return  Block.box(0, 0, 0, 0, 0, 0);
+//    }
 
     public boolean spreadFromRandomFaceWithinBlock(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
         List<Direction> possibleSourceDirections = Lists.newArrayList(DIRECTIONS).stream()
