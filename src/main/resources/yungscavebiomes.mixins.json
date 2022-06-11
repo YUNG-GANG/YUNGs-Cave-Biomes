@@ -13,6 +13,7 @@
     "MixinNoiseSampler",
     "MixinOverworldBiomeBuilder",
     "MixinThrownPotion",
+    "accessor.PotionBrewingAccessor",
     "accessor.AbstractCauldronBlockAccessor",
     "accessor.NoiseChunkAccessor"
   ],
