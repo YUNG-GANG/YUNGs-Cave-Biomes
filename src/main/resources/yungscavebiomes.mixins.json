@@ -12,6 +12,7 @@
     "MixinNoiseBasedChunkGenerator",
     "MixinNoiseSampler",
     "MixinOverworldBiomeBuilder",
+    "MixinThrownPotion",
     "accessor.AbstractCauldronBlockAccessor",
     "accessor.NoiseChunkAccessor"
   ],

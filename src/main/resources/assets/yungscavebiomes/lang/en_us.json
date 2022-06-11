@@ -24,5 +24,11 @@
   "block.yungscavebiomes.prickly_vines": "Prickly Vines",
 
   "entity.yungscavebiomes.ice_cube": "Ice Cube",
-  "item.yungscavebiomes.ice_cube_spawn_egg": "Ice Cube Spawn Egg"
+  "item.yungscavebiomes.ice_cube_spawn_egg": "Ice Cube Spawn Egg",
+
+  "effect.yungscavebiomes.frost": "Frost",
+  "item.minecraft.potion.effect.yungscavebiomes.frost": "Potion of Frost",
+  "item.minecraft.splash_potion.effect.yungscavebiomes.frost": "Splash Potion of Frost",
+  "item.minecraft.lingering_potion.effect.yungscavebiomes.frost": "Lingering Potion of Frost",
+  "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Arrow of Frost"
 }
