@@ -8,9 +8,11 @@ import net.minecraft.sounds.SoundEvent;
 public class YCBModSounds {
     public static SoundEvent MUSIC_BIOME_ICE_CAVES = new SoundEvent(new ResourceLocation(YungsCaveBiomes.MOD_ID, "music.overworld.ice_caves"));
     public static SoundEvent MUSIC_BIOME_DESERT_CAVES = new SoundEvent(new ResourceLocation(YungsCaveBiomes.MOD_ID, "music.overworld.desert_caves"));
+    public static SoundEvent AMBIENT_BLOCK_RARE_ICE = new SoundEvent(new ResourceLocation(YungsCaveBiomes.MOD_ID, "block.rare_ice.ambient"));
 
     public static void init() {
         Registry.register(Registry.SOUND_EVENT, MUSIC_BIOME_ICE_CAVES.getLocation(), MUSIC_BIOME_ICE_CAVES);
         Registry.register(Registry.SOUND_EVENT, MUSIC_BIOME_DESERT_CAVES.getLocation(), MUSIC_BIOME_DESERT_CAVES);
+        Registry.register(Registry.SOUND_EVENT, AMBIENT_BLOCK_RARE_ICE.getLocation(), AMBIENT_BLOCK_RARE_ICE);
     }
 }

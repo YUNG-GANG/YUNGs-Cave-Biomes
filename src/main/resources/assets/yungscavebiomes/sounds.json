@@ -16,5 +16,29 @@
         "volume": 1
       }
     ]
+  },
+  "block.rare_ice.ambient": {
+    "sounds": [
+      {
+        "name": "yungscavebiomes:rare_ice_ambient_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "yungscavebiomes:rare_ice_ambient_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "yungscavebiomes:rare_ice_ambient_3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "yungscavebiomes:rare_ice_ambient_4",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "yungscavebiomes:rare_ice_ambient_5",
+        "attenuation_distance": 16
+      }
+    ]
   }
 }
