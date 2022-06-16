@@ -7,6 +7,7 @@ import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
@@ -43,8 +44,11 @@ public class YCBModPlacedFeatures {
             InSquarePlacement.spread(),
             PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
             EnvironmentScanPlacement.scanningFor(Direction.DOWN,
-                    BlockPredicate.solid(),
-                    BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                    BlockPredicate.anyOf(
+                            BlockPredicate.matchesTag(BlockTags.ICE),
+                            BlockPredicate.matchesBlocks(List.of(Blocks.SNOW_BLOCK))
+                    ),
+                    BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
             RandomOffsetPlacement.vertical(ConstantInt.of(1)),
             BiomeFilter.biome()
     );
