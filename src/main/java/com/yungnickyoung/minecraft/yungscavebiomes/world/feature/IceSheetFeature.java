@@ -11,14 +11,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.GlowLichenConfiguration;
 import net.minecraft.world.level.material.Material;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class IceSheetFeature extends Feature<IceSheetConfiguration> {
     private static final Set<Block> invalid_blocks = Set.of(Blocks.ICE, Blocks.PACKED_ICE, Blocks.BLUE_ICE);
@@ -51,7 +46,7 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
                     BlockState currState = worldGenLevel.getBlockState(currPos);
 
                     // Only replace air or water
-                    if (!isAirOrWater(worldGenLevel.getBlockState(currPos))) {
+                    if (!isAirOrWater(currState)) {
                         continue;
                     }
 
@@ -69,6 +64,7 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
                         if (updatedBlockState == null) {
                             continue;
                         }
+                        updatedBlockState = updatedBlockState.setValue(IceSheetBlock.GROWTH_DISTANCE, 3);
 
                         currState = updatedBlockState;
                         worldGenLevel.setBlock(currPos, updatedBlockState, 3);
@@ -79,50 +75,6 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
         }
 
         return true;
-//
-//        if (placeGlowLichenIfPossible(worldGenLevel, blockPos, worldGenLevel.getBlockState(blockPos), config, random, config.validDirections)) {
-//            return true;
-//        }
-//
-//        BlockPos.MutableBlockPos currPos = blockPos.currPos();
-//
-//        block0:
-//        for (Direction direction : config.validDirections) {
-//            currPos.set(blockPos);
-//            List<Direction> list2 = GlowLichenFeature.getShuffledDirectionsExcept(config, random, direction.getOpposite());
-//            for (int i = 0; i < config.searchRange; ++i) {
-//                currPos.setWithOffset(blockPos, direction);
-//                BlockState blockState = worldGenLevel.getBlockState(currPos);
-//                if (!GlowLichenFeature.isAirOrWater(blockState) && !blockState.is(Blocks.GLOW_LICHEN)) continue block0;
-//                if (!GlowLichenFeature.placeGlowLichenIfPossible(worldGenLevel, currPos, blockState, config, random, list2))
-//                    continue;
-//                return true;
-//            }
-//        }
-//        return false;
-    }
-
-    public static boolean placeGlowLichenIfPossible(WorldGenLevel worldGenLevel, BlockPos blockPos, BlockState blockState, GlowLichenConfiguration config, Random random, List<Direction> directions) {
-        BlockPos.MutableBlockPos mutable = blockPos.mutable();
-        for (Direction direction : directions) {
-            BlockState blockState2 = worldGenLevel.getBlockState(mutable.setWithOffset(blockPos, direction));
-            if (!config.canBePlacedOn.contains(blockState2.getBlock())) continue;
-            IceSheetBlock iceSheetBlock = (IceSheetBlock) YCBModBlocks.ICE_SHEET;
-            BlockState updatedBlockState = iceSheetBlock.getStateForPlacement(blockState, worldGenLevel, blockPos, direction);
-            if (updatedBlockState == null) {
-                return false;
-            }
-            worldGenLevel.setBlock(blockPos, updatedBlockState, 3);
-            worldGenLevel.getChunk(blockPos).markPosForPostprocessing(blockPos);
-            return true;
-        }
-        return false;
-    }
-
-    public static List<Direction> getShuffledDirectionsExcept(GlowLichenConfiguration glowLichenConfiguration, Random random, Direction direction) {
-        List<Direction> list = glowLichenConfiguration.validDirections.stream().filter(direction2 -> direction2 != direction).collect(Collectors.toList());
-        Collections.shuffle(list, random);
-        return list;
     }
 
     private static boolean isAirOrWater(BlockState blockState) {
