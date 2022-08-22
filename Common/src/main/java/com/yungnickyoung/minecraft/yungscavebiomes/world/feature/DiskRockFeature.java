@@ -38,15 +38,16 @@ public class DiskRockFeature extends Feature<ReplaceBlockConfiguration> {
         for (int x = -radXZ; x <= radXZ; x++) {
             for (int z = -radXZ; z <= radXZ; z++) {
 
-                for (int y = -radY; y <= radY; y++) {
-                    double dx = x / (double) radXZ;
-                    double dz = z / (double) radXZ;
+                for (int y = -radY; y <= radY + 1; y++) {
+                    int sub = y == radY + 1 ? 2 : 0;
+                    double dx = x / (double) (radXZ - sub);
+                    double dz = z / (double) (radXZ - sub);
                     double dy = y / (double) aRadY;
 
                     // Make y a bit smaller
                     dy *= 1.05;
 
-                    double noiseHere = noise.getValue(x + pos.getX(), y + pos.getY(), z + pos.getZ()) * 0.1;
+                    double noiseHere = noise.getValue(x + pos.getX(), y + pos.getY() / 1.2, z + pos.getZ()) * 0.5;
 
                     // We want to squeeze in the y direction first
                     if (dy * dy <= 1 + noiseHere) {
