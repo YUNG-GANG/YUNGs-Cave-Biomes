@@ -1,0 +1,27 @@
+package com.yungnickyoung.minecraft.yungscavebiomes;
+
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterCreativeTab;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.ConfigModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
+import net.minecraft.world.item.ItemStack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class YungsCaveBiomesCommon {
+	public static final String MOD_ID = "yungscavebiomes";
+	public static final String MOD_NAME = "YUNG's Cave Biomes";
+	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
+    public static final ConfigModule CONFIG = new ConfigModule();
+
+    @AutoRegister("general")
+    public static AutoRegisterCreativeTab TAB_CAVEBIOMES = new AutoRegisterCreativeTab.Builder()
+            .iconItem(() -> new ItemStack(BlockModule.LAYERED_ANCIENT_SANDSTONE.get()))
+            .build();
+
+	public static void init() {
+		Services.MODULES.loadModules();
+	}
+}

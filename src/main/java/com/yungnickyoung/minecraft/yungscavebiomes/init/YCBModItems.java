@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.init;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomes;
-import com.yungnickyoung.minecraft.yungscavebiomes.enchant.FrostMobEffect;
+import com.yungnickyoung.minecraft.yungscavebiomes.effect.FrostMobEffect;
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.PotionBrewingAccessor;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.core.Registry;

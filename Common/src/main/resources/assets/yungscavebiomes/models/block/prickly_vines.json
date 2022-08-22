@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "yungscavebiomes:block/prickly_vines"
+  }
+}

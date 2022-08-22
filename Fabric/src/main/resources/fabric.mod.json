@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "yungscavebiomes",
+  "version": "${version}",
+  "name": "YUNG's Cave Biomes",
+  "description": "Adds new vanilla+ cave biomes and underground content!",
+  "authors": [
+    "YUNGNICKYOUNG",
+    "Frenderman",
+    "SuperCoder79",
+    "Sully",
+    "LudoCrypt",
+    "K.jpg"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/yungs-cave-biomes-fabric",
+    "sources": "https://github.com/yungnickyoung/YUNGs-Cave-Biomes",
+    "issues": "https://github.com/yungnickyoung/YUNGs-Cave-Biomes/issues",
+    "discord": "discord.gg/rns3beq"
+  },
+  "license": "LGPLv3",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesFabric"
+    ],
+    "client": [
+      "com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesClientFabric"
+    ],
+    "modmenu": [
+      "com.yungnickyoung.minecraft.yungscavebiomes.config.gui.YCBModMenu"
+    ]
+  },
+  "mixins": [
+    "yungscavebiomes.mixins.json"
+    "yungscavebiomes_fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.5",
+    "fabric": ">=0.47.8",
+    "minecraft": ">=1.18.2",
+    "cloth-config2": ">=6.2.57",
+    "java": ">=17",
+    "yungsapi": ">=1.18.2-Fabric-2.1.5"
+  },
+  "accessWidener": "yungscavebiomes.aw"
+}

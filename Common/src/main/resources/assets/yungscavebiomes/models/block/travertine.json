@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "yungscavebiomes:block/travertine_top",
+    "bottom": "yungscavebiomes:block/travertine_top",
+    "side": "yungscavebiomes:block/travertine"
+  }
+}

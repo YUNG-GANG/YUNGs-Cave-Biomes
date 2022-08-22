@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "yungscavebiomes:block/frost_lily"
+      }
+    },
+    {
+      "apply": {
+        "model": "yungscavebiomes:block/frost_lily_2"
+      }
+    }
+  ]
+}
