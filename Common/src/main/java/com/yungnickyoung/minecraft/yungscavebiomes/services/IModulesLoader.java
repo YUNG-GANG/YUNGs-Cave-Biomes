@@ -7,6 +7,8 @@ public interface IModulesLoader {
         BiomeModule.init();
         EntityModule.init();
         FeatureModule.init();
+        ConfiguredFeatureModule.init();
+        PlacedFeatureModule.init();
         MobEffectModule.init();
         PotionModule.init();
         ParticleTypeModule.init();

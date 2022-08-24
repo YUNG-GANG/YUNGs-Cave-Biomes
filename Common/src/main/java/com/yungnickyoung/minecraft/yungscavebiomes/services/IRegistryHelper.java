@@ -13,7 +13,9 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import java.util.function.Supplier;
 
@@ -22,6 +24,8 @@ public interface IRegistryHelper {
     void registerEntityType(ResourceLocation resourceLocation, EntityType<?> entityType);
     void registerEntityAttributes();
     void registerFeature(ResourceLocation resourceLocation, Feature<?> feature);
+    void registerConfiguredFeature(ResourceLocation resourceLocation, ConfiguredFeature<?, ?> configuredFeature);
+    void registerPlacedFeature(ResourceLocation resourceLocation, PlacedFeature placedFeature);
     void registerMobEffect(ResourceLocation resourceLocation, MobEffect mobEffect);
     void registerPotion(ResourceLocation resourceLocation, Potion potion);
     void registerParticleType(ResourceLocation resourceLocation, ParticleType<?> particleType);

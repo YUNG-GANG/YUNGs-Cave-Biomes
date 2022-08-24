@@ -13,7 +13,9 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class FabricRegistryHelper implements IRegistryHelper {
     @Override
@@ -34,6 +36,16 @@ public class FabricRegistryHelper implements IRegistryHelper {
     @Override
     public void registerFeature(ResourceLocation resourceLocation, Feature<?> feature) {
         Registry.register(Registry.FEATURE, resourceLocation, feature);
+    }
+
+    @Override
+    public void registerConfiguredFeature(ResourceLocation resourceLocation, ConfiguredFeature<?, ?> configuredFeature) {
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, resourceLocation, configuredFeature);
+    }
+
+    @Override
+    public void registerPlacedFeature(ResourceLocation resourceLocation, PlacedFeature placedFeature) {
+        Registry.register(BuiltinRegistries.PLACED_FEATURE, resourceLocation, placedFeature);
     }
 
     @Override
