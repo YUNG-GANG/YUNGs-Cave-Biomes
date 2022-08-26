@@ -1,6 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinDeadBushBlock {
     @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
     public void placeOnAncientSand(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
-        if (blockState.is(YCBModBlocks.ANCIENT_SAND)) {
+        if (blockState.is(BlockModule.ANCIENT_SAND.get())) {
             cir.setReturnValue(true);
         }
     }

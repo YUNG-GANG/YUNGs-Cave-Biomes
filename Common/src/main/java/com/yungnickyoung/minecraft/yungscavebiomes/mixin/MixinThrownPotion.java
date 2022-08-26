@@ -1,8 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.block.IceSheetBlock;
-import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
-import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;

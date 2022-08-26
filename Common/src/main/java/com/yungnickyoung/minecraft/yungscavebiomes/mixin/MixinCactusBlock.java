@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.CactusBlock;
@@ -19,7 +20,7 @@ public class MixinCactusBlock {
     public void allowCactusOnAncientSand(BlockState blockState, LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockStateBelow = levelReader.getBlockState(blockPos.below());
         BlockState blockStateAbove = levelReader.getBlockState(blockPos.above());
-        if (blockStateBelow.is(YCBModBlocks.ANCIENT_SAND) && !blockStateAbove.getMaterial().isLiquid()) {
+        if (blockStateBelow.is(BlockModule.ANCIENT_SAND.get()) && !blockStateAbove.getMaterial().isLiquid()) {
             cir.setReturnValue(true);
         }
     }
