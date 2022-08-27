@@ -1,14 +1,18 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.NoiseChunkAccessor;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
-import net.minecraft.world.level.levelgen.NoiseSampler;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,21 +21,41 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
 @Mixin(NoiseBasedChunkGenerator.class)
-public class MixinNoiseBasedChunkGenerator {
-    @Shadow @Final private NoiseSampler sampler;
+public abstract class MixinNoiseBasedChunkGenerator extends ChunkGenerator {
 
-    @Inject(method = "<init>(Lnet/minecraft/core/Registry;Lnet/minecraft/world/level/biome/BiomeSource;Lnet/minecraft/world/level/biome/BiomeSource;JLjava/util/function/Supplier;)V", at = @At("TAIL"))
-    private void ycbAddBiomeSource(Registry registry, BiomeSource biomeSource, BiomeSource biomeSource2, long l, Supplier supplier, CallbackInfo ci) {
-        ((NoiseSamplerBiomeHolder)this.sampler).setBiomeSource(biomeSource);
+    @Shadow @Final private NoiseRouter router;
+
+    @Shadow @Final private Aquifer.FluidPicker globalFluidPicker;
+
+    @Shadow @Final protected Holder<NoiseGeneratorSettings> settings;
+
+    public MixinNoiseBasedChunkGenerator(Registry<StructureSet> $$0, Optional<HolderSet<StructureSet>> $$1, BiomeSource $$2) {
+        super($$0, $$1, $$2);
     }
+
+//    @Inject(method = "<init>(Lnet/minecraft/core/Registry;Lnet/minecraft/world/level/biome/BiomeSource;Lnet/minecraft/world/level/biome/BiomeSource;JLjava/util/function/Supplier;)V", at = @At("TAIL"))
+//    private void ycbAddBiomeSource(Registry registry, BiomeSource biomeSource, BiomeSource biomeSource2, long l, Supplier supplier, CallbackInfo ci) {
+//        ((NoiseSamplerBiomeHolder)this.sampler).setBiomeSource(biomeSource);
+//    }
 
     @Inject(method = "createBiomes", at = @At("HEAD"))
     private void captureBiomeRegistry(Registry<Biome> registry, Executor executor, Blender blender, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
-        ((NoiseSamplerBiomeHolder)this.sampler).setBiomeRegistry(registry);
+//        ((NoiseSamplerBiomeHolder)this.sampler).setBiomeRegistry(registry);
+
+        NoiseChunk nc = chunkAccess.getOrCreateNoiseChunk(this.router, () -> {
+            return BeardifierAccessor.createBeardifier(structureFeatureManager, chunkAccess);
+        }, this.settings.value(), this.globalFluidPicker, blender);
+
+        ((NoiseSamplerBiomeHolder)nc).setBiomeSource(this.runtimeBiomeSource);
+        ((NoiseSamplerBiomeHolder)nc).setBiomeRegistry(registry);
+        ((NoiseSamplerBiomeHolder)nc).setClimateSampler(((NoiseChunkAccessor)nc).callCachedClimateSampler(this.router));
     }
+
+
 }

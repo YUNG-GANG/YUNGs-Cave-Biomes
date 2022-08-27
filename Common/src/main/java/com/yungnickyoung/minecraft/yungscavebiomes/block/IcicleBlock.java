@@ -306,7 +306,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
 
     private static void spawnFallingIcicle(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos) {
         Vec3 vec3 = Vec3.atBottomCenterOf(blockPos);
-        FallingBlockEntity fallingBlockEntity = new FallingBlockEntity.fall(serverLevel, blockPos, blockState);
+        FallingBlockEntity fallingBlockEntity = FallingBlockEntity.fall(serverLevel, blockPos, blockState);
 
         if (isTip(blockState)) {
             int icicleSize = getIcicleSizeFromTip(serverLevel, blockPos, 5);

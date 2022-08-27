@@ -17,7 +17,7 @@ public class EntityModule {
             .of(IceCubeEntity::new, MobCategory.MONSTER)
             .sized(1.5f, 1.5f)
             .clientTrackingRange(10)
-            .build(null);
+            .build(new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ice_cube").toString());
 
     /* BlockEntities */
     @AutoRegister("rare_ice")

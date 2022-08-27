@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBlocks;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;

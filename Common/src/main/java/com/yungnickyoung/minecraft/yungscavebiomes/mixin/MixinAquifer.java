@@ -8,6 +8,7 @@ import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Aquifer;
 import net.minecraft.world.level.levelgen.NoiseChunk;
@@ -31,13 +32,14 @@ public class MixinAquifer {
         if (y > -4 && y < 36) {
 
             // Gather data that we need
-            NoiseSamplerBiomeHolder holder = (NoiseSamplerBiomeHolder) ((NoiseChunkAccessor) (this.noiseChunk)).getSampler();
+            NoiseSamplerBiomeHolder holder = ((NoiseSamplerBiomeHolder) this.noiseChunk);
             BiomeSource source = holder.getBiomeSource();
             Registry<Biome> biomes = holder.getBiomeRegistry();
+            Climate.Sampler sampler = holder.getClimateSampler();
 
             if (biomes != null) {
                 // Find biome
-                Holder<Biome> biome = source.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z), holder);
+                Holder<Biome> biome = source.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z), sampler);
 
                 // Make aquifer at y16 if marble caves is found
                 if (biomes.getResourceKey(biome.value()).get() == BiomeModule.MARBLE_CAVES) {

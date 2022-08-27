@@ -33,7 +33,7 @@
     ]
   },
   "mixins": [
-    "yungscavebiomes.mixins.json"
+    "yungscavebiomes.mixins.json",
     "yungscavebiomes_fabric.mixins.json"
   ],
   "depends": {

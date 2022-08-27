@@ -1,7 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
 import com.mojang.datafixers.util.Pair;
-import com.yungnickyoung.minecraft.yungscavebiomes.init.YCBModBiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;

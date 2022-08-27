@@ -1,6 +1,8 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.block.IceSheetBlock;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.PotionModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -32,7 +34,7 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
         if (!this.level.isClientSide && !level.dimensionType().ultraWarm()) {
             ItemStack itemStack = this.getItem();
             Potion potion = PotionUtils.getPotion(itemStack);
-            if (potion == YCBModItems.FROST_POTION || potion == YCBModItems.STRONG_FROST_POTION) {
+            if (potion == PotionModule.FROST_POTION || potion == PotionModule.STRONG_FROST_POTION) {
                 // Determine hit pos
                 BlockPos originPos = null;
                 if (hitResult.getType() == HitResult.Type.BLOCK) {
@@ -48,8 +50,8 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
                 BlockPos.MutableBlockPos currPos = originPos.mutable();
                 BlockPos.MutableBlockPos mutable = currPos.mutable();
 
-                int attemptDistance = potion == YCBModItems.FROST_POTION ? 3 : 4;
-                int maxDist = potion == YCBModItems.FROST_POTION ? 8 : 14;
+                int attemptDistance = potion == PotionModule.FROST_POTION ? 3 : 4;
+                int maxDist = potion == PotionModule.FROST_POTION ? 8 : 14;
 
                 // Create AOE freeze
                 for (int x = -attemptDistance; x <= attemptDistance; x++) {
@@ -69,7 +71,7 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
                             for (Direction direction : Direction.values()) {
                                 mutable.setWithOffset(currPos, direction);
 
-                                IceSheetBlock iceSheetBlock = (IceSheetBlock) YCBModBlocks.ICE_SHEET;
+                                IceSheetBlock iceSheetBlock = (IceSheetBlock) BlockModule.ICE_SHEET.get();
                                 BlockState updatedBlockState = iceSheetBlock.getStateForPlacement(currState, level, currPos, direction);
                                 if (updatedBlockState == null) {
                                     continue;
