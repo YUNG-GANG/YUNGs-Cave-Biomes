@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -156,9 +157,10 @@ public class ConfiguredFeatureModule {
             new SpringConfiguration(
                     Fluids.WATER.defaultFluidState(), false, 4, 1,
                     HolderSet.direct(
-                            Holder.direct(Blocks.STONE),
-                            Holder.direct(BlockModule.TRAVERTINE.get()),
-                            Holder.direct(BlockModule.MARBLE.get()))));
+                            Block::builtInRegistryHolder,
+                            Blocks.STONE,
+                            BlockModule.TRAVERTINE.get(),
+                            BlockModule.MARBLE.get())));
 
     public static final ConfiguredFeature<SphereReplaceConfig, ?> MARBLE_PATCH = new ConfiguredFeature<>(
             FeatureModule.SPHERE_REPLACE,
@@ -188,17 +190,19 @@ public class ConfiguredFeatureModule {
             new GlowLichenConfiguration(
                     20, false, true, true, 0.5F,
                     HolderSet.direct(
-                            Holder.direct(BlockModule.TRAVERTINE.get()),
-                            Holder.direct(BlockModule.MARBLE.get()))));
+                            Block::builtInRegistryHolder,
+                            BlockModule.TRAVERTINE.get(),
+                            BlockModule.MARBLE.get())));
 
     public static final ConfiguredFeature<GlowLichenConfiguration, ?> SANDSTONE_GLOW_LICHEN = new ConfiguredFeature<>(
             Feature.GLOW_LICHEN,
             new GlowLichenConfiguration(
                     20, false, true, true, 0.5F,
                     HolderSet.direct(
-                            Holder.direct(BlockModule.ANCIENT_SAND.get()),
-                            Holder.direct(BlockModule.LAYERED_ANCIENT_SANDSTONE.get()),
-                            Holder.direct(BlockModule.ANCIENT_SANDSTONE.get()))));
+                            Block::builtInRegistryHolder,
+                            BlockModule.ANCIENT_SAND.get(),
+                            BlockModule.LAYERED_ANCIENT_SANDSTONE.get(),
+                            BlockModule.ANCIENT_SANDSTONE.get())));
 
     public static final ConfiguredFeature<NoneFeatureConfiguration, ?> CACTUS_PATCH = new ConfiguredFeature<>(
             FeatureModule.CACTUS_PATCH,

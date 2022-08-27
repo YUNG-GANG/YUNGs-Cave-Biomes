@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.PlacedFeatureModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import net.minecraft.core.Holder;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.sounds.Music;
@@ -11,6 +12,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -92,17 +95,17 @@ public class BiomeMaker {
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeSettingsBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeSettingsBuilder);
 
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.LARGE_ICICLE));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.TILTED_ICICLE));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.SMALL_ICICLE));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.ICE_PATCH));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.ICE_PATCH_CEILING));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.FROST_LILY));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.WATER_SURFACE_ICE_FRAGMENT));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.WATER_SURFACE_ICE_FRAGMENT2));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.ICICLES));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, Holder.direct(PlacedFeatureModule.ICE_SHEET_REPLACE));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, Holder.direct(PlacedFeatureModule.ICE_SHEET_REPLACE_2));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.LARGE_ICICLE));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.TILTED_ICICLE));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.SMALL_ICICLE));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.ICE_PATCH));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.ICE_PATCH_CEILING));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.FROST_LILY));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.WATER_SURFACE_ICE_FRAGMENT));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.WATER_SURFACE_ICE_FRAGMENT2));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.ICICLES));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, makeHolder(PlacedFeatureModule.ICE_SHEET_REPLACE));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, makeHolder(PlacedFeatureModule.ICE_SHEET_REPLACE_2));
 
         Music music = Musics.createGameMusic(SoundModule.MUSIC_BIOME_ICE_CAVES);
         return biome(Biome.Precipitation.SNOW, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F,
@@ -122,11 +125,11 @@ public class BiomeMaker {
         BiomeDefaultFeatures.addDefaultMushrooms(biomeSettingsBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeSettingsBuilder);
 
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.MARBLE_WATER_POOL));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.MARBLE_WATER_SPRING));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.MARBLE_PATCH));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.TRAVERTINE_PATCH));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.MARBLE_GLOW_LICHEN));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.MARBLE_WATER_POOL));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.MARBLE_WATER_SPRING));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.MARBLE_PATCH));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.TRAVERTINE_PATCH));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.MARBLE_GLOW_LICHEN));
 
         Music music = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES);
         return biome(Biome.Precipitation.RAIN, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F,
@@ -146,20 +149,25 @@ public class BiomeMaker {
         BiomeDefaultFeatures.addDefaultMushrooms(biomeSettingsBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeSettingsBuilder);
 
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.SANDSTONE_PATCH));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.SANDSTONE_PATCH2));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.CACTUS_PATCH));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.SANDSTONE_PATCH));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.SANDSTONE_PATCH2));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.CACTUS_PATCH));
 
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.PRICKLY_PEAR_CACTUS_PATCH));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.SANDSTONE_GLOW_LICHEN));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.BRITTLE_SANDSTONE_REPLACE));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.PRICKLY_PEAR_CACTUS_PATCH));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.SANDSTONE_GLOW_LICHEN));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.BRITTLE_SANDSTONE_REPLACE));
 
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.DEAD_BUSH_SPREAD));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.PRICKLY_VINES));
-        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, Holder.direct(PlacedFeatureModule.DISK_ROCK));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.DEAD_BUSH_SPREAD));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.PRICKLY_VINES));
+        biomeSettingsBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.DISK_ROCK));
 
         Music music = Musics.createGameMusic(SoundModule.MUSIC_BIOME_DESERT_CAVES);
         return biome(Biome.Precipitation.NONE, Biome.BiomeCategory.UNDERGROUND, 0.8F, 0.4F,
                 mobSpawnSettingsBuilder, biomeSettingsBuilder, music);
+    }
+
+    @NotNull
+    private static Holder<PlacedFeature> makeHolder(PlacedFeature placed) {
+        return BuiltinRegistries.PLACED_FEATURE.getHolderOrThrow(BuiltinRegistries.PLACED_FEATURE.getResourceKey(placed).get());
     }
 }
