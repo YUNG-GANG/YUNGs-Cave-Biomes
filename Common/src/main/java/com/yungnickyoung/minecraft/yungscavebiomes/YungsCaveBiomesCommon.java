@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class YungsCaveBiomesCommon {
 	public static final String MOD_ID = "yungscavebiomes";
 	public static final String MOD_NAME = "YUNG's Cave Biomes";

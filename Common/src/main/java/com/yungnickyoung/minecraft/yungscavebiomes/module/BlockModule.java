@@ -16,24 +16,22 @@ import net.minecraft.world.level.material.MaterialColor;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class BlockModule {
-    /* Blocks */
-
     @AutoRegister("icicle")
     public static final AutoRegisterBlock ICICLE = AutoRegisterBlock.of(() -> new IcicleBlock(BlockBehaviour.Properties
                     .of(Material.ICE, MaterialColor.ICE)
                     .noOcclusion()
-                    .sound(SoundType.GLASS)
                     .randomTicks()
                     .strength(0.5f)
-                    .dynamicShape()))
+                    .dynamicShape()
+                    .sound(SoundType.GLASS)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
     @AutoRegister("frost_lily")
     public static final AutoRegisterBlock FROST_LILY = AutoRegisterBlock.of(() -> new FrostLilyBlock(BlockBehaviour.Properties
                     .of(Material.ICE, MaterialColor.ICE)
                     .noOcclusion()
-                    .dynamicShape()
                     .instabreak()
+                    .dynamicShape()
                     .lightLevel(blockState -> 10)
                     .sound(SoundType.GLASS)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
@@ -150,9 +148,9 @@ public class BlockModule {
 
     @AutoRegister("potted_prickly_pear_cactus")
     public static final AutoRegisterBlock POTTED_PRICKLY_PEAR_CACTUS = AutoRegisterBlock.of(() -> new FlowerPotBlock(PRICKLY_PEAR_CACTUS.get(), BlockBehaviour.Properties
-                    .of(Material.DECORATION)
-                    .instabreak()
-                    .noOcclusion()));
+            .of(Material.DECORATION)
+            .instabreak()
+            .noOcclusion()));
 
     @AutoRegister("prickly_vines")
     public static final AutoRegisterBlock PRICKLY_VINES = AutoRegisterBlock.of(() -> new PricklyVinesBlock(BlockBehaviour.Properties
@@ -165,9 +163,9 @@ public class BlockModule {
 
     @AutoRegister("prickly_vines_plant")
     public static final AutoRegisterBlock PRICKLY_VINES_PLANT = AutoRegisterBlock.of(() -> new PricklyVinesPlantBlock(BlockBehaviour.Properties
-                    .of(Material.PLANT)
-                    .randomTicks()
-                    .noCollission()
-                    .instabreak()
-                    .sound(SoundType.WEEPING_VINES)));
+            .of(Material.PLANT)
+            .randomTicks()
+            .noCollission()
+            .instabreak()
+            .sound(SoundType.WEEPING_VINES)));
 }
