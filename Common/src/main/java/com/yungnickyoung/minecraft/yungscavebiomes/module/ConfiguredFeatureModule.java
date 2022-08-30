@@ -11,6 +11,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.SphereReplaceCo
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
@@ -31,7 +32,7 @@ import net.minecraft.world.level.material.Fluids;
 import java.util.List;
 
 public class ConfiguredFeatureModule {
-    public static ConfiguredFeature<LargeIceDripstoneConfiguration, ?> LARGE_ICICLE = new ConfiguredFeature<>(
+    public static final ConfiguredFeature<LargeIceDripstoneConfiguration, ?> LARGE_ICICLE = new ConfiguredFeature<>(
             FeatureModule.LARGE_ICICLE,
             new LargeIceDripstoneConfiguration(
                     30,
@@ -47,7 +48,7 @@ public class ConfiguredFeatureModule {
                     0.4f
             ));
 
-    public static ConfiguredFeature<LargeIceDripstoneConfiguration, ?> TILTED_ICICLE = new ConfiguredFeature<>(
+    public static final ConfiguredFeature<LargeIceDripstoneConfiguration, ?> TILTED_ICICLE = new ConfiguredFeature<>(
             FeatureModule.LARGE_ICICLE,
             new LargeIceDripstoneConfiguration(
                     30,
@@ -63,7 +64,7 @@ public class ConfiguredFeatureModule {
                     0.4f
             ));
 
-    public static ConfiguredFeature<LargeIceDripstoneConfiguration, ?> SMALL_ICICLE = new ConfiguredFeature<>(
+    public static final ConfiguredFeature<LargeIceDripstoneConfiguration, ?> SMALL_ICICLE = new ConfiguredFeature<>(
             FeatureModule.LARGE_ICICLE,
             new LargeIceDripstoneConfiguration(
                     30,
@@ -92,7 +93,7 @@ public class ConfiguredFeatureModule {
             new VegetationPatchConfiguration(
                     BlockTags.MOSS_REPLACEABLE,
                     BlockStateProvider.simple(Blocks.PACKED_ICE),
-                    Holder.direct(PlacedFeatureModule.NO_OP),
+                    PlacementUtils.inlinePlaced(Holder.direct(NO_OP)),
                     CaveSurface.FLOOR,
                     UniformInt.of(3, 4),
                     0.0F,
@@ -106,7 +107,7 @@ public class ConfiguredFeatureModule {
             new VegetationPatchConfiguration(
                     BlockTags.MOSS_REPLACEABLE,
                     BlockStateProvider.simple(Blocks.PACKED_ICE),
-                    Holder.direct(PlacedFeatureModule.NO_OP),
+                    PlacementUtils.inlinePlaced(Holder.direct(NO_OP)),
                     CaveSurface.CEILING,
                     UniformInt.of(3, 4),
                     0.0F,
@@ -143,7 +144,7 @@ public class ConfiguredFeatureModule {
             new VegetationPatchConfiguration(
                     BlockTags.LUSH_GROUND_REPLACEABLE,
                     BlockStateProvider.simple(BlockModule.TRAVERTINE.get()),
-                    Holder.direct(PlacedFeatureModule.NO_OP),
+                    PlacementUtils.inlinePlaced(Holder.direct(NO_OP)),
                     CaveSurface.FLOOR,
                     ConstantInt.of(3),
                     0.8F,
@@ -268,9 +269,9 @@ public class ConfiguredFeatureModule {
         register("spring_marble_water", SPRING_MARBLE_WATER);
         register("marble_patch", MARBLE_PATCH);
         register("travertine_patch", TRAVERTINE_PATCH);
+        register("sandstone_patch", SANDSTONE_PATCH);
         register("marble_glow_lichen", MARBLE_GLOW_LICHEN);
         register("sandstone_glow_lichen", SANDSTONE_GLOW_LICHEN);
-        register("sandstone_patch", SANDSTONE_PATCH);
         register("brittle_sandstone_replace", BRITTLE_SANDSTONE_REPLACE);
         register("cactus_patch", CACTUS_PATCH);
         register("prickly_pear_cactus_patch", PRICKLY_PEAR_CACTUS_PATCH);

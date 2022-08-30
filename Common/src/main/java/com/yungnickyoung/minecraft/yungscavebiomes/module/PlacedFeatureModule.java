@@ -277,9 +277,9 @@ public class PlacedFeatureModule {
                     RandomOffsetPlacement.vertical(ConstantInt.of(0)),
                     BiomeFilter.biome()));
 
-    public static final PlacedFeature NO_OP = new PlacedFeature(
-            Holder.direct(ConfiguredFeatureModule.NO_OP),
-            List.of());
+//    public static final PlacedFeature NO_OP = new PlacedFeature(
+//            Holder.direct(ConfiguredFeatureModule.NO_OP),
+//            List.of());
 
     public static void init() {
         register("large_icicle", LARGE_ICICLE);
