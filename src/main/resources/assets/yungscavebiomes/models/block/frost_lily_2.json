@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "yungscavebiomes:block/frost_lily_2"
-  }
-}

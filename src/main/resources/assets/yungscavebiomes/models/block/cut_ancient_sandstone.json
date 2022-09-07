@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "top": "yungscavebiomes:block/ancient_sandstone_top",
-    "bottom": "yungscavebiomes:block/ancient_sandstone_bottom",
-    "side": "yungscavebiomes:block/cut_ancient_sandstone"
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "parent": "yungscavebiomes:block/icicle",
-  "textures": {
-    "cross": "yungscavebiomes:block/icicle_tip"
-  }
-}
