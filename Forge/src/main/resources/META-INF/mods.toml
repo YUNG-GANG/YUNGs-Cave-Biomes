@@ -27,7 +27,7 @@ issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Cave-Biomes/issues"
 
 [[dependencies.yungscavebiomes]]
     modId="yungsapi"
-    versionRange="[1.18.2-Forge-2.1.5,)"
+    versionRange="[1.18.2-Forge-2.2.0,)"
     mandatory=true
     ordering="NONE"
     side="BOTH"
