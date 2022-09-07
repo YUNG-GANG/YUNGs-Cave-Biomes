@@ -1,38 +1,39 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
-import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 
+@AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class FeatureModule {
+    @AutoRegister("large_icicle")
     public static Feature<LargeIceDripstoneConfiguration> LARGE_ICICLE = new LargeIceDripstoneFeature(LargeIceDripstoneConfiguration.CODEC);
+
+    @AutoRegister("icicle_cluster")
     public static Feature<DripstoneClusterConfiguration> ICICLE_CLUSTER = new IcicleClusterFeature(DripstoneClusterConfiguration.CODEC);
+
+    @AutoRegister("sphere_replace")
     public static Feature<SphereReplaceConfig> SPHERE_REPLACE = new SphereReplaceFeature(SphereReplaceConfig.CODEC);
+
+    @AutoRegister("cactus_patch")
     public static Feature<NoneFeatureConfiguration> CACTUS_PATCH = new CactusPatchFeature(NoneFeatureConfiguration.CODEC);
+
+    @AutoRegister("prickly_pear_cactus_patch")
     public static Feature<NoneFeatureConfiguration> PRICKLY_PEAR_CACTUS_PATCH = new PricklyPearCactusPatchFeature(NoneFeatureConfiguration.CODEC);
+
+    @AutoRegister("multisurface_sphere_replace")
     public static Feature<MultisurfaceSphereReplaceConfig> MULTISURFACE_SPHERE_REPLACE = new MultisurfaceSphereReplaceFeature(MultisurfaceSphereReplaceConfig.CODEC);
+
+    @AutoRegister("water_surface_ice_fragment")
     public static Feature<NoneFeatureConfiguration> WATER_SURFACE_ICE_FRAGMENT = new WaterSurfaceIceFragmentFeature(NoneFeatureConfiguration.CODEC);
-    public static Feature<ReplaceBlockConfiguration> DISK_ROCK = new DiskRockFeature(ReplaceBlockConfiguration.CODEC);
+
+    @AutoRegister("disk_rock")
+    public static Feature<SimpleBlockConfiguration> DISK_ROCK = new DiskRockFeature(SimpleBlockConfiguration.CODEC);
+
+    @AutoRegister("ice_sheet_replace")
     public static Feature<IceSheetConfiguration> ICE_SHEET_REPLACE = new IceSheetFeature(IceSheetConfiguration.CODEC);
-
-    public static void init() {
-        register("large_icicle", LARGE_ICICLE);
-        register("icicle_cluster", ICICLE_CLUSTER);
-        register("sphere_replace", SPHERE_REPLACE);
-        register("cactus_patch", CACTUS_PATCH);
-        register("prickly_pear_cactus_patch", PRICKLY_PEAR_CACTUS_PATCH);
-        register("multisurface_sphere_replace", MULTISURFACE_SPHERE_REPLACE);
-        register("water_surface_ice_fragment", WATER_SURFACE_ICE_FRAGMENT);
-        register("disk_rock", DISK_ROCK);
-        register("ice_sheet_replace", ICE_SHEET_REPLACE);
-    }
-
-    private static void register(String name, Feature<?> feature) {
-        Services.REGISTRY.registerFeature(new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, name), feature);
-    }
 }

@@ -1,0 +1,12 @@
+{
+  "type": "yungscavebiomes:sphere_replace",
+  "config": {
+    "matches": [
+      "yungscavebiomes:ancient_sandstone"
+    ],
+    "place": {
+      "Name": "yungscavebiomes:brittle_ancient_sandstone"
+    },
+    "radius": 7
+  }
+}

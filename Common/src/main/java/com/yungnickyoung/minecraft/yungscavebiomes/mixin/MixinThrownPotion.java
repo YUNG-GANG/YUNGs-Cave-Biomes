@@ -34,7 +34,7 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
         if (!this.level.isClientSide && !level.dimensionType().ultraWarm()) {
             ItemStack itemStack = this.getItem();
             Potion potion = PotionUtils.getPotion(itemStack);
-            if (potion == PotionModule.FROST_POTION || potion == PotionModule.STRONG_FROST_POTION) {
+            if (potion == PotionModule.FROST_POTION.get() || potion == PotionModule.STRONG_FROST_POTION.get()) {
                 // Determine hit pos
                 BlockPos originPos = null;
                 if (hitResult.getType() == HitResult.Type.BLOCK) {
@@ -50,8 +50,8 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
                 BlockPos.MutableBlockPos currPos = originPos.mutable();
                 BlockPos.MutableBlockPos mutable = currPos.mutable();
 
-                int attemptDistance = potion == PotionModule.FROST_POTION ? 3 : 4;
-                int maxDist = potion == PotionModule.FROST_POTION ? 8 : 14;
+                int attemptDistance = potion == PotionModule.FROST_POTION.get() ? 3 : 4;
+                int maxDist = potion == PotionModule.FROST_POTION.get() ? 8 : 14;
 
                 // Create AOE freeze
                 for (int x = -attemptDistance; x <= attemptDistance; x++) {

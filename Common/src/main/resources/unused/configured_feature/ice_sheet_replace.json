@@ -1,0 +1,6 @@
+{
+  "type": "yungscavebiomes:ice_sheet_replace",
+  "config": {
+    "search_range": 8
+  }
+}

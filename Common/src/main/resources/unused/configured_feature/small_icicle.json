@@ -1,0 +1,52 @@
+{
+  "type": "yungscavebiomes:large_icicle",
+  "config": {
+    "floor_to_ceiling_search_range": 30,
+    "column_radius": {
+      "type": "minecraft:uniform",
+      "value": {
+        "min_inclusive": 4,
+        "max_inclusive": 5
+      }
+    },
+    "height_scale": {
+      "type": "minecraft:uniform",
+      "value": {
+        "min_inclusive": 0.6,
+        "max_exclusive": 0.61
+      }
+    },
+    "max_column_radius_to_cave_height_ratio": 0.8,
+    "stalactite_bluntness": {
+      "type": "minecraft:uniform",
+      "value": {
+        "min_inclusive": 0.6,
+        "max_exclusive": 1.0
+      }
+    },
+    "stalagmite_bluntness": {
+      "type": "minecraft:uniform",
+      "value": {
+        "min_inclusive": 0.6,
+        "max_exclusive": 1.0
+      }
+    },
+    "wind_speed": {
+      "type": "minecraft:uniform",
+      "value": {
+        "min_inclusive": 0,
+        "max_exclusive": 0.3
+      }
+    },
+    "min_radius_for_wind": 4,
+    "min_bluntness_for_wind": 0.4,
+    "angle": {
+      "type": "minecraft:uniform",
+      "value": {
+        "min_inclusive": 0.0,
+        "max_exclusive": 6.2831
+      }
+    },
+    "rare_ice_chance": 0.1
+  }
+}

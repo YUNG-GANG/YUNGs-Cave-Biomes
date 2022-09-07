@@ -18,6 +18,7 @@
     ]
   },
   "block.rare_ice.ambient": {
+    "subtitle": "subtitles.yungscavebiomes.block.rare_ice.ambient",
     "sounds": [
       {
         "name": "yungscavebiomes:rare_ice_ambient_1",

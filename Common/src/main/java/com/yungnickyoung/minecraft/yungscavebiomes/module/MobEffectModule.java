@@ -1,15 +1,13 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterMobEffect;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.effect.FrostMobEffect;
-import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
 
+@AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class MobEffectModule {
-    public static final MobEffect FROZEN_EFFECT = new FrostMobEffect(200, 100, 600);
-
-    public static void init() {
-        Services.REGISTRY.registerMobEffect(new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "frost"), FROZEN_EFFECT);
-    }
+    @AutoRegister("frost")
+    public static final AutoRegisterMobEffect FROZEN_EFFECT = AutoRegisterMobEffect
+            .of(() -> new FrostMobEffect(200, 100, 600));
 }

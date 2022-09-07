@@ -34,5 +34,7 @@
   "item.minecraft.lingering_potion.effect.yungscavebiomes.frost": "Lingering Potion of Frost",
   "item.minecraft.lingering_potion.effect.yungscavebiomes.strong_frost": "Lingering Potion of Frost",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Arrow of Frost",
-  "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Arrow of Frost"
+  "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Arrow of Frost",
+
+  "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows"
 }

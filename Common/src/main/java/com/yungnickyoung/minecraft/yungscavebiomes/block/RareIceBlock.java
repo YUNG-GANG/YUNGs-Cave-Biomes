@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.block.entity.RareIceBlockEntity;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -56,7 +56,7 @@ public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return createTickerHelper(blockEntityType, EntityModule.RARE_ICE.get(), RareIceBlockEntity::tick);
+        return createTickerHelper(blockEntityType, EntityTypeModule.RARE_ICE.get(), RareIceBlockEntity::tick);
     }
 
     @Nullable

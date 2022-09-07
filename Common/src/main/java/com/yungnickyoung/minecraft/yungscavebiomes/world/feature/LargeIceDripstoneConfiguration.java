@@ -18,7 +18,7 @@ public class LargeIceDripstoneConfiguration implements FeatureConfiguration {
             (Codec.intRange(0, 100).fieldOf("min_radius_for_wind")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.minRadiusForWind),
             (Codec.floatRange(0.0f, 5.0f).fieldOf("min_bluntness_for_wind")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.minBluntnessForWind),
             (FloatProvider.codec(0.0f, 6.2832f).fieldOf("angle")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.angle),
-            (Codec.floatRange(0.0f, 1.0f).fieldOf("rareIceChance")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.rareIceChance)
+            (Codec.floatRange(0.0f, 1.0f).fieldOf("rare_ice_chance")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.rareIceChance)
     ).apply(instance, LargeIceDripstoneConfiguration::new));
 
     public final int floorToCeilingSearchRange;

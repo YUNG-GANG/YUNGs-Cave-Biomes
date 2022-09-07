@@ -1,0 +1,33 @@
+modLoader="javafml" #mandatory
+loaderVersion="[40,)"
+license="LGPLv3"
+issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Cave-Biomes/issues"
+
+[[mods]]
+    modId="yungscavebiomes"
+    version="${file.jarVersion}"
+	displayName="YUNG's Cave Biomes"
+    credits="Thanks so much to all my patrons!"
+    authors="YUNGNICKYOUNG, Frenderman, SuperCoder79, Sully, LudoCrypt, K.jpg"
+    description="Adds new vanilla+ cave biomes and underground content!"
+    logoFile="logo.png"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/yungs-cave-biomes"
+
+[[dependencies.yungscavebiomes]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.2,1.19)"
+
+[[dependencies.yungscavebiomes]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40.0.8,)"
+    ordering="NONE"
+    side="SERVER"
+
+[[dependencies.yungscavebiomes]]
+    modId="yungsapi"
+    versionRange="[1.18.2-Forge-2.1.5,)"
+    mandatory=true
+    ordering="NONE"
+    side="BOTH"

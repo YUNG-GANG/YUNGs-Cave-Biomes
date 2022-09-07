@@ -1,21 +1,26 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
 import com.mojang.serialization.Codec;
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterParticleType;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
-import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.resources.ResourceLocation;
 
+@AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ParticleTypeModule {
-    public static ParticleType<BlockParticleOption> ANCIENT_DUST = new ParticleType<>(false, BlockParticleOption.DESERIALIZER) {
+    @AutoRegister("ancient_dust")
+    public static AutoRegisterParticleType<BlockParticleOption> ANCIENT_DUST = AutoRegisterParticleType
+            .of(BlockParticleType::new);
+
+    private static class BlockParticleType extends ParticleType<BlockParticleOption> {
+        protected BlockParticleType() {
+            super(false, BlockParticleOption.DESERIALIZER);
+        }
+
         @Override
         public Codec<BlockParticleOption> codec() {
             return BlockParticleOption.codec(this);
         }
-    };
-
-    public static void init() {
-        Services.REGISTRY.registerParticleType(new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ancient_dust"), ANCIENT_DUST);
     }
 }

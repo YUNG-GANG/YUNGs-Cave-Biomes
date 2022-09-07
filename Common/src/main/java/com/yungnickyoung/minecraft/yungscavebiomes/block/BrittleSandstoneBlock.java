@@ -25,7 +25,7 @@ public class BrittleSandstoneBlock extends Block {
             double d = (double)blockPos.getX() + random.nextDouble();
             double e = (double)blockPos.getY() - 0.05;
             double f = (double)blockPos.getZ() + random.nextDouble();
-            level.addParticle(new BlockParticleOption(ParticleTypeModule.ANCIENT_DUST, blockState), d, e, f, 0.0, 0.0, 0.0);
+            level.addParticle(new BlockParticleOption(ParticleTypeModule.ANCIENT_DUST.get(), blockState), d, e, f, 0.0, 0.0, 0.0);
         }
     }
 

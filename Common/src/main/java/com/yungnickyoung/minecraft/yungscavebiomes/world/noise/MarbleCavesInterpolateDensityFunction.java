@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.noise;
 
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -38,7 +39,7 @@ public class MarbleCavesInterpolateDensityFunction implements DensityFunction {
                     for (int z1 = -1; z1 <= 1; z1++) {
                         Holder<Biome> biome = source.getNoiseBiome(x + x1, y, z + z1, holder.getClimateSampler());
 
-                        if (biome.unwrapKey().get() == BiomeModule.MARBLE_CAVES) {
+                        if (biome.unwrapKey().get() ==  Services.PLATFORM.getMarbleCavesResourceKey()) {
                             interp++;
                             found = true;
                         }

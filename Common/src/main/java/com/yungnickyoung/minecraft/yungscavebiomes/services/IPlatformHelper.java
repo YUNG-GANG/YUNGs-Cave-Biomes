@@ -1,5 +1,8 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
+
 public interface IPlatformHelper {
     /**
      * Gets the name of the current platform
@@ -22,4 +25,8 @@ public interface IPlatformHelper {
      * @return True if in a development environment, false otherwise.
      */
     boolean isDevelopmentEnvironment();
+
+    ResourceKey<Biome> getMarbleCavesResourceKey();
+    ResourceKey<Biome> getFrostedCavesResourceKey();
+    ResourceKey<Biome> getAncientCavesResourceKey();
 }

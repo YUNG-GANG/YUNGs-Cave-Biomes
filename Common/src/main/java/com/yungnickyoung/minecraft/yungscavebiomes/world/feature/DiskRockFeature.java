@@ -7,24 +7,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import java.util.Random;
 
-public class DiskRockFeature extends Feature<ReplaceBlockConfiguration> {
-    public DiskRockFeature(Codec<ReplaceBlockConfiguration> codec) {
+public class DiskRockFeature extends Feature<SimpleBlockConfiguration> {
+    public DiskRockFeature(Codec<SimpleBlockConfiguration> codec) {
         super(codec);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<ReplaceBlockConfiguration> context) {
+    public boolean place(FeaturePlaceContext<SimpleBlockConfiguration> context) {
         WorldGenLevel level = context.level();
         BlockPos pos = context.origin();
         Random random = context.random();
 
-        ReplaceBlockConfiguration config = context.config();
-        BlockState state = config.targetStates.get(0).state;
+        SimpleBlockConfiguration config = context.config();
+        BlockState state = config.toPlace().getState(context.random(), context.origin());
 
         NormalNoise noise = NormalNoise.create(new LegacyRandomSource(random.nextLong()), -3, 1.0);
 

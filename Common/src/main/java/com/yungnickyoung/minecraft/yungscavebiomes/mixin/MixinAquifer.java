@@ -1,11 +1,13 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.NoiseChunkAccessor;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
+import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
@@ -42,7 +44,7 @@ public class MixinAquifer {
                 Holder<Biome> biome = source.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z), sampler);
 
                 // Make aquifer at y16 if marble caves is found
-                if (biomes.getResourceKey(biome.value()).get() == BiomeModule.MARBLE_CAVES) {
+                if (biomes.getResourceKey(biome.value()).get() == Services.PLATFORM.getMarbleCavesResourceKey()) {
                     cir.setReturnValue(new Aquifer.FluidStatus(16, Blocks.WATER.defaultBlockState()));
                 }
             }
