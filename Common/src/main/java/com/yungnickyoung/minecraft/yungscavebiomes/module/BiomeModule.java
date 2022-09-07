@@ -8,15 +8,15 @@ import com.yungnickyoung.minecraft.yungscavebiomes.world.biome.BiomeMaker;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
-//@AutoRegister(YungsCaveBiomesCommon.MOD_ID)
+@AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class BiomeModule {
-//    @AutoRegister("frosted_caves")
-//    public static AutoRegisterBiome FROSTED_CAVES = AutoRegisterBiome.of(BiomeMaker::iceCaves);
-//
-//    @AutoRegister("marble_caves")
-//    public static AutoRegisterBiome MARBLE_CAVES = AutoRegisterBiome.of(BiomeMaker::marbleCaves);
-//
-//    @AutoRegister("ancient_caves")
-//    public static AutoRegisterBiome ANCIENT_CAVES = AutoRegisterBiome.of(BiomeMaker::ancientCaves);
+    @AutoRegister("frosted_caves")
+    public static AutoRegisterBiome FROSTED_CAVES = AutoRegisterBiome.of(BiomeMaker::frostedCaves);
+
+    @AutoRegister("marble_caves")
+    public static AutoRegisterBiome MARBLE_CAVES = AutoRegisterBiome.of(BiomeMaker::marbleCaves);
+
+    @AutoRegister("ancient_caves")
+    public static AutoRegisterBiome ANCIENT_CAVES = AutoRegisterBiome.of(BiomeMaker::ancientCaves);
 
 }

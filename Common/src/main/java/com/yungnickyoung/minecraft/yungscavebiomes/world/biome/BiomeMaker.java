@@ -262,6 +262,5 @@ public class BiomeMaker {
         Optional<ResourceKey<PlacedFeature>> optional = BuiltinRegistries.PLACED_FEATURE.getResourceKey(placed);
         ResourceKey<PlacedFeature> key = optional.get();
         return BuiltinRegistries.PLACED_FEATURE.getHolderOrThrow(key);
-//        return Holder.direct(placed); // Pretty sure it can't be this. Fabric won't allow it. Need to find way to ensure all things are registered at proper times
     }
 }

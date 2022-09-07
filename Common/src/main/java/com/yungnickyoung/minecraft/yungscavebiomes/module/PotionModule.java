@@ -18,6 +18,14 @@ public class PotionModule {
     public static final AutoRegisterPotion STRONG_FROST_POTION = AutoRegisterPotion
             .mobEffect(new MobEffectInstance(MobEffectModule.FROZEN_EFFECT.get(), 0, 1, false, true, false));
 
+    /**
+     * Methods with the AutoRegister annotations will be executed after registration.
+     * For Fabric, this means the method is executed during mod initialization as normal.
+     * For Forge, the method is queued to execute in common setup.
+     *
+     * Any methods used with the AutoRegister annotation must be static and take no arguments.
+     * Note that the annotation value is ignored.
+     */
     @AutoRegister("_ignored")
     private static void init() {
         AutoRegisterUtils.registerBrewingRecipe(() -> Potions.AWKWARD, () -> BlockModule.FROST_LILY.get().asItem(), FROST_POTION.getSupplier());
