@@ -2,7 +2,7 @@
   "ambientocclusion": false,
   "textures": {
     "particle": "block/flower_pot",
-    "0": "yungscavebiomes:block/potted_prickly_pear_cactus",
+    "0": "yungscavebiomes:block/potted_prickly_peach_cactus",
     "flowerpot": "block/flower_pot"
   },
   "elements": [

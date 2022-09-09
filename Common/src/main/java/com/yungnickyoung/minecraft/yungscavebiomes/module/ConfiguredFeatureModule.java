@@ -228,9 +228,9 @@ public class ConfiguredFeatureModule {
                     FeatureModule.CACTUS_PATCH,
                     NoneFeatureConfiguration.INSTANCE));
 
-    public static final ConfiguredFeature<NoneFeatureConfiguration, ?> PRICKLY_PEAR_CACTUS_PATCH = register("prickly_pear_cactus_patch",
+    public static final ConfiguredFeature<NoneFeatureConfiguration, ?> PRICKLY_PEACH_CACTUS_PATCH = register("prickly_peach_cactus_patch",
             new ConfiguredFeature<>(
-                    FeatureModule.PRICKLY_PEAR_CACTUS_PATCH,
+                    FeatureModule.PRICKLY_PEACH_CACTUS_PATCH,
                     NoneFeatureConfiguration.INSTANCE));
 
     public static final ConfiguredFeature<SphereReplaceConfig, ?> BRITTLE_SANDSTONE_REPLACE = register("brittle_sandstone_replace",

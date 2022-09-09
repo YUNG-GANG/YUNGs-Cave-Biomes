@@ -29,8 +29,8 @@ public class YungsCaveBiomesClientForge {
             ItemBlockRenderTypes.setRenderLayer(BlockModule.FROST_LILY.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(BlockModule.RARE_ICE.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(BlockModule.ICE_SHEET.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(BlockModule.PRICKLY_PEAR_CACTUS.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(BlockModule.POTTED_PRICKLY_PEAR_CACTUS.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockModule.PRICKLY_PEACH_CACTUS.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(BlockModule.POTTED_PRICKLY_PEACH_CACTUS.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(BlockModule.PRICKLY_VINES.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(BlockModule.PRICKLY_VINES_PLANT.get(), RenderType.cutout());
         });

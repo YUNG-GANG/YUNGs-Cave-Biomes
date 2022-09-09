@@ -1,5 +1,5 @@
 {
-  "parent": "yungscavebiomes:block/prickly_pear_cactus",
+  "parent": "yungscavebiomes:block/prickly_peach_cactus",
   "display": {
     "gui": {
       "rotation": [ 30, 45, 0 ],

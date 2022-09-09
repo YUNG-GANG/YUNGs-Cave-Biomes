@@ -17,11 +17,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
-public class PricklyPearCactusBlock extends Block {
+public class PricklyPeachCactusBlock extends Block {
     protected static final VoxelShape COLLISION_SHAPE = Block.box(4.0, 0.0, 3.0, 12.0, 8.0, 11.0);
     protected static final VoxelShape OUTLINE_SHAPE = Block.box(4.0, 0.0, 3.0, 12.0, 7.0, 11.0);
 
-    public PricklyPearCactusBlock(BlockBehaviour.Properties properties) {
+    public PricklyPeachCactusBlock(BlockBehaviour.Properties properties) {
         super(properties);
     }
 

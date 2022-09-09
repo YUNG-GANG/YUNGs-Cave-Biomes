@@ -247,9 +247,9 @@ public class PlacedFeatureModule {
                             RandomOffsetPlacement.vertical(ConstantInt.of(0)),
                             BiomeFilter.biome())));
 
-    public static final PlacedFeature PRICKLY_PEAR_CACTUS_PATCH = register("prickly_pear_cactus_patch",
+    public static final PlacedFeature PRICKLY_PEACH_CACTUS_PATCH = register("prickly_peach_cactus_patch",
             new PlacedFeature(
-                    Holder.direct(ConfiguredFeatureModule.PRICKLY_PEAR_CACTUS_PATCH),
+                    Holder.direct(ConfiguredFeatureModule.PRICKLY_PEACH_CACTUS_PATCH),
                     List.of(
                             CountPlacement.of(50),
                             InSquarePlacement.spread(),

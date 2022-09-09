@@ -22,8 +22,8 @@ public class FeatureModule {
     @AutoRegister("cactus_patch")
     public static Feature<NoneFeatureConfiguration> CACTUS_PATCH = new CactusPatchFeature(NoneFeatureConfiguration.CODEC);
 
-    @AutoRegister("prickly_pear_cactus_patch")
-    public static Feature<NoneFeatureConfiguration> PRICKLY_PEAR_CACTUS_PATCH = new PricklyPearCactusPatchFeature(NoneFeatureConfiguration.CODEC);
+    @AutoRegister("prickly_peach_cactus_patch")
+    public static Feature<NoneFeatureConfiguration> PRICKLY_PEACH_CACTUS_PATCH = new PricklyPeachCactusPatchFeature(NoneFeatureConfiguration.CODEC);
 
     @AutoRegister("multisurface_sphere_replace")
     public static Feature<MultisurfaceSphereReplaceConfig> MULTISURFACE_SPHERE_REPLACE = new MultisurfaceSphereReplaceFeature(MultisurfaceSphereReplaceConfig.CODEC);

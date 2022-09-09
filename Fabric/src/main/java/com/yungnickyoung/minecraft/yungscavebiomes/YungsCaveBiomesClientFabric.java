@@ -21,8 +21,8 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.FROST_LILY.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.RARE_ICE.get(), RenderType.translucent());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.ICE_SHEET.get(), RenderType.translucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_PEAR_CACTUS.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.POTTED_PRICKLY_PEAR_CACTUS.get(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_PEACH_CACTUS.get(), RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.POTTED_PRICKLY_PEACH_CACTUS.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_VINES.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_VINES_PLANT.get(), RenderType.cutout());
         EntityRendererRegistry.register(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);

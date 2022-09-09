@@ -13,8 +13,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 import java.util.Random;
 
-public class PricklyPearCactusPatchFeature extends Feature<NoneFeatureConfiguration> {
-    public PricklyPearCactusPatchFeature(Codec<NoneFeatureConfiguration> codec) {
+public class PricklyPeachCactusPatchFeature extends Feature<NoneFeatureConfiguration> {
+    public PricklyPeachCactusPatchFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
     }
 
@@ -53,14 +53,14 @@ public class PricklyPearCactusPatchFeature extends Feature<NoneFeatureConfigurat
 
             for (Direction direction : Direction.Plane.HORIZONTAL) {
                 Block block = level.getBlockState(pos.relative(direction)).getBlock();
-                if (block == BlockModule.PRICKLY_PEAR_CACTUS.get() || block == Blocks.CACTUS) {
+                if (block == BlockModule.PRICKLY_PEACH_CACTUS.get() || block == Blocks.CACTUS) {
                     isAdjacentCactus = true;
                     break;
                 }
             }
 
             if (!isAdjacentCactus) {
-                level.setBlock(pos, BlockModule.PRICKLY_PEAR_CACTUS.get().defaultBlockState(), 3);
+                level.setBlock(pos, BlockModule.PRICKLY_PEACH_CACTUS.get().defaultBlockState(), 3);
                 maxCacti--;
             }
         }

@@ -138,16 +138,16 @@ public class BlockModule {
                     .strength(0.8f)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
-    @AutoRegister("prickly_pear_cactus")
-    public static final AutoRegisterBlock PRICKLY_PEAR_CACTUS = AutoRegisterBlock.of(() -> new PricklyPearCactusBlock(BlockBehaviour.Properties
+    @AutoRegister("prickly_peach_cactus")
+    public static final AutoRegisterBlock PRICKLY_PEACH_CACTUS = AutoRegisterBlock.of(() -> new PricklyPeachCactusBlock(BlockBehaviour.Properties
                     .of(Material.CACTUS)
                     .randomTicks()
                     .sound(SoundType.WOOL)
                     .strength(0.4f)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
-    @AutoRegister("potted_prickly_pear_cactus")
-    public static final AutoRegisterBlock POTTED_PRICKLY_PEAR_CACTUS = AutoRegisterBlock.of(() -> new FlowerPotBlock(PRICKLY_PEAR_CACTUS.get(), BlockBehaviour.Properties
+    @AutoRegister("potted_prickly_peach_cactus")
+    public static final AutoRegisterBlock POTTED_PRICKLY_PEACH_CACTUS = AutoRegisterBlock.of(() -> new FlowerPotBlock(PRICKLY_PEACH_CACTUS.get(), BlockBehaviour.Properties
             .of(Material.DECORATION)
             .instabreak()
             .noOcclusion()));
