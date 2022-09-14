@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.network;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
@@ -9,9 +9,9 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class IcicleShatterS2CPacket {
-    private BlockPos pos;
+    private Vec3 pos;
 
-    public IcicleShatterS2CPacket(BlockPos pos) {
+    public IcicleShatterS2CPacket(Vec3 pos) {
         this.pos = pos;
     }
 
@@ -19,14 +19,16 @@ public class IcicleShatterS2CPacket {
      * Decoder
      */
     public IcicleShatterS2CPacket(FriendlyByteBuf buf) {
-        this.pos = buf.readBlockPos();
+        this.pos = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
     /**
      * Encoder
      */
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeBlockPos(this.pos);
+        buf.writeDouble(this.pos.x());
+        buf.writeDouble(this.pos.y());
+        buf.writeDouble(this.pos.z());
     }
 
     /**
@@ -41,7 +43,7 @@ public class IcicleShatterS2CPacket {
         return true;
     }
 
-    public BlockPos getPos() {
+    public Vec3 getPos() {
         return this.pos;
     }
 }

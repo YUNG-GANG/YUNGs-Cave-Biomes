@@ -1,6 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.mixin.AbstractArrowAccessor;
+import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.AbstractArrowAccessor;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
@@ -12,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -56,7 +55,7 @@ public class IcicleProjectileEntity extends AbstractArrow {
         ((AbstractArrowAccessor) this).callResetPiercedEntities();
         this.hit = true;
         if (this.level instanceof ServerLevel serverLevel) {
-            Services.PLATFORM.sendIcicleProjectileShatterS2CPacket(serverLevel, this.blockPosition());
+            Services.PLATFORM.sendIcicleProjectileShatterS2CPacket(serverLevel, this.position());
         }
         this.playSound(SoundEvents.GLASS_BREAK, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
         this.discard();
@@ -66,7 +65,7 @@ public class IcicleProjectileEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult $$0) {
         super.onHitEntity($$0);
         if (this.level instanceof ServerLevel serverLevel) {
-            Services.PLATFORM.sendIcicleProjectileShatterS2CPacket(serverLevel, this.blockPosition());
+            Services.PLATFORM.sendIcicleProjectileShatterS2CPacket(serverLevel, this.position());
         }
     }
 

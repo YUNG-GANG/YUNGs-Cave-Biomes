@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 
 public class FabricPlatformHelper implements IPlatformHelper {
     @Override
@@ -27,10 +28,12 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void sendIcicleProjectileShatterS2CPacket(ServerLevel level, BlockPos pos) {
+    public void sendIcicleProjectileShatterS2CPacket(ServerLevel level, Vec3 pos) {
         FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBlockPos(pos);
-        for (ServerPlayer player : PlayerLookup.tracking(level, pos)) {
+        buf.writeDouble(pos.x());
+        buf.writeDouble(pos.y());
+        buf.writeDouble(pos.z());
+        for (ServerPlayer player : PlayerLookup.tracking(level, new BlockPos(pos))) {
             ServerPlayNetworking.send(player, NetworkModuleFabric.ICICLE_SHATTER_ID, buf);
         }
     }

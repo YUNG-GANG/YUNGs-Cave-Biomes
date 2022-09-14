@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 
@@ -26,9 +27,9 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void sendIcicleProjectileShatterS2CPacket(ServerLevel serverLevel, BlockPos pos) {
-        if (serverLevel.isLoaded(pos)) {
-            ChunkAccess chunkAccess = serverLevel.getChunk(pos);
+    public void sendIcicleProjectileShatterS2CPacket(ServerLevel serverLevel, Vec3 pos) {
+        if (serverLevel.isLoaded(new BlockPos(pos))) {
+            ChunkAccess chunkAccess = serverLevel.getChunk(new BlockPos(pos));
             if (chunkAccess instanceof LevelChunk levelChunk) {
                 NetworkModuleForge.sendToClientsTrackingChunk(new IcicleShatterS2CPacket(pos), levelChunk);
             }
