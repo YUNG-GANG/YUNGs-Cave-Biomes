@@ -1,7 +1,11 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleForge;
+import com.yungnickyoung.minecraft.yungscavebiomes.network.IcicleShatterS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 
@@ -23,6 +27,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public void sendIcicleProjectileShatterS2CPacket(ServerLevel serverLevel, BlockPos pos) {
-        // TODO
+        if (serverLevel.isLoaded(pos)) {
+            ChunkAccess chunkAccess = serverLevel.getChunk(pos);
+            if (chunkAccess instanceof LevelChunk levelChunk) {
+                NetworkModuleForge.sendToClientsTrackingChunk(new IcicleShatterS2CPacket(pos), levelChunk);
+            }
+        }
     }
 }
