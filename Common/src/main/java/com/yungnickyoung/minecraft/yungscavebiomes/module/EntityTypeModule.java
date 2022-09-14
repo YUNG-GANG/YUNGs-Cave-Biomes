@@ -5,6 +5,7 @@ import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterBlockEn
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterEntityType;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.entity.RareIceBlockEntity;
+import com.yungnickyoung.minecraft.yungscavebiomes.entity.IcicleProjectileEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity;
 import net.minecraft.world.entity.MobCategory;
 
@@ -19,6 +20,15 @@ public class EntityTypeModule {
                     .clientTrackingRange(10)
                     .build())
             .attributes(IceCubeEntity::createAttributes);
+
+    @AutoRegister("icicle")
+    public static AutoRegisterEntityType<IcicleProjectileEntity> ICICLE = AutoRegisterEntityType
+            .of(() -> AutoRegisterEntityType.Builder
+                    .of(IcicleProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.5f, 0.5f)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build());
 
     /* BlockEntities */
     @AutoRegister("rare_ice")

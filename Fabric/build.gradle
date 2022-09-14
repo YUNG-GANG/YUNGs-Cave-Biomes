@@ -32,6 +32,7 @@ dependencies {
 }
 
 loom {
+    accessWidenerPath = file("src/main/resources/yungscavebiomes.aw")
     mixin.defaultRefmapName = "${mod_id}.refmap.json"
 
     runs {

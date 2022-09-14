@@ -3,8 +3,10 @@ package com.yungnickyoung.minecraft.yungscavebiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.model.IceCubeModel;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.FallingAncientDustParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectileRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -17,6 +19,7 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         YungsCaveBiomesClientCommon.init(); // Run loader-independent client-side logic
+        NetworkModuleFabric.registerS2CPackets();
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.ICICLE.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.FROST_LILY.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.RARE_ICE.get(), RenderType.translucent());
@@ -26,6 +29,7 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_VINES.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_VINES_PLANT.get(), RenderType.cutout());
         EntityRendererRegistry.register(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
+        EntityRendererRegistry.register(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(IceCubeRenderer.LAYER_LOCATION, IceCubeModel::createBodyLayer);
         ParticleFactoryRegistry.getInstance().register(ParticleTypeModule.ANCIENT_DUST.get(), FallingAncientDustParticle.Provider::new);
     }

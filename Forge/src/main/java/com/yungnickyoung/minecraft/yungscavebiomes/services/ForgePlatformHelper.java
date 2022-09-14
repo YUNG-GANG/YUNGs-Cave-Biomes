@@ -1,5 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 
@@ -17,5 +19,10 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public boolean isDevelopmentEnvironment() {
         return !FMLLoader.isProduction();
+    }
+
+    @Override
+    public void sendIcicleProjectileShatterS2CPacket(ServerLevel serverLevel, BlockPos pos) {
+        // TODO
     }
 }

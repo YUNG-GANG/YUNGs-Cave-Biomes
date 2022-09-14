@@ -1,5 +1,9 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+
 public interface IPlatformHelper {
     /**
      * Gets the name of the current platform
@@ -22,4 +26,6 @@ public interface IPlatformHelper {
      * @return True if in a development environment, false otherwise.
      */
     boolean isDevelopmentEnvironment();
+
+    void sendIcicleProjectileShatterS2CPacket(ServerLevel serverLevel, BlockPos pos);
 }
