@@ -9,7 +9,8 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nullable;
 
 public class FallingAncientDustParticle extends TextureSheetParticle {
     private final float rotSpeed;

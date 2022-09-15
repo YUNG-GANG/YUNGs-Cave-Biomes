@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.PlacedFeatureModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import net.minecraft.core.Holder;
@@ -18,9 +17,8 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -257,7 +255,6 @@ public class BiomeMaker {
         builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_TUFF);
     }
 
-    @NotNull
     private static Holder<PlacedFeature> makeHolder(PlacedFeature placed) {
         Optional<ResourceKey<PlacedFeature>> optional = BuiltinRegistries.PLACED_FEATURE.getResourceKey(placed);
         ResourceKey<PlacedFeature> key = optional.get();

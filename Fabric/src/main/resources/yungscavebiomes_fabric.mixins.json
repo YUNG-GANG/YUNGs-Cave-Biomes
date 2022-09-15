@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "com.yungnickyoung.minecraft.yungscavebiomes.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "yungscavebiomes.refmap.json",
   "mixins": [
   ],
   "injectors": {
