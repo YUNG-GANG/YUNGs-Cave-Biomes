@@ -22,10 +22,12 @@ public class IcicleProjectileEntity extends AbstractArrow {
 
     public IcicleProjectileEntity(EntityType<? extends AbstractArrow> entityType, Level level) {
         super(EntityTypeModule.ICICLE.get(), level);
+        this.setBaseDamage(1.0); // Regular arrows deal 2 damage
     }
 
     private IcicleProjectileEntity(Level level, LivingEntity livingEntity) {
         super(EntityTypeModule.ICICLE.get(), livingEntity, level);
+        this.setBaseDamage(1.0);
     }
 
     @Override
