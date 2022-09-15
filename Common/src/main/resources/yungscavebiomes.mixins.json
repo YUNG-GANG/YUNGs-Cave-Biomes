@@ -4,8 +4,8 @@
   "package": "com.yungnickyoung.minecraft.yungscavebiomes.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "accessor.AbstractArrowAccessor",
-    "accessor.BeardifierAccessor",
+    "accessor.ArrowAccessor",
+    "MixinAbstractArrow",
     "MixinAbstractCauldronBlock",
     "MixinAquifer",
     "MixinBlock",
@@ -16,7 +16,9 @@
     "MixinNoiseChunk",
     "MixinOverworldBiomeBuilder",
     "MixinThrownPotion",
+    "accessor.AbstractArrowAccessor",
     "accessor.AbstractCauldronBlockAccessor",
+    "accessor.BeardifierAccessor",
     "accessor.NoiseChunkAccessor",
     "accessor.PotionBrewingAccessor"
   ],
