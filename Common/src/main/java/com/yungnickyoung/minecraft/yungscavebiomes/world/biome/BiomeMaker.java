@@ -39,7 +39,7 @@ public class BiomeMaker {
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 100, 4, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.WITCH, 5, 1, 1));
-        mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityTypeModule.ICE_CUBE.get(), 10, 1, 1));
+//        mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityTypeModule.ICE_CUBE.get(), 10, 1, 1));
 
         /* Begin adding biome settings */
         BiomeGenerationSettings.Builder biomeSettings = new BiomeGenerationSettings.Builder();

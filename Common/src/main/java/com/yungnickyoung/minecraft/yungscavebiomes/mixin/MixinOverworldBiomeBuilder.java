@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
 import com.mojang.datafixers.util.Pair;
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
@@ -30,9 +31,17 @@ public abstract class MixinOverworldBiomeBuilder {
 
     @Inject(method = "addUndergroundBiomes", at = @At("HEAD"))
     private void addYCBBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> consumer, CallbackInfo ci) {
-        this.addUndergroundBiome(consumer, this.FROZEN_RANGE, this.FULL_RANGE, Climate.Parameter.span(0.8F, 1.0F), this.FULL_RANGE, this.FULL_RANGE, 0.0F, BiomeModule.FROSTED_CAVES.getResourceKey());
-        this.addUndergroundBiome(consumer, this.FROZEN_RANGE, this.FULL_RANGE, Climate.Parameter.span(-1.05F, -0.19F), this.FULL_RANGE, this.FULL_RANGE, 0.0F, BiomeModule.MARBLE_CAVES.getResourceKey());
-        this.addUndergroundBiome(consumer, this.temperatures[4], this.FULL_RANGE, Climate.Parameter.span(0.2F, 0.7F), Climate.Parameter.span(0.2F, 1.0F), this.FULL_RANGE, 0.0F, BiomeModule.ANCIENT_CAVES.getResourceKey());
+        if (YungsCaveBiomesCommon.FROSTED_CAVES_ENABLED) {
+            this.addUndergroundBiome(consumer, this.FROZEN_RANGE, this.FULL_RANGE, Climate.Parameter.span(0.8F, 1.0F), this.FULL_RANGE, this.FULL_RANGE, 0.0F, BiomeModule.FROSTED_CAVES.getResourceKey());
+        }
+
+        if (YungsCaveBiomesCommon.MARBLE_CAVES_ENABLED) {
+            this.addUndergroundBiome(consumer, this.FROZEN_RANGE, this.FULL_RANGE, Climate.Parameter.span(-1.05F, -0.19F), this.FULL_RANGE, this.FULL_RANGE, 0.0F, BiomeModule.MARBLE_CAVES.getResourceKey());
+        }
+
+        if (YungsCaveBiomesCommon.ANCIENT_CAVES_ENABLED) {
+            this.addUndergroundBiome(consumer, this.temperatures[4], this.FULL_RANGE, Climate.Parameter.span(0.2F, 0.7F), Climate.Parameter.span(0.2F, 1.0F), this.FULL_RANGE, 0.0F, BiomeModule.ANCIENT_CAVES.getResourceKey());
+        }
     }
 
     @Inject(method = "addUndergroundBiome", at = @At("HEAD"), cancellable = true)

@@ -28,8 +28,8 @@ public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     @Override
     public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack) {
         super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack);
-        int i = 15 + serverLevel.random.nextInt(15) + serverLevel.random.nextInt(15);
-        this.popExperience(serverLevel, blockPos, i);
+        int xp = 15 + serverLevel.random.nextInt(20) + serverLevel.random.nextInt(20);
+        this.popExperience(serverLevel, blockPos, xp);
     }
 
     @Override

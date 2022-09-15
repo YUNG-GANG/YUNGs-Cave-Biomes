@@ -16,6 +16,10 @@ public class YungsCaveBiomesCommon {
 
     public static final ConfigModule CONFIG = new ConfigModule();
 
+    public static boolean FROSTED_CAVES_ENABLED = true;
+    public static boolean ANCIENT_CAVES_ENABLED = false;
+    public static boolean MARBLE_CAVES_ENABLED = false;
+
     @AutoRegister("general")
     public static AutoRegisterCreativeTab TAB_CAVEBIOMES = new AutoRegisterCreativeTab.Builder()
             .iconItem(() -> new ItemStack(BlockModule.LAYERED_ANCIENT_SANDSTONE.get()))
