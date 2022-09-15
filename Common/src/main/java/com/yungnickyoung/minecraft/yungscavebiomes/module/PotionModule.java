@@ -20,6 +20,7 @@ public class PotionModule {
 
     /**
      * Methods with the AutoRegister annotations will be executed after registration.
+     *
      * For Fabric, this means the method is executed during mod initialization as normal.
      * For Forge, the method is queued to execute in common setup.
      *
