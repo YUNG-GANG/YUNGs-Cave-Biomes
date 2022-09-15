@@ -1,6 +1,7 @@
 {
   "textures": {
-    "0": "yungscavebiomes:block/prickly_peach_cactus"
+    "0": "yungscavebiomes:block/prickly_peach_cactus",
+    "particle": "yungscavebiomes:block/prickly_peach_cactus"
   },
   "elements": [
     {
