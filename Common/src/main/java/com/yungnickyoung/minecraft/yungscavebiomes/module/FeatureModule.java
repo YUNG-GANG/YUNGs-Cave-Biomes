@@ -17,7 +17,7 @@ public class FeatureModule {
     public static Feature<DripstoneClusterConfiguration> ICICLE_CLUSTER = new IcicleClusterFeature(DripstoneClusterConfiguration.CODEC);
 
     @AutoRegister("sphere_replace")
-    public static Feature<SphereReplaceConfig> SPHERE_REPLACE = new SphereReplaceFeature(SphereReplaceConfig.CODEC);
+    public static Feature<NoisySphereReplaceConfig> SPHERE_REPLACE = new NoisySphereReplaceFeature(NoisySphereReplaceConfig.CODEC);
 
     @AutoRegister("cactus_patch")
     public static Feature<NoneFeatureConfiguration> CACTUS_PATCH = new CactusPatchFeature(NoneFeatureConfiguration.CODEC);
@@ -26,7 +26,7 @@ public class FeatureModule {
     public static Feature<NoneFeatureConfiguration> PRICKLY_PEACH_CACTUS_PATCH = new PricklyPeachCactusPatchFeature(NoneFeatureConfiguration.CODEC);
 
     @AutoRegister("multisurface_sphere_replace")
-    public static Feature<MultisurfaceSphereReplaceConfig> MULTISURFACE_SPHERE_REPLACE = new MultisurfaceSphereReplaceFeature(MultisurfaceSphereReplaceConfig.CODEC);
+    public static Feature<MultisurfaceNoisySphereReplaceConfig> MULTISURFACE_SPHERE_REPLACE = new MultisurfaceNoisySphereReplaceFeature(MultisurfaceNoisySphereReplaceConfig.CODEC);
 
     @AutoRegister("water_surface_ice_fragment")
     public static Feature<NoneFeatureConfiguration> WATER_SURFACE_ICE_FRAGMENT = new WaterSurfaceIceFragmentFeature(NoneFeatureConfiguration.CODEC);

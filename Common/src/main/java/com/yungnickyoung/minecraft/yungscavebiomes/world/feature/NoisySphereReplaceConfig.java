@@ -9,19 +9,21 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 
 import java.util.List;
 
-public class SphereReplaceConfig implements FeatureConfiguration {
-    public static final Codec<SphereReplaceConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class NoisySphereReplaceConfig implements FeatureConfiguration {
+    public static final Codec<NoisySphereReplaceConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.BLOCK.byNameCodec().listOf().fieldOf("matches").forGetter(c -> c.matches),
             BlockState.CODEC.fieldOf("place").forGetter(c -> c.place),
-            Codec.INT.fieldOf("radius").forGetter(c -> c.radius)
-    ).apply(instance, SphereReplaceConfig::new));
+            Codec.INT.fieldOf("radiusMin").forGetter(c -> c.radiusMin),
+            Codec.INT.fieldOf("radiusMax").forGetter(c -> c.radiusMax)
+    ).apply(instance, NoisySphereReplaceConfig::new));
     public final List<Block> matches;
     public final BlockState place;
-    public final int radius;
+    public final int radiusMin, radiusMax;
 
-    public SphereReplaceConfig(List<Block> matches, BlockState place, int radius) {
+    public NoisySphereReplaceConfig(List<Block> matches, BlockState place, int radiusMin, int radiusMax) {
         this.matches = matches;
         this.place = place;
-        this.radius = radius;
+        this.radiusMin = radiusMin;
+        this.radiusMax = radiusMax;
     }
 }
