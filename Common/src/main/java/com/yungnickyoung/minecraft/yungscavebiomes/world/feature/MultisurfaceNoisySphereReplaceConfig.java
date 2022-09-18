@@ -9,25 +9,27 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 
 import java.util.List;
 
-public class MultisurfaceSphereReplaceConfig implements FeatureConfiguration {
-    public static final Codec<MultisurfaceSphereReplaceConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+public class MultisurfaceNoisySphereReplaceConfig implements FeatureConfiguration {
+    public static final Codec<MultisurfaceNoisySphereReplaceConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.BLOCK.byNameCodec().listOf().fieldOf("matches").forGetter(c -> c.matches),
             BlockState.CODEC.fieldOf("floor").forGetter(c -> c.floor),
             BlockState.CODEC.fieldOf("wall").forGetter(c -> c.wall),
             BlockState.CODEC.fieldOf("ceiling").forGetter(c -> c.ceiling),
-            Codec.INT.fieldOf("radius").forGetter(c -> c.radius)
-    ).apply(instance, MultisurfaceSphereReplaceConfig::new));
+            Codec.INT.fieldOf("radiusMin").forGetter(c -> c.radiusMin),
+            Codec.INT.fieldOf("radiusMax").forGetter(c -> c.radiusMax)
+    ).apply(instance, MultisurfaceNoisySphereReplaceConfig::new));
     public final List<Block> matches;
     public final BlockState floor;
     public final BlockState wall;
     public final BlockState ceiling;
-    public final int radius;
+    public final int radiusMin, radiusMax;
 
-    public MultisurfaceSphereReplaceConfig(List<Block> matches, BlockState floor, BlockState wall, BlockState ceiling, int radius) {
+    public MultisurfaceNoisySphereReplaceConfig(List<Block> matches, BlockState floor, BlockState wall, BlockState ceiling, int radiusMin, int radiusMax) {
         this.matches = matches;
         this.floor = floor;
         this.wall = wall;
         this.ceiling = ceiling;
-        this.radius = radius;
+        this.radiusMin = radiusMin;
+        this.radiusMax = radiusMax;
     }
 }

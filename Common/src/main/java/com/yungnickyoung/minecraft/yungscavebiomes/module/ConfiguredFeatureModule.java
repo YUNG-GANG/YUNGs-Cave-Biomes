@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.IceSheetConfiguration;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.MultisurfaceSphereReplaceConfig;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.SphereReplaceConfig;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.MultisurfaceNoisySphereReplaceConfig;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.NoisySphereReplaceConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -176,31 +176,31 @@ public class ConfiguredFeatureModule {
                                     BlockModule.TRAVERTINE.get(),
                                     BlockModule.MARBLE.get()))));
 
-    public static final ConfiguredFeature<SphereReplaceConfig, ?> MARBLE_PATCH = register("marble_patch",
+    public static final ConfiguredFeature<NoisySphereReplaceConfig, ?> MARBLE_PATCH = register("marble_patch",
             new ConfiguredFeature<>(
                     FeatureModule.SPHERE_REPLACE,
-                    new SphereReplaceConfig(
+                    new NoisySphereReplaceConfig(
                             ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
                             BlockModule.MARBLE.get().defaultBlockState(),
-                            7)));
+                            6, 10)));
 
-    public static final ConfiguredFeature<SphereReplaceConfig, ?> TRAVERTINE_PATCH = register("travertine_patch",
+    public static final ConfiguredFeature<NoisySphereReplaceConfig, ?> TRAVERTINE_PATCH = register("travertine_patch",
             new ConfiguredFeature<>(
                     FeatureModule.SPHERE_REPLACE,
-                    new SphereReplaceConfig(
+                    new NoisySphereReplaceConfig(
                             ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
                             BlockModule.TRAVERTINE.get().defaultBlockState(),
-                            7)));
+                            6, 10)));
 
-    public static final ConfiguredFeature<MultisurfaceSphereReplaceConfig, ?> SANDSTONE_PATCH = register("sandstone_patch",
+    public static final ConfiguredFeature<MultisurfaceNoisySphereReplaceConfig, ?> SANDSTONE_PATCH = register("sandstone_patch",
             new ConfiguredFeature<>(
                     FeatureModule.MULTISURFACE_SPHERE_REPLACE,
-                    new MultisurfaceSphereReplaceConfig(
+                    new MultisurfaceNoisySphereReplaceConfig(
                             ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
                             BlockModule.ANCIENT_SAND.get().defaultBlockState(),
                             BlockModule.LAYERED_ANCIENT_SANDSTONE.get().defaultBlockState(),
                             BlockModule.ANCIENT_SANDSTONE.get().defaultBlockState(),
-                            12)));
+                            10, 16)));
 
     public static final ConfiguredFeature<GlowLichenConfiguration, ?> MARBLE_GLOW_LICHEN = register("marble_glow_lichen",
             new ConfiguredFeature<>(
@@ -233,13 +233,13 @@ public class ConfiguredFeatureModule {
                     FeatureModule.PRICKLY_PEACH_CACTUS_PATCH,
                     NoneFeatureConfiguration.INSTANCE));
 
-    public static final ConfiguredFeature<SphereReplaceConfig, ?> BRITTLE_SANDSTONE_REPLACE = register("brittle_sandstone_replace",
+    public static final ConfiguredFeature<NoisySphereReplaceConfig, ?> BRITTLE_SANDSTONE_REPLACE = register("brittle_sandstone_replace",
             new ConfiguredFeature<>(
                     FeatureModule.SPHERE_REPLACE,
-                    new SphereReplaceConfig(
+                    new NoisySphereReplaceConfig(
                             ImmutableList.of(BlockModule.ANCIENT_SANDSTONE.get()),
                             BlockModule.BRITTLE_ANCIENT_SANDSTONE.get().defaultBlockState(),
-                            7)));
+                            6, 10)));
 
     public static final ConfiguredFeature<BlockColumnConfiguration, ?> PRICKLY_VINE = register("prickly_vine",
             new ConfiguredFeature<>(
