@@ -26,7 +26,7 @@ public class MixinAquifer {
     @Shadow @Final private NoiseChunk noiseChunk;
 
     @Inject(method = "computeFluid", at = @At("HEAD"), cancellable = true)
-    private void ycbAquiferFluids(int x, int y, int z, CallbackInfoReturnable<Aquifer.FluidStatus> cir) {
+    private void yungscavebiomes_enforceMarbleCavesAquifer(int x, int y, int z, CallbackInfoReturnable<Aquifer.FluidStatus> cir) {
         // Target multiple aquifer cells to prevent water level artifacts
         if (y > -4 && y < 36) {
 

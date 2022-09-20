@@ -30,7 +30,7 @@ public abstract class MixinAbstractCauldronBlock extends Block {
     protected abstract void receiveStalactiteDrip(BlockState blockState, Level level, BlockPos blockPos, Fluid fluid);
 
     @Inject(method = "tick", at = @At("HEAD"))
-    private void ycb_checkForIcicleDrip(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random, CallbackInfo ci) {
+    private void yungscavebiomes_checkForIcicleDrip(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random, CallbackInfo ci) {
         BlockPos iciclePos = IcicleBlock.findIcicleTipAboveCauldron(serverLevel, blockPos);
         if (iciclePos == null) {
             return;

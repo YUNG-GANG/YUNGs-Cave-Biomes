@@ -44,7 +44,7 @@ public abstract class MixinNoiseBasedChunkGenerator extends ChunkGenerator {
 //    }
 
     @Inject(method = "createBiomes", at = @At("HEAD"))
-    private void captureBiomeRegistry(Registry<Biome> registry, Executor executor, Blender blender, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
+    private void yungscavebiomes_captureBiomeRegistry(Registry<Biome> registry, Executor executor, Blender blender, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
 //        ((NoiseSamplerBiomeHolder)this.sampler).setBiomeRegistry(registry);
 
         NoiseChunk nc = chunkAccess.getOrCreateNoiseChunk(this.router, () -> {

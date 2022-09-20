@@ -6,11 +6,11 @@
   "description": "Adds new vanilla+ cave biomes and underground content!",
   "authors": [
     "YUNGNICKYOUNG",
-    "Frenderman",
     "SuperCoder79",
     "Sully",
     "LudoCrypt",
-    "K.jpg"
+    "K.jpg",
+    "Frenderman"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/yungs-cave-biomes-fabric",
@@ -30,6 +30,9 @@
     ],
     "modmenu": [
       "com.yungnickyoung.minecraft.yungscavebiomes.config.gui.YCBModMenu"
+    ],
+    "terrablender": [
+      "com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesFabric"
     ]
   },
   "mixins": [
@@ -42,6 +45,7 @@
     "minecraft": ">=1.18.2",
     "cloth-config2": ">=6.2.57",
     "java": ">=17",
-    "yungsapi": ">=1.18.2-Fabric-2.2.2"
+    "yungsapi": ">=1.18.2-Fabric-2.2.2",
+    "terrablender": ">=1.2.0.126"
   }
 }

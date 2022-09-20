@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CactusBlock.class)
 public class MixinCactusBlock {
     @Inject(method = "canSurvive", at = @At("TAIL"), cancellable = true)
-    public void allowCactusOnAncientSand(BlockState blockState, LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
+    public void yungscavebiomes_allowCactusOnAncientSand(BlockState blockState, LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockStateBelow = levelReader.getBlockState(blockPos.below());
         BlockState blockStateAbove = levelReader.getBlockState(blockPos.above());
         if (blockStateBelow.is(BlockModule.ANCIENT_SAND.get()) && !blockStateAbove.getMaterial().isLiquid()) {

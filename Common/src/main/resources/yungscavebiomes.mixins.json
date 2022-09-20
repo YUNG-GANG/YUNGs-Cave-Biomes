@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "yungscavebiomes.refmap.json",
   "mixins": [
-    "accessor.ArrowAccessor",
     "MixinAbstractArrow",
     "MixinAbstractCauldronBlock",
     "MixinAquifer",
@@ -15,10 +14,10 @@
     "MixinDeadBushBlock",
     "MixinNoiseBasedChunkGenerator",
     "MixinNoiseChunk",
-    "MixinOverworldBiomeBuilder",
     "MixinThrownPotion",
     "accessor.AbstractArrowAccessor",
     "accessor.AbstractCauldronBlockAccessor",
+    "accessor.ArrowAccessor",
     "accessor.BeardifierAccessor",
     "accessor.NoiseChunkAccessor",
     "accessor.PotionBrewingAccessor"

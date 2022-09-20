@@ -31,3 +31,10 @@ issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Cave-Biomes/issues"
     mandatory=true
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.yungscavebiomes]]
+    modId="terrablender"
+    versionRange="[1.2.0.126,)"
+    mandatory=true
+    ordering="NONE"
+    side="BOTH"

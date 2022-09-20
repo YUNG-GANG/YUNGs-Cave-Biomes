@@ -30,7 +30,7 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
     }
 
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ThrownPotion;discard()V", ordinal = 0))
-    protected void ycbOnFrostSplashPotionHit(HitResult hitResult, CallbackInfo ci) {
+    protected void yungscavebiomes_onFrostSplashPotionHit(HitResult hitResult, CallbackInfo ci) {
         if (!this.level.isClientSide && !level.dimensionType().ultraWarm()) {
             ItemStack itemStack = this.getItem();
             Potion potion = PotionUtils.getPotion(itemStack);

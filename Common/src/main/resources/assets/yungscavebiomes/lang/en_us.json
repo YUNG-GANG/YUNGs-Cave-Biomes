@@ -37,5 +37,7 @@
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Arrow of Frost",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Arrow of Frost",
 
-  "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows"
+  "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows",
+
+  "text.autoconfig.yungscavebiomes-fabric-1_18_2.title": "YUNG's Cave Biomes"
 }

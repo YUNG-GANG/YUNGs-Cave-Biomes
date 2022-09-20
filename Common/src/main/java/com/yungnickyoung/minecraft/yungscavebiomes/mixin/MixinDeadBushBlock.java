@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(DeadBushBlock.class)
 public class MixinDeadBushBlock {
     @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
-    public void placeOnAncientSand(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
+    public void yungscavebiomes_placeDeadBushOnAncientSand(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
         if (blockState.is(BlockModule.ANCIENT_SAND.get())) {
             cir.setReturnValue(true);
         }

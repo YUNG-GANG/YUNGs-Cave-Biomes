@@ -59,7 +59,7 @@ public abstract class MixinNoiseChunk implements NoiseSamplerBiomeHolder {
 
     // Make marble caves interpolate ground to zero
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/level/levelgen/NoiseRouter;finalDensity()Lnet/minecraft/world/level/levelgen/DensityFunction;"))
-    private DensityFunction rewireFinalDensity(NoiseRouter instance) {
+    private DensityFunction yungscavebiomes_ewireFinalDensity(NoiseRouter instance) {
         return new MarbleCavesInterpolateDensityFunction(instance.finalDensity(), this);
     }
 }
