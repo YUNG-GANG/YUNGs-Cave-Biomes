@@ -140,7 +140,7 @@ public class BiomeMaker {
         return biome(Biome.Precipitation.RAIN, 0.8F, 0.4F, mobSettings, biomeSettings, null);
     }
 
-    public static Biome ancientCaves() {
+    public static Biome lostCaves() {
         // Mob spawns
         MobSpawnSettings.Builder mobSettings = new MobSpawnSettings.Builder();
         mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 10, 8, 8));

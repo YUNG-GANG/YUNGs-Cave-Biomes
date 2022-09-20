@@ -43,7 +43,7 @@ public class CaveBiomeRegionParameters {
             fullRange, // weirdness
             0.0F // offset
     );
-    public static final Climate.ParameterPoint ANCIENT_CAVES = Climate.parameters(
+    public static final Climate.ParameterPoint LOST_CAVES = Climate.parameters(
             temperatures[4], // temperature
             fullRange, // humidity
             Climate.Parameter.span(0.2F, 0.7F), // continentalness

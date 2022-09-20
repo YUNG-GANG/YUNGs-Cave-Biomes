@@ -34,8 +34,8 @@ public class CaveBiomeRegion extends Region {
         if (YungsCaveBiomesCommon.MARBLE_CAVES_ENABLED) {
             this.addBiome(mapper, CaveBiomeRegionParameters.MARBLE_CAVES, BiomeModule.MARBLE_CAVES.getResourceKey());
         }
-        if (YungsCaveBiomesCommon.ANCIENT_CAVES_ENABLED) {
-            this.addBiome(mapper, CaveBiomeRegionParameters.ANCIENT_CAVES, BiomeModule.ANCIENT_CAVES.getResourceKey());
+        if (YungsCaveBiomesCommon.LOST_CAVES_ENABLED) {
+            this.addBiome(mapper, CaveBiomeRegionParameters.LOST_CAVES, BiomeModule.LOST_CAVES.getResourceKey());
         }
     }
 }
