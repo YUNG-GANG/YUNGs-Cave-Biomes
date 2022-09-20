@@ -6,7 +6,7 @@
   "elements": [
     {
       "from": [ 0, 0, 0 ],
-      "to": [ 16, 16, 0.01 ],
+      "to": [ 16, 16, 0.04 ],
       "faces": {
         "north": { "uv": [ 16, 0, 0, 16 ], "texture": "#ice" },
         "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#ice" }

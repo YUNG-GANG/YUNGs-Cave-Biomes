@@ -70,7 +70,7 @@ public class BlockModule {
                     .noOcclusion()
                     .noCollission()
                     .strength(0.3f)
-                    .lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 3 : 0)
+                    .lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 4 : 0)
                     .randomTicks()
                     .sound(SoundType.GLASS)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
