@@ -1,6 +1,6 @@
 modLoader="javafml" #mandatory
 loaderVersion="[40,)"
-license="LGPLv3"
+license="All Rights Reserved"
 issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Cave-Biomes/issues"
 
 [[mods]]
