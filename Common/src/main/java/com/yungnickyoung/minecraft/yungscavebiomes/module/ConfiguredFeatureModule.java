@@ -263,7 +263,7 @@ public class ConfiguredFeatureModule {
 
     public static final ConfiguredFeature<SimpleBlockConfiguration, ?> LAYERED_SANDSTONE_PILLAR = register("layered_sandstone_pillar",
             new ConfiguredFeature<>(
-                    FeatureModule.DISK_ROCK,
+                    FeatureModule.PILLAR_ROCK,
                     new SimpleBlockConfiguration(BlockStateProvider.simple(BlockModule.LAYERED_ANCIENT_SANDSTONE.get()))));
 
     private static <FC extends FeatureConfiguration> ConfiguredFeature<FC, ?> register(String key, ConfiguredFeature<FC, ?> feature) {
