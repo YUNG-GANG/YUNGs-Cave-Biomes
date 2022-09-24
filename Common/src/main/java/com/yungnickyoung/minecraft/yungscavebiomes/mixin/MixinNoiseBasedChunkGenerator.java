@@ -34,19 +34,14 @@ public abstract class MixinNoiseBasedChunkGenerator extends ChunkGenerator {
 
     @Shadow @Final protected Holder<NoiseGeneratorSettings> settings;
 
+    @Shadow @Final private long seed;
+
     public MixinNoiseBasedChunkGenerator(Registry<StructureSet> $$0, Optional<HolderSet<StructureSet>> $$1, BiomeSource $$2) {
         super($$0, $$1, $$2);
     }
 
-//    @Inject(method = "<init>(Lnet/minecraft/core/Registry;Lnet/minecraft/world/level/biome/BiomeSource;Lnet/minecraft/world/level/biome/BiomeSource;JLjava/util/function/Supplier;)V", at = @At("TAIL"))
-//    private void ycbAddBiomeSource(Registry registry, BiomeSource biomeSource, BiomeSource biomeSource2, long l, Supplier supplier, CallbackInfo ci) {
-//        ((NoiseSamplerBiomeHolder)this.sampler).setBiomeSource(biomeSource);
-//    }
-
     @Inject(method = "createBiomes", at = @At("HEAD"))
     private void captureBiomeRegistry(Registry<Biome> registry, Executor executor, Blender blender, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
-//        ((NoiseSamplerBiomeHolder)this.sampler).setBiomeRegistry(registry);
-
         NoiseChunk nc = chunkAccess.getOrCreateNoiseChunk(this.router, () -> {
             return BeardifierAccessor.createBeardifier(structureFeatureManager, chunkAccess);
         }, this.settings.value(), this.globalFluidPicker, blender);
@@ -54,6 +49,7 @@ public abstract class MixinNoiseBasedChunkGenerator extends ChunkGenerator {
         ((NoiseSamplerBiomeHolder)nc).setBiomeSource(this.runtimeBiomeSource);
         ((NoiseSamplerBiomeHolder)nc).setBiomeRegistry(registry);
         ((NoiseSamplerBiomeHolder)nc).setClimateSampler(((NoiseChunkAccessor)nc).callCachedClimateSampler(this.router));
+        ((NoiseSamplerBiomeHolder)nc).setWorldSeed(this.seed);
     }
 
 
