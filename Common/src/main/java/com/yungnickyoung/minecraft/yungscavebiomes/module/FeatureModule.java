@@ -31,8 +31,8 @@ public class FeatureModule {
     @AutoRegister("water_surface_ice_fragment")
     public static Feature<NoneFeatureConfiguration> WATER_SURFACE_ICE_FRAGMENT = new WaterSurfaceIceFragmentFeature(NoneFeatureConfiguration.CODEC);
 
-    @AutoRegister("disk_rock")
-    public static Feature<SimpleBlockConfiguration> DISK_ROCK = new DiskRockFeature(SimpleBlockConfiguration.CODEC);
+    @AutoRegister("pillar_rock")
+    public static Feature<SimpleBlockConfiguration> PILLAR_ROCK = new PillarRockFeature(SimpleBlockConfiguration.CODEC);
 
     @AutoRegister("ice_sheet_replace")
     public static Feature<IceSheetConfiguration> ICE_SHEET_REPLACE = new IceSheetFeature(IceSheetConfiguration.CODEC);
