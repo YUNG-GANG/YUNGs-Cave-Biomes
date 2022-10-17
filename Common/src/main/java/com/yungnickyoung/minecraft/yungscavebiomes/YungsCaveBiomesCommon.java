@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes;
 
+import com.yungnickyoung.minecraft.yungsapi.api.YungAutoRegister;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterCreativeTab;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
@@ -26,6 +27,7 @@ public class YungsCaveBiomesCommon {
             .build();
 
 	public static void init() {
+        YungAutoRegister.scanPackageForAnnotations("com.yungnickyoung.minecraft.yungscavebiomes");
 		Services.MODULES.loadModules();
 	}
 }

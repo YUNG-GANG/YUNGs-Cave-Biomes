@@ -45,7 +45,7 @@
     "minecraft": ">=1.18.2",
     "cloth-config2": ">=6.2.57",
     "java": ">=17",
-    "yungsapi": ">=1.18.2-Fabric-2.2.2",
+    "yungsapi": ">=1.18.2-Fabric-2.2.4",
     "terrablender": ">=1.2.0.126"
   }
 }
