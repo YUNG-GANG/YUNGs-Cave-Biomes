@@ -39,14 +39,24 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
             int height = config.height.sample(random);
             float wetness = config.wetness.sample(random);
             float density = config.density.sample(random);
-            int xRadius = config.radius.sample(random);
-            int zRadius = config.radius.sample(random);
 
-            for(int xOffset = -xRadius; xOffset <= xRadius; ++xOffset) {
-                for(int zOffset = -zRadius; zOffset <= zRadius; ++zOffset) {
-                    double chance = this.getChanceOfStalagmiteOrStalactite(xRadius, zRadius, xOffset, zOffset, config);
+            // Ellipse
+            int uRadius = config.radius.sample(random);
+            int vRadius = config.radius.sample(random);
+            int uvRadiusMax = Math.max(uRadius, vRadius);
+            float angle = random.nextFloat(Mth.TWO_PI);
+            float rx = Mth.cos(angle), rz = Mth.sin(angle);
+            float ux = rx / uRadius, uz = rz / uRadius;
+            float vx = rz / vRadius, vz = -rx / vRadius;
+
+            for (int xOffset = -uvRadiusMax; xOffset <= uvRadiusMax; ++xOffset) {
+                for (int zOffset = -uvRadiusMax; zOffset <= uvRadiusMax; ++zOffset) {
+                    float ellipseDensity = Mth.square(xOffset * ux + zOffset * uz) + Mth.square(xOffset * vx + zOffset * vz);
+                    if (ellipseDensity >= 1.0f) continue;
+                    float chanceOfStalagmiteOrStalactite = this.getChanceOfStalagmiteOrStalactite(ellipseDensity, uvRadiusMax, config);
                     BlockPos blockPos2 = origin.offset(xOffset, 0, zOffset);
-                    this.placeColumn(worldGenLevel, random, blockPos2, xOffset, zOffset, wetness, chance, height, density, config);
+                    this.placeColumn(worldGenLevel, random, blockPos2, xOffset, zOffset, wetness,
+                            chanceOfStalagmiteOrStalactite, height, density, config);
                 }
             }
 
@@ -188,13 +198,10 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
         }
     }
 
-    private double getChanceOfStalagmiteOrStalactite(int xRadius, int zRadius, int xOffset, int zOffset, DripstoneClusterConfiguration config) {
-        int distanceFromXEdge = xRadius - Math.abs(xOffset);
-        int distanceFromZEdge = zRadius - Math.abs(zOffset);
-        int SmallestDistanceToEdge = Math.min(distanceFromXEdge, distanceFromZEdge);
-        return Mth.clampedMap((float)SmallestDistanceToEdge,
-                0.0F,
-                (float)config.maxDistanceFromEdgeAffectingChanceOfDripstoneColumn,
+    private float getChanceOfStalagmiteOrStalactite(float ellipseDensity, float uvRadiusMax, DripstoneClusterConfiguration config) {
+        return Mth.clampedMap(ellipseDensity * (uvRadiusMax * uvRadiusMax),
+                (uvRadiusMax * uvRadiusMax),
+                config.maxDistanceFromEdgeAffectingChanceOfDripstoneColumn,
                 config.chanceOfDripstoneColumnAtMaxDistanceFromCenter,
                 1.0F);
     }

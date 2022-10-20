@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -12,6 +13,15 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import java.util.Random;
 
 public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
+
+    public static final int MAX_PLACEMENT_ATTEMPTS = 16;
+    public static final float PLACEMENT_SKIP_CHANCE = 0.25f;
+    public static final int MAX_TOTAL_PLACEMENTS = 4;
+    public static final int PLACEMENT_RADIUS_XZ = 7;
+    public static final int PLACEMENT_RADIUS_Y = 5;
+    public static final int MAX_CACTUS_HEIGHT = 3;
+    public static final float CACTUS_HEIGHT_GROWTH_CHANCE = 0.3f;
+
     public CactusPatchFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
     }
@@ -22,18 +32,27 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos pos = context.origin();
         Random random = context.random();
 
-        int maxCacti = 3;
+        int cactiRemaining = MAX_TOTAL_PLACEMENTS;
 
-        for (int j = 0; j < 16; j++) {
-            if (maxCacti <= 0) {
+        for (int j = 0; j < MAX_PLACEMENT_ATTEMPTS; j++) {
+            if (cactiRemaining <= 0) {
                 return true;
             }
 
-            // Triangle 5x3x5 spread
+            // Skip many attempts
+            if (random.nextFloat() < PLACEMENT_SKIP_CHANCE) {
+                continue;
+            }
+
+            // Ellipsoid spread
+            float sphereY = random.nextFloat(-1.0f, 1.0f);
+            float sphereTheta = random.nextFloat(Mth.TWO_PI);
+            float sphereXZScale = Mth.sqrt(1.0f - sphereY * sphereY);
+            float radiusScale = Mth.square(random.nextFloat()); // Higher density towards the center
             BlockPos local = pos.offset(
-                    random.nextInt(6) - random.nextInt(6),
-                    random.nextInt(4) - random.nextInt(4),
-                    random.nextInt(6) - random.nextInt(6)
+                    (int)(radiusScale * PLACEMENT_RADIUS_XZ * sphereXZScale * Mth.cos(sphereTheta)),
+                    (int)(radiusScale * PLACEMENT_RADIUS_Y * sphereY),
+                    (int)(radiusScale * PLACEMENT_RADIUS_XZ * sphereXZScale * Mth.sin(sphereTheta))
             );
 
             // Check for sandstone below
@@ -41,16 +60,9 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
                 continue;
             }
 
-            // Make most cases not have cacti
-            if (random.nextInt(3) > 1) {
-                continue;
-            }
-
-            level.setBlock(local.below(), BlockModule.ANCIENT_SAND.get().defaultBlockState(), 3);
-
             // Attempt to place cactus
             boolean placedCactus = false;
-            for (int i = 0; i < random.nextInt(3); i++) {
+            for (int i = 0; i < MAX_CACTUS_HEIGHT; i++) {
                 if (!level.getBlockState(local.above(i)).isAir()) {
                     break;
                 }
@@ -73,13 +85,17 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
 
                 level.setBlock(local.above(i), Blocks.CACTUS.defaultBlockState(), 3);
                 placedCactus = true;
+
+                if (random.nextFloat() >= CACTUS_HEIGHT_GROWTH_CHANCE) {
+                    break;
+                }
             }
 
             if (placedCactus) {
-                maxCacti--;
+                cactiRemaining--;
             }
         }
 
-        return false;
+        return cactiRemaining < MAX_TOTAL_PLACEMENTS;
     }
 }
