@@ -28,6 +28,7 @@
   "item.yungscavebiomes.ice_cube_spawn_egg": "Ice Cube Spawn Egg",
 
   "effect.yungscavebiomes.frost": "Frost",
+  "effect.yungscavebiomes.buffeted": "Buffeted",
   "item.minecraft.potion.effect.yungscavebiomes.frost": "Potion of Frost",
   "item.minecraft.potion.effect.yungscavebiomes.strong_frost": "Potion of Frost",
   "item.minecraft.splash_potion.effect.yungscavebiomes.frost": "Splash Potion of Frost",
@@ -39,5 +40,9 @@
 
   "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows",
 
-  "text.autoconfig.yungscavebiomes-fabric-1_18_2.title": "YUNG's Cave Biomes"
+  "text.autoconfig.yungscavebiomes-fabric-1_18_2.title": "YUNG's Cave Biomes",
+  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.enableSandstorms": "Enable Sandstorms",
+  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.avgSandstormDuration": "Average Sandstorm Duration (Minutes)",
+  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.avgTimeBetweenSandstorms": "Average Time Between Sandstorms (Minutes)",
+  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.minTimeBetweenSandstorms": "Minimum Time Between Sandstorms (Minutes)"
 }

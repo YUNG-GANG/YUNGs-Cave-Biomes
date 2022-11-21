@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.config.YCBConfigFabric;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -20,6 +21,9 @@ public class ConfigModuleFabric {
     }
 
     private static void bakeConfig(YCBConfigFabric configFabric) {
-        // TODO
+        YungsCaveBiomesCommon.CONFIG.lostCaves.enableSandstorms = configFabric.lostCaves.enableSandstorms;
+        YungsCaveBiomesCommon.CONFIG.lostCaves.avgSandstormDuration = configFabric.lostCaves.avgSandstormDuration;
+        YungsCaveBiomesCommon.CONFIG.lostCaves.avgTimeBetweenSandstorms = configFabric.lostCaves.avgTimeBetweenSandstorms;
+        YungsCaveBiomesCommon.CONFIG.lostCaves.minTimeBetweenSandstorms = configFabric.lostCaves.minTimeBetweenSandstorms;
     }
 }

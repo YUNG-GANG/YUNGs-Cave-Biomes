@@ -8,5 +8,5 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 public class YCBConfigFabric implements ConfigData {
     @ConfigEntry.Category("YUNG's Cave Biomes")
     @ConfigEntry.Gui.TransitiveObject
-    public ConfigGeneralFabric general = new ConfigGeneralFabric();
+    public ConfigLostCavesFabric lostCaves = new ConfigLostCavesFabric();
 }

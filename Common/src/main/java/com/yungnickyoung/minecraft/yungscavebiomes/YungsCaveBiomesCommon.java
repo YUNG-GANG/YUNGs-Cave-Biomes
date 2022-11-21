@@ -18,7 +18,7 @@ public class YungsCaveBiomesCommon {
     public static final ConfigModule CONFIG = new ConfigModule();
 
     public static boolean FROSTED_CAVES_ENABLED = true;
-    public static boolean LOST_CAVES_ENABLED = false;
+    public static boolean LOST_CAVES_ENABLED = true;
     public static boolean MARBLE_CAVES_ENABLED = false;
 
     @AutoRegister("general")

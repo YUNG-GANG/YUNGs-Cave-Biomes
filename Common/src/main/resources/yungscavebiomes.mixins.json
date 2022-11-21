@@ -12,6 +12,7 @@
     "MixinCactusBlock",
     "MixinCrossbowItem",
     "MixinDeadBushBlock",
+    "MixinLivingEntity",
     "MixinNoiseBasedChunkGenerator",
     "MixinNoiseChunk",
     "MixinThrownPotion",
