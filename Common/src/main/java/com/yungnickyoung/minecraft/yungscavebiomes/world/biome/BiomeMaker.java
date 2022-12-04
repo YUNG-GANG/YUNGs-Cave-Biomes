@@ -197,7 +197,7 @@ public class BiomeMaker {
         Music music = Musics.createGameMusic(SoundModule.MUSIC_BIOME_DESERT_CAVES.get());
 
         // Build biome
-        return biome(Biome.Precipitation.NONE, 0.8F, 0.4F, mobSettings, biomeSettings, music);
+        return biome(Biome.Precipitation.NONE, 0.8F, 0.4F, 4159204, 329011, 0xc88027,mobSettings, biomeSettings, music);
     }
 
     protected static int calculateSkyColor(float temperature) {
@@ -213,7 +213,7 @@ public class BiomeMaker {
                                BiomeGenerationSettings.Builder biomeGenerationSettingsBuilder,
                                @Nullable Music music
     ) {
-        return biome(precipitation, temperature, downfall, 4159204, 329011,
+        return biome(precipitation, temperature, downfall, 4159204, 329011, 12638463,
                 mobSpawnSettingsBuilder, biomeGenerationSettingsBuilder, music);
     }
 
@@ -222,6 +222,7 @@ public class BiomeMaker {
                                float downfall,
                                int waterColor,
                                int waterFogColor,
+                               int fogColor,
                                MobSpawnSettings.Builder mobSpawnSettingsBuilder,
                                BiomeGenerationSettings.Builder biomeGenerationSettingsBuilder,
                                @Nullable Music music

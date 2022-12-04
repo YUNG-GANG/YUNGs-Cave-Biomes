@@ -32,7 +32,7 @@ public abstract class MixinLivingEntity extends Entity {
         if (YungsCaveBiomesCommon.CONFIG.lostCaves.enableSandstorms
                 && !this.level.isClientSide
                 && !this.isSpectator()
-                && this.tickCount % 20 == 0
+                && this.tickCount % 10 == 0
                 && this.level.getBiome(this.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey())
         ) {
             MobEffectInstance buffetedEffect = this.getEffect(MobEffectModule.BUFFETED_EFFECT.get());

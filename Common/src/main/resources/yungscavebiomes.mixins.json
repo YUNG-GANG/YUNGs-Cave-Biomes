@@ -25,5 +25,9 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "client.MixinClientLevel",
+    "client.MixinFogRenderer"
+  ]
 }

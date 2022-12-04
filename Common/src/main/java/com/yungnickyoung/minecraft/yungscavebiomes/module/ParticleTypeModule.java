@@ -14,6 +14,10 @@ public class ParticleTypeModule {
     public static AutoRegisterParticleType<BlockParticleOption> ANCIENT_DUST = AutoRegisterParticleType
             .of(BlockParticleType::new);
 
+    @AutoRegister("sandstorm")
+    public static AutoRegisterParticleType<SimpleParticleType> SANDSTORM = AutoRegisterParticleType
+            .simple();
+
     @AutoRegister("ice_shatter")
     public static AutoRegisterParticleType<SimpleParticleType> ICE_SHATTER = AutoRegisterParticleType
             .simple();

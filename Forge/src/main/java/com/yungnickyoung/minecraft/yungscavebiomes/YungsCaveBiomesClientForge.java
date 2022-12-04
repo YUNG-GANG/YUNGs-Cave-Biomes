@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.model.IceCubeModel;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.FallingAncientDustParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.IceShatterParticle;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.SandstormParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectileRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
@@ -49,6 +50,7 @@ public class YungsCaveBiomesClientForge {
 
     private static void registerParticleFactories(ParticleFactoryRegisterEvent event) {
         Minecraft.getInstance().particleEngine.register(ParticleTypeModule.ANCIENT_DUST.get(), FallingAncientDustParticle.Provider::new);
+        Minecraft.getInstance().particleEngine.register(ParticleTypeModule.SANDSTORM.get(), SandstormParticle.Provider::new);
         Minecraft.getInstance().particleEngine.register(ParticleTypeModule.ICE_SHATTER.get(), IceShatterParticle.Provider::new);
     }
 }
