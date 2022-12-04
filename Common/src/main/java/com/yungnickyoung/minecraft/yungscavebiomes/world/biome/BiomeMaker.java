@@ -197,7 +197,7 @@ public class BiomeMaker {
         Music music = Musics.createGameMusic(SoundModule.MUSIC_BIOME_DESERT_CAVES.get());
 
         // Build biome
-        return biome(Biome.Precipitation.NONE, 0.8F, 0.4F, 0x332c0a, 0x1c1606, 0x5E440C, mobSettings, biomeSettings, music);
+        return biome(Biome.Precipitation.NONE, 0.8F, 0.4F, 0x332c0a, 0x1c1606, 0xc88027, mobSettings, biomeSettings, music);
     }
 
     protected static int calculateSkyColor(float temperature) {
