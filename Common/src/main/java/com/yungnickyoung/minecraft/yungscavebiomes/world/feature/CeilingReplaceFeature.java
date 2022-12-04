@@ -10,21 +10,18 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
 import java.util.List;
 
-/**
- * Replaces blocks in a noisy sphere that matches a list of blocks
- */
-public class NoisySphereReplaceFeature extends Feature<NoisySphereReplaceConfig> {
+public class CeilingReplaceFeature extends Feature<CeilingReplaceConfig> {
 
     private static final double NOISE_FREQUENCY_XZ = 0.15;
     private static final double NOISE_FREQUENCY_Y = 0.15;
     private static final long NOISE_SEED_FLIP_MASK = -0x6139D09B0B75F247L;
 
-    public NoisySphereReplaceFeature(Codec<NoisySphereReplaceConfig> codec) {
+    public CeilingReplaceFeature(Codec<CeilingReplaceConfig> codec) {
         super(codec);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoisySphereReplaceConfig> context) {
+    public boolean place(FeaturePlaceContext<CeilingReplaceConfig> context) {
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
         int radiusMin = context.config().radiusMin;
@@ -35,7 +32,12 @@ public class NoisySphereReplaceFeature extends Feature<NoisySphereReplaceConfig>
         for (BlockPos here : new NoisySphereUtils.NoisySphereIterable(
                 origin, noiseSeed, NOISE_FREQUENCY_XZ, NOISE_FREQUENCY_Y, radiusMin, radiusMax)) {
             if (matches.contains(level.getBlockState(here).getBlock())) {
-                level.setBlock(here, context.config().place, 3);
+                for (int yOffset = context.config().width; yOffset >= 1; yOffset--) {
+                    if (level.getBlockState(here.below(yOffset)).isAir()) {
+                        level.setBlock(here, context.config().place, 3);
+                        break;
+                    }
+                }
             }
         }
 

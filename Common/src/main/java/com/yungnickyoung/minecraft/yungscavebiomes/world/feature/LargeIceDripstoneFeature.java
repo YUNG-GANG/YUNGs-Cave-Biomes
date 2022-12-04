@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.util.DripstoneIceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;

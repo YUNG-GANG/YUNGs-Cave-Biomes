@@ -2,10 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
 import com.google.common.collect.ImmutableList;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.IceSheetConfiguration;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.LargeIceDripstoneConfiguration;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.MultisurfaceNoisySphereReplaceConfig;
-import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.NoisySphereReplaceConfig;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -192,15 +189,19 @@ public class ConfiguredFeatureModule {
                             BlockModule.TRAVERTINE.get().defaultBlockState(),
                             6, 10)));
 
-    public static final ConfiguredFeature<MultisurfaceNoisySphereReplaceConfig, ?> SANDSTONE_PATCH = register("sandstone_patch",
+    public static final ConfiguredFeature<NoneFeatureConfiguration, ?> LOST_CAVES_SURFACE_REPLACE = register("lost_caves_surface_replace",
+            new ConfiguredFeature<>(FeatureModule.LOST_CAVES_SURFACE_REPLACE, NoneFeatureConfiguration.INSTANCE));
+
+    /**
+     * Replaces some of the ceiling layer exposed to air with brittle ancient sandstone.
+     */
+    public static final ConfiguredFeature<CeilingReplaceConfig, ?> BRITTLE_SANDSTONE_CEILING_PATCH = register("brittle_sandstone_ceiling_patch",
             new ConfiguredFeature<>(
-                    FeatureModule.MULTISURFACE_SPHERE_REPLACE,
-                    new MultisurfaceNoisySphereReplaceConfig(
-                            ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
-                            BlockModule.ANCIENT_SAND.get().defaultBlockState(),
-                            BlockModule.LAYERED_ANCIENT_SANDSTONE.get().defaultBlockState(),
-                            BlockModule.ANCIENT_SANDSTONE.get().defaultBlockState(),
-                            10, 16)));
+                    FeatureModule.CEILING_REPLACE,
+                    new CeilingReplaceConfig(
+                            ImmutableList.of(BlockModule.LAYERED_ANCIENT_SANDSTONE.get()),
+                            BlockModule.BRITTLE_ANCIENT_SANDSTONE.get().defaultBlockState(),
+                            1, 6, 10)));
 
     public static final ConfiguredFeature<GlowLichenConfiguration, ?> MARBLE_GLOW_LICHEN = register("marble_glow_lichen",
             new ConfiguredFeature<>(
@@ -232,14 +233,6 @@ public class ConfiguredFeatureModule {
             new ConfiguredFeature<>(
                     FeatureModule.PRICKLY_PEACH_CACTUS_PATCH,
                     NoneFeatureConfiguration.INSTANCE));
-
-    public static final ConfiguredFeature<NoisySphereReplaceConfig, ?> BRITTLE_SANDSTONE_REPLACE = register("brittle_sandstone_replace",
-            new ConfiguredFeature<>(
-                    FeatureModule.SPHERE_REPLACE,
-                    new NoisySphereReplaceConfig(
-                            ImmutableList.of(BlockModule.ANCIENT_SANDSTONE.get()),
-                            BlockModule.BRITTLE_ANCIENT_SANDSTONE.get().defaultBlockState(),
-                            6, 10)));
 
     public static final ConfiguredFeature<BlockColumnConfiguration, ?> PRICKLY_VINE = register("prickly_vine",
             new ConfiguredFeature<>(

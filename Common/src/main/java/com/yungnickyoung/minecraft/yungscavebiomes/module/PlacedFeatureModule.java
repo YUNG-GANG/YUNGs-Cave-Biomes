@@ -211,9 +211,9 @@ public class PlacedFeatureModule {
                             SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13),
                             BiomeFilter.biome())));
 
-    public static final PlacedFeature SANDSTONE_PATCH = register("sandstone_patch",
+    public static final PlacedFeature LOST_CAVES_SURFACE_REPLACE = register("lost_caves_surface_replace",
             new PlacedFeature(
-                    Holder.direct(ConfiguredFeatureModule.SANDSTONE_PATCH),
+                    Holder.direct(ConfiguredFeatureModule.LOST_CAVES_SURFACE_REPLACE),
                     List.of(
                             CountPlacement.of(250),
                             InSquarePlacement.spread(),
@@ -223,9 +223,9 @@ public class PlacedFeatureModule {
                             RandomOffsetPlacement.vertical(ConstantInt.of(1)),
                             BiomeFilter.biome())));
 
-    public static final PlacedFeature SANDSTONE_PATCH2 = register("sandstone_patch_2",
+    public static final PlacedFeature LOST_CAVES_SURFACE_REPLACE_2 = register("lost_caves_surface_replace_2",
             new PlacedFeature(
-                    Holder.direct(ConfiguredFeatureModule.SANDSTONE_PATCH),
+                    Holder.direct(ConfiguredFeatureModule.LOST_CAVES_SURFACE_REPLACE),
                     List.of(
                             CountPlacement.of(250),
                             InSquarePlacement.spread(),
@@ -259,9 +259,9 @@ public class PlacedFeatureModule {
                             RandomOffsetPlacement.vertical(ConstantInt.of(0)),
                             BiomeFilter.biome())));
 
-    public static final PlacedFeature BRITTLE_SANDSTONE_REPLACE = register("brittle_sandstone_replace",
+    public static final PlacedFeature BRITTLE_SANDSTONE_CEILING_PATCH = register("brittle_sandstone_ceiling_patch",
             new PlacedFeature(
-                    Holder.direct(ConfiguredFeatureModule.BRITTLE_SANDSTONE_REPLACE),
+                    Holder.direct(ConfiguredFeatureModule.BRITTLE_SANDSTONE_CEILING_PATCH),
                     List.of(
                             CountPlacement.of(150),
                             InSquarePlacement.spread(),

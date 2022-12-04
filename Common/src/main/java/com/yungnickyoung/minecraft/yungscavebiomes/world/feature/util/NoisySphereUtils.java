@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
+package com.yungnickyoung.minecraft.yungscavebiomes.world.feature.util;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.world.noise.OpenSimplex2S;
 import net.minecraft.core.BlockPos;
