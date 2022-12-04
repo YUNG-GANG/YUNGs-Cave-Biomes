@@ -183,12 +183,12 @@ public class BiomeMaker {
         BiomeDefaultFeatures.addSurfaceFreezing(biomeSettings);
 
         // Modded features
-        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.SANDSTONE_PATCH));
-        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.SANDSTONE_PATCH2));
+        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.LOST_CAVES_SURFACE_REPLACE));
+        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.LOST_CAVES_SURFACE_REPLACE_2));
+        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.BRITTLE_SANDSTONE_CEILING_PATCH));
+        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.SANDSTONE_GLOW_LICHEN));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.CACTUS_PATCH));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.PRICKLY_PEACH_CACTUS_PATCH));
-        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.SANDSTONE_GLOW_LICHEN));
-        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.BRITTLE_SANDSTONE_REPLACE));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.DEAD_BUSH_SPREAD));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.PRICKLY_VINES));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.LAYERED_SANDSTONE_PILLAR));
@@ -197,7 +197,7 @@ public class BiomeMaker {
         Music music = Musics.createGameMusic(SoundModule.MUSIC_BIOME_DESERT_CAVES.get());
 
         // Build biome
-        return biome(Biome.Precipitation.NONE, 0.8F, 0.4F, mobSettings, biomeSettings, music);
+        return biome(Biome.Precipitation.NONE, 0.8F, 0.4F, 0x332c0a, 0x1c1606, 0x5E440C, mobSettings, biomeSettings, music);
     }
 
     protected static int calculateSkyColor(float temperature) {
@@ -213,7 +213,7 @@ public class BiomeMaker {
                                BiomeGenerationSettings.Builder biomeGenerationSettingsBuilder,
                                @Nullable Music music
     ) {
-        return biome(precipitation, temperature, downfall, 4159204, 329011,
+        return biome(precipitation, temperature, downfall, 0x3F76E4, 0x050533, 0xC0D8FF,
                 mobSpawnSettingsBuilder, biomeGenerationSettingsBuilder, music);
     }
 
@@ -222,6 +222,7 @@ public class BiomeMaker {
                                float downfall,
                                int waterColor,
                                int waterFogColor,
+                               int fogColor,
                                MobSpawnSettings.Builder mobSpawnSettingsBuilder,
                                BiomeGenerationSettings.Builder biomeGenerationSettingsBuilder,
                                @Nullable Music music
@@ -234,10 +235,11 @@ public class BiomeMaker {
                 .specialEffects(new BiomeSpecialEffects.Builder()
                         .waterColor(waterColor)
                         .waterFogColor(waterFogColor)
-                        .fogColor(12638463)
+                        .fogColor(fogColor)
                         .skyColor(calculateSkyColor(temperature))
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                        .backgroundMusic(music).build())
+                        .backgroundMusic(music)
+                        .build())
                 .mobSpawnSettings(mobSpawnSettingsBuilder.build())
                 .generationSettings(biomeGenerationSettingsBuilder.build())
                 .build();

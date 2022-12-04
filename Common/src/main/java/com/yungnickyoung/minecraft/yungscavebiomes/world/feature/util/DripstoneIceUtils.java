@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
+package com.yungnickyoung.minecraft.yungscavebiomes.world.feature.util;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
@@ -23,7 +23,7 @@ public class DripstoneIceUtils {
      * @param bluntness Dripstone bluntness
      * @return height at given radial distance
      */
-    protected static double getDripstoneHeight(double radialDistance, double radius, double scale, double bluntness) {
+    public static double getDripstoneHeight(double radialDistance, double radius, double scale, double bluntness) {
         if (radialDistance < bluntness) {
             radialDistance = bluntness;
         }
@@ -45,7 +45,7 @@ public class DripstoneIceUtils {
      * @param radius Search radius
      * @return false if any water, lava, or air is encountered; true otherwise
      */
-    protected static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel worldGenLevel, BlockPos blockPos, int radius) {
+    public static boolean isCircleMostlyEmbeddedInStone(WorldGenLevel worldGenLevel, BlockPos blockPos, int radius) {
         if (isEmptyOrWaterOrLava(worldGenLevel, blockPos)) {
             return false;
         } else {
@@ -64,18 +64,18 @@ public class DripstoneIceUtils {
         }
     }
 
-    protected static boolean isEmpty(LevelAccessor levelAccessor, BlockPos blockPos) {
+    public static boolean isEmpty(LevelAccessor levelAccessor, BlockPos blockPos) {
         return levelAccessor.isStateAtPosition(blockPos, BlockState::isAir);
     }
-    protected static boolean isEmptyOrWater(LevelAccessor levelAccessor, BlockPos blockPos) {
+    public static boolean isEmptyOrWater(LevelAccessor levelAccessor, BlockPos blockPos) {
         return levelAccessor.isStateAtPosition(blockPos, DripstoneIceUtils::isEmptyOrWater);
     }
 
-    protected static boolean isEmptyOrWaterOrLava(LevelAccessor levelAccessor, BlockPos blockPos) {
+    public static boolean isEmptyOrWaterOrLava(LevelAccessor levelAccessor, BlockPos blockPos) {
         return levelAccessor.isStateAtPosition(blockPos, DripstoneIceUtils::isEmptyOrWaterOrLava);
     }
 
-    protected static void buildBaseToTipColumn(Direction direction, int i, boolean bl, Consumer<BlockState> consumer) {
+    public static void buildBaseToTipColumn(Direction direction, int i, boolean bl, Consumer<BlockState> consumer) {
         if (i >= 3) {
             consumer.accept(createIcicle(direction, DripstoneThickness.BASE));
 
@@ -94,7 +94,7 @@ public class DripstoneIceUtils {
 
     }
 
-    protected static void growIcicle(LevelAccessor levelAccessor, BlockPos blockPos, Direction direction, int i, boolean bl) {
+    public static void growIcicle(LevelAccessor levelAccessor, BlockPos blockPos, Direction direction, int i, boolean bl) {
         if (isIcicleBase(levelAccessor.getBlockState(blockPos.relative(direction.getOpposite())))) {
             BlockPos.MutableBlockPos mutable = blockPos.mutable();
             buildBaseToTipColumn(direction, i, bl, blockState -> {
@@ -104,7 +104,7 @@ public class DripstoneIceUtils {
         }
     }
 
-    protected static boolean placePackedIceIfPossible(LevelAccessor levelAccessor, BlockPos blockPos) {
+    public static boolean placePackedIceIfPossible(LevelAccessor levelAccessor, BlockPos blockPos) {
         BlockState blockState = levelAccessor.getBlockState(blockPos);
         if (blockState.is(BlockTags.DRIPSTONE_REPLACEABLE)) {
             levelAccessor.setBlock(blockPos, Blocks.PACKED_ICE.defaultBlockState(), 2);

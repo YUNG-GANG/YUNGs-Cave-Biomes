@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 
 import com.mojang.serialization.Codec;
+import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.util.NoisySphereUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -9,18 +10,18 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
 import java.util.List;
 
-public class MultisurfaceNoisySphereReplaceFeature extends Feature<MultisurfaceNoisySphereReplaceConfig> {
+public class FloorReplaceFeature extends Feature<FloorReplaceConfig> {
 
     private static final double NOISE_FREQUENCY_XZ = 0.15;
     private static final double NOISE_FREQUENCY_Y = 0.15;
     private static final long NOISE_SEED_FLIP_MASK = -0x6139D09B0B75F247L;
 
-    public MultisurfaceNoisySphereReplaceFeature(Codec<MultisurfaceNoisySphereReplaceConfig> codec) {
+    public FloorReplaceFeature(Codec<FloorReplaceConfig> codec) {
         super(codec);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<MultisurfaceNoisySphereReplaceConfig> context) {
+    public boolean place(FeaturePlaceContext<FloorReplaceConfig> context) {
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
         int radiusMin = context.config().radiusMin;
@@ -31,16 +32,16 @@ public class MultisurfaceNoisySphereReplaceFeature extends Feature<MultisurfaceN
         for (BlockPos here : new NoisySphereUtils.NoisySphereIterable(
                 origin, noiseSeed, NOISE_FREQUENCY_XZ, NOISE_FREQUENCY_Y, radiusMin, radiusMax)) {
             if (matches.contains(level.getBlockState(here).getBlock())) {
-                if (level.getBlockState(here.above()).isAir()) {
-                    level.setBlock(here, context.config().floor, 3);
-                } else if (level.getBlockState(here.below()).isAir()) {
-                    level.setBlock(here, context.config().ceiling, 3);
-                } else {
-                    level.setBlock(here, context.config().wall, 3);
+                for (int yOffset = context.config().width; yOffset >= 1; yOffset--) {
+                    if (level.getBlockState(here.above(yOffset)).isAir()) {
+                        level.setBlock(here, context.config().place, 3);
+                        break;
+                    }
                 }
             }
         }
 
         return true;
     }
+
 }
