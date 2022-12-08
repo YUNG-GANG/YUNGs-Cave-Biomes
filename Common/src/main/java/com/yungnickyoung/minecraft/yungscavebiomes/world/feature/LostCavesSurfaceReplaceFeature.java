@@ -33,7 +33,6 @@ public class LostCavesSurfaceReplaceFeature extends Feature<NoneFeatureConfigura
 
     private static final int RADIUS_MIN = 10;
     private static final int RADIUS_MAX = 16;
-    private static final List<Block> MATCHES = ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE, BlockModule.LAYERED_ANCIENT_SANDSTONE.get());
 
     public LostCavesSurfaceReplaceFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -45,10 +44,11 @@ public class LostCavesSurfaceReplaceFeature extends Feature<NoneFeatureConfigura
         BlockPos origin = context.origin();
         long noiseSeed = context.level().getSeed() ^ NOISE_SEED_FLIP_MASK;
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+        List<Block> matches = ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE, BlockModule.LAYERED_ANCIENT_SANDSTONE.get());
 
         for (BlockPos here : new NoisySphereUtils.NoisySphereIterable(
                 origin, noiseSeed, NOISE_FREQUENCY_XZ, NOISE_FREQUENCY_Y, RADIUS_MIN, RADIUS_MAX)) {
-            if (MATCHES.contains(level.getBlockState(here).getBlock())) {
+            if (matches.contains(level.getBlockState(here).getBlock())) {
                 boolean placed = false;
                 for (int yOffset = 1; yOffset <= 6; yOffset++) {
                     mutableBlockPos.set(here).move(Direction.UP, yOffset);

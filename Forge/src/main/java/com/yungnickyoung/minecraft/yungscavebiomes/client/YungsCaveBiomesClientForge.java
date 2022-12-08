@@ -1,9 +1,11 @@
-package com.yungnickyoung.minecraft.yungscavebiomes;
+package com.yungnickyoung.minecraft.yungscavebiomes.client;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesClientCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.model.IceCubeModel;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.FallingAncientDustParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.IceShatterParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.SandstormParticle;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.BuffetedOverlayForge;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectileRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
@@ -14,6 +16,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -27,6 +30,10 @@ public class YungsCaveBiomesClientForge {
     }
 
     private static void clientSetup(final FMLClientSetupEvent event) {
+        // Overlay rendering. Doesn't need to be enqueued because the registry is synchronized.
+        OverlayRegistry.registerOverlayTop("Buffeted", BuffetedOverlayForge::render);
+
+        // Non-synchronous work -- enqueued for safety.
         event.enqueueWork(() -> {
             ItemBlockRenderTypes.setRenderLayer(BlockModule.ICICLE.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(BlockModule.FROST_LILY.get(), RenderType.cutout());

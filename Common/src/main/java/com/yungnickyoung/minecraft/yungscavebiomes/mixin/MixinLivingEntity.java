@@ -36,8 +36,8 @@ public abstract class MixinLivingEntity extends Entity {
                 && this.level.getBiome(this.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey())
         ) {
             MobEffectInstance buffetedEffect = this.getEffect(MobEffectModule.BUFFETED_EFFECT.get());
-            if (buffetedEffect == null || buffetedEffect.getDuration() < 40) {
-                this.addEffect(new MobEffectInstance(MobEffectModule.BUFFETED_EFFECT.get(), 100, 1, false, false, true));
+            if (buffetedEffect == null || buffetedEffect.getDuration() < 60) {
+                this.addEffect(new MobEffectInstance(MobEffectModule.BUFFETED_EFFECT.get(), 100, 0, false, false, true));
             }
         }
     }

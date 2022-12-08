@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.client.YungsCaveBiomesClientForge;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
