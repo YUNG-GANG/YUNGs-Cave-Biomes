@@ -25,7 +25,7 @@ public class MixinFogRenderer {
     private static double lostCavesFoggy = 0;
 
     @Inject(method = "setupFog", at = @At("TAIL"))
-    private static void handleLostCavesFog(Camera camera, FogRenderer.FogMode mode, float renderDistance, boolean isVeryFoggy, CallbackInfo ci) {
+    private static void yungscavebiomes_handleLostCavesFog(Camera camera, FogRenderer.FogMode mode, float renderDistance, boolean isVeryFoggy, CallbackInfo ci) {
         if (mode == FogRenderer.FogMode.FOG_TERRAIN && Minecraft.getInstance().player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get())) {
             lostCavesFoggy = Mth.clamp(lostCavesFoggy + 0.05, 0, 1);
 
@@ -40,7 +40,7 @@ public class MixinFogRenderer {
     }
 
     @Inject(method = "setupColor", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/FogRenderer;biomeChangedTime:J", ordinal = 4, opcode = 179 /*PUTFIELD*/, shift = At.Shift.AFTER))
-    private static void setupLostCavesColor(Camera camera, float f, ClientLevel clientLevel, int i2, float g, CallbackInfo ci) {
+    private static void yungscavebiomes_setupLostCavesColor(Camera camera, float f, ClientLevel clientLevel, int i2, float g, CallbackInfo ci) {
         if (Minecraft.getInstance().player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get())) {
             fogRed = 0.8f;
             fogGreen = 0.5f;

@@ -33,7 +33,7 @@ public abstract class MixinClientLevel extends Level {
     @Shadow public abstract void addParticle(ParticleOptions p_104706_, double p_104707_, double p_104708_, double p_104709_, double p_104710_, double p_104711_, double p_104712_);
 
     @Inject(method = "doAnimateTick", at = @At("TAIL"))
-    private void addSandstormParticles(int i, int j, int k, int l, Random random, @Nullable Block markerTarget, BlockPos.MutableBlockPos pos, CallbackInfo ci) {
+    private void yungscavebiomes_addSandstormParticles(int i, int j, int k, int l, Random random, @Nullable Block markerTarget, BlockPos.MutableBlockPos pos, CallbackInfo ci) {
         if (Minecraft.getInstance().player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get()) && random.nextDouble() < 0.03) {
             this.addParticle((SimpleParticleType) ParticleTypeModule.SANDSTORM.get(), (double)pos.getX() + this.random.nextDouble(), (double)pos.getY() + this.random.nextDouble(), (double)pos.getZ() + this.random.nextDouble(), 0.0, 0.0, 0.0);
         }
