@@ -3,8 +3,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.module;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterItem;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ItemModule {
@@ -13,4 +13,13 @@ public class ItemModule {
 //            new SpawnEggItem(
 //                    EntityTypeModule.ICE_CUBE.get(), 10798332, 15002876,
 //                    new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get())));
+
+    @AutoRegister("prickly_peach")
+    public static AutoRegisterItem PRICKLY_PEACH_ITEM = AutoRegisterItem.of(() -> new Item(
+                new Item.Properties()
+                        .tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get())
+                        .food(new FoodProperties.Builder()
+                                .nutrition(2)
+                                .saturationMod(0.1F)
+                                .build())));
 }

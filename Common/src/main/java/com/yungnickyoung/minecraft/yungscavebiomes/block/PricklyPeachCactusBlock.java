@@ -1,33 +1,103 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DripstoneThickness;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
-public class PricklyPeachCactusBlock extends Block {
+public class PricklyPeachCactusBlock extends Block implements BonemealableBlock {
+    public static final BooleanProperty FRUIT = BlockStateProperties.BERRIES;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_25;
+
     protected static final VoxelShape COLLISION_SHAPE = Block.box(4.0, 0.0, 3.0, 12.0, 8.0, 11.0);
     protected static final VoxelShape OUTLINE_SHAPE = Block.box(4.0, 0.0, 3.0, 12.0, 7.0, 11.0);
 
+    private static final float AGE_CHANCE = 0.5f;
+    private static final float BERRY_CHANCE = 0.1f;
+    private static final int MAX_AGE = 25;
+
     public PricklyPeachCactusBlock(BlockBehaviour.Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(AGE, 0)
+                .setValue(FRUIT, false));
+    }
+
+    @Override
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+        if (blockState.getValue(FRUIT)) {
+            Block.popResource(level, blockPos, new ItemStack(ItemModule.PRICKLY_PEACH_ITEM.get(), 1));
+            float volume = Mth.randomBetween(level.random, 0.8f, 1.2f);
+            level.playSound(null, blockPos, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, volume);
+            level.setBlock(blockPos, blockState.setValue(FRUIT, false).setValue(AGE, 0), 2);
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return InteractionResult.PASS;
     }
 
     @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
-        // TODO - grow fruit
+        if (isMaxAge(blockState) || hasFruit(blockState)) {
+            return;
+        }
+
+        // Chance of aging cactus
+        if (random.nextDouble() < AGE_CHANCE) {
+            int newAge = blockState.getValue(AGE) + 1;
+            BlockState newBlockState = blockState.setValue(AGE, newAge);
+
+            // Chance of growing fruit
+            if (random.nextDouble() < BERRY_CHANCE || newAge == MAX_AGE) {
+                newBlockState = newBlockState.setValue(FRUIT, true);
+            }
+
+            serverLevel.setBlockAndUpdate(blockPos, newBlockState);
+        }
+    }
+
+    @Override
+    public boolean isValidBonemealTarget(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, boolean b) {
+        return blockState.hasProperty(FRUIT) && !blockState.getValue(FRUIT);
+    }
+
+    @Override
+    public boolean isBonemealSuccess(Level var1, Random var2, BlockPos var3, BlockState var4) {
+        return true;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel serverLevel, Random random, BlockPos blockPos, BlockState blockState) {
+        serverLevel.setBlock(blockPos, blockState.setValue(FRUIT, true), 2);
     }
 
     @Override
@@ -47,6 +117,14 @@ public class PricklyPeachCactusBlock extends Block {
     }
 
     @Override
+    public BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState, LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
+        if (!currState.canSurvive(levelAccessor, currPos)) {
+            levelAccessor.destroyBlock(currPos, true);
+        }
+        return currState;
+    }
+
+    @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         entity.hurt(DamageSource.CACTUS, 1.0f);
     }
@@ -54,5 +132,18 @@ public class PricklyPeachCactusBlock extends Block {
     @Override
     public boolean isPathfindable(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, PathComputationType pathComputationType) {
         return false;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(AGE, FRUIT);
+    }
+
+    private static boolean isMaxAge(BlockState blockState) {
+        return blockState.hasProperty(AGE) && blockState.getValue(AGE) == MAX_AGE;
+    }
+
+    private static boolean hasFruit(BlockState blockState) {
+        return blockState.hasProperty(FRUIT) && blockState.getValue(FRUIT);
     }
 }

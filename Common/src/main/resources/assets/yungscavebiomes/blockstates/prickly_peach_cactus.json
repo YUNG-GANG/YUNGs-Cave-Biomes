@@ -1,6 +1,9 @@
 {
   "variants": {
-    "": {
+    "berries=true": {
+      "model": "yungscavebiomes:block/prickly_peach_cactus_berries"
+    },
+    "berries=false": {
       "model": "yungscavebiomes:block/prickly_peach_cactus"
     }
   }

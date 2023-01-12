@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 
 import com.mojang.serialization.Codec;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -8,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -72,7 +74,10 @@ public class PricklyPeachCactusPatchFeature extends Feature<NoneFeatureConfigura
             }
 
             if (!isAdjacentCactus) {
-                level.setBlock(pos, BlockModule.PRICKLY_PEACH_CACTUS.get().defaultBlockState(), 3);
+                BlockState cactusBlockState = BlockModule.PRICKLY_PEACH_CACTUS.get()
+                        .defaultBlockState()
+                        .setValue(PricklyPeachCactusBlock.FRUIT, random.nextFloat() < 0.9);
+                level.setBlock(pos, cactusBlockState, 3);
                 cactiRemaining--;
             }
         }

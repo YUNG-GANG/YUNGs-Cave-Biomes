@@ -25,7 +25,9 @@
 
   "entity.yungscavebiomes.ice_cube": "Ice Cube",
   "entity.yungscavebiomes.icicle": "Icicle",
+
   "item.yungscavebiomes.ice_cube_spawn_egg": "Ice Cube Spawn Egg",
+  "item.yungscavebiomes.prickly_peach": "Prickly Peach",
 
   "effect.yungscavebiomes.frost": "Frost",
   "effect.yungscavebiomes.buffeted": "Buffeted",

@@ -216,7 +216,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     /**
-     * Schedules ticks for an entire icicle, rom the tip up.
+     * Schedules ticks for an entire icicle, from the tip up.
      * Should only be called after determining the icicle is no longer valid.
      */
     private void scheduleFallingTicks(BlockState blockState, LevelAccessor levelAccessor, BlockPos blockPos) {
