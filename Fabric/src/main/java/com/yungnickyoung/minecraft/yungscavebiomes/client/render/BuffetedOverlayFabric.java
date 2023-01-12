@@ -1,17 +1,20 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.MobEffectModule;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class BuffetedOverlayFabric implements HudRenderCallback {
+public class BuffetedOverlayFabric {
     private static final ResourceLocation texture = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "textures/overlay/buffeted_overlay.png");
     private static final int maxTicks = 200;
     private static final float maxOpacity = 1.0f;
@@ -24,8 +27,7 @@ public class BuffetedOverlayFabric implements HudRenderCallback {
      * Renders the Buffeted overlay on the player's screen, with variable opacity depending
      * on the remaining duration of the effect.
      */
-    @Override
-    public void onHudRender(PoseStack matrixStack, float partialTicks) {
+    public static void render(PoseStack matrixStack, float partialTicks) {
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
 

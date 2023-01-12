@@ -5,7 +5,6 @@ import com.yungnickyoung.minecraft.yungscavebiomes.client.model.IceCubeModel;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.FallingAncientDustParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.IceShatterParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.SandstormParticle;
-import com.yungnickyoung.minecraft.yungscavebiomes.client.render.BuffetedOverlayFabric;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectileRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
@@ -17,7 +16,6 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.renderer.RenderType;
 
 public class YungsCaveBiomesClientFabric implements ClientModInitializer {
@@ -25,7 +23,6 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
     public void onInitializeClient() {
         YungsCaveBiomesClientCommon.init(); // Run loader-independent client-side logic
         NetworkModuleFabric.registerS2CPackets();
-        HudRenderCallback.EVENT.register(new BuffetedOverlayFabric());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.ICICLE.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.FROST_LILY.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.RARE_ICE.get(), RenderType.translucent());
