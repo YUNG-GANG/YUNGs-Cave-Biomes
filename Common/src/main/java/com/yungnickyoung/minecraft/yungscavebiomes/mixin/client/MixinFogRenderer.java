@@ -24,6 +24,10 @@ public class MixinFogRenderer {
 
     private static double lostCavesFoggy = 0;
 
+    /**
+     * Customizes the fog in Lost Caves during sandstorms.
+     * Note that there is a separate Forge-only mixin required, since Forge replaces the vanilla setupFog method with their own.
+     */
     @Inject(method = "setupFog", at = @At("TAIL"))
     private static void yungscavebiomes_handleLostCavesFog(Camera camera, FogRenderer.FogMode mode, float renderDistance, boolean isVeryFoggy, CallbackInfo ci) {
         if (mode == FogRenderer.FogMode.FOG_TERRAIN && Minecraft.getInstance().player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get())) {
@@ -39,6 +43,9 @@ public class MixinFogRenderer {
         }
     }
 
+    /**
+     * Customizes the fog color in Lost Caves during sandstorms.
+     */
     @Inject(method = "setupColor", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/FogRenderer;biomeChangedTime:J", ordinal = 4, opcode = 179 /*PUTFIELD*/, shift = At.Shift.AFTER))
     private static void yungscavebiomes_setupLostCavesColor(Camera camera, float f, ClientLevel clientLevel, int i2, float g, CallbackInfo ci) {
         if (Minecraft.getInstance().player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get())) {
