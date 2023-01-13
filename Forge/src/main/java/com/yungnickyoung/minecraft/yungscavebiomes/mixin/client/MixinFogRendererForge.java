@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Unique mixin for Forge since they replace the vanilla setupFog method with their own.
  */
 @Mixin(FogRenderer.class)
-public class MixinFogRendererForge {
+public abstract class MixinFogRendererForge {
     private static double lostCavesFoggy = 0;
 
     @Inject(method = "setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V", at = @At("TAIL"), remap = false)

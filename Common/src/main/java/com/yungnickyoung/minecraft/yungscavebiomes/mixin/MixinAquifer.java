@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Enforces a constant aquifer at y=16 in marble caves biome.
  */
 @Mixin(Aquifer.NoiseBasedAquifer.class)
-public class MixinAquifer {
+public abstract class MixinAquifer {
     @Shadow @Final private NoiseChunk noiseChunk;
 
     @Inject(method = "computeFluid", at = @At("HEAD"), cancellable = true)

@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.Predicate;
 
 @Mixin(CrossbowItem.class)
-public class MixinCrossbowItem {
+public abstract class MixinCrossbowItem {
     @Inject(method = "shootProjectile", at = @At("HEAD"), cancellable = true)
     private static void yungscavebiomes_shootIcicleProjectile(Level level, LivingEntity shooter, InteractionHand hand, ItemStack bowItemStack, ItemStack projectileItemStack, float $$5, boolean creative, float $$7, float $$8, float $$9, CallbackInfo ci) {
         if (!level.isClientSide && projectileItemStack.is(BlockModule.ICICLE.get().asItem())) {

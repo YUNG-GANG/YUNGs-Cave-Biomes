@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Allow dead bush blocks to be placed on ancient sand.
  */
 @Mixin(DeadBushBlock.class)
-public class MixinDeadBushBlock {
+public abstract class MixinDeadBushBlock {
     @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
     public void yungscavebiomes_placeDeadBushOnAncientSand(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
         if (blockState.is(BlockModule.ANCIENT_SAND.get())) {

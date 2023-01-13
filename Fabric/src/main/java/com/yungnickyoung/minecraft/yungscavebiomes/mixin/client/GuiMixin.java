@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
-public class GuiMixin {
+public abstract class GuiMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getTicksFrozen()I"))
     public void yungscavebiomes_renderBufferedOverlay(PoseStack matrixStack, float tickDelta, CallbackInfo callbackInfo) {
         BuffetedOverlayFabric.render(matrixStack, tickDelta);
