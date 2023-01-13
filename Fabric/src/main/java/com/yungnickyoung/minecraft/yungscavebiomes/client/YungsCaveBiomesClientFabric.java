@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesClientCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.model.IceCubeModel;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.FallingAncientDustParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.IceShatterParticle;
@@ -23,6 +22,8 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
     public void onInitializeClient() {
         YungsCaveBiomesClientCommon.init(); // Run loader-independent client-side logic
         NetworkModuleFabric.registerS2CPackets();
+
+        // Block rendering
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.ICICLE.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.FROST_LILY.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.RARE_ICE.get(), RenderType.translucent());
@@ -31,9 +32,13 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.POTTED_PRICKLY_PEACH_CACTUS.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_VINES.get(), RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_VINES_PLANT.get(), RenderType.cutout());
-//        EntityRendererRegistry.register(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
+
+        // Entity rendering
         EntityRendererRegistry.register(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(IceCubeRenderer.LAYER_LOCATION, IceCubeModel::createBodyLayer);
+//        EntityRendererRegistry.register(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
+
+        // Particle rendering
         ParticleFactoryRegistry.getInstance().register(ParticleTypeModule.ANCIENT_DUST.get(), FallingAncientDustParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(ParticleTypeModule.SANDSTORM.get(), SandstormParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(ParticleTypeModule.ICE_SHATTER.get(), IceShatterParticle.Provider::new);

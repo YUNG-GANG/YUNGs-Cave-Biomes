@@ -1,16 +1,13 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.block.BrittleSandstoneBlock;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -24,14 +21,13 @@ public class SandstormParticle extends TextureSheetParticle {
         this.rCol = r;
         this.gCol = g;
         this.bCol = b;
-        int k = Mth.randomBetweenInclusive(clientLevel.getRandom(), 256, 512);
-        this.lifetime = (int)Math.max((float)k, 1.0f);
-        this.age = Mth.randomBetweenInclusive(clientLevel.getRandom(), 0, 96);
+        this.lifetime = Mth.randomBetweenInclusive(clientLevel.getRandom(), 32, 48);
+        this.age = Mth.randomBetweenInclusive(clientLevel.getRandom(), 0, 32);
         this.setSpriteFromAge(spriteSet);
-        this.rotSpeed = (float)Math.random() * 0.15f + 0.05f;
-        this.roll = (float)Math.random() * ((float)Math.PI * 2);
+        this.rotSpeed = (float) Math.random() * 0.15f + 0.05f;
+        this.roll = (float) Math.random() * ((float) Math.PI * 2);
         this.gravity = 0;
-        setParticleSpeed(1, (Math.random() - 0.5) * 0.1, 1);
+        setParticleSpeed(1, 0, 1);
     }
 
     @Override
@@ -41,7 +37,7 @@ public class SandstormParticle extends TextureSheetParticle {
 
     @Override
     public float getQuadSize(float f) {
-        return this.quadSize * Mth.clamp(((float)this.age + f) / (float)this.lifetime * 32.0f, 0.0f, 1.0f);
+        return this.quadSize * Mth.clamp(((float) this.age + f) / (float) this.lifetime * 32.0f, 0.0f, 1.0f);
     }
 
     @Override
@@ -55,7 +51,7 @@ public class SandstormParticle extends TextureSheetParticle {
         }
         this.setSpriteFromAge(this.sprites);
         this.oRoll = this.roll;
-        this.roll += (float)Math.PI * this.rotSpeed * 2.0f;
+        this.roll += (float) Math.PI * this.rotSpeed * 2.0f;
         if (this.onGround) {
             this.roll = 0.0f;
             this.oRoll = 0.0f;
@@ -64,20 +60,20 @@ public class SandstormParticle extends TextureSheetParticle {
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
-        private final SpriteSet sprite;
+        private final SpriteSet spriteSet;
 
         public Provider(SpriteSet spriteSet) {
-            this.sprite = spriteSet;
+            this.spriteSet = spriteSet;
         }
 
         @Override
         @Nullable
-        public Particle createParticle(SimpleParticleType typ, ClientLevel clientLevel, double xo, double yo, double zo, double dx, double dy, double dz) {
+        public Particle createParticle(SimpleParticleType type, ClientLevel clientLevel, double xo, double yo, double zo, double dx, double dy, double dz) {
             int color = 0xd1b482;
-            float r = (float)(color >> 16 & 0xFF) / 255.0f;
-            float g = (float)(color >> 8 & 0xFF) / 255.0f;
-            float b = (float)(color & 0xFF) / 255.0f;
-            return new FallingAncientDustParticle(clientLevel, xo, yo, zo, r, g, b, this.sprite);
+            float r = (float) (color >> 16 & 0xFF) / 255.0f;
+            float g = (float) (color >> 8 & 0xFF) / 255.0f;
+            float b = (float) (color & 0xFF) / 255.0f;
+            return new SandstormParticle(clientLevel, xo, yo, zo, r, g, b, this.spriteSet);
         }
     }
 }

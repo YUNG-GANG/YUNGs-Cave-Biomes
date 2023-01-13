@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesClientCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.model.IceCubeModel;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.FallingAncientDustParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.IceShatterParticle;

@@ -24,7 +24,7 @@ public class MixinFogRendererForge {
             lostCavesFoggy = Mth.clamp(lostCavesFoggy + 0.05, 0, 1);
 
             RenderSystem.setShaderFogStart(-4f);
-            RenderSystem.setShaderFogEnd(renderDistance * 0.45f);
+            RenderSystem.setShaderFogEnd(Math.min(renderDistance * 0.45f, 64));
         } else {
             lostCavesFoggy = Mth.clamp(lostCavesFoggy - 0.05, 0, 1);
         }
