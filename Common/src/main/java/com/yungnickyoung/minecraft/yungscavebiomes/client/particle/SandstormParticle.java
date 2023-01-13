@@ -1,5 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
+import com.yungnickyoung.minecraft.yungsapi.math.Vector2f;
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormData;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -27,7 +29,10 @@ public class SandstormParticle extends TextureSheetParticle {
         this.rotSpeed = (float) Math.random() * 0.15f + 0.05f;
         this.roll = (float) Math.random() * ((float) Math.PI * 2);
         this.gravity = 0;
-        setParticleSpeed(1, 0, 1);
+        ISandstormData sandstormData = ((ISandstormData) clientLevel);
+        Vector2f angle = sandstormData.getSandstormDirection();
+        float speed = 1.5f;
+        setParticleSpeed(angle.x * speed, 0, angle.y * speed);
     }
 
     @Override
@@ -57,6 +62,11 @@ public class SandstormParticle extends TextureSheetParticle {
             this.oRoll = 0.0f;
         }
         this.move(this.xd, this.yd, this.zd);
+
+        ISandstormData sandstormData = ((ISandstormData) this.level);
+        Vector2f angle = sandstormData.getSandstormDirection();
+        float speed = 2.0f;
+        setParticleSpeed(angle.x * speed, 0, angle.y * speed);
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {

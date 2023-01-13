@@ -26,6 +26,8 @@ dependencies {
     } else {
         modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${minecraft_version}-Fabric-${yungsapi_version}"
     }
+    implementation("org.reflections:reflections:0.10.2")
+    include("org.reflections:reflections:0.10.2")
 
     // Fabric API + Loader
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
