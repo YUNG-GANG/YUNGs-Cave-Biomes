@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.util.DistributionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -47,15 +48,8 @@ public class PricklyPeachCactusPatchFeature extends Feature<NoneFeatureConfigura
             }
 
             // Ellipsoid spread
-            float sphereY = random.nextFloat(-1.0f, 1.0f);
-            float sphereTheta = random.nextFloat(Mth.TWO_PI);
-            float sphereXZScale = Mth.sqrt(1.0f - sphereY * sphereY);
-            float radiusScale = Mth.square(random.nextFloat()); // Higher density towards the center
-            BlockPos pos = origin.offset(
-                    (int)(radiusScale * PLACEMENT_RADIUS_XZ * sphereXZScale * Mth.cos(sphereTheta)),
-                    (int)(radiusScale * PLACEMENT_RADIUS_Y * sphereY),
-                    (int)(radiusScale * PLACEMENT_RADIUS_XZ * sphereXZScale * Mth.sin(sphereTheta))
-            );
+            BlockPos pos = DistributionUtils.ellipsoidCenterBiasedSpread(PLACEMENT_RADIUS_XZ, PLACEMENT_RADIUS_Y, random,
+                    (x, y, z) -> origin.offset(Math.round(x), Math.round(y), Math.round(z)));
 
             // Check for sandstone below
             if (!level.getBlockState(pos.below()).is(BlockModule.ANCIENT_SAND.get())) {
