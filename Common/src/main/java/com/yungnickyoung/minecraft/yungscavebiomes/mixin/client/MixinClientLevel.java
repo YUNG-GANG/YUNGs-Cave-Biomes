@@ -2,14 +2,13 @@ package com.yungnickyoung.minecraft.yungscavebiomes.mixin.client;
 
 import com.mojang.math.Vector3f;
 import com.yungnickyoung.minecraft.yungsapi.math.Vector2f;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormData;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.MobEffectModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.noise.OpenSimplex2S;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
@@ -33,18 +32,37 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 @Mixin(ClientLevel.class)
-public abstract class MixinClientLevel extends Level implements ISandstormData {
+public abstract class MixinClientLevel extends Level implements ISandstormClientData {
     @Unique
-    public float sandstormTime = 1000;
+    private boolean isSandstormActive = false;
+
+    // Sandstorm time is basically just used as a frequency on the client
+    @Unique
+    private int sandstormTime = 0;
 
     @Unique
-    private long seed;
+    private long sandstormSeed;
 
     @Override
     public Vector2f getSandstormDirection() {
-        float x = OpenSimplex2S.noise3_ImproveXZ(this.seed, sandstormTime, 0, 0);
-        float z = OpenSimplex2S.noise3_ImproveXZ(this.seed, sandstormTime, 0, 10000);
+        float x = OpenSimplex2S.noise3_ImproveXZ(this.sandstormSeed, this.sandstormTime / 300f, 0, 0);
+        float z = OpenSimplex2S.noise3_ImproveXZ(this.sandstormSeed, this.sandstormTime / 300f, 0, 10000);
         return new Vector2f(x, z);
+    }
+
+    @Override
+    public void setSandstormActive(boolean sandstormActive) {
+        this.isSandstormActive = sandstormActive;
+    }
+
+    @Override
+    public void setSandstormTime(int time) {
+        this.sandstormTime = time;
+    }
+
+    @Override
+    public void setSandstormSeed(long sandstormSeed) {
+        this.sandstormSeed = sandstormSeed;
     }
 
     @Shadow
@@ -54,33 +72,14 @@ public abstract class MixinClientLevel extends Level implements ISandstormData {
         super($$0, $$1, $$2, $$3, $$4, $$5, $$6);
     }
 
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void yungscavebiomes_initSandstormNoise(ClientPacketListener $$0, ClientLevel.ClientLevelData $$1, ResourceKey $$2, Holder $$3, int $$4, int $$5, Supplier $$6, LevelRenderer $$7, boolean $$8, long $$9, CallbackInfo ci) {
-        this.seed = $$9;
-    }
-
     @Inject(method = "tick", at = @At("TAIL"))
     private void yungscavebiomes_tickSandstorm(BooleanSupplier $$0, CallbackInfo ci) {
-        sandstormTime -= 0.001f;
-        if (sandstormTime <= 0) {
-            sandstormTime = 1000;
-        }
-    }
-
-    /**
-     * Adds extra sandstorm particles that spawn further away than particles normally do.
-     */
-    @Inject(method = "animateTick", at = @At("TAIL"))
-    private void yungscavebiomes_spawnExtraSandstormParticles(int x, int y, int z, CallbackInfo ci) {
-        Random random = new Random();
-        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-
-        if (!Minecraft.getInstance().player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get())) {
-            return;
-        }
-
-        for (int i = 0; i < 20; ++i) {
-            this.addSandstormParticle(x, y, z, 32, 64, random, mutable);
+        this.sandstormTime -= 1;
+        if (this.isSandstormActive) {
+            // Sandstorm time runs out -> disable sandstorm
+            if (this.sandstormTime <= 0) {
+                this.isSandstormActive = false;
+            }
         }
     }
 
@@ -88,25 +87,65 @@ public abstract class MixinClientLevel extends Level implements ISandstormData {
      * Spawns sandstorm particles around the player.
      */
     @Inject(method = "doAnimateTick", at = @At("TAIL"))
-    private void yungscavebiomes_addSandstormParticles2(int x, int y, int z, int maxDistance, Random random, Block markerTarget, BlockPos.MutableBlockPos pos, CallbackInfo ci) {
-        if (Minecraft.getInstance().player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get()) && random.nextDouble() < 0.03) {
-            int particleX = x + random.nextInt(maxDistance) - this.random.nextInt(maxDistance);
-            int particleY = y + random.nextInt(maxDistance) - this.random.nextInt(maxDistance);
-            int particleZ = z + random.nextInt(maxDistance) - this.random.nextInt(maxDistance);
-            pos.set(particleX, particleY, particleZ);
-            BlockState blockState = this.getBlockState(pos);
-            if (blockState.isAir()) {
-                this.addParticle((ParticleOptions) ParticleTypeModule.SANDSTORM.get(),
-                        (double) pos.getX() + this.random.nextDouble(),
-                        (double) pos.getY() + this.random.nextDouble(),
-                        (double) pos.getZ() + this.random.nextDouble(),
-                        0.0, 0.0, 0.0);
-            }
+    private void yungscavebiomes_addSandstormParticles(int x, int y, int z, int maxDistance, Random random, Block markerTarget, BlockPos.MutableBlockPos pos, CallbackInfo ci) {
+        if (!this.isSandstormActive || random.nextDouble() > 0.03) {
+            return;
+        }
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+
+        boolean playerInSandstorm = this.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey());
+        if (!playerInSandstorm) {
+            return;
+        }
+
+        int particleX = x + random.nextInt(maxDistance) - this.random.nextInt(maxDistance);
+        int particleY = y + random.nextInt(maxDistance) - this.random.nextInt(maxDistance);
+        int particleZ = z + random.nextInt(maxDistance) - this.random.nextInt(maxDistance);
+        pos.set(particleX, particleY, particleZ);
+        BlockState blockState = this.getBlockState(pos);
+        if (blockState.isAir()) {
+            this.addParticle((ParticleOptions) ParticleTypeModule.SANDSTORM.get(),
+                    (double) pos.getX() + this.random.nextDouble(),
+                    (double) pos.getY() + this.random.nextDouble(),
+                    (double) pos.getZ() + this.random.nextDouble(),
+                    0.0, 0.0, 0.0);
+        }
+    }
+
+    /**
+     * Adds extra sandstorm particles that spawn further away than particles normally do.
+     * TODO - config option to disable this for performance reasons
+     */
+    @Inject(method = "animateTick", at = @At("TAIL"))
+    private void yungscavebiomes_addExtraSandstormParticles(int x, int y, int z, CallbackInfo ci) {
+        if (!isSandstormActive) {
+            return;
+        }
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+
+        boolean playerInSandstormBiome = this.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey());
+        if (!playerInSandstormBiome) {
+            return;
+        }
+
+        Random random = new Random();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+
+        for (int i = 0; i < 20; ++i) {
+            this.addExtraSandstormParticle(x, y, z, 32, 64, random, mutable);
         }
     }
 
     @Unique
-    private void addSandstormParticle(int x, int y, int z, int minDistance, int maxDistance, Random random, BlockPos.MutableBlockPos pos) {
+    private void addExtraSandstormParticle(int x, int y, int z, int minDistance, int maxDistance, Random random, BlockPos.MutableBlockPos pos) {
         float particleX = random.nextFloat() - random.nextFloat();
         float particleY = random.nextFloat() - random.nextFloat();
         float particleZ = random.nextFloat() - random.nextFloat();

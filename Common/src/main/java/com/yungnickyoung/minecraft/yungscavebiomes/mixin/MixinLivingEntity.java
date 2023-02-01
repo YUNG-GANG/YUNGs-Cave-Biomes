@@ -1,8 +1,10 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.MobEffectModule;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -34,6 +36,8 @@ public abstract class MixinLivingEntity extends Entity {
                 && !this.isSpectator()
                 && this.tickCount % 10 == 0
                 && this.level.getBiome(this.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey())
+                && this.level instanceof ServerLevel serverLevel
+                && ((ISandstormServerData) serverLevel).isSandstormActive()
         ) {
             MobEffectInstance buffetedEffect = this.getEffect(MobEffectModule.BUFFETED_EFFECT.get());
             if (buffetedEffect == null || buffetedEffect.getDuration() < 60) {

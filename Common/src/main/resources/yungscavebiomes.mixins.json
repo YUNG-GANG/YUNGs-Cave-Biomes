@@ -15,6 +15,7 @@
     "MixinLivingEntity",
     "MixinNoiseBasedChunkGenerator",
     "MixinNoiseChunk",
+    "MixinServerLevel",
     "MixinThrownPotion",
     "accessor.AbstractArrowAccessor",
     "accessor.AbstractCauldronBlockAccessor",
@@ -23,11 +24,11 @@
     "accessor.NoiseChunkAccessor",
     "accessor.PotionBrewingAccessor"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  },
   "client": [
     "client.MixinClientLevel",
     "client.MixinFogRenderer"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

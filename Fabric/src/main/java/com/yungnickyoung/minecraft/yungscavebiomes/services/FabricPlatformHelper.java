@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -36,5 +37,16 @@ public class FabricPlatformHelper implements IPlatformHelper {
         for (ServerPlayer player : PlayerLookup.tracking(level, new BlockPos(pos))) {
             ServerPlayNetworking.send(player, NetworkModuleFabric.ICICLE_SHATTER_ID, buf);
         }
+    }
+
+    @Override
+    public void syncSandstormDataToClients(ServerLevel serverLevel) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
+        buf.writeBoolean(sandstormData.isSandstormActive());
+        buf.writeInt(sandstormData.getSandstormTime());
+        buf.writeLong(sandstormData.getSandstormSeed());
+        PlayerLookup.world(serverLevel)
+                .forEach(player -> ServerPlayNetworking.send(player, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf));
     }
 }

@@ -1,9 +1,11 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class SandstormCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -18,13 +20,16 @@ public class SandstormCommand {
 
     public static int execute(CommandSourceStack commandSource, String action) {
         if (action.equals("start")) {
-            commandSource.sendSuccess(new TextComponent("Sandstorm started in all Lost Caves."), false);
+            ((ISandstormServerData) commandSource.getLevel()).startSandstorm();
+            commandSource.sendSuccess(new TranslatableComponent("command.sandstorm.start"), false);
+            return 1;
         } else if (action.equals("stop")) {
-            commandSource.sendSuccess(new TextComponent("Sandstorm stopped in all Lost Caves."), false);
+            ((ISandstormServerData) commandSource.getLevel()).stopSandstorm();
+            commandSource.sendSuccess(new TranslatableComponent("command.sandstorm.stop"), false);
+            return 1;
         } else {
             commandSource.sendFailure(new TextComponent("Unrecognized action."));
             return -1;
         }
-        return 1;
     }
 }
