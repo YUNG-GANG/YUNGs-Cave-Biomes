@@ -1,9 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
-import com.yungnickyoung.minecraft.yungsapi.math.Vector2f;
-import com.yungnickyoung.minecraft.yungsapi.math.Vector3f;
+import com.mojang.math.Vector3f;
 import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -18,7 +16,7 @@ import javax.annotation.Nullable;
 public class SandstormParticle extends TextureSheetParticle {
     private final float rotSpeed;
     private final SpriteSet sprites;
-    private static final float maxSpeed = 2.5f;
+    private final Vector3f particleSpeedVector;
 
     SandstormParticle(ClientLevel clientLevel, double xo, double yo, double zo, float r, float g, float b, SpriteSet spriteSet) {
         super(clientLevel, xo, yo, zo);
@@ -32,10 +30,8 @@ public class SandstormParticle extends TextureSheetParticle {
         this.rotSpeed = (float) Math.random() * 0.15f + 0.05f;
         this.roll = (float) Math.random() * ((float) Math.PI * 2);
         this.gravity = 0;
-        ISandstormClientData sandstormData = ((ISandstormClientData) clientLevel);
-        Vector2f angle = sandstormData.getSandstormDirection();
-        float speed = 1.5f;
-        setParticleSpeed(angle.x * speed, 0, angle.y * speed);
+        this.particleSpeedVector = new Vector3f();
+        updateSpeed();
     }
 
     @Override
@@ -66,20 +62,13 @@ public class SandstormParticle extends TextureSheetParticle {
         }
         this.move(this.xd, this.yd, this.zd);
 
+        updateSpeed();
+    }
+
+    private void updateSpeed() {
         ISandstormClientData sandstormData = ((ISandstormClientData) this.level);
-
-        Vector2f angle = sandstormData.getSandstormDirection();
-        int sandstormTime = sandstormData.getSandstormTime();
-        Vector3f speedVec = new Vector3f(angle.x * maxSpeed, 0, angle.y * maxSpeed);
-
-        // Smooth transition when sandstorm is starting up
-        if (sandstormTime > ISandstormServerData.SANDSTORM_DURATION - 20) {
-            float speedFactor = (ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20f;
-            speedVec.x = Mth.lerp(speedFactor, 0, angle.x * maxSpeed);
-            speedVec.z = Mth.lerp(speedFactor, 0, angle.y * maxSpeed);
-            speedVec.y = Math.min(0, (float) (this.yd + 0.003f));
-        }
-        setParticleSpeed(speedVec.x, speedVec.y, speedVec.z);
+        sandstormData.getSandstormDirection(xo, yo, zo, particleSpeedVector);
+        setParticleSpeed(particleSpeedVector.x(), particleSpeedVector.y(), particleSpeedVector.z());
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {

@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.util.DistributionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.WorldGenLevel;
@@ -29,7 +30,7 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel level = context.level();
-        BlockPos pos = context.origin();
+        BlockPos origin = context.origin();
         Random random = context.random();
 
         int cactiRemaining = MAX_TOTAL_PLACEMENTS;
@@ -45,45 +46,38 @@ public class CactusPatchFeature extends Feature<NoneFeatureConfiguration> {
             }
 
             // Ellipsoid spread
-            float sphereY = random.nextFloat(-1.0f, 1.0f);
-            float sphereTheta = random.nextFloat(Mth.TWO_PI);
-            float sphereXZScale = Mth.sqrt(1.0f - sphereY * sphereY);
-            float radiusScale = Mth.square(random.nextFloat()); // Higher density towards the center
-            BlockPos local = pos.offset(
-                    (int)(radiusScale * PLACEMENT_RADIUS_XZ * sphereXZScale * Mth.cos(sphereTheta)),
-                    (int)(radiusScale * PLACEMENT_RADIUS_Y * sphereY),
-                    (int)(radiusScale * PLACEMENT_RADIUS_XZ * sphereXZScale * Mth.sin(sphereTheta))
-            );
+            BlockPos pos = DistributionUtils.ellipsoidCenterBiasedSpread(PLACEMENT_RADIUS_XZ, PLACEMENT_RADIUS_Y, random,
+                    (x, y, z) -> origin.offset(Math.round(x), Math.round(y), Math.round(z)));
 
             // Check for sandstone below
-            if (!level.getBlockState(local.below()).is(BlockModule.ANCIENT_SAND.get())) {
+            if (!level.getBlockState(pos.below()).is(BlockModule.ANCIENT_SAND.get())) {
                 continue;
             }
 
             // Attempt to place cactus
             boolean placedCactus = false;
             for (int i = 0; i < MAX_CACTUS_HEIGHT; i++) {
-                if (!level.getBlockState(local.above(i)).isAir()) {
+                if (!level.getBlockState(pos.above(i)).isAir()) {
                     break;
                 }
 
-                if (!level.getBlockState(local.above(i).north()).isAir()) {
+                if (!level.getBlockState(pos.above(i).north()).isAir()) {
                     break;
                 }
 
-                if (!level.getBlockState(local.above(i).east()).isAir()) {
+                if (!level.getBlockState(pos.above(i).east()).isAir()) {
                     break;
                 }
 
-                if (!level.getBlockState(local.above(i).west()).isAir()) {
+                if (!level.getBlockState(pos.above(i).west()).isAir()) {
                     break;
                 }
 
-                if (!level.getBlockState(local.above(i).south()).isAir()) {
+                if (!level.getBlockState(pos.above(i).south()).isAir()) {
                     break;
                 }
 
-                level.setBlock(local.above(i), Blocks.CACTUS.defaultBlockState(), 3);
+                level.setBlock(pos.above(i), Blocks.CACTUS.defaultBlockState(), 3);
                 placedCactus = true;
 
                 if (random.nextFloat() >= CACTUS_HEIGHT_GROWTH_CHANCE) {

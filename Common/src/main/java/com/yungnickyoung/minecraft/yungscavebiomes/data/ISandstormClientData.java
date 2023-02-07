@@ -1,9 +1,9 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.data;
 
-import com.yungnickyoung.minecraft.yungsapi.math.Vector2f;
+import com.mojang.math.Vector3f;
 
 public interface ISandstormClientData {
-    Vector2f getSandstormDirection();
+    void getSandstormDirection(double worldX, double worldY, double worldZ, Vector3f output);
     boolean isSandstormActive();
     int getSandstormTime();
 
