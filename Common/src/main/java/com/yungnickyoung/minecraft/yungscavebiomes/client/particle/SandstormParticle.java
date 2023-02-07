@@ -1,7 +1,9 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
 import com.yungnickyoung.minecraft.yungsapi.math.Vector2f;
+import com.yungnickyoung.minecraft.yungsapi.math.Vector3f;
 import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -16,6 +18,7 @@ import javax.annotation.Nullable;
 public class SandstormParticle extends TextureSheetParticle {
     private final float rotSpeed;
     private final SpriteSet sprites;
+    private static final float maxSpeed = 2.5f;
 
     SandstormParticle(ClientLevel clientLevel, double xo, double yo, double zo, float r, float g, float b, SpriteSet spriteSet) {
         super(clientLevel, xo, yo, zo);
@@ -64,9 +67,19 @@ public class SandstormParticle extends TextureSheetParticle {
         this.move(this.xd, this.yd, this.zd);
 
         ISandstormClientData sandstormData = ((ISandstormClientData) this.level);
+
         Vector2f angle = sandstormData.getSandstormDirection();
-        float speed = 2.0f;
-        setParticleSpeed(angle.x * speed, 0, angle.y * speed);
+        int sandstormTime = sandstormData.getSandstormTime();
+        Vector3f speedVec = new Vector3f(angle.x * maxSpeed, 0, angle.y * maxSpeed);
+
+        // Smooth transition when sandstorm is starting up
+        if (sandstormTime > ISandstormServerData.SANDSTORM_DURATION - 20) {
+            float speedFactor = (ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20f;
+            speedVec.x = Mth.lerp(speedFactor, 0, angle.x * maxSpeed);
+            speedVec.z = Mth.lerp(speedFactor, 0, angle.y * maxSpeed);
+            speedVec.y = Math.min(0, (float) (this.yd + 0.003f));
+        }
+        setParticleSpeed(speedVec.x, speedVec.y, speedVec.z);
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {

@@ -51,6 +51,16 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
     }
 
     @Override
+    public boolean isSandstormActive() {
+        return isSandstormActive;
+    }
+
+    @Override
+    public int getSandstormTime() {
+        return sandstormTime;
+    }
+
+    @Override
     public void setSandstormActive(boolean sandstormActive) {
         this.isSandstormActive = sandstormActive;
     }
