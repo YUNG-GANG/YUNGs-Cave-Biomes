@@ -3,8 +3,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.mixin.client;
 import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
-import com.yungnickyoung.minecraft.yungsapi.math.Vector2f;
 import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.util.DistributionUtils;
@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.WritableLevelData;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -98,6 +97,25 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
                 SANDSTORM_PARTICLE_SPEED_SCALAR_Y,
                 SANDSTORM_PARTICLE_SPEED_SCALAR_XZ
         );
+
+        // Smoothing during sandstorm start transition
+        if (this.sandstormTime > ISandstormServerData.SANDSTORM_DURATION - 20) {
+            output.mul(
+                    (ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20f,
+                    (ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20f,
+                    (ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20f
+            );
+        }
+    }
+
+    @Override
+    public boolean isSandstormActive() {
+        return isSandstormActive;
+    }
+
+    @Override
+    public int getSandstormTime() {
+        return sandstormTime;
     }
 
     @Override

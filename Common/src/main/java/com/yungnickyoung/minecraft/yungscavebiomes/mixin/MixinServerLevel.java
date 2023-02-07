@@ -26,9 +26,6 @@ import java.util.function.BooleanSupplier;
 
 @Mixin(ServerLevel.class)
 public abstract class MixinServerLevel implements ISandstormServerData {
-    private final static int SANDSTORM_DURATION = 200;
-    private final static int SANDSTORM_COOLDOWN = 200;
-
     @Shadow
     @Final
     private ServerLevelData serverLevelData;

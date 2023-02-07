@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.util;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 
 import java.util.Random;

@@ -1,7 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
 import com.mojang.math.Vector3f;
-import com.yungnickyoung.minecraft.yungsapi.math.Vector2f;
 import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
