@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.network;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,6 +18,16 @@ public class ClientPacketHandler {
             for (int i = 0; i < random.nextInt(5) + 10; i++) {
                 clientLevel.addParticle((SimpleParticleType) ParticleTypeModule.ICE_SHATTER.get(), packet.getPos().x, packet.getPos().y, packet.getPos().z, 0, 0, 0);
             }
+        }
+    }
+
+    public static void handleSandstormSync(SandstormSyncS2CPacket packet, Supplier<NetworkEvent.Context> ctx) {
+        ClientLevel clientLevel = Minecraft.getInstance().level;
+        if (clientLevel != null) {
+            ISandstormClientData sandstormData = (ISandstormClientData) clientLevel;
+            sandstormData.setSandstormActive(packet.isActive());
+            sandstormData.setSandstormTime(packet.getSandstormTime());
+            sandstormData.setSandstormSeed(packet.getSandstormSeed());
         }
     }
 }

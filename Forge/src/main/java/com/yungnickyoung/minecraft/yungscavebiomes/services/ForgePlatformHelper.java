@@ -1,7 +1,9 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleForge;
 import com.yungnickyoung.minecraft.yungscavebiomes.network.IcicleShatterS2CPacket;
+import com.yungnickyoung.minecraft.yungscavebiomes.network.SandstormSyncS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -34,5 +36,15 @@ public class ForgePlatformHelper implements IPlatformHelper {
                 NetworkModuleForge.sendToClientsTrackingChunk(new IcicleShatterS2CPacket(pos), levelChunk);
             }
         }
+    }
+
+    @Override
+    public void syncSandstormDataToClients(ServerLevel serverLevel) {
+        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
+        NetworkModuleForge.sendToClientsInLevel(new SandstormSyncS2CPacket(
+                sandstormData.isSandstormActive(),
+                sandstormData.getSandstormTime(),
+                sandstormData.getSandstormSeed()),
+                serverLevel.dimension());
     }
 }

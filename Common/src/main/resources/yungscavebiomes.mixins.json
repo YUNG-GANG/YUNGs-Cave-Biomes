@@ -25,8 +25,7 @@
     "accessor.PotionBrewingAccessor"
   ],
   "client": [
-    "client.MixinClientLevel",
-    "client.MixinFogRenderer"
+    "client.MixinClientLevel"
   ],
   "injectors": {
     "defaultRequire": 1
