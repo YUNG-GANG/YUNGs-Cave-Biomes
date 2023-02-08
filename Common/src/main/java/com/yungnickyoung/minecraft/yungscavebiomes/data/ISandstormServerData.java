@@ -1,8 +1,8 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.data;
 
 public interface ISandstormServerData {
-    int SANDSTORM_DURATION = 200;
-    int SANDSTORM_COOLDOWN = 200;
+    int SANDSTORM_DURATION = 10 * 20;
+    int SANDSTORM_COOLDOWN = 10 * 20;
 
     boolean isSandstormActive();
     int getSandstormTime();

@@ -53,7 +53,7 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
     private static final double SANDSTORM_NOISE_FREQUENCY_TIME = 1.0 / 768.0;
 
     private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_Y_RELATIVE = 1.0f / 3.0f;
-    private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_XZ = 0.75f;
+    private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_XZ = 0.9f;
     private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_Y =
             SANDSTORM_PARTICLE_SPEED_SCALAR_Y_RELATIVE * SANDSTORM_PARTICLE_SPEED_SCALAR_XZ;
 
@@ -158,7 +158,18 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
      */
     @Inject(method = "doAnimateTick", at = @At("TAIL"))
     private void yungscavebiomes_addSandstormParticles(int x, int y, int z, int maxDistance, Random random, Block markerTarget, BlockPos.MutableBlockPos pos, CallbackInfo ci) {
-        if (!this.isSandstormActive || random.nextDouble() > 0.03) {
+        if (!this.isSandstormActive) {
+            return;
+        }
+
+        // Random chance of spawning particle.
+        // Chance is lower when sandstorm is first starting up.
+        double chance = Mth.clamp(
+                Mth.lerp((ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20.0, 0, 0.03),
+                0,
+                0.03
+        );
+        if (random.nextDouble() > chance) {
             return;
         }
 
@@ -198,7 +209,18 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
         Random random = new Random();
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
-        for (int i = 0; i < 20; ++i) {
+        for (int i = 0; i < 667; ++i) {
+            // Random chance of spawning particle.
+            // Chance is lower when sandstorm is first starting up.
+            double chance = Mth.clamp(
+                    Mth.lerp((ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20.0, 0, 0.03),
+                    0,
+                    0.03
+            );
+            if (random.nextDouble() > chance) {
+                continue;
+            }
+
             this.addSandstormParticle(x, y, z, true, 64, random, mutable);
         }
     }

@@ -9,9 +9,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
+import net.minecraft.world.level.storage.WritableLevelData;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,9 +27,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 @Mixin(ServerLevel.class)
-public abstract class MixinServerLevel implements ISandstormServerData {
+public abstract class MixinServerLevel extends Level implements ISandstormServerData {
     @Shadow
     @Final
     private ServerLevelData serverLevelData;
@@ -40,6 +45,10 @@ public abstract class MixinServerLevel implements ISandstormServerData {
 
     @Unique
     private long sandstormSeed;
+
+    protected MixinServerLevel(WritableLevelData $$0, ResourceKey<Level> $$1, Holder<DimensionType> $$2, Supplier<ProfilerFiller> $$3, boolean $$4, boolean $$5, long $$6) {
+        super($$0, $$1, $$2, $$3, $$4, $$5, $$6);
+    }
 
     @Override
     public boolean isSandstormActive() {
@@ -58,7 +67,7 @@ public abstract class MixinServerLevel implements ISandstormServerData {
 
     @Override
     public void startSandstorm() {
-        YungsCaveBiomesCommon.LOGGER.info("STARTING SANDSTORM");
+//        YungsCaveBiomesCommon.LOGGER.info("STARTING SANDSTORM {}", this.dimensionType());
         this.isSandstormActive = true;
         this.sandstormTime = SANDSTORM_DURATION;
 //        this.sandstormCooldown = SANDSTORM_COOLDOWN;
@@ -69,7 +78,7 @@ public abstract class MixinServerLevel implements ISandstormServerData {
 
     @Override
     public void stopSandstorm() {
-        YungsCaveBiomesCommon.LOGGER.info("STOPPING SANDSTORM");
+//        YungsCaveBiomesCommon.LOGGER.info("STOPPING SANDSTORM");
         this.isSandstormActive = false;
 //        this.sandstormTime = SANDSTORM_DURATION;
         this.sandstormCooldown = SANDSTORM_COOLDOWN;
@@ -77,11 +86,11 @@ public abstract class MixinServerLevel implements ISandstormServerData {
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void yungscavebiomes_initSandstormNoiseServer(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey $$4, Holder $$5, ChunkProgressListener $$6, ChunkGenerator $$7, boolean $$8, long $$9, List $$10, boolean $$11, CallbackInfo ci) {
+    private void yungscavebiomes_initSandstormNoiseSeed(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey $$4, Holder $$5, ChunkProgressListener $$6, ChunkGenerator $$7, boolean $$8, long $$9, List $$10, boolean $$11, CallbackInfo ci) {
         this.sandstormSeed = Hashing.sha256().hashLong($$9 + this.serverLevelData.getGameTime()).asLong();
     }
 
-    @Inject(method = "tick", at = @At("TAIL"))
+    @Inject(method = "tick", at = @At("HEAD"))
     private void yungscavebiomes_tickSandstorm(BooleanSupplier $$0, CallbackInfo ci) {
         if (this.isSandstormActive) {
             // Sandstorm is active -> decrement remaining sandstorm timer
