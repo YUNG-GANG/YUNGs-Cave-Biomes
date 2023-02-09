@@ -1,8 +1,11 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.PlacedFeatureModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.Carvers;
@@ -11,10 +14,16 @@ import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.biome.AmbientMoodSettings;
+import net.minecraft.world.level.biome.AmbientParticleSettings;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
@@ -193,11 +202,28 @@ public class BiomeMaker {
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.PRICKLY_VINES));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.LAYERED_SANDSTONE_PILLAR));
 
-        // Music
-        Music music = Musics.createGameMusic(SoundModule.MUSIC_BIOME_DESERT_CAVES.get());
+        // Music & sounds
+        Music music = Musics.createGameMusic(SoundModule.MUSIC_BIOME_LOST_CAVES.get());
+        SoundEvent loopSound = SoundModule.SANDSTORM_AMBIENT_LOST_CAVES.get();
 
         // Build biome
-        return biome(Biome.Precipitation.NONE, 0.8F, 0.4F, 0x332c0a, 0x1c1606, 0xc88027, mobSettings, biomeSettings, music);
+        return new Biome.BiomeBuilder()
+                .precipitation(Biome.Precipitation.NONE)
+                .biomeCategory(Biome.BiomeCategory.UNDERGROUND)
+                .temperature(0.8F)
+                .downfall(0.4F)
+                .specialEffects(new BiomeSpecialEffects.Builder()
+                        .waterColor(0x332c0a)
+                        .waterFogColor(0x1c1606)
+                        .fogColor(0xc88027)
+                        .skyColor(calculateSkyColor(0.8F))
+//                        .ambientLoopSound(loopSound)
+                        .backgroundMusic(music)
+                        .ambientParticle(new AmbientParticleSettings((ParticleOptions) ParticleTypeModule.LOST_CAVES_AMBIENT.get(), 0.0015f))
+                        .build())
+                .mobSpawnSettings(mobSettings.build())
+                .generationSettings(biomeSettings.build())
+                .build();
     }
 
     protected static int calculateSkyColor(float temperature) {

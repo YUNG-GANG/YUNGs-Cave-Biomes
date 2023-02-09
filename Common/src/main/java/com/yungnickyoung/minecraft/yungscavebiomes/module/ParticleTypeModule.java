@@ -10,6 +10,11 @@ import net.minecraft.core.particles.SimpleParticleType;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ParticleTypeModule {
+
+    @AutoRegister("ice_shatter")
+    public static AutoRegisterParticleType<SimpleParticleType> ICE_SHATTER = AutoRegisterParticleType
+            .simple();
+
     @AutoRegister("ancient_dust")
     public static AutoRegisterParticleType<BlockParticleOption> ANCIENT_DUST = AutoRegisterParticleType
             .of(BlockParticleType::new);
@@ -18,8 +23,8 @@ public class ParticleTypeModule {
     public static AutoRegisterParticleType<SimpleParticleType> SANDSTORM = AutoRegisterParticleType
             .simple();
 
-    @AutoRegister("ice_shatter")
-    public static AutoRegisterParticleType<SimpleParticleType> ICE_SHATTER = AutoRegisterParticleType
+    @AutoRegister("lost_caves_ambient")
+    public static AutoRegisterParticleType<SimpleParticleType> LOST_CAVES_AMBIENT = AutoRegisterParticleType
             .simple();
 
     private static class BlockParticleType extends ParticleType<BlockParticleOption> {

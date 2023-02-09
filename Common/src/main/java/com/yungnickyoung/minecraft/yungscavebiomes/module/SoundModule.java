@@ -9,9 +9,15 @@ public class SoundModule {
     @AutoRegister("music.overworld.ice_caves")
     public static AutoRegisterSoundEvent MUSIC_BIOME_ICE_CAVES = AutoRegisterSoundEvent.create();
 
-    @AutoRegister("music.overworld.desert_caves")
-    public static AutoRegisterSoundEvent MUSIC_BIOME_DESERT_CAVES = AutoRegisterSoundEvent.create();
-
     @AutoRegister("block.rare_ice.ambient")
     public static AutoRegisterSoundEvent AMBIENT_BLOCK_RARE_ICE = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("music.overworld.lost_caves")
+    public static AutoRegisterSoundEvent MUSIC_BIOME_LOST_CAVES = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("ambient.lost_caves.loop")
+    public static AutoRegisterSoundEvent AMBIENT_LOST_CAVES = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("ambient.lost_caves.sandstorm_loop")
+    public static AutoRegisterSoundEvent SANDSTORM_AMBIENT_LOST_CAVES = AutoRegisterSoundEvent.create();
 }

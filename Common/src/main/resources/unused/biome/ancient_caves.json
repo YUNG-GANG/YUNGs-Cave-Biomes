@@ -7,7 +7,7 @@
       "offset": 2
     },
     "music": {
-      "sound": "yungscavebiomes:music.overworld.desert_caves",
+      "sound": "yungscavebiomes:music.overworld.lost_caves",
       "min_delay": 12000,
       "max_delay": 24000,
       "replace_current_music": false
