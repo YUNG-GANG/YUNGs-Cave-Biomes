@@ -87,6 +87,9 @@ public class BlockModule {
                     .of(Material.STONE, MaterialColor.SAND)
                     .requiresCorrectToolForDrops()
                     .strength(0.8f)))
+            .withStairs()
+            .withSlab()
+            .withWall()
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
     @AutoRegister("brittle_ancient_sandstone")
@@ -115,6 +118,23 @@ public class BlockModule {
                     .of(Material.STONE, MaterialColor.SAND)
                     .requiresCorrectToolForDrops()
                     .strength(0.8f)))
+            .withSlab()
+            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+
+    @AutoRegister("chiseled_ancient_sandstone")
+    public static final AutoRegisterBlock CHISELED_ANCIENT_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
+                    .of(Material.STONE, MaterialColor.SAND)
+                    .requiresCorrectToolForDrops()
+                    .strength(0.8f)))
+            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+
+    @AutoRegister("smooth_ancient_sandstone")
+    public static final AutoRegisterBlock SMOOTH_ANCIENT_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
+                    .of(Material.STONE, MaterialColor.SAND)
+                    .requiresCorrectToolForDrops()
+                    .strength(0.8f)))
+            .withStairs()
+            .withSlab()
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
     @AutoRegister("layered_ancient_sandstone")

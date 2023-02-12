@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "yungscavebiomes:block/cut_ancient_sandstone_slab"
+    },
+    "type=double": {
+      "model": "yungscavebiomes:block/cut_ancient_sandstone"
+    },
+    "type=top": {
+      "model": "yungscavebiomes:block/cut_ancient_sandstone_slab_top"
+    }
+  }
+}

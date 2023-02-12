@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "yungscavebiomes:smooth_ancient_sandstone"
+    }
+  },
+  "result": {
+    "item": "yungscavebiomes:smooth_ancient_sandstone_stairs",
+    "count": 4
+  }
+}

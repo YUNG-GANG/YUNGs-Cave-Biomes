@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "yungscavebiomes:ancient_sandstone"
+    ]
+  },
+  "criteria": {
+    "has_ancient_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "yungscavebiomes:ancient_sand"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "yungscavebiomes:ancient_sandstone"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ancient_sand",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "top": "yungscavebiomes:block/ancient_sandstone_top",
+    "bottom": "yungscavebiomes:block/ancient_sandstone_bottom",
+    "side": "yungscavebiomes:block/ancient_sandstone"
+  }
+}
