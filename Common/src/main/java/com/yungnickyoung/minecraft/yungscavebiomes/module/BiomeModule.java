@@ -8,12 +8,12 @@ import com.yungnickyoung.minecraft.yungscavebiomes.world.biome.BiomeMaker;
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class BiomeModule {
     @AutoRegister("frosted_caves")
-    public static AutoRegisterBiome FROSTED_CAVES = AutoRegisterBiome.of(BiomeMaker::frostedCaves);
+    public static final AutoRegisterBiome FROSTED_CAVES = AutoRegisterBiome.of(BiomeMaker::frostedCaves);
 
     @AutoRegister("marble_caves")
-    public static AutoRegisterBiome MARBLE_CAVES = AutoRegisterBiome.of(BiomeMaker::marbleCaves);
+    public static final AutoRegisterBiome MARBLE_CAVES = AutoRegisterBiome.of(BiomeMaker::marbleCaves);
 
     @AutoRegister("lost_caves")
-    public static AutoRegisterBiome LOST_CAVES = AutoRegisterBiome.of(BiomeMaker::lostCaves);
+    public static final AutoRegisterBiome LOST_CAVES = AutoRegisterBiome.of(BiomeMaker::lostCaves);
 
 }

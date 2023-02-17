@@ -8,5 +8,5 @@ import com.yungnickyoung.minecraft.yungscavebiomes.command.SandstormCommand;
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class CommandModule {
     @AutoRegister("sandstorm")
-    public static AutoRegisterCommand START_SANDSTORM = AutoRegisterCommand.of(() -> SandstormCommand::register);
+    public static final AutoRegisterCommand SANDSTORM_COMMAND = AutoRegisterCommand.of(() -> SandstormCommand::register);
 }

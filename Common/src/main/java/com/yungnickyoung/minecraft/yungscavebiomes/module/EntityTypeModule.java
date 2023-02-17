@@ -22,7 +22,7 @@ public class EntityTypeModule {
 //            .attributes(IceCubeEntity::createAttributes);
 
     @AutoRegister("icicle")
-    public static AutoRegisterEntityType<IcicleProjectileEntity> ICICLE = AutoRegisterEntityType
+    public static final AutoRegisterEntityType<IcicleProjectileEntity> ICICLE = AutoRegisterEntityType
             .of(() -> AutoRegisterEntityType.Builder
                     .of(IcicleProjectileEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f)
@@ -32,7 +32,7 @@ public class EntityTypeModule {
 
     /* BlockEntities */
     @AutoRegister("rare_ice")
-    public static AutoRegisterBlockEntityType<RareIceBlockEntity> RARE_ICE = AutoRegisterBlockEntityType
+    public static final AutoRegisterBlockEntityType<RareIceBlockEntity> RARE_ICE = AutoRegisterBlockEntityType
             .of(() -> AutoRegisterBlockEntityType.Builder
                     .of(RareIceBlockEntity::new, BlockModule.RARE_ICE.get())
                     .build(null));

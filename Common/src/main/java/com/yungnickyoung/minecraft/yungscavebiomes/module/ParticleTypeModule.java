@@ -12,19 +12,19 @@ import net.minecraft.core.particles.SimpleParticleType;
 public class ParticleTypeModule {
 
     @AutoRegister("ice_shatter")
-    public static AutoRegisterParticleType<SimpleParticleType> ICE_SHATTER = AutoRegisterParticleType
+    public static final AutoRegisterParticleType<SimpleParticleType> ICE_SHATTER = AutoRegisterParticleType
             .simple();
 
     @AutoRegister("ancient_dust")
-    public static AutoRegisterParticleType<BlockParticleOption> ANCIENT_DUST = AutoRegisterParticleType
+    public static final AutoRegisterParticleType<BlockParticleOption> ANCIENT_DUST = AutoRegisterParticleType
             .of(BlockParticleType::new);
 
     @AutoRegister("sandstorm")
-    public static AutoRegisterParticleType<SimpleParticleType> SANDSTORM = AutoRegisterParticleType
+    public static final AutoRegisterParticleType<SimpleParticleType> SANDSTORM = AutoRegisterParticleType
             .simple();
 
     @AutoRegister("lost_caves_ambient")
-    public static AutoRegisterParticleType<SimpleParticleType> LOST_CAVES_AMBIENT = AutoRegisterParticleType
+    public static final AutoRegisterParticleType<SimpleParticleType> LOST_CAVES_AMBIENT = AutoRegisterParticleType
             .simple();
 
     private static class BlockParticleType extends ParticleType<BlockParticleOption> {
