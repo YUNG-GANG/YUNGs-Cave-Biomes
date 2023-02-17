@@ -1,0 +1,30 @@
+{
+  "parent": "yungscavebiomes:frosted_caves",
+  "display": {
+    "icon": {
+      "item": "yungscavebiomes:frost_lily"
+    },
+    "title": {
+      "translate": "yungscavebiomes.advancements.frost_potion.title"
+    },
+    "description": {
+      "translate": "yungscavebiomes.advancements.frost_potion.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "frost_potion": {
+      "trigger": "minecraft:brewed_potion",
+      "conditions": {
+        "potion": "yungscavebiomes:frost"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "frost_potion"
+    ]
+  ]
+}

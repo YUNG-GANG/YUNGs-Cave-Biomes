@@ -34,7 +34,9 @@ public class BlockModule {
                     .dynamicShape()
                     .lightLevel(blockState -> 10)
                     .sound(SoundType.GLASS)))
-            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+            .withItem(() -> new Item.Properties()
+                    .stacksTo(16)
+                    .tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
     @AutoRegister("marble")
     public static final AutoRegisterBlock MARBLE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
