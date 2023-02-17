@@ -6,8 +6,6 @@ import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterUtils;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potions;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ItemModule {
@@ -38,5 +36,7 @@ public class ItemModule {
     @AutoRegister("_ignored")
     private static void addCompostables() {
         AutoRegisterUtils.addCompostableItem(() -> BlockModule.PRICKLY_VINES.get().asItem(), 0.5F);
+        AutoRegisterUtils.addCompostableItem(() -> BlockModule.PRICKLY_PEACH_CACTUS.get().asItem(), 0.5F);
+        AutoRegisterUtils.addCompostableItem(() -> ItemModule.PRICKLY_PEACH_ITEM.get(), 0.65F);
     }
 }
