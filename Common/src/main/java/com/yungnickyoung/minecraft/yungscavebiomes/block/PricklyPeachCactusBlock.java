@@ -14,9 +14,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -57,7 +60,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         // Harvest peach if available
         if (blockState.getValue(FRUIT)) {
-            Block.popResource(level, blockPos, new ItemStack(ItemModule.PRICKLY_PEACH_ITEM.get(), 1));
+            popFruit(level, blockPos, new ItemStack(ItemModule.PRICKLY_PEACH_ITEM.get(), 1));
             float volume = Mth.randomBetween(level.random, 0.8f, 1.2f);
             level.playSound(null, blockPos, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, volume);
             level.setBlock(blockPos, blockState.setValue(FRUIT, false).setValue(AGE, 0), 2);
@@ -165,5 +168,38 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
 
     private static boolean hasFruit(BlockState blockState) {
         return blockState.hasProperty(FRUIT) && blockState.getValue(FRUIT);
+    }
+
+    private static void popFruit(Level level, BlockPos $$1, ItemStack itemStack) {
+        if (!level.isClientSide && !itemStack.isEmpty() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+            double x = (double) $$1.getX() + 0.5;
+            double y = (double) $$1.getY() + 0.5 - (EntityType.ITEM.getHeight() / 2.0F);
+            double z = (double) $$1.getZ() + 0.5;
+
+            double xOffset = Mth.nextDouble(level.random, 0.20, 0.25);
+            double yOffset = 0.25;
+            double zOffset = Mth.nextDouble(level.random, 0.20, 0.25);
+
+            double dx = Mth.nextDouble(level.random, 0.075, 0.1);
+            double dy = 0.2;
+            double dz = Mth.nextDouble(level.random, 0.075, 0.1);
+
+            if (level.random.nextBoolean()) {
+                xOffset *= -1;
+                dx *= -1;
+            }
+            if (level.random.nextBoolean()) {
+                zOffset *= -1;
+                dz *= -1;
+            }
+
+            x += xOffset;
+            y += yOffset;
+            z += zOffset;
+
+            ItemEntity itemEntity = new ItemEntity(level, x, y, z, itemStack, dx, dy, dz);
+            itemEntity.setDefaultPickUpDelay();
+            level.addFreshEntity(itemEntity);
+        }
     }
 }
