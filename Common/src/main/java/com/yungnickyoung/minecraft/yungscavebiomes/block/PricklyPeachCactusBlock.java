@@ -98,6 +98,14 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
+    public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack) {
+        super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack);
+        if (blockState.hasProperty(FRUIT) && blockState.getValue(FRUIT)) {
+            Block.popResource(serverLevel, blockPos, new ItemStack(ItemModule.PRICKLY_PEACH_ITEM.get(), 1));
+        }
+    }
+
+    @Override
     public boolean isValidBonemealTarget(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, boolean b) {
         return blockState.hasProperty(FRUIT) && !blockState.getValue(FRUIT);
     }
