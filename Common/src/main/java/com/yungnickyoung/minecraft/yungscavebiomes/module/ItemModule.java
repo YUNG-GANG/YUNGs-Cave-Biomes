@@ -2,9 +2,12 @@ package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterItem;
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterUtils;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potions;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ItemModule {
@@ -22,4 +25,18 @@ public class ItemModule {
                                 .nutrition(2)
                                 .saturationMod(0.1F)
                                 .build())));
+
+    /**
+     * Methods with the AutoRegister annotations will be executed after registration.
+     *
+     * For Fabric, this means the method is executed during mod initialization as normal.
+     * For Forge, the method is queued to execute in common setup.
+     *
+     * Any methods used with the AutoRegister annotation must be static and take no arguments.
+     * Note that the annotation value is ignored.
+     */
+    @AutoRegister("_ignored")
+    private static void addCompostables() {
+        AutoRegisterUtils.addCompostableItem(() -> BlockModule.PRICKLY_VINES.get().asItem(), 0.5F);
+    }
 }
