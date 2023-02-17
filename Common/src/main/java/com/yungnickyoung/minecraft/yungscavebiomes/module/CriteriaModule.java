@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
+import com.yungnickyoung.minecraft.yungscavebiomes.criteria.BreakEnchantedIceTrigger;
 import com.yungnickyoung.minecraft.yungscavebiomes.criteria.EatPricklyPeachTrigger;
 import com.yungnickyoung.minecraft.yungscavebiomes.criteria.InteractEmptyPricklyCactusTrigger;
 
@@ -12,4 +13,7 @@ public class CriteriaModule {
 
     @AutoRegister("eat_prickly_peach")
     public static final EatPricklyPeachTrigger EAT_PRICKLY_PEACH = new EatPricklyPeachTrigger();
+
+    @AutoRegister("break_enchanted_ice")
+    public static final BreakEnchantedIceTrigger BREAK_ENCHANTED_ICE = new BreakEnchantedIceTrigger();
 }

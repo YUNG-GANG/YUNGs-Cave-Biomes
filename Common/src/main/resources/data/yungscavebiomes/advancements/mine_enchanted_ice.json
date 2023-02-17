@@ -1,0 +1,29 @@
+{
+  "parent": "yungscavebiomes:frosted_caves",
+  "display": {
+    "icon": {
+      "item": "yungscavebiomes:rare_ice"
+    },
+    "title": {
+      "translate": "yungscavebiomes.advancements.mine_enchanted_ice.title"
+    },
+    "description": {
+      "translate": "yungscavebiomes.advancements.mine_enchanted_ice.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "mine_enchanted_ice": {
+      "trigger": "yungscavebiomes:break_enchanted_ice",
+      "conditions": {
+      }
+    }
+  },
+  "requirements": [
+    [
+      "mine_enchanted_ice"
+    ]
+  ]
+}
