@@ -1,0 +1,32 @@
+{
+  "parent": "yungscavebiomes:root",
+  "display": {
+    "icon": {
+      "item": "yungscavebiomes:icicle"
+    },
+    "title": {
+      "translate": "yungscavebiomes.advancements.frosted_caves.title"
+    },
+    "description": {
+      "translate": "yungscavebiomes.advancements.frosted_caves.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "frosted_caves": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "biome": "yungscavebiomes:frosted_caves"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "frosted_caves"
+    ]
+  ]
+}

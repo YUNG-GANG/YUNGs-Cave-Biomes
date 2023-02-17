@@ -4,6 +4,7 @@ import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterItem;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterUtils;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
+import com.yungnickyoung.minecraft.yungscavebiomes.item.PricklyPeachItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 
@@ -16,12 +17,12 @@ public class ItemModule {
 //                    new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get())));
 
     @AutoRegister("prickly_peach")
-    public static final AutoRegisterItem PRICKLY_PEACH_ITEM = AutoRegisterItem.of(() -> new Item(
+    public static final AutoRegisterItem PRICKLY_PEACH_ITEM = AutoRegisterItem.of(() -> new PricklyPeachItem(
                 new Item.Properties()
                         .tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get())
                         .food(new FoodProperties.Builder()
-                                .nutrition(2)
-                                .saturationMod(0.1F)
+                                .nutrition(4)
+                                .saturationMod(0.3F)
                                 .build())));
 
     /**

@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "yungscavebiomes:layered_ancient_sandstone"
+    },
+    "title": {
+      "translate": "yungscavebiomes.advancements.root.title"
+    },
+    "description": {
+      "translate": "yungscavebiomes.advancements.root.description"
+    },
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true,
+    "background": "yungscavebiomes:textures/block/layered_ancient_sandstone.png"
+  },
+  "criteria": {
+    "always": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

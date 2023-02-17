@@ -1,9 +1,11 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.module.CriteriaModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -53,13 +55,25 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
 
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+        // Harvest peach if available
         if (blockState.getValue(FRUIT)) {
             Block.popResource(level, blockPos, new ItemStack(ItemModule.PRICKLY_PEACH_ITEM.get(), 1));
             float volume = Mth.randomBetween(level.random, 0.8f, 1.2f);
             level.playSound(null, blockPos, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, volume);
             level.setBlock(blockPos, blockState.setValue(FRUIT, false).setValue(AGE, 0), 2);
             return InteractionResult.sidedSuccess(level.isClientSide);
+        } else {
+            // Hurt player if nothing in hand
+            ItemStack itemInHand = player.getItemInHand(interactionHand);
+            if (itemInHand.isEmpty()) {
+                player.hurt(DamageSource.CACTUS, 1.0f);
+                if (player instanceof ServerPlayer serverPlayer) {
+                    CriteriaModule.INTERACT_EMPTY_PRICKLY_CACTUS.trigger(serverPlayer);
+                }
+                return InteractionResult.sidedSuccess(level.isClientSide);
+            }
         }
+
         return InteractionResult.PASS;
     }
 

@@ -1,0 +1,29 @@
+{
+  "parent": "yungscavebiomes:lost_caves",
+  "display": {
+    "icon": {
+      "item": "yungscavebiomes:prickly_peach_cactus"
+    },
+    "title": {
+      "translate": "yungscavebiomes.advancements.poke_the_cactus.title"
+    },
+    "description": {
+      "translate": "yungscavebiomes.advancements.poke_the_cactus.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "poked_the_cactus": {
+      "trigger": "yungscavebiomes:interact_empty_prickly_cactus",
+      "conditions": {
+      }
+    }
+  },
+  "requirements": [
+    [
+      "poked_the_cactus"
+    ]
+  ]
+}

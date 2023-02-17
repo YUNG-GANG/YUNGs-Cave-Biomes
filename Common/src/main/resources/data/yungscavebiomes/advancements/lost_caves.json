@@ -1,0 +1,32 @@
+{
+  "parent": "yungscavebiomes:root",
+  "display": {
+    "icon": {
+      "item": "yungscavebiomes:chiseled_ancient_sandstone"
+    },
+    "title": {
+      "translate": "yungscavebiomes.advancements.lost_caves.title"
+    },
+    "description": {
+      "translate": "yungscavebiomes.advancements.lost_caves.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "lost_caves": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "biome": "yungscavebiomes:lost_caves"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "lost_caves"
+    ]
+  ]
+}

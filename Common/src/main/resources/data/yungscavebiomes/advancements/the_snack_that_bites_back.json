@@ -1,0 +1,34 @@
+{
+  "parent": "yungscavebiomes:lost_caves",
+  "display": {
+    "icon": {
+      "item": "yungscavebiomes:prickly_peach"
+    },
+    "title": {
+      "translate": "yungscavebiomes.advancements.the_snack_that_bites_back.title"
+    },
+    "description": {
+      "translate": "yungscavebiomes.advancements.the_snack_that_bites_back.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "prickly_peach": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "yungscavebiomes:prickly_peach"
+          ]
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "prickly_peach"
+    ]
+  ]
+}

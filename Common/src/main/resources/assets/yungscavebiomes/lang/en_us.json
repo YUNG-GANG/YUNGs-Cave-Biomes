@@ -1,6 +1,17 @@
 {
   "itemGroup.yungscavebiomes.general": "YUNG's Cave Biomes",
 
+  "yungscavebiomes.advancements.root.title": "YUNG's Cave Biomes",
+  "yungscavebiomes.advancements.root.description": "Explore the underground...",
+  "yungscavebiomes.advancements.poke_the_cactus.title": "Please Do Not Touch The Cactus",
+  "yungscavebiomes.advancements.poke_the_cactus.description": "You touched the cactus. We told you not to, but here we are.",
+  "yungscavebiomes.advancements.the_snack_that_bites_back.title": "The Snack That Bites Back",
+  "yungscavebiomes.advancements.the_snack_that_bites_back.description": "Eat a Prickly Peach",
+  "yungscavebiomes.advancements.frosted_caves.title": "Cool, Cool Cave",
+  "yungscavebiomes.advancements.frosted_caves.description": "Discover the Frosted Caves",
+  "yungscavebiomes.advancements.lost_caves.title": "A Howling Discovery",
+  "yungscavebiomes.advancements.lost_caves.description": "Set foot in the Lost Caves",
+
   "biome.yungscavebiomes.frosted_caves": "Frosted Caves",
   "biome.yungscavebiomes.marble_caves": "Marble Caves",
   "biome.yungscavebiomes.lost_caves": "Lost Caves",
