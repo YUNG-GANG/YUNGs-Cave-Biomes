@@ -252,12 +252,12 @@ public class PlacedFeatureModule {
     public static final AutoRegisterPlacedFeature PRICKLY_PEACH_CACTUS_PATCH = AutoRegisterPlacedFeature.of(
             ConfiguredFeatureModule.PRICKLY_PEACH_CACTUS_PATCH,
             List.of(
-                    CountPlacement.of(50),
+                    CountPlacement.of(30),
                     InSquarePlacement.spread(),
                     PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
                     EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
                             BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-                    RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+                    RandomOffsetPlacement.vertical(ConstantInt.of(1)),
                     BiomeFilter.biome()));
 
     @AutoRegister("brittle_sandstone_ceiling_patch")

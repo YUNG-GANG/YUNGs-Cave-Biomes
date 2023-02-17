@@ -6,7 +6,6 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.util.DistributionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -24,6 +23,7 @@ public class PricklyPeachCactusPatchFeature extends Feature<NoneFeatureConfigura
     public static final int MAX_TOTAL_PLACEMENTS = 4;
     public static final int PLACEMENT_RADIUS_XZ = 7;
     public static final int PLACEMENT_RADIUS_Y = 5;
+    public static final float FRUIT_CHANCE = 0.4f;
 
     public PricklyPeachCactusPatchFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -51,7 +51,7 @@ public class PricklyPeachCactusPatchFeature extends Feature<NoneFeatureConfigura
             BlockPos pos = DistributionUtils.ellipsoidCenterBiasedSpread(PLACEMENT_RADIUS_XZ, PLACEMENT_RADIUS_Y, random,
                     (x, y, z) -> origin.offset(Math.round(x), Math.round(y), Math.round(z)));
 
-            // Check for sandstone below
+            // Require sandstone below
             if (!level.getBlockState(pos.below()).is(BlockModule.ANCIENT_SAND.get())) {
                 continue;
             }
@@ -59,18 +59,28 @@ public class PricklyPeachCactusPatchFeature extends Feature<NoneFeatureConfigura
             // Ensure no adjacent cacti to help spread out distribution
             boolean isAdjacentCactus = false;
 
+            // Ensure not completely surrounded by blocks
+            int solidNeighbors = 0;
+
             for (Direction direction : Direction.Plane.HORIZONTAL) {
-                Block block = level.getBlockState(pos.relative(direction)).getBlock();
-                if (block == BlockModule.PRICKLY_PEACH_CACTUS.get() || block == Blocks.CACTUS) {
+                BlockState neighborState = level.getBlockState(pos.relative(direction));
+                Block neighborBlock = neighborState.getBlock();
+                if (neighborBlock == BlockModule.PRICKLY_PEACH_CACTUS.get() || neighborBlock == Blocks.CACTUS) {
                     isAdjacentCactus = true;
+                    break;
+                }
+                if (!neighborState.isAir()) {
+                    solidNeighbors++;
+                }
+                if (solidNeighbors > 2) {
                     break;
                 }
             }
 
-            if (!isAdjacentCactus) {
+            if (!isAdjacentCactus && solidNeighbors < 3) {
                 BlockState cactusBlockState = BlockModule.PRICKLY_PEACH_CACTUS.get()
                         .defaultBlockState()
-                        .setValue(PricklyPeachCactusBlock.FRUIT, random.nextFloat() < 0.9);
+                        .setValue(PricklyPeachCactusBlock.FRUIT, random.nextFloat() < FRUIT_CHANCE);
                 level.setBlock(pos, cactusBlockState, 3);
                 cactiRemaining--;
             }
