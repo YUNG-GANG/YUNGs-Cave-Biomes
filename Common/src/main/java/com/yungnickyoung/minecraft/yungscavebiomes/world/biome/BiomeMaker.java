@@ -1,20 +1,17 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterPlacedFeature;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.PlacedFeatureModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
 import net.minecraft.data.worldgen.placement.OrePlacements;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -28,7 +25,6 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 /**
  * Utilities for creating new biomes.
@@ -81,7 +77,7 @@ public class BiomeMaker {
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.ICE_PATCH_CEILING));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.FROST_LILY));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.WATER_SURFACE_ICE_FRAGMENT));
-        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.WATER_SURFACE_ICE_FRAGMENT2));
+        biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.WATER_SURFACE_ICE_FRAGMENT_2));
         biomeSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, makeHolder(PlacedFeatureModule.ICICLES));
         biomeSettings.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, makeHolder(PlacedFeatureModule.ICE_SHEET_REPLACE));
         biomeSettings.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, makeHolder(PlacedFeatureModule.ICE_SHEET_REPLACE_2));
@@ -204,7 +200,6 @@ public class BiomeMaker {
 
         // Music & sounds
         Music music = Musics.createGameMusic(SoundModule.MUSIC_BIOME_LOST_CAVES.get());
-        SoundEvent loopSound = SoundModule.SANDSTORM_AMBIENT_LOST_CAVES.get();
 
         // Build biome
         return new Biome.BiomeBuilder()
@@ -283,9 +278,7 @@ public class BiomeMaker {
         builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_TUFF);
     }
 
-    private static Holder<PlacedFeature> makeHolder(PlacedFeature placed) {
-        Optional<ResourceKey<PlacedFeature>> optional = BuiltinRegistries.PLACED_FEATURE.getResourceKey(placed);
-        ResourceKey<PlacedFeature> key = optional.get();
-        return BuiltinRegistries.PLACED_FEATURE.getHolderOrThrow(key);
+    private static Holder<PlacedFeature> makeHolder(AutoRegisterPlacedFeature autoRegisterPlacedFeature) {
+        return autoRegisterPlacedFeature.holder();
     }
 }
