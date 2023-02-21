@@ -9,6 +9,6 @@ public class BuffetedEffect extends MobEffect {
     public BuffetedEffect() {
         super(MobEffectCategory.HARMFUL, 0x996436);
         this.addAttributeModifier(Attributes.MOVEMENT_SPEED, "AAE883F3-00D3-9804-67FF-AFFE449F8BC4",
-                -0.4, AttributeModifier.Operation.MULTIPLY_TOTAL);
+                -0.5, AttributeModifier.Operation.MULTIPLY_TOTAL);
     }
 }
