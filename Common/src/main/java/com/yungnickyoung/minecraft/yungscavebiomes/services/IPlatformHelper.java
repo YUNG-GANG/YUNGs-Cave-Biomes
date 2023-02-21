@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
 public interface IPlatformHelper {
@@ -29,4 +30,5 @@ public interface IPlatformHelper {
     void sendIcicleProjectileShatterS2CPacket(ServerLevel serverLevel, Vec3 pos);
 
     void syncSandstormDataToClients(ServerLevel serverLevel);
+    void syncSandstormDataToPlayer(ServerLevel serverLevel, ServerPlayer serverPlayer);
 }

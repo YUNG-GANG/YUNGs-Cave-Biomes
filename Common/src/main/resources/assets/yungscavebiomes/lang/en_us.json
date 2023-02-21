@@ -65,8 +65,8 @@
 
   "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows",
 
-  "command.sandstorm.start": "Sandstorm started in all Lost Caves.",
-  "command.sandstorm.stop": "Sandstorm stopped in all Lost Caves.",
+  "command.sandstorm.start": "Sandstorm started in all Lost Caves in %s.",
+  "command.sandstorm.stop": "Sandstorm stopped in all Lost Caves in %s.",
 
   "text.autoconfig.yungscavebiomes-fabric-1_18_2.title": "YUNG's Cave Biomes",
   "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.enableSandstorms": "Enable Sandstorms",

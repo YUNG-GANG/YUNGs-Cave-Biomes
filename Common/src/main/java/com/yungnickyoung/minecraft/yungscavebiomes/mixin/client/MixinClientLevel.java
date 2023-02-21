@@ -4,7 +4,7 @@ import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
+import com.yungnickyoung.minecraft.yungscavebiomes.data.Sandstorm;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.util.DistributionUtils;
@@ -99,11 +99,11 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
         );
 
         // Smoothing during sandstorm start transition
-        if (this.sandstormTime > ISandstormServerData.SANDSTORM_DURATION - 20) {
+        if (this.sandstormTime > Sandstorm.SANDSTORM_DURATION - 20) {
             output.mul(
-                    (ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20f,
-                    (ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20f,
-                    (ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20f
+                    (Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20f,
+                    (Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20f,
+                    (Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20f
             );
         }
     }
@@ -165,7 +165,7 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
         // Random chance of spawning particle.
         // Chance is lower when sandstorm is first starting up.
         double chance = Mth.clamp(
-                Mth.lerp((ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20.0, 0, 0.03),
+                Mth.lerp((Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20.0, 0, 0.03),
                 0,
                 0.03
         );
@@ -213,7 +213,7 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
             // Random chance of spawning particle.
             // Chance is lower when sandstorm is first starting up.
             double chance = Mth.clamp(
-                    Mth.lerp((ISandstormServerData.SANDSTORM_DURATION - sandstormTime) / 20.0, 0, 0.03),
+                    Mth.lerp((Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20.0, 0, 0.03),
                     0,
                     0.03
             );

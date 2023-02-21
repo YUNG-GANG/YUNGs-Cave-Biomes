@@ -49,4 +49,14 @@ public class FabricPlatformHelper implements IPlatformHelper {
         PlayerLookup.world(serverLevel)
                 .forEach(player -> ServerPlayNetworking.send(player, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf));
     }
+
+    @Override
+    public void syncSandstormDataToPlayer(ServerLevel serverLevel, ServerPlayer serverPlayer) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
+        buf.writeBoolean(sandstormData.isSandstormActive());
+        buf.writeInt(sandstormData.getSandstormTime());
+        buf.writeLong(sandstormData.getSandstormSeed());
+        ServerPlayNetworking.send(serverPlayer, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf);
+    }
 }

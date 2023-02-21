@@ -6,6 +6,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.network.IcicleShatterS2CPacke
 import com.yungnickyoung.minecraft.yungscavebiomes.network.SandstormSyncS2CPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
@@ -41,10 +42,22 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public void syncSandstormDataToClients(ServerLevel serverLevel) {
         ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
-        NetworkModuleForge.sendToClientsInLevel(new SandstormSyncS2CPacket(
-                sandstormData.isSandstormActive(),
-                sandstormData.getSandstormTime(),
-                sandstormData.getSandstormSeed()),
+        NetworkModuleForge.sendToClientsInLevel(
+                new SandstormSyncS2CPacket(
+                        sandstormData.isSandstormActive(),
+                        sandstormData.getSandstormTime(),
+                        sandstormData.getSandstormSeed()),
                 serverLevel.dimension());
+    }
+
+    @Override
+    public void syncSandstormDataToPlayer(ServerLevel serverLevel, ServerPlayer serverPlayer) {
+        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
+        NetworkModuleForge.sendToClient(
+                new SandstormSyncS2CPacket(
+                        sandstormData.isSandstormActive(),
+                        sandstormData.getSandstormTime(),
+                        sandstormData.getSandstormSeed()),
+                serverPlayer);
     }
 }

@@ -21,11 +21,11 @@ public class SandstormCommand {
     public static int execute(CommandSourceStack commandSource, String action) {
         if (action.equals("start")) {
             ((ISandstormServerData) commandSource.getLevel()).startSandstorm();
-            commandSource.sendSuccess(new TranslatableComponent("command.sandstorm.start"), false);
+            commandSource.sendSuccess(new TranslatableComponent("command.sandstorm.start", commandSource.getLevel().dimension().location()), false);
             return 1;
         } else if (action.equals("stop")) {
             ((ISandstormServerData) commandSource.getLevel()).stopSandstorm();
-            commandSource.sendSuccess(new TranslatableComponent("command.sandstorm.stop"), false);
+            commandSource.sendSuccess(new TranslatableComponent("command.sandstorm.stop", commandSource.getLevel().dimension().location()), false);
             return 1;
         } else {
             commandSource.sendFailure(new TextComponent("Unrecognized action."));
