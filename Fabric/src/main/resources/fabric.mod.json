@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "yungscavebiomes",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "YUNG's Cave Biomes",
-  "description": "Adds new vanilla+ cave biomes and underground content!",
+  "name": "${mod_full_name}",
+  "description": "${mod_description}",
   "authors": [
     "YUNGNICKYOUNG",
     "SuperCoder79",
@@ -45,7 +45,7 @@
     "minecraft": ">=1.18.2",
     "cloth-config2": ">=6.2.57",
     "java": ">=17",
-    "yungsapi": ">=1.18.2-Fabric-2.2.4",
-    "terrablender": ">=1.2.0.126"
+    "yungsapi": ">=${mc_version}-Fabric-${yungsapi_version}",
+    "terrablender": ">=${terrablender_version}"
   }
 }

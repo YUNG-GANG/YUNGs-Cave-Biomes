@@ -4,40 +4,40 @@ license="All Rights Reserved"
 issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Cave-Biomes/issues"
 
 [[mods]]
-    modId="yungscavebiomes"
-    version="${file.jarVersion}"
-	displayName="YUNG's Cave Biomes"
+    modId="${mod_id}"
+    version="${version}"
+    displayName="${mod_full_name}"
     credits="Thanks so much to all my patrons!"
     authors="YUNGNICKYOUNG, SuperCoder79, Sully, LudoCrypt, K.jpg, Frenderman"
-    description="Adds new vanilla+ cave biomes and underground content!"
+    description="${mod_description}"
     logoFile="logo.png"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/yungs-cave-biomes"
 
-[modproperties.yungscavebiomes]
+[modproperties.${mod_id}]
     catalogueImageIcon="catagloue_icon.png"
 
-[[dependencies.yungscavebiomes]]
+[[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.18.2,1.19)"
 
-[[dependencies.yungscavebiomes]]
+[[dependencies.${mod_id}]]
     modId="forge"
     mandatory=true
     versionRange="[40.0.8,)"
     ordering="NONE"
     side="SERVER"
 
-[[dependencies.yungscavebiomes]]
+[[dependencies.${mod_id}]]
     modId="yungsapi"
-    versionRange="[1.18.2-Forge-2.2.4,)"
+    versionRange="[${mc_version}-Forge-${yungsapi_version},)"
     mandatory=true
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.yungscavebiomes]]
+    [[dependencies.${mod_id}]]
     modId="terrablender"
-    versionRange="[1.2.0.126,)"
+    versionRange="[${terrablender_version},)"
     mandatory=true
     ordering="NONE"
     side="BOTH"

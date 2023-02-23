@@ -84,7 +84,7 @@ dependencies {
     implementation fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-Forge-${yungsapi_version}")
 
     // Terrablender
-    implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${terrablender_version}")
+    implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${mc_version}-${terrablender_version}")
 
     // Other
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -97,9 +97,22 @@ tasks.withType(JavaCompile) {
 
 processResources {
     from project(":Common").sourceSets.main.resources
+    inputs.property "version", project.version
+    inputs.property "yungsapi_version", project.yungsapi_version
+    inputs.property "mc_version", project.mc_version
+    inputs.property "mod_description", project.mod_description
+    inputs.property "mod_full_name", project.mod_full_name
+    inputs.property "mod_id", project.mod_id
+    inputs.property "terrablender_version", project.terrablender_version
 
-    filesMatching('*.mixins.json') {
-        expand "refmap_target": mod_id + "."
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version,
+                "yungsapi_version": project.yungsapi_version,
+                "terrablender_version": project.terrablender_version,
+                "mc_version": project.mc_version,
+                "mod_description": project.mod_description,
+                "mod_full_name": project.mod_full_name,
+                "mod_id": project.mod_id
     }
 }
 
