@@ -9,8 +9,11 @@ public class ConfigModule {
 
     public static class LostCaves {
         public boolean enableSandstorms = true;
-        public int avgSandstormDuration = 5;
-        public int avgTimeBetweenSandstorms = 30;
-        public int minTimeBetweenSandstorms = 10;
+
+        // Sandstorm times, in seconds
+        public int minSandstormDuration = 2 * 60; // 2 min
+        public int maxSandstormDuration = 10 * 80; // 8 min
+        public int minTimeBetweenSandstorms = 20 * 60; // 20 min
+        public int maxTimeBetweenSandstorms = 40 * 60; // 40 min
     }
 }

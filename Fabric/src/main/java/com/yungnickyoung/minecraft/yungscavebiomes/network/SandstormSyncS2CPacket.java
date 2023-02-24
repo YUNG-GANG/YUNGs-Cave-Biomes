@@ -14,6 +14,7 @@ public class SandstormSyncS2CPacket {
         boolean isActive = buf.readBoolean();
         int sandstormTime = buf.readInt();
         long sandstormSeed = buf.readLong();
+        int totalSandstormDuration = buf.readInt();
 
         client.execute(() -> {
             if (client.level != null) {
@@ -22,6 +23,7 @@ public class SandstormSyncS2CPacket {
                 sandstormData.setSandstormActive(isActive);
                 sandstormData.setSandstormTime(sandstormTime);
                 sandstormData.setSandstormSeed(sandstormSeed);
+                sandstormData.setTotalSandstormDuration(totalSandstormDuration);
             }
         });
     }

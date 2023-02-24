@@ -52,6 +52,11 @@ public abstract class MixinServerLevel extends Level implements ISandstormServer
     }
 
     @Override
+    public int getTotalSandstormDuration() {
+        return this.sandstorm.totalSandstormDuration;
+    }
+
+    @Override
     public void startSandstorm() {
         this.sandstorm.start();
     }
@@ -64,7 +69,7 @@ public abstract class MixinServerLevel extends Level implements ISandstormServer
     @Inject(method = "<init>", at = @At("TAIL"))
     private void yungscavebiomes_initServerLevel(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey $$4, Holder $$5, ChunkProgressListener $$6, ChunkGenerator $$7, boolean $$8, long $$9, List $$10, boolean $$11, CallbackInfo ci) {
         this.sandstorm = this.getDataStorage().computeIfAbsent(
-                (tag) -> Sandstorm.load((ServerLevel) (Object) this, tag),
+                (compoundTag) -> Sandstorm.load((ServerLevel) (Object) this, compoundTag),
                 () -> new Sandstorm((ServerLevel) (Object) this),
                 "sandstorms");
     }

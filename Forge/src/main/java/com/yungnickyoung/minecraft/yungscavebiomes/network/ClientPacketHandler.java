@@ -28,6 +28,7 @@ public class ClientPacketHandler {
             sandstormData.setSandstormActive(packet.isActive());
             sandstormData.setSandstormTime(packet.getSandstormTime());
             sandstormData.setSandstormSeed(packet.getSandstormSeed());
+            sandstormData.setTotalSandstormDuration(packet.getTotalSandstormDuration());
         }
     }
 }

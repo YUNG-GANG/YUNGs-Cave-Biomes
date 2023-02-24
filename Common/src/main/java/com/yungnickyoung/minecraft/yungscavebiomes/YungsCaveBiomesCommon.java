@@ -21,6 +21,8 @@ public class YungsCaveBiomesCommon {
     public static boolean LOST_CAVES_ENABLED = true;
     public static boolean MARBLE_CAVES_ENABLED = false;
 
+    public static boolean DEBUG_LOG = true;
+
     @AutoRegister("general")
     public static final AutoRegisterCreativeTab TAB_CAVEBIOMES = new AutoRegisterCreativeTab.Builder()
             .iconItem(() -> new ItemStack(BlockModule.LAYERED_ANCIENT_SANDSTONE.get()))

@@ -10,4 +10,5 @@ public interface ISandstormClientData {
     void setSandstormActive(boolean isActive);
     void setSandstormTime(int time);
     void setSandstormSeed(long seed);
+    void setTotalSandstormDuration(int time);
 }

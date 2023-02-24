@@ -3,8 +3,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.mixin.client;
 import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.Sandstorm;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.util.DistributionUtils;
@@ -42,6 +42,9 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
     // Sandstorm time is basically just used as a frequency on the client
     @Unique
     private int sandstormTime = 0;
+
+    @Unique
+    private int totalSandstormDuration = 0;
 
     @Unique
     private long sandstormSeed;
@@ -99,11 +102,11 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
         );
 
         // Smoothing during sandstorm start transition
-        if (this.sandstormTime > Sandstorm.SANDSTORM_DURATION - 20) {
+        if (this.sandstormTime > this.totalSandstormDuration - 20) {
             output.mul(
-                    (Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20f,
-                    (Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20f,
-                    (Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20f
+                    (this.totalSandstormDuration - sandstormTime) / 20f,
+                    (this.totalSandstormDuration - sandstormTime) / 20f,
+                    (this.totalSandstormDuration - sandstormTime) / 20f
             );
         }
     }
@@ -133,6 +136,11 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
         this.sandstormSeed = sandstormSeed;
     }
 
+    @Override
+    public void setTotalSandstormDuration(int totalSandstormDuration) {
+        this.totalSandstormDuration = totalSandstormDuration;
+    }
+
     @Shadow
     public abstract void addParticle(ParticleOptions p_104706_, double p_104707_, double p_104708_, double p_104709_, double p_104710_, double p_104711_, double p_104712_);
 
@@ -142,6 +150,11 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void yungscavebiomes_tickSandstorm(BooleanSupplier $$0, CallbackInfo ci) {
+        if (YungsCaveBiomesCommon.DEBUG_LOG) {
+            YungsCaveBiomesCommon.LOGGER.info("Sandstorm CLIENT {} / {} time",
+                    this.sandstormTime, this.totalSandstormDuration);
+        }
+
         if (this.isSandstormActive) {
             if (this.sandstormTime > 0) {
                 // Sandstorm is active -> decrement remaining sandstorm timer
@@ -165,7 +178,7 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
         // Random chance of spawning particle.
         // Chance is lower when sandstorm is first starting up.
         double chance = Mth.clamp(
-                Mth.lerp((Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20.0, 0, 0.03),
+                Mth.lerp((this.totalSandstormDuration - sandstormTime) / 20.0, 0, 0.03),
                 0,
                 0.03
         );
@@ -213,7 +226,7 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
             // Random chance of spawning particle.
             // Chance is lower when sandstorm is first starting up.
             double chance = Mth.clamp(
-                    Mth.lerp((Sandstorm.SANDSTORM_DURATION - sandstormTime) / 20.0, 0, 0.03),
+                    Mth.lerp((this.totalSandstormDuration - sandstormTime) / 20.0, 0, 0.03),
                     0,
                     0.03
             );

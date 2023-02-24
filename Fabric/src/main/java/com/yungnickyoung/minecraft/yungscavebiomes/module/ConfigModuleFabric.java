@@ -22,8 +22,9 @@ public class ConfigModuleFabric {
 
     private static void bakeConfig(YCBConfigFabric configFabric) {
         YungsCaveBiomesCommon.CONFIG.lostCaves.enableSandstorms = configFabric.lostCaves.enableSandstorms;
-        YungsCaveBiomesCommon.CONFIG.lostCaves.avgSandstormDuration = configFabric.lostCaves.avgSandstormDuration;
-        YungsCaveBiomesCommon.CONFIG.lostCaves.avgTimeBetweenSandstorms = configFabric.lostCaves.avgTimeBetweenSandstorms;
+        YungsCaveBiomesCommon.CONFIG.lostCaves.minSandstormDuration = configFabric.lostCaves.minSandstormDuration;
+        YungsCaveBiomesCommon.CONFIG.lostCaves.maxSandstormDuration = configFabric.lostCaves.maxSandstormDuration;
         YungsCaveBiomesCommon.CONFIG.lostCaves.minTimeBetweenSandstorms = configFabric.lostCaves.minTimeBetweenSandstorms;
+        YungsCaveBiomesCommon.CONFIG.lostCaves.maxTimeBetweenSandstorms = configFabric.lostCaves.maxTimeBetweenSandstorms;
     }
 }

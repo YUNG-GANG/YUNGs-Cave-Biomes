@@ -28,8 +28,9 @@ public class ConfigModuleForge {
 
     private static void bakeConfig() {
         YungsCaveBiomesCommon.CONFIG.lostCaves.enableSandstorms = YCBConfigForge.lostCaves.enableSandstorms.get();
-        YungsCaveBiomesCommon.CONFIG.lostCaves.avgSandstormDuration = YCBConfigForge.lostCaves.avgSandstormDuration.get();
-        YungsCaveBiomesCommon.CONFIG.lostCaves.avgTimeBetweenSandstorms = YCBConfigForge.lostCaves.avgTimeBetweenSandstorms.get();
+        YungsCaveBiomesCommon.CONFIG.lostCaves.minSandstormDuration = YCBConfigForge.lostCaves.minSandstormDuration.get();
+        YungsCaveBiomesCommon.CONFIG.lostCaves.maxSandstormDuration = YCBConfigForge.lostCaves.maxSandstormDuration.get();
         YungsCaveBiomesCommon.CONFIG.lostCaves.minTimeBetweenSandstorms = YCBConfigForge.lostCaves.minTimeBetweenSandstorms.get();
+        YungsCaveBiomesCommon.CONFIG.lostCaves.maxTimeBetweenSandstorms = YCBConfigForge.lostCaves.maxTimeBetweenSandstorms.get();
     }
 }

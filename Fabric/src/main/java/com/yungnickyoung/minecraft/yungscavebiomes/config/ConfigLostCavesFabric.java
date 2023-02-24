@@ -2,7 +2,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.config;
 
 public class ConfigLostCavesFabric {
     public boolean enableSandstorms = true;
-    public int avgSandstormDuration = 5;
-    public int avgTimeBetweenSandstorms = 30;
-    public int minTimeBetweenSandstorms = 10;
+    public int minSandstormDuration = 2 * 60;
+    public int maxSandstormDuration = 10 * 60;
+    public int minTimeBetweenSandstorms = 20 * 60;
+    public int maxTimeBetweenSandstorms = 40 * 60;
 }

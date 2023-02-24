@@ -46,6 +46,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
         buf.writeBoolean(sandstormData.isSandstormActive());
         buf.writeInt(sandstormData.getSandstormTime());
         buf.writeLong(sandstormData.getSandstormSeed());
+        buf.writeInt(sandstormData.getTotalSandstormDuration());
         PlayerLookup.world(serverLevel)
                 .forEach(player -> ServerPlayNetworking.send(player, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf));
     }
@@ -57,6 +58,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
         buf.writeBoolean(sandstormData.isSandstormActive());
         buf.writeInt(sandstormData.getSandstormTime());
         buf.writeLong(sandstormData.getSandstormSeed());
+        buf.writeInt(sandstormData.getTotalSandstormDuration());
         ServerPlayNetworking.send(serverPlayer, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf);
     }
 }

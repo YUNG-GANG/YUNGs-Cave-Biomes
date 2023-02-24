@@ -11,11 +11,13 @@ public class SandstormSyncS2CPacket {
     private boolean isActive;
     private int sandstormTime;
     private long sandstormSeed;
+    private int totalSandstormDuration;
 
-    public SandstormSyncS2CPacket(boolean isActive, int sandstormTime, long sandstormSeed) {
+    public SandstormSyncS2CPacket(boolean isActive, int sandstormTime, long sandstormSeed, int totalSandstormDuration) {
         this.isActive = isActive;
         this.sandstormTime = sandstormTime;
         this.sandstormSeed = sandstormSeed;
+        this.totalSandstormDuration = totalSandstormDuration;
     }
 
     /**
@@ -25,6 +27,7 @@ public class SandstormSyncS2CPacket {
         this.isActive = buf.readBoolean();
         this.sandstormTime = buf.readInt();
         this.sandstormSeed = buf.readLong();
+        this.totalSandstormDuration = buf.readInt();
     }
 
     /**
@@ -34,6 +37,7 @@ public class SandstormSyncS2CPacket {
         buf.writeBoolean(this.isActive);
         buf.writeInt(this.sandstormTime);
         buf.writeLong(this.sandstormSeed);
+        buf.writeInt(this.totalSandstormDuration);
     }
 
     /**
@@ -58,5 +62,9 @@ public class SandstormSyncS2CPacket {
 
     public long getSandstormSeed() {
         return sandstormSeed;
+    }
+
+    public int getTotalSandstormDuration() {
+        return totalSandstormDuration;
     }
 }

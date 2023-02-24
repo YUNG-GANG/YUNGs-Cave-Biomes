@@ -46,7 +46,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
                 new SandstormSyncS2CPacket(
                         sandstormData.isSandstormActive(),
                         sandstormData.getSandstormTime(),
-                        sandstormData.getSandstormSeed()),
+                        sandstormData.getSandstormSeed(),
+                        sandstormData.getTotalSandstormDuration()),
                 serverLevel.dimension());
     }
 
@@ -57,7 +58,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
                 new SandstormSyncS2CPacket(
                         sandstormData.isSandstormActive(),
                         sandstormData.getSandstormTime(),
-                        sandstormData.getSandstormSeed()),
+                        sandstormData.getSandstormSeed(),
+                        sandstormData.getTotalSandstormDuration()),
                 serverPlayer);
     }
 }
