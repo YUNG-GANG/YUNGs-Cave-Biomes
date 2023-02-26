@@ -7,8 +7,10 @@ import net.minecraft.world.level.biome.Climate;
  * The actual creation of TerraBlender region is handled in loader-dependent modules.
  */
 public class CaveBiomeRegionParameters {
-    // Temperature parameters.
-    // Duplicate of OverworldBiomeBuilder fields.
+    // Climate Parameters. Most of these are duplicates of OverworldBiomeBuilder fields.
+    private static final Climate.Parameter FULL_RANGE = Climate.Parameter.span(-1.0F, 1.0F);
+
+    // Temperature.
     private static final Climate.Parameter[] temperatures = new Climate.Parameter[]{
             Climate.Parameter.span(-1.0F, -0.45F),
             Climate.Parameter.span(-0.45F, -0.15F),
@@ -16,10 +18,29 @@ public class CaveBiomeRegionParameters {
             Climate.Parameter.span(0.2F, 0.55F),
             Climate.Parameter.span(0.55F, 1.0F)
     };
-    private static final Climate.Parameter FULL_RANGE = Climate.Parameter.span(-1.0F, 1.0F);
-    private static final Climate.Parameter FROZEN_TEMP_RANGE = temperatures[0];
-    private static final Climate.Parameter UNFROZEN_TEMP_RANGE = Climate.Parameter.span(temperatures[1], temperatures[4]);
-    private static final Climate.Parameter UNDERGROUND_DEPTH_RANGE = Climate.Parameter.span(0.2F, 0.9F);
+    private static final Climate.Parameter frozenTemp = temperatures[0];
+    private static final Climate.Parameter unfrozenTemp = Climate.Parameter.span(temperatures[1], temperatures[4]);
+
+    // Humidity.
+    private static final Climate.Parameter[] humidities = new Climate.Parameter[]{
+            Climate.Parameter.span(-1.0F, -0.35F),
+            Climate.Parameter.span(-0.35F, -0.1F),
+            Climate.Parameter.span(-0.1F, 0.1F),
+            Climate.Parameter.span(0.1F, 0.3F),
+            Climate.Parameter.span(0.3F, 1.0F)
+    };
+
+    // Continentalness.
+    private static final Climate.Parameter deepOceanContinentalness = Climate.Parameter.span(-1.05F, -0.455F);
+    private static final Climate.Parameter oceanContinentalness = Climate.Parameter.span(-0.455F, -0.19F);
+    private static final Climate.Parameter coastContinentalness = Climate.Parameter.span(-0.19F, -0.11F);
+    private static final Climate.Parameter inlandContinentalness = Climate.Parameter.span(-0.11F, 0.55F);
+    private static final Climate.Parameter nearInlandContinentalness = Climate.Parameter.span(-0.11F, 0.03F);
+    private static final Climate.Parameter midInlandContinentalness = Climate.Parameter.span(0.03F, 0.3F);
+    private static final Climate.Parameter farInlandContinentalness = Climate.Parameter.span(0.3F, 1.0F);
+
+    // Depth.
+    private static final Climate.Parameter undergroundDepth = Climate.Parameter.span(0.2F, 0.9F);
 
     // Dripstone modifications
     public static final Climate.ParameterPoint DRIPSTONE_OLD = new ParameterPointBuilder()
@@ -27,48 +48,48 @@ public class CaveBiomeRegionParameters {
             .humidity(FULL_RANGE)
             .continentalness(Climate.Parameter.span(0.8F, 1.0F))
             .erosion(FULL_RANGE)
-            .depth(UNDERGROUND_DEPTH_RANGE)
+            .depth(undergroundDepth)
             .weirdness(FULL_RANGE)
             .offset(0.0F)
             .build();
 
     public static final Climate.ParameterPoint DRIPSTONE_NEW = new ParameterPointBuilder()
-            .temperature(UNFROZEN_TEMP_RANGE)
+            .temperature(unfrozenTemp)
             .humidity(FULL_RANGE)
             .continentalness(Climate.Parameter.span(0.8F, 1.0F))
             .erosion(FULL_RANGE)
-            .depth(UNDERGROUND_DEPTH_RANGE)
+            .depth(undergroundDepth)
             .weirdness(FULL_RANGE)
             .offset(0.0F)
             .build();
 
     // Cave biomes
     public static final Climate.ParameterPoint FROSTED_CAVES = new ParameterPointBuilder()
-            .temperature(FROZEN_TEMP_RANGE)
+            .temperature(frozenTemp)
             .humidity(FULL_RANGE)
-            .continentalness(Climate.Parameter.span(0.1F, 1.0F))
+            .continentalness(Climate.Parameter.span(coastContinentalness, farInlandContinentalness))
             .erosion(FULL_RANGE)
-            .depth(UNDERGROUND_DEPTH_RANGE)
+            .depth(undergroundDepth)
             .weirdness(FULL_RANGE)
             .offset(0.0F)
             .build();
 
     public static final Climate.ParameterPoint MARBLE_CAVES = new ParameterPointBuilder()
-            .temperature(FROZEN_TEMP_RANGE)
+            .temperature(frozenTemp)
             .humidity(FULL_RANGE)
-            .continentalness(Climate.Parameter.span(-1.05F, -0.19F))
+            .continentalness(Climate.Parameter.span(deepOceanContinentalness, oceanContinentalness))
             .erosion(FULL_RANGE)
-            .depth(UNDERGROUND_DEPTH_RANGE)
+            .depth(undergroundDepth)
             .weirdness(FULL_RANGE)
             .offset(0.0F)
             .build();
 
     public static final Climate.ParameterPoint LOST_CAVES = new ParameterPointBuilder()
             .temperature(temperatures[4])
-            .humidity(FULL_RANGE)
-            .continentalness(Climate.Parameter.span(0.2F, 0.7F))
-            .erosion(Climate.Parameter.span(0.2F, 1.0F))
-            .depth(UNDERGROUND_DEPTH_RANGE)
+            .humidity(Climate.Parameter.span(humidities[0], humidities[3]))
+            .continentalness(Climate.Parameter.span(inlandContinentalness, farInlandContinentalness))
+            .erosion(FULL_RANGE)
+            .depth(undergroundDepth)
             .weirdness(FULL_RANGE)
             .offset(0.0F)
             .build();
