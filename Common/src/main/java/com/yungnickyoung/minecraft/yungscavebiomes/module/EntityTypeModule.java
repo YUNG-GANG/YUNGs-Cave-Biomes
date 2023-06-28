@@ -12,14 +12,14 @@ import net.minecraft.world.entity.MobCategory;
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class EntityTypeModule {
     /* Entities */
-//    @AutoRegister("ice_cube")
-//    public static AutoRegisterEntityType<IceCubeEntity> ICE_CUBE = AutoRegisterEntityType
-//            .of(() -> AutoRegisterEntityType.Builder
-//                    .of(IceCubeEntity::new, MobCategory.MONSTER)
-//                    .sized(1.5f, 1.5f)
-//                    .clientTrackingRange(10)
-//                    .build())
-//            .attributes(IceCubeEntity::createAttributes);
+    @AutoRegister("ice_cube")
+    public static AutoRegisterEntityType<IceCubeEntity> ICE_CUBE = AutoRegisterEntityType
+            .of(() -> AutoRegisterEntityType.Builder
+                    .of(IceCubeEntity::new, MobCategory.MONSTER)
+                    .sized(1.5f, 1.5f)
+                    .clientTrackingRange(10)
+                    .build())
+            .attributes(IceCubeEntity::createAttributes);
 
     @AutoRegister("icicle")
     public static final AutoRegisterEntityType<IcicleProjectileEntity> ICICLE = AutoRegisterEntityType

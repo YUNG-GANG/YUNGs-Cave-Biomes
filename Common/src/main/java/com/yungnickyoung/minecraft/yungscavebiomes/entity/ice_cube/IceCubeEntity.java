@@ -36,6 +36,7 @@ public class IceCubeEntity extends Monster {
 
     public IceCubeEntity(EntityType<? extends IceCubeEntity> entityType, Level level) {
         super(entityType, level);
+        this.setDiscardFriction(true);
 //        this.moveControl = new IceCubeMoveControl(this);
     }
 

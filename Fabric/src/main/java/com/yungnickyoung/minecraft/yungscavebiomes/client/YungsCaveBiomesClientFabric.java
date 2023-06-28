@@ -37,7 +37,7 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
         // Entity rendering
         EntityRendererRegistry.register(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(IceCubeRenderer.LAYER_LOCATION, IceCubeModel::createBodyLayer);
-//        EntityRendererRegistry.register(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
+        EntityRendererRegistry.register(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
 
         // Particle rendering
         ParticleFactoryRegistry.getInstance().register(ParticleTypeModule.ANCIENT_DUST.get(), FallingAncientDustParticle.Provider::new);
