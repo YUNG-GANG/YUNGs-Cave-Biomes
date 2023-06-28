@@ -14,6 +14,7 @@ repositories {
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases/" }
     maven { url "https://maven.minecraftforge.net/" }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 }
 
 dependencies {
@@ -41,6 +42,9 @@ dependencies {
 
     // Terrablender
     modImplementation "com.github.glitchfiend:TerraBlender-fabric:${project.mc_version}-${project.terrablender_version}"
+
+    // GeckoLib
+    modImplementation files("libs/geckolib-fabric-1.18-${fabric_geckolib_version}.jar")
 
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":Common")
@@ -75,11 +79,13 @@ processResources {
     inputs.property "mod_full_name", project.mod_full_name
     inputs.property "mod_id", project.mod_id
     inputs.property "terrablender_version", project.terrablender_version
+    inputs.property "fabric_geckolib_version", project.fabric_geckolib_version
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
                 "yungsapi_version": project.yungsapi_version,
                 "terrablender_version": project.terrablender_version,
+                "fabric_geckolib_version": project.fabric_geckolib_version,
                 "mc_version": project.mc_version,
                 "mod_description": project.mod_description,
                 "mod_full_name": project.mod_full_name,

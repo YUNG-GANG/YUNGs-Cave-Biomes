@@ -46,6 +46,7 @@
     "cloth-config2": ">=6.2.57",
     "java": ">=17",
     "yungsapi": ">=${mc_version}-Fabric-${yungsapi_version}",
-    "terrablender": ">=${terrablender_version}"
+    "terrablender": ">=${terrablender_version}",
+    "geckolib3": ">=${fabric_geckolib_version}"
   }
 }

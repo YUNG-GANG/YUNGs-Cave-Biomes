@@ -77,6 +77,10 @@ minecraft {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
@@ -85,6 +89,9 @@ dependencies {
 
     // Terrablender
     implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${mc_version}-${terrablender_version}")
+
+    // GeckoLib
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.18:${forge_geckolib_version}")
 
     // Other
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -104,11 +111,13 @@ processResources {
     inputs.property "mod_full_name", project.mod_full_name
     inputs.property "mod_id", project.mod_id
     inputs.property "terrablender_version", project.terrablender_version
+    inputs.property "forge_geckolib_version", project.forge_geckolib_version
 
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version,
                 "yungsapi_version": project.yungsapi_version,
                 "terrablender_version": project.terrablender_version,
+                "forge_geckolib_version": project.forge_geckolib_version,
                 "mc_version": project.mc_version,
                 "mod_description": project.mod_description,
                 "mod_full_name": project.mod_full_name,
