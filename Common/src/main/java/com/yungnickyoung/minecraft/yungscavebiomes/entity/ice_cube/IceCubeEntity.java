@@ -1,26 +1,30 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeAttackGoal;
-import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeFloatGoal;
-import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeKeepOnJumpingGoal;
-import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeRandomDirectionGoal;
+import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeLeapGoal;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Monster;
@@ -29,31 +33,28 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class IceCubeEntity extends Monster {
+    private static final EntityDataAccessor<Boolean> IS_LEAPING = SynchedEntityData.defineId(IceCubeEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean wasOnGround;
     public float targetSquish;
     public float squish;
     public float oSquish;
+    private int leapTicks;
 
     public IceCubeEntity(EntityType<? extends IceCubeEntity> entityType, Level level) {
         super(entityType, level);
         this.setDiscardFriction(true);
-//        this.moveControl = new IceCubeMoveControl(this);
     }
 
     @Override
     protected void registerGoals() {
-//        this.goalSelector.addGoal(1, new IceCubeFloatGoal(this));
-//        this.goalSelector.addGoal(2, new IceCubeAttackGoal(this));
-//        this.goalSelector.addGoal(3, new IceCubeRandomDirectionGoal(this));
-//        this.goalSelector.addGoal(5, new IceCubeKeepOnJumpingGoal(this));
-//        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, livingEntity -> Math.abs(livingEntity.getY() - this.getY()) <= 4.0));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, MagmaCube.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Blaze.class, 6.0f, 1.0, 1.2));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(4, new IceCubeLeapGoal(this, 0.4f));
+        this.goalSelector.addGoal(5, new IceCubeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
@@ -78,6 +79,21 @@ public class IceCubeEntity extends Monster {
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.wasOnGround = compoundTag.getBoolean("wasOnGround");
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(IS_LEAPING, false);
+    }
+
+    public void setLeaping(boolean leaping) {
+        this.entityData.set(IS_LEAPING, leaping);
+        this.leapTicks = leaping ? 15 : 0;
+    }
+
+    public boolean getLeaping() {
+        return this.entityData.get(IS_LEAPING);
     }
 
     @Override
@@ -115,6 +131,11 @@ public class IceCubeEntity extends Monster {
         if (this.isAlive()) {
             // TODO - melt when near lava/fire/daylight?
         }
+
+        if (!this.level.isClientSide() && this.getLeaping() && this.leapTicks-- <= 0) {
+            this.setLeaping(false);
+        }
+
         super.aiStep();
     }
 
@@ -168,15 +189,6 @@ public class IceCubeEntity extends Monster {
         return (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
     }
 
-    protected int getJumpDelay() {
-        return this.random.nextInt(20) + 10;
-    }
-
-    private float getSoundPitch() {
-        float f = 0.8f;
-        return ((this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f) * f;
-    }
-
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return SoundEvents.SLIME_HURT;
@@ -202,85 +214,5 @@ public class IceCubeEntity extends Monster {
 
     protected ParticleOptions getParticleType() {
         return ParticleTypes.SNOWFLAKE;
-    }
-
-    public static class IceCubeMoveControl extends MoveControl {
-        private final IceCubeEntity iceCube;
-        private float yRotDegrees;
-        private boolean isAggressive;
-        private int moveDelay;
-
-        public IceCubeMoveControl(IceCubeEntity iceCube) {
-            super(iceCube);
-            this.iceCube = iceCube;
-            this.yRotDegrees = 180.0f * iceCube.getYRot() / (float) Math.PI;
-        }
-
-        public void setDirection(float yRot, boolean isAggressive) {
-            this.yRotDegrees = yRot;
-            this.isAggressive = isAggressive;
-        }
-
-        public void setMovingWithSpeed(double speedModifier) {
-            this.speedModifier = speedModifier;
-            this.operation = MoveControl.Operation.MOVE_TO;
-        }
-
-        @Override
-        public void tick() {
-            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), this.yRotDegrees, 90.0f));
-            this.mob.yHeadRot = this.mob.getYRot();
-            this.mob.yBodyRot = this.mob.getYRot();
-            if (this.operation != MoveControl.Operation.MOVE_TO) {
-                this.mob.setZza(0.0f);
-                return;
-            }
-            this.operation = MoveControl.Operation.WAIT;
-            this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
-            if (this.mob.isOnGround()) {
-                if (this.moveDelay-- <= 0) {
-                    this.moveDelay = this.iceCube.getJumpDelay();
-                    if (this.isAggressive) {
-                        this.moveDelay /= 3;
-                    }
-//                    this.iceCube.getJumpControl().jump();
-                    this.iceCube.playSound(this.iceCube.getJumpSound(), this.iceCube.getSoundVolume(), this.iceCube.getSoundPitch());
-                } else {
-                    // Slime's only method of movement is jumping, so we ensure it's stationary when not jumping
-                    this.iceCube.xxa = 0.0f;
-                    this.iceCube.zza = 0.0f;
-                    this.mob.setSpeed(0.0f);
-                }
-            }
-        }
-
-//        @Override
-//        public void tick() {
-//            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), this.yRotDegrees, 90.0f));
-//            this.mob.yHeadRot = this.mob.getYRot();
-//            this.mob.yBodyRot = this.mob.getYRot();
-//            if (this.operation != MoveControl.Operation.MOVE_TO) {
-//                this.mob.setZza(0.0f);
-//                return;
-//            }
-//            this.operation = MoveControl.Operation.WAIT;
-//            this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
-//            if (this.mob.isOnGround()) {
-//                if (this.jumpDelay-- <= 0) {
-//                    // Initiate a jump
-//                    this.jumpDelay = this.iceCube.getJumpDelay();
-//                    if (this.isAggressive) {
-//                        this.jumpDelay /= 3;
-//                    }
-//                    this.iceCube.getJumpControl().jump();
-//                    this.iceCube.playSound(this.iceCube.getJumpSound(), this.iceCube.getSoundVolume(), this.iceCube.getSoundPitch());
-//                } else {
-//                    // Slime's only method of movement is jumping, so we ensure it's stationary when not jumping
-//                    this.iceCube.xxa = 0.0f;
-//                    this.iceCube.zza = 0.0f;
-//                    this.mob.setSpeed(0.0f);
-//                }
-//            }
-//        }
     }
 }
