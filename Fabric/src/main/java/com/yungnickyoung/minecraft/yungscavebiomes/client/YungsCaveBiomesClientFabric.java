@@ -7,6 +7,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.LostCavesAmbi
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.SandstormParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectileRenderer;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.SandSnapperRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
@@ -38,6 +39,7 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(IceCubeRenderer.LAYER_LOCATION, IceCubeModel::createBodyLayer);
         EntityRendererRegistry.register(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
+        EntityRendererRegistry.register(EntityTypeModule.SAND_SNAPPER.get(), SandSnapperRenderer::new);
 
         // Particle rendering
         ParticleFactoryRegistry.getInstance().register(ParticleTypeModule.ANCIENT_DUST.get(), FallingAncientDustParticle.Provider::new);

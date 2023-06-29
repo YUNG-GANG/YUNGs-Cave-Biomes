@@ -7,6 +7,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.entity.RareIceBlockEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.IcicleProjectileEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity;
+import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
 import net.minecraft.world.entity.MobCategory;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
@@ -20,6 +21,15 @@ public class EntityTypeModule {
                     .clientTrackingRange(10)
                     .build())
             .attributes(IceCubeEntity::createAttributes);
+
+    @AutoRegister("sand_snapper")
+    public static AutoRegisterEntityType<SandSnapperEntity> SAND_SNAPPER = AutoRegisterEntityType
+            .of(() -> AutoRegisterEntityType.Builder
+                    .of(SandSnapperEntity::new, MobCategory.MONSTER)
+                    .sized(1.75f, 0.5f)
+                    .clientTrackingRange(10)
+                    .build())
+            .attributes(SandSnapperEntity::createAttributes);
 
     @AutoRegister("icicle")
     public static final AutoRegisterEntityType<IcicleProjectileEntity> ICICLE = AutoRegisterEntityType

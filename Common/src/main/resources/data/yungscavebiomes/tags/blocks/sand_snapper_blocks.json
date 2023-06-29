@@ -1,0 +1,23 @@
+{
+  "values": [
+    "#minecraft:sand",
+    "minecraft:sandstone",
+    "minecraft:chiseled_sandstone",
+    "minecraft:cut_sandstone",
+    "minecraft:smooth_sandstone",
+    "minecraft:red_sandstone",
+    "minecraft:chiseled_red_sandstone",
+    "minecraft:cut_red_sandstone",
+    "minecraft:smooth_red_sandstone",
+    "yungscavebiomes:ancient_sandstone",
+    "yungscavebiomes:brittle_ancient_sandstone",
+    "yungscavebiomes:brittle_sandstone",
+    "yungscavebiomes:brittle_red_sandstone",
+    "yungscavebiomes:cut_ancient_sandstone",
+    "yungscavebiomes:chiseled_ancient_sandstone",
+    "yungscavebiomes:smooth_ancient_sandstone",
+    "yungscavebiomes:layered_ancient_sandstone",
+    "yungscavebiomes:layered_sandstone",
+    "yungscavebiomes:layered_red_sandstone"
+  ]
+}
