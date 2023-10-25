@@ -35,13 +35,18 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
     // ClothConfig
-    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version_fabric}"
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version_fabric}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
     // ModMenu
-    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version_fabric}") { transitive = false }
+//    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version_fabric}") { transitive = false }
+    modApi "com.terraformersmc:modmenu:${project.modmenu_version_fabric}"
 
     // Terrablender
-    modImplementation "com.github.glitchfiend:TerraBlender-fabric:${project.mc_version}-${project.terrablender_version}"
+    modImplementation("com.github.glitchfiend:TerraBlender-fabric:${project.mc_version}-${project.terrablender_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
     // GeckoLib
     modImplementation files("libs/geckolib-fabric-1.18-${fabric_geckolib_version}.jar")
