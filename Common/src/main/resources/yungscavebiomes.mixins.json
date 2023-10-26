@@ -17,7 +17,7 @@
     "MixinNoiseChunk",
     "MixinServerLevel",
     "MixinThrownPotion",
-    "ServerLevelAccessor",
+    "accessor.ServerLevelAccessor",
     "accessor.AbstractArrowAccessor",
     "accessor.AbstractCauldronBlockAccessor",
     "accessor.ArrowAccessor",

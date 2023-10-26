@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;

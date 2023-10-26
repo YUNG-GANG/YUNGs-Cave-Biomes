@@ -10,11 +10,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Allow cactus blocks to be placed on ancient sand.
- */
 @Mixin(CactusBlock.class)
 public abstract class MixinCactusBlock {
+    /**
+     * Allow cactus blocks to be placed on ancient sand.
+     */
     @Inject(method = "canSurvive", at = @At("TAIL"), cancellable = true)
     public void yungscavebiomes_allowCactusOnAncientSand(BlockState blockState, LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockStateBelow = levelReader.getBlockState(blockPos.below());

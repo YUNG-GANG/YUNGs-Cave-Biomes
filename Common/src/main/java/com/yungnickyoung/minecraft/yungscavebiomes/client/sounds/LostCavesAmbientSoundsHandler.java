@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.sounds;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import net.minecraft.client.player.LocalPlayer;

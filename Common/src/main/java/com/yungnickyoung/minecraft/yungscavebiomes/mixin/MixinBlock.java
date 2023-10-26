@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Prevents rare ice rendering faces when embedded in ice.
- */
 @Mixin(Block.class)
 public abstract class MixinBlock {
+    /**
+     * Prevents rare ice rendering faces when embedded in ice.
+     */
     @Inject(method = "shouldRenderFace", at = @At("HEAD"), cancellable = true)
     private static void yungscavebiomes_cancelRareIceRender(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction, BlockPos blockPos2, CallbackInfoReturnable<Boolean> cir) {
         if (blockState.getBlock() instanceof RareIceBlock) {

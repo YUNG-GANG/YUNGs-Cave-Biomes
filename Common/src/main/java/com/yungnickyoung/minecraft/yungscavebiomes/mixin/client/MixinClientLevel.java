@@ -4,7 +4,7 @@ import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.util.DistributionUtils;
@@ -36,33 +36,30 @@ import java.util.function.Supplier;
 
 @Mixin(ClientLevel.class)
 public abstract class MixinClientLevel extends Level implements ISandstormClientData {
-    @Unique
-    private boolean isSandstormActive = false;
+    @Unique private boolean isSandstormActive = false;
 
-    // Sandstorm time is basically just used as a frequency on the client
-    @Unique
-    private int sandstormTime = 0;
+    // Sandstorm time is basically just used as a frequency for noise-based particle directions on the client
+    @Unique private int sandstormTime = 0;
 
-    @Unique
-    private int totalSandstormDuration = 0;
+    @Unique private int totalSandstormDuration = 0;
 
-    @Unique
-    private long sandstormSeed;
+    @Unique private long sandstormSeed;
 
-    private static final double SANDSTORM_NOISE_FREQUENCY_Y_RELATIVE = 1.0 / 3.0;
-    private static final double SANDSTORM_NOISE_FREQUENCY_XZ = 1.0 / 128.0;
-    private static final double SANDSTORM_NOISE_FREQUENCY_Y =
+    @Unique private static final double SANDSTORM_NOISE_FREQUENCY_Y_RELATIVE = 1.0 / 3.0;
+    @Unique private static final double SANDSTORM_NOISE_FREQUENCY_XZ = 1.0 / 128.0;
+    @Unique private static final double SANDSTORM_NOISE_FREQUENCY_Y =
             SANDSTORM_NOISE_FREQUENCY_Y_RELATIVE * SANDSTORM_NOISE_FREQUENCY_XZ;
-    private static final double SANDSTORM_NOISE_FREQUENCY_TIME = 1.0 / 768.0;
+    @Unique private static final double SANDSTORM_NOISE_FREQUENCY_TIME = 1.0 / 768.0;
 
-    private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_Y_RELATIVE = 1.0f / 3.0f;
-    private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_XZ = 0.9f;
-    private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_Y =
+    @Unique private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_Y_RELATIVE = 1.0f / 3.0f;
+    @Unique private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_XZ = 0.9f;
+    @Unique private static final float SANDSTORM_PARTICLE_SPEED_SCALAR_Y =
             SANDSTORM_PARTICLE_SPEED_SCALAR_Y_RELATIVE * SANDSTORM_PARTICLE_SPEED_SCALAR_XZ;
 
-    private static final long SEED_2_OFFSET = 0x635D783F323BF442L;
+    @Unique private static final long SEED_2_OFFSET = 0x635D783F323BF442L;
 
     @Override
+    @Unique
     public void getSandstormDirection(double worldX, double worldY, double worldZ, Vector3f output) {
         Vector4f noise4GradientA = new Vector4f();
         Vector4f noise4GradientB = new Vector4f();
@@ -112,31 +109,37 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
     }
 
     @Override
+    @Unique
     public boolean isSandstormActive() {
         return isSandstormActive;
     }
 
     @Override
+    @Unique
     public int getSandstormTime() {
         return sandstormTime;
     }
 
     @Override
+    @Unique
     public void setSandstormActive(boolean sandstormActive) {
         this.isSandstormActive = sandstormActive;
     }
 
     @Override
+    @Unique
     public void setSandstormTime(int time) {
         this.sandstormTime = time;
     }
 
     @Override
+    @Unique
     public void setSandstormSeed(long sandstormSeed) {
         this.sandstormSeed = sandstormSeed;
     }
 
     @Override
+    @Unique
     public void setTotalSandstormDuration(int totalSandstormDuration) {
         this.totalSandstormDuration = totalSandstormDuration;
     }

@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.data;
+package com.yungnickyoung.minecraft.yungscavebiomes.sandstorm;
 
 import com.mojang.math.Vector3f;
 

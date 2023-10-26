@@ -29,6 +29,9 @@ public abstract class MixinAbstractCauldronBlock extends Block {
     @Shadow
     protected abstract void receiveStalactiteDrip(BlockState blockState, Level level, BlockPos blockPos, Fluid fluid);
 
+    /**
+     * Allows cauldrons to receive icicle drips.
+     */
     @Inject(method = "tick", at = @At("HEAD"))
     private void yungscavebiomes_checkForIcicleDrip(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random, CallbackInfo ci) {
         BlockPos iciclePos = IcicleBlock.findIcicleTipAboveCauldron(serverLevel, blockPos);

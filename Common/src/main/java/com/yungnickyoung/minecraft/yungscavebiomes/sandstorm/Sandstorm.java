@@ -1,8 +1,8 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.data;
+package com.yungnickyoung.minecraft.yungscavebiomes.sandstorm;
 
 import com.google.common.hash.Hashing;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
-import com.yungnickyoung.minecraft.yungscavebiomes.mixin.ServerLevelAccessor;
+import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.ServerLevelAccessor;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;

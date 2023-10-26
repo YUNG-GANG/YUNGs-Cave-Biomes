@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.DensityFunctions;
 import net.minecraft.world.level.levelgen.NoiseChunk;
 import net.minecraft.world.level.levelgen.NoiseRouter;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -18,47 +19,55 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MixinNoiseChunk implements NoiseSamplerBiomeHolder {
 
     // NoiseSamplerBiomeHolder impl
-    private BiomeSource ycbBiomeSource;
-    private Registry<Biome> ycbBiomeRegistry;
-    private Climate.Sampler ycbClimateSampler;
-    private long ycbWorldSeed;
+    @Unique private BiomeSource ycbBiomeSource;
+    @Unique private Registry<Biome> ycbBiomeRegistry;
+    @Unique private Climate.Sampler ycbClimateSampler;
+    @Unique private long ycbWorldSeed;
 
     @Override
+    @Unique
     public BiomeSource getBiomeSource() {
         return this.ycbBiomeSource;
     }
 
     @Override
+    @Unique
     public Registry<Biome> getBiomeRegistry() {
         return this.ycbBiomeRegistry;
     }
 
     @Override
+    @Unique
     public void setBiomeSource(BiomeSource source) {
         this.ycbBiomeSource = source;
     }
 
     @Override
+    @Unique
     public void setBiomeRegistry(Registry<Biome> registry) {
         this.ycbBiomeRegistry = registry;
     }
 
     @Override
+    @Unique
     public Climate.Sampler getClimateSampler() {
         return this.ycbClimateSampler;
     }
 
     @Override
+    @Unique
     public void setClimateSampler(Climate.Sampler sampler) {
         this.ycbClimateSampler = sampler;
     }
 
     @Override
+    @Unique
     public long getWorldSeed() {
         return ycbWorldSeed;
     }
 
     @Override
+    @Unique
     public void setWorldSeed(long worldSeed) {
         this.ycbWorldSeed = worldSeed;
     }

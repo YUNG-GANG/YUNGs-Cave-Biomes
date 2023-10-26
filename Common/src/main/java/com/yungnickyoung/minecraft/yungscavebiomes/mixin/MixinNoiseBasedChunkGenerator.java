@@ -46,10 +46,10 @@ public abstract class MixinNoiseBasedChunkGenerator extends ChunkGenerator {
             return BeardifierAccessor.createBeardifier(structureFeatureManager, chunkAccess);
         }, this.settings.value(), this.globalFluidPicker, blender);
 
-        ((NoiseSamplerBiomeHolder)nc).setBiomeSource(this.runtimeBiomeSource);
-        ((NoiseSamplerBiomeHolder)nc).setBiomeRegistry(registry);
-        ((NoiseSamplerBiomeHolder)nc).setClimateSampler(((NoiseChunkAccessor)nc).callCachedClimateSampler(this.router));
-        ((NoiseSamplerBiomeHolder)nc).setWorldSeed(this.seed);
+        ((NoiseSamplerBiomeHolder) nc).setBiomeSource(this.runtimeBiomeSource);
+        ((NoiseSamplerBiomeHolder) nc).setBiomeRegistry(registry);
+        ((NoiseSamplerBiomeHolder) nc).setClimateSampler(((NoiseChunkAccessor) nc).callCachedClimateSampler(this.router));
+        ((NoiseSamplerBiomeHolder) nc).setWorldSeed(this.seed);
     }
 
 

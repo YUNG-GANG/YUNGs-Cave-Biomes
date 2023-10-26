@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.Sandstorm;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerData;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.Sandstorm;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -17,6 +17,7 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.level.storage.WritableLevelData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 
 @Mixin(ServerLevel.class)
 public abstract class MixinServerLevel extends Level implements ISandstormServerData {
-    private Sandstorm sandstorm;
+    @Unique private Sandstorm sandstorm;
 
     @Shadow public abstract DimensionDataStorage getDataStorage();
 
@@ -37,31 +38,37 @@ public abstract class MixinServerLevel extends Level implements ISandstormServer
     }
 
     @Override
+    @Unique
     public boolean isSandstormActive() {
         return this.sandstorm.isSandstormActive;
     }
 
     @Override
+    @Unique
     public int getSandstormTime() {
         return this.sandstorm.sandstormTime;
     }
 
     @Override
+    @Unique
     public long getSandstormSeed() {
         return this.sandstorm.sandstormSeed;
     }
 
     @Override
+    @Unique
     public int getTotalSandstormDuration() {
         return this.sandstorm.totalSandstormDuration;
     }
 
     @Override
+    @Unique
     public void startSandstorm() {
         this.sandstorm.start();
     }
 
     @Override
+    @Unique
     public void stopSandstorm() {
         this.sandstorm.stop();
     }

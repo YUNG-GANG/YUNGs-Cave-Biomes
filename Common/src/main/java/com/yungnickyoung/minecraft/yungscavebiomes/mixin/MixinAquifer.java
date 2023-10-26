@@ -18,13 +18,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Enforces a constant aquifer at y=16 in marble caves biome.
- */
 @Mixin(Aquifer.NoiseBasedAquifer.class)
 public abstract class MixinAquifer {
     @Shadow @Final private NoiseChunk noiseChunk;
 
+    /**
+     * Enforces a constant aquifer at y=16 in marble caves biome.
+     */
     @Inject(method = "computeFluid", at = @At("HEAD"), cancellable = true)
     private void yungscavebiomes_enforceMarbleCavesAquifer(int x, int y, int z, CallbackInfoReturnable<Aquifer.FluidStatus> cir) {
         // Target multiple aquifer cells to prevent water level artifacts

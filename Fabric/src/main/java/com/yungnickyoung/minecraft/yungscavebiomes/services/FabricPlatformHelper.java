@@ -1,6 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;

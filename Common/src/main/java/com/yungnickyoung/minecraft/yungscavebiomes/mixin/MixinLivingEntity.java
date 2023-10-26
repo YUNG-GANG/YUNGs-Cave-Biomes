@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormServerData;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.MobEffectModule;
 import net.minecraft.server.level.ServerLevel;
@@ -29,6 +29,9 @@ public abstract class MixinLivingEntity extends Entity {
         super(entityType, level);
     }
 
+    /**
+     * Applies the Buffeted effect to players in the Lost Caves during sandstorms.
+     */
     @Inject(method = "tick", at = @At("RETURN"))
     public void yungscavebiomes_buffetEntitiesInSandstorm(CallbackInfo ci) {
         if (YungsCaveBiomesCommon.CONFIG.lostCaves.enableSandstorms

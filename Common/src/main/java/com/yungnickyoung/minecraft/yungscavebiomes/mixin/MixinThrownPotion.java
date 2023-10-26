@@ -29,6 +29,9 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
         super(entityType, level);
     }
 
+    /**
+     * Makes frost splash potions spawn ice sheets on impact.
+     */
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ThrownPotion;discard()V", ordinal = 0))
     protected void yungscavebiomes_onFrostSplashPotionHit(HitResult hitResult, CallbackInfo ci) {
         if (!this.level.isClientSide && !level.dimensionType().ultraWarm()) {

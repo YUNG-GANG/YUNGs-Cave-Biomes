@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,6 +29,9 @@ public abstract class MixinAbstractArrow extends Entity {
         super(entityType, level);
     }
 
+    /**
+     * Makes frost tipped arrows spawn ice sheets on block impact.
+     */
     @Inject(method = "onHitBlock", at = @At("RETURN"))
     public void yungscavebiomes_tippedArrowOnHitBlockSpawnIceSheets(BlockHitResult blockHitResult, CallbackInfo ci) {
         if (!this.level.isClientSide && isArrow(this)) {
@@ -38,13 +42,16 @@ public abstract class MixinAbstractArrow extends Entity {
                 }
 
                 BlockPos originPos = blockHitResult.getBlockPos();
-                int amplifier = mobEffectInstance.getAmplifier();
+                boolean amplified = mobEffectInstance.getAmplifier() > 0;
 
-                placeIceSheets(level, originPos, amplifier);
+                placeIceSheets(level, originPos, amplified);
             }
         }
     }
 
+    /**
+     * Makes frost tipped arrows spawn ice sheets around an entity on entity impact.
+     */
     @Inject(method = "onHitEntity", at = @At("RETURN"))
     public void yungscavebiomes_tippedArrowOnHitEntitySpawnIceSheets(EntityHitResult entityHitResult, CallbackInfo ci) {
         if (!this.level.isClientSide && isArrow(this)) {
@@ -55,19 +62,24 @@ public abstract class MixinAbstractArrow extends Entity {
                 }
 
                 BlockPos originPos = entityHitResult.getEntity().getOnPos();
-                int amplifier = mobEffectInstance.getAmplifier();
+                boolean amplified = mobEffectInstance.getAmplifier() > 0;
 
-                placeIceSheets(level, originPos, amplifier);
+                placeIceSheets(level, originPos, amplified);
             }
         }
     }
 
-    private static void placeIceSheets(Level level, BlockPos originPos, int amplifier) {
+    /**
+     * Places ice sheets in a 3x3x3 cube around the given origin position,
+     * or a 4x4x4 cube if amplified is true.
+     */
+    @Unique
+    private static void placeIceSheets(Level level, BlockPos originPos, boolean amplified) {
         BlockPos.MutableBlockPos currPos = originPos.mutable();
         BlockPos.MutableBlockPos mutable = currPos.mutable();
 
-        int attemptDistance = amplifier == 0 ? 3 :4;
-        int maxDist = amplifier == 0 ? 8 : 14;
+        int attemptDistance = amplified ? 4 : 3;
+        int maxDist = amplified ? 14 : 8;
 
         // Create AOE freeze
         for (int x = -attemptDistance; x <= attemptDistance; x++) {

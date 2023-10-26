@@ -1,6 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.network;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.data.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.data;
+package com.yungnickyoung.minecraft.yungscavebiomes.sandstorm;
 
 public interface ISandstormServerData {
     boolean isSandstormActive();
