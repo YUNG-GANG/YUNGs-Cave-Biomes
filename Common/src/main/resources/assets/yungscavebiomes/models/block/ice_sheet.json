@@ -1,7 +1,7 @@
 {
   "textures": {
     "particle": "block/ice",
-    "ice": "yungscavebiomes:block/ice_sheet_63"
+    "ice": "yungscavebiomes:block/ice_sheet"
   },
   "elements": [
     {

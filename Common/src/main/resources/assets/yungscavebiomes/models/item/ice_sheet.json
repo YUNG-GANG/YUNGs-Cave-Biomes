@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "yungscavebiomes:block/ice_sheet_63"
+    "layer0": "yungscavebiomes:block/ice_sheet"
   }
 }
