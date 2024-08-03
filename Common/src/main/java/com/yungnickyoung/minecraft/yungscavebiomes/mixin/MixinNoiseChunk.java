@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.noise.MarbleCavesInterpolationSlideDensityFunction;
 import net.minecraft.core.Registry;
@@ -19,10 +20,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MixinNoiseChunk implements NoiseSamplerBiomeHolder {
 
     // NoiseSamplerBiomeHolder impl
-    @Unique private BiomeSource ycbBiomeSource;
-    @Unique private Registry<Biome> ycbBiomeRegistry;
-    @Unique private Climate.Sampler ycbClimateSampler;
-    @Unique private long ycbWorldSeed;
+    @Unique
+    private BiomeSource ycbBiomeSource;
+    @Unique
+    private Registry<Biome> ycbBiomeRegistry;
+    @Unique
+    private Climate.Sampler ycbClimateSampler;
+    @Unique
+    private long ycbWorldSeed;
 
     @Override
     @Unique
@@ -73,8 +78,12 @@ public abstract class MixinNoiseChunk implements NoiseSamplerBiomeHolder {
     }
 
     // Make marble caves interpolate ground to zero
-    @Redirect(method = "<init>", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/level/levelgen/NoiseRouter;finalDensity()Lnet/minecraft/world/level/levelgen/DensityFunction;"))
+    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/NoiseRouter;finalDensity()Lnet/minecraft/world/level/levelgen/DensityFunction;"))
     private DensityFunction yungscavebiomes_rewireFinalDensity(NoiseRouter instance) {
+        if (!YungsCaveBiomesCommon.MARBLE_CAVES_ENABLED) {
+            return instance.finalDensity();
+        }
+
         return DensityFunctions.lerp(
                 DensityFunctions.interpolated(new MarbleCavesInterpolationSlideDensityFunction(this)),
                 instance.finalDensity(),

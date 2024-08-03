@@ -24,7 +24,7 @@ public class CaveBiomeRegion extends Region {
         // We also want vanilla biomes in our TerraBlender region
         addModifiedVanillaOverworldBiomes(mapper, b -> {
             // Modify dripstone caves to only spawn in the unfrozen temperature range.
-            // The frozen range will be occupied by frosted caves
+            // The frozen range will be occupied by frosted caves.
             b.replaceParameter(CaveBiomeRegionParameters.DRIPSTONE_OLD, CaveBiomeRegionParameters.DRIPSTONE_NEW);
         });
 

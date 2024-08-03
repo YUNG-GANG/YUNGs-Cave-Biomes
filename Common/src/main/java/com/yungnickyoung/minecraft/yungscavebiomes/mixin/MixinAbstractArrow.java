@@ -114,10 +114,12 @@ public abstract class MixinAbstractArrow extends Entity {
         }
     }
 
+    @Unique
     private static boolean isArrow(Object object) {
         return object instanceof Arrow;
     }
 
+    @Unique
     private static Arrow asArrow(Object object) {
         return (Arrow) object;
     }

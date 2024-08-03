@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder;
 import net.minecraft.core.Holder;
@@ -27,6 +28,10 @@ public abstract class MixinAquifer {
      */
     @Inject(method = "computeFluid", at = @At("HEAD"), cancellable = true)
     private void yungscavebiomes_enforceMarbleCavesAquifer(int x, int y, int z, CallbackInfoReturnable<Aquifer.FluidStatus> cir) {
+        if (!YungsCaveBiomesCommon.MARBLE_CAVES_ENABLED) {
+            return;
+        }
+
         // Target multiple aquifer cells to prevent water level artifacts
         if (y > -4 && y < 36) {
 

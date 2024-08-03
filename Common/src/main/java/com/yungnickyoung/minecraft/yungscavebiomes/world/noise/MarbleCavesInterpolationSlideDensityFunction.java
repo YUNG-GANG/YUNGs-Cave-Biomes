@@ -13,6 +13,7 @@ import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
+// TODO optimize if we end up using this
 public class MarbleCavesInterpolationSlideDensityFunction implements DensityFunction {
     private static final double SQRT3 = Math.sqrt(3.0);
     private static final int SEARCH_RADIUS_INT = Mth.ceil(SQRT3 * QuartPos.SIZE);
