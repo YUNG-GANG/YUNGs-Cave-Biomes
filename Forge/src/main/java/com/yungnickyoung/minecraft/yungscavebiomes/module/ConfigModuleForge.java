@@ -32,5 +32,6 @@ public class ConfigModuleForge {
         YungsCaveBiomesCommon.CONFIG.lostCaves.maxSandstormDuration = YCBConfigForge.lostCaves.maxSandstormDuration.get();
         YungsCaveBiomesCommon.CONFIG.lostCaves.minTimeBetweenSandstorms = YCBConfigForge.lostCaves.minTimeBetweenSandstorms.get();
         YungsCaveBiomesCommon.CONFIG.lostCaves.maxTimeBetweenSandstorms = YCBConfigForge.lostCaves.maxTimeBetweenSandstorms.get();
+        YungsCaveBiomesCommon.CONFIG.lostCaves.extraSandstormParticles = YCBConfigForge.lostCaves.extraSandstormParticles.get();
     }
 }

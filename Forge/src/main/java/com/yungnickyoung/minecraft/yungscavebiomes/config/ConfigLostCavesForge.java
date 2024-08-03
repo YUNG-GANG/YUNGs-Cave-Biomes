@@ -8,6 +8,7 @@ public class ConfigLostCavesForge {
     public final ForgeConfigSpec.ConfigValue<Integer> maxSandstormDuration;
     public final ForgeConfigSpec.ConfigValue<Integer> minTimeBetweenSandstorms;
     public final ForgeConfigSpec.ConfigValue<Integer> maxTimeBetweenSandstorms;
+    public final ForgeConfigSpec.ConfigValue<Boolean> extraSandstormParticles;
     public ConfigLostCavesForge(final ForgeConfigSpec.Builder BUILDER) {
         BUILDER.push("Lost Caves");
 
@@ -31,6 +32,8 @@ public class ConfigLostCavesForge {
                 .worldRestart()
                 .define("Max Time Between Sandstorms (seconds)", 40 * 60);
 
+        extraSandstormParticles = BUILDER
+                .define("Render Extra Particles During Sandstorms", true);
 
         BUILDER.pop();
     }

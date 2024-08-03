@@ -26,5 +26,6 @@ public class ConfigModuleFabric {
         YungsCaveBiomesCommon.CONFIG.lostCaves.maxSandstormDuration = configFabric.lostCaves.maxSandstormDuration;
         YungsCaveBiomesCommon.CONFIG.lostCaves.minTimeBetweenSandstorms = configFabric.lostCaves.minTimeBetweenSandstorms;
         YungsCaveBiomesCommon.CONFIG.lostCaves.maxTimeBetweenSandstorms = configFabric.lostCaves.maxTimeBetweenSandstorms;
+        YungsCaveBiomesCommon.CONFIG.lostCaves.extraSandstormParticles = configFabric.lostCaves.extraSandstormParticles;
     }
 }

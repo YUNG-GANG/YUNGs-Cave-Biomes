@@ -70,6 +70,7 @@
 
   "text.autoconfig.yungscavebiomes-fabric-1_18_2.title": "YUNG's Cave Biomes",
   "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.enableSandstorms": "Enable Sandstorms",
+  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.extraSandstormParticles": "Render Extra Particles During Sandstorms",
   "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.minSandstormDuration": "Min Sandstorm Duration (seconds)",
   "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.maxSandstormDuration": "Max Sandstorm Duration (seconds)",
   "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.minTimeBetweenSandstorms": "Min Time Between Sandstorms (seconds)",

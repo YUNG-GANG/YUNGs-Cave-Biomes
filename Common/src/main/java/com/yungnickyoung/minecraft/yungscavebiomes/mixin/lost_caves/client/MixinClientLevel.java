@@ -194,8 +194,8 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
             return;
         }
 
-        boolean playerInSandstorm = this.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey());
-        if (!playerInSandstorm) {
+        boolean isPlayerInLostCaves = this.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey());
+        if (!isPlayerInLostCaves) {
             return;
         }
 
@@ -204,10 +204,13 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
 
     /**
      * Adds extra sandstorm particles that spawn further away than particles normally do.
-     * TODO - config option to disable this for performance reasons
      */
     @Inject(method = "animateTick", at = @At("TAIL"))
     private void yungscavebiomes_addExtraSandstormParticles(int x, int y, int z, CallbackInfo ci) {
+        if (!YungsCaveBiomesCommon.CONFIG.lostCaves.extraSandstormParticles) {
+            return;
+        }
+
         if (!isSandstormActive) {
             return;
         }
@@ -217,8 +220,8 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
             return;
         }
 
-        boolean playerInSandstormBiome = this.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey());
-        if (!playerInSandstormBiome) {
+        boolean isPlayerInLostCaves = this.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey());
+        if (!isPlayerInLostCaves) {
             return;
         }
 

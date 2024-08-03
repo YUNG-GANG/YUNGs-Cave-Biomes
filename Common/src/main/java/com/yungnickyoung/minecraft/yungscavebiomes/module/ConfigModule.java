@@ -9,6 +9,7 @@ public class ConfigModule {
 
     public static class LostCaves {
         public boolean enableSandstorms = true;
+        public boolean extraSandstormParticles = true;
 
         // Sandstorm times, in seconds
         public int minSandstormDuration = 2 * 60; // 2 min
