@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.mixin.client;
+package com.yungnickyoung.minecraft.yungscavebiomes.mixin.lost_caves.client;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.client.sounds.LostCavesAmbientSoundsHandler;
 import net.minecraft.client.ClientRecipeBook;

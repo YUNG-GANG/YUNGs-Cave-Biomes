@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.mixin.client;
+package com.yungnickyoung.minecraft.yungscavebiomes.mixin.lost_caves.client;
 
 import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;

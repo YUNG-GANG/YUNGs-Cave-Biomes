@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
+package com.yungnickyoung.minecraft.yungscavebiomes.mixin.marble_caves;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.BeardifierAccessor;
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.NoiseChunkAccessor;

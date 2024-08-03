@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
+package com.yungnickyoung.minecraft.yungscavebiomes.mixin.frosted_caves;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.block.IceSheetBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.ArrowAccessor;

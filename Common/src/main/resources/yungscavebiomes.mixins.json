@@ -5,29 +5,29 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "yungscavebiomes.refmap.json",
   "mixins": [
-    "MixinAbstractArrow",
-    "MixinAbstractCauldronBlock",
-    "MixinAquifer",
-    "MixinBlock",
-    "MixinCactusBlock",
-    "MixinCrossbowItem",
-    "MixinDeadBushBlock",
-    "MixinLivingEntity",
-    "MixinNoiseBasedChunkGenerator",
-    "MixinNoiseChunk",
-    "MixinServerLevel",
-    "MixinThrownPotion",
-    "accessor.ServerLevelAccessor",
     "accessor.AbstractArrowAccessor",
     "accessor.AbstractCauldronBlockAccessor",
     "accessor.ArrowAccessor",
     "accessor.BeardifierAccessor",
     "accessor.NoiseChunkAccessor",
-    "accessor.PotionBrewingAccessor"
+    "accessor.PotionBrewingAccessor",
+    "accessor.ServerLevelAccessor",
+    "frosted_caves.MixinAbstractArrow",
+    "frosted_caves.MixinAbstractCauldronBlock",
+    "frosted_caves.MixinBlock",
+    "frosted_caves.MixinCrossbowItem",
+    "frosted_caves.MixinThrownPotion",
+    "lost_caves.MixinCactusBlock",
+    "lost_caves.MixinDeadBushBlock",
+    "lost_caves.MixinLivingEntity",
+    "lost_caves.MixinServerLevel",
+    "marble_caves.MixinAquifer",
+    "marble_caves.MixinNoiseBasedChunkGenerator",
+    "marble_caves.MixinNoiseChunk"
   ],
   "client": [
-    "client.MixinClientLevel",
-    "client.MixinLocalPlayer"
+    "lost_caves.client.MixinClientLevel",
+    "lost_caves.client.MixinLocalPlayer"
   ],
   "injectors": {
     "defaultRequire": 1

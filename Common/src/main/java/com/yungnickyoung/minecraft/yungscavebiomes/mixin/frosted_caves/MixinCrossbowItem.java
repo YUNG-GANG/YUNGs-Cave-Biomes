@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
+package com.yungnickyoung.minecraft.yungscavebiomes.mixin.frosted_caves;
 
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;

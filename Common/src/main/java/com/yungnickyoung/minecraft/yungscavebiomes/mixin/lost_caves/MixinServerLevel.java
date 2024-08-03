@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.mixin;
+package com.yungnickyoung.minecraft.yungscavebiomes.mixin.lost_caves;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.Sandstorm;
