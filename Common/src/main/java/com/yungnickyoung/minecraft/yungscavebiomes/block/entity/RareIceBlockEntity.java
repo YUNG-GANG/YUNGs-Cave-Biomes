@@ -19,7 +19,7 @@ public class RareIceBlockEntity extends BlockEntity {
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, RareIceBlockEntity rareIceBlockEntity) {
         rareIceBlockEntity.timeToNextSound--;
         if (rareIceBlockEntity.timeToNextSound <= 0) {
-            level.playSound(null, blockPos, SoundModule.AMBIENT_BLOCK_RARE_ICE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, blockPos, SoundModule.AMBIENT_BLOCK_RARE_ICE.get(), SoundSource.BLOCKS, 2.0F, 1.0F);
             rareIceBlockEntity.timeToNextSound = Mth.randomBetweenInclusive(level.getRandom(), 100, 160);
         }
     }

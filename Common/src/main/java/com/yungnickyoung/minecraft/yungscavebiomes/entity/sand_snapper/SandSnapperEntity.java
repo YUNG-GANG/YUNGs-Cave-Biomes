@@ -68,7 +68,6 @@ public class SandSnapperEntity extends Mob implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState generalPredicate(AnimationEvent<E> event) {
-
         return PlayState.STOP;
     }
 
