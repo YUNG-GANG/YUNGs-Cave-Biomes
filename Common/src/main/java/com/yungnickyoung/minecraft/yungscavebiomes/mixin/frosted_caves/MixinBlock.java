@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin.frosted_caves;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.block.RareIceBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
