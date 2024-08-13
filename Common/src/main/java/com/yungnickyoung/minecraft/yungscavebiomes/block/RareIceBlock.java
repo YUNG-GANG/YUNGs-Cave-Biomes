@@ -9,6 +9,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HalfTransparentBlock;
@@ -29,8 +31,10 @@ public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     @Override
     public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack) {
         super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack);
-        int xp = 15 + serverLevel.random.nextInt(20) + serverLevel.random.nextInt(20);
-        this.popExperience(serverLevel, blockPos, xp);
+        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, itemStack) == 0) {
+            int xp = 15 + serverLevel.random.nextInt(20) + serverLevel.random.nextInt(20);
+            this.popExperience(serverLevel, blockPos, xp);
+        }
     }
 
     @Override
