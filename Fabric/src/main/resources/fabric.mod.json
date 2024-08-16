@@ -39,6 +39,7 @@
     "yungscavebiomes.mixins.json",
     "yungscavebiomes_fabric.mixins.json"
   ],
+  "accessWidener": "yungscavebiomes.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.5",
     "fabric": ">=0.58.0",

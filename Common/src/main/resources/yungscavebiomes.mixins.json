@@ -14,6 +14,7 @@
     "accessor.ServerLevelAccessor",
     "frosted_caves.MixinAbstractArrow",
     "frosted_caves.MixinAbstractCauldronBlock",
+    "frosted_caves.MixinAquifer",
     "frosted_caves.MixinBlock",
     "frosted_caves.MixinCrossbowItem",
     "frosted_caves.MixinThrownPotion",
