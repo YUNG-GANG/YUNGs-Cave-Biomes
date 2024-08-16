@@ -35,16 +35,6 @@ public abstract class MixinAquifer implements Aquifer {
             return;
         }
 
-//        if (x == 67512 && y == -21 && z == -117) {
-//            int a = 1;
-//            int b = 2;
-//        }
-//
-//        if (Math.floorDiv(x, 16) == 4219 && Math.floorDiv(y, 12) == -2 && Math.floorDiv(z, 16) == -8) {
-//            int a = 1;
-//            int b = 2;
-//        }
-
         FluidStatus original = cir.getReturnValue();
 
         // For some reason, trying to limit the check to only lava aquifers didn't work. No idea why.
