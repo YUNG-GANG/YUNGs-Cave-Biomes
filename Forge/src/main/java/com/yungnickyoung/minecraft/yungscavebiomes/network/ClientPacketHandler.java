@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.network;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.ISandstormClientDataProvider;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.SandstormClientData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -24,11 +25,11 @@ public class ClientPacketHandler {
     public static void handleSandstormSync(SandstormSyncS2CPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ClientLevel clientLevel = Minecraft.getInstance().level;
         if (clientLevel != null) {
-            ISandstormClientData sandstormData = (ISandstormClientData) clientLevel;
-            sandstormData.setSandstormActive(packet.isActive());
-            sandstormData.setSandstormTime(packet.getCurrSandstormTicks());
-            sandstormData.setSandstormSeed(packet.getSandstormSeed());
-            sandstormData.setTotalSandstormDuration(packet.getTotalSandstormDurationTicks());
+            SandstormClientData sandstormClientData = ((ISandstormClientDataProvider) clientLevel).getSandstormClientData();
+            sandstormClientData.setSandstormActive(packet.isActive());
+            sandstormClientData.setSandstormTime(packet.getCurrSandstormTicks());
+            sandstormClientData.setSandstormSeed(packet.getSandstormSeed());
+            sandstormClientData.setTotalSandstormDuration(packet.getTotalSandstormDurationTicks());
         }
     }
 }

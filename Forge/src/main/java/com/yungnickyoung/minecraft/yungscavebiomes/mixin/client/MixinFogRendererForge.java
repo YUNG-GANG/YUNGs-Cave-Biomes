@@ -13,7 +13,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Unique mixin for Forge since they replace the vanilla setupFog method with their own.
+ * Mixin to handle rendering of the sandstorm fog in Lost Caves.
+ * This is a module-specific mixin because Forge uses its own setupFog method.
  */
 @Mixin(FogRenderer.class)
 public abstract class MixinFogRendererForge {
@@ -34,10 +35,10 @@ public abstract class MixinFogRendererForge {
 
     @Inject(method = "setupColor", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/FogRenderer;biomeChangedTime:J", ordinal = 4, opcode = 179 /*PUTFIELD*/, shift = At.Shift.AFTER))
     private static void yungscavebiomes_setupLostCavesColorForge(Camera camera, float f, ClientLevel clientLevel, int i2, float g, CallbackInfo ci) {        // Interpolate fog if needed
-        if (sandstormFogRenderer.fogLevel > 0) {
-            fogRed = (float) Mth.lerp(sandstormFogRenderer.fogLevel, fogRed, 0.8f);
-            fogGreen = (float) Mth.lerp(sandstormFogRenderer.fogLevel, fogGreen, 0.5f);
-            fogBlue = (float) Mth.lerp(sandstormFogRenderer.fogLevel, fogBlue, 0.15f);
+        if (sandstormFogRenderer.getFogLevel() > 0) {
+            fogRed = (float) Mth.lerp(sandstormFogRenderer.getFogLevel(), fogRed, 0.8f);
+            fogGreen = (float) Mth.lerp(sandstormFogRenderer.getFogLevel(), fogGreen, 0.5f);
+            fogBlue = (float) Mth.lerp(sandstormFogRenderer.getFogLevel(), fogBlue, 0.15f);
         }
     }
 }

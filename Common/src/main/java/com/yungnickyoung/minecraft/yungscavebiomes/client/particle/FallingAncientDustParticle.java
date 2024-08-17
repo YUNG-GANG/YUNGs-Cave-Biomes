@@ -28,11 +28,11 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
         this.bCol = b;
 //        this.quadSize *= 0.67499995f;
         int k = Mth.randomBetweenInclusive(clientLevel.getRandom(), 256, 512);
-        this.lifetime = (int)Math.max((float)k, 1.0f);
+        this.lifetime = (int) Math.max((float) k, 1.0f);
         this.age = Mth.randomBetweenInclusive(clientLevel.getRandom(), 0, 96);
         this.setSpriteFromAge(spriteSet);
-        this.rotSpeed = ((float)Math.random() - 0.5f) * 0.1f;
-        this.roll = (float)Math.random() * ((float)Math.PI * 2);
+        this.rotSpeed = ((float) Math.random() - 0.5f) * 0.1f;
+        this.roll = (float) Math.random() * ((float) Math.PI * 2);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
 
     @Override
     public float getQuadSize(float f) {
-        return this.quadSize * Mth.clamp(((float)this.age + f) / (float)this.lifetime * 32.0f, 0.0f, 1.0f);
+        return this.quadSize * Mth.clamp(((float) this.age + f) / (float) this.lifetime * 32.0f, 0.0f, 1.0f);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
         }
         this.setSpriteFromAge(this.sprites);
         this.oRoll = this.roll;
-        this.roll += (float)Math.PI * this.rotSpeed * 2.0f;
+        this.roll += (float) Math.PI * this.rotSpeed * 2.0f;
         if (this.onGround) {
             this.roll = 0.0f;
             this.oRoll = 0.0f;
@@ -83,11 +83,11 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
             BlockPos blockPos = new BlockPos(xo, yo, zo);
             int color = Minecraft.getInstance().getBlockColors().getColor(blockState, clientLevel, blockPos);
             if (blockState.getBlock() instanceof BrittleSandstoneBlock) {
-                color = ((BrittleSandstoneBlock)blockState.getBlock()).getDustColor();
+                color = ((BrittleSandstoneBlock) blockState.getBlock()).getDustColor();
             }
-            float r = (float)(color >> 16 & 0xFF) / 255.0f;
-            float g = (float)(color >> 8 & 0xFF) / 255.0f;
-            float b = (float)(color & 0xFF) / 255.0f;
+            float r = (float) (color >> 16 & 0xFF) / 255.0f;
+            float g = (float) (color >> 8 & 0xFF) / 255.0f;
+            float b = (float) (color & 0xFF) / 255.0f;
             return new FallingAncientDustParticle(clientLevel, xo, yo, zo, r, g, b, this.sprite);
         }
     }

@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -24,11 +23,11 @@ public class LostCavesAmbientParticle extends TextureSheetParticle {
         this.bCol = b;
         this.quadSize *= 0.67499995f;
         int k = Mth.randomBetweenInclusive(clientLevel.getRandom(), 32, 64);
-        this.lifetime = (int)Math.max((float)k, 1.0f);
+        this.lifetime = (int) Math.max((float) k, 1.0f);
         this.age = Mth.randomBetweenInclusive(clientLevel.getRandom(), 0, 16);
         this.setSpriteFromAge(spriteSet);
-        this.rotSpeed = ((float)Math.random() - 0.5f) * 0.1f;
-        this.roll = (float)Math.random() * ((float)Math.PI * 2);
+        this.rotSpeed = ((float) Math.random() - 0.5f) * 0.1f;
+        this.roll = (float) Math.random() * ((float) Math.PI * 2);
         this.setParticleSpeed(
                 Mth.lerp(clientLevel.random.nextDouble(), -0.05, 0.05),
                 Mth.lerp(clientLevel.random.nextDouble(), -0.05, 0.05),
@@ -57,7 +56,7 @@ public class LostCavesAmbientParticle extends TextureSheetParticle {
         }
         this.setSpriteFromAge(this.sprites);
         this.oRoll = this.roll;
-        this.roll += (float)Math.PI * this.rotSpeed * 2.0f;
+        this.roll += (float) Math.PI * this.rotSpeed * 2.0f;
         if (this.onGround) {
             this.roll = 0.0f;
             this.oRoll = 0.0f;

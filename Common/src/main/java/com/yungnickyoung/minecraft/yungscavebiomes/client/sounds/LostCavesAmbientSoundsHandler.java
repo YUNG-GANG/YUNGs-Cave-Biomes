@@ -1,15 +1,17 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.sounds;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
-import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.SandstormClientData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.ISandstormClientDataProvider;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.AmbientSoundHandler;
 import net.minecraft.client.resources.sounds.BiomeAmbientSoundsHandler;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 
@@ -19,6 +21,12 @@ import net.minecraft.world.level.biome.BiomeManager;
  * depending on whether a sandstorm is active.
  */
 public class LostCavesAmbientSoundsHandler implements AmbientSoundHandler {
+    private static final ResourceLocation regularAmbientSound =
+            new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ambient.lost_caves.loop");
+
+    private static final ResourceLocation sandstormAmbientSound =
+            new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ambient.lost_caves.sandstorm_loop");
+
     private final LocalPlayer player;
     private final SoundManager soundManager;
     private final BiomeManager biomeManager;
@@ -49,31 +57,31 @@ public class LostCavesAmbientSoundsHandler implements AmbientSoundHandler {
             this.lostCavesSound.fadeOut();
         }
 
-        ISandstormClientData sandstormClientData = ((ISandstormClientData) this.player.level);
-        // Set sandstorm sound
-        if (this.inLostCaves
-                && sandstormClientData.isSandstormActive()
-                && this.lostCavesSound.getLocation().equals(lostCavesSoundLocation)) {
-            this.lostCavesSound.fadeOut();
-            this.lostCavesSound = new BiomeAmbientSoundsHandler.LoopSoundInstance(SoundModule.SANDSTORM_AMBIENT_LOST_CAVES.get());
-            this.soundManager.play(lostCavesSound);
-            this.lostCavesSound.fadeIn();
-        }
+        SandstormClientData sandstormClientData = ((ISandstormClientDataProvider) this.player.level).getSandstormClientData();
 
-        // Set regular sound
-        if (this.inLostCaves
-                && !sandstormClientData.isSandstormActive()
-                && this.lostCavesSound.getLocation().equals(sandstormSoundLocation)) {
-            this.lostCavesSound.fadeOut();
-            this.lostCavesSound = new BiomeAmbientSoundsHandler.LoopSoundInstance(SoundModule.AMBIENT_LOST_CAVES.get());
-            this.soundManager.play(lostCavesSound);
-            this.lostCavesSound.fadeIn();
+        if (this.inLostCaves) {
+            // Set sandstorm sound
+            if (sandstormClientData.isSandstormActive()
+                    && !this.lostCavesSound.getLocation().equals(sandstormAmbientSound)) {
+                changeAmbientsound(SoundModule.SANDSTORM_AMBIENT_LOST_CAVES.get());
+            }
+
+            // Set regular sound
+            if (!sandstormClientData.isSandstormActive()
+                    && !this.lostCavesSound.getLocation().equals(regularAmbientSound)) {
+                changeAmbientsound(SoundModule.AMBIENT_LOST_CAVES.get());
+            }
         }
     }
 
-    private static final ResourceLocation lostCavesSoundLocation =
-            new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ambient.lost_caves.loop");
-
-    private static final ResourceLocation sandstormSoundLocation =
-            new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ambient.lost_caves.sandstorm_loop");
+    /**
+     * Fades out the current ambient sound and fades in the new one.
+     * @param newAmbientSoundEvent The new ambient sound to play.
+     */
+    private void changeAmbientsound(SoundEvent newAmbientSoundEvent) {
+        this.lostCavesSound.fadeOut();
+        this.lostCavesSound = new BiomeAmbientSoundsHandler.LoopSoundInstance(newAmbientSoundEvent);
+        this.soundManager.play(lostCavesSound);
+        this.lostCavesSound.fadeIn();
+    }
 }

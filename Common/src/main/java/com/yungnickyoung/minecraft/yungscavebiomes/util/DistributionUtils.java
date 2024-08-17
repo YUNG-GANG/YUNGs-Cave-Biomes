@@ -5,7 +5,16 @@ import net.minecraft.util.Mth;
 import java.util.Random;
 
 public class DistributionUtils {
-
+    /**
+     * Generates a random point within an ellipsoid centered at the origin.
+     * The distribution is biased with points more likely to be far from the center.
+     * @param radiusXZ The radius of the ellipsoid in the XZ plane.
+     * @param radiusY The radius of the ellipsoid in the Y direction.
+     * @param random The random number generator to use.
+     * @param callback A function to apply to the generated point.
+     * @return The result of applying the callback to the generated point.
+     * @param <R> The return type of the callback.
+     */
     public static <R> R ellipsoidCenterBiasedSpread(float radiusXZ, float radiusY, Random random, CoordinateFunction<R> callback) {
         float sphereY = random.nextFloat(-1.0f, 1.0f);
         float sphereTheta = random.nextFloat(Mth.TWO_PI);
@@ -25,5 +34,4 @@ public class DistributionUtils {
     public interface CoordinateFunction<R> {
         R apply(float x, float y, float z);
     }
-
 }

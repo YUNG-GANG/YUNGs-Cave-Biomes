@@ -1,7 +1,8 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
 import com.mojang.math.Vector3f;
-import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.ISandstormClientDataProvider;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.SandstormClientData;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -16,7 +17,7 @@ import javax.annotation.Nullable;
 public class SandstormParticle extends TextureSheetParticle {
     private final float rotSpeed;
     private final SpriteSet sprites;
-    private final Vector3f particleSpeedVector;
+    private Vector3f particleSpeedVector;
 
     SandstormParticle(ClientLevel clientLevel, double xo, double yo, double zo, float r, float g, float b, SpriteSet spriteSet) {
         super(clientLevel, xo, yo, zo);
@@ -65,9 +66,12 @@ public class SandstormParticle extends TextureSheetParticle {
         updateSpeed();
     }
 
+    /**
+     * Updates the particle speed based on the current sandstorm direction.
+     */
     private void updateSpeed() {
-        ISandstormClientData sandstormData = ((ISandstormClientData) this.level);
-        sandstormData.getSandstormDirection(xo, yo, zo, particleSpeedVector);
+        SandstormClientData sandstormClientData = ((ISandstormClientDataProvider) this.level).getSandstormClientData();
+        particleSpeedVector = sandstormClientData.getSandstormParticleSpeedVector(xo, yo, zo, particleSpeedVector);
         setParticleSpeed(particleSpeedVector.x(), particleSpeedVector.y(), particleSpeedVector.z());
     }
 

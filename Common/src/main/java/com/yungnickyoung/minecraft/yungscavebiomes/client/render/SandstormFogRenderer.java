@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.ISandstormClientDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -10,11 +10,16 @@ import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.util.Mth;
 
 public class SandstormFogRenderer {
-    public double fogLevel = 0;
+    /**
+     * The current fog level. 0 is no fog, 1 is full fog.
+     * This is used to smoothly transition the fog level when entering and exiting the Lost Caves biome during sandstorms.
+     */
+    private double fogLevel = 0;
 
     /**
-     * Customizes the fog in Lost Caves during sandstorms.
-     * Note that there is a separate Forge-only mixin required, since Forge replaces the vanilla setupFog method with their own.
+     * Renders the fog in Lost Caves during sandstorms.
+     * Note that the mixin that invokes this method is defined separately in each loader module,
+     * since Forge replaces the vanilla setupFog method with their own.
      */
     public void render(FogRenderer.FogMode mode, float renderDistance) {
         if (mode == FogRenderer.FogMode.FOG_TERRAIN) {
@@ -22,9 +27,9 @@ public class SandstormFogRenderer {
             ClientLevel clientLevel = Minecraft.getInstance().level;
             if (localPlayer == null || clientLevel == null) return;
 
-            // Increase if in sandstorm, decrease if not
+            // Increase fog if in active sandstorm, decrease if not
             if (clientLevel.getBiome(localPlayer.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey())
-                    && ((ISandstormClientData) clientLevel).isSandstormActive()) {
+                    && ((ISandstormClientDataProvider) clientLevel).getSandstormClientData().isSandstormActive()) {
                 this.fogLevel = Mth.clamp(this.fogLevel + 0.002, 0, 1);
             } else {
                 this.fogLevel = Mth.clamp(this.fogLevel - 0.002, 0, 1);
@@ -36,5 +41,9 @@ public class SandstormFogRenderer {
                 RenderSystem.setShaderFogEnd((float) Mth.lerp(this.fogLevel, RenderSystem.getShaderFogEnd(), Math.min(renderDistance * 0.45f, 64)));
             }
         }
+    }
+
+    public double getFogLevel() {
+        return fogLevel;
     }
 }

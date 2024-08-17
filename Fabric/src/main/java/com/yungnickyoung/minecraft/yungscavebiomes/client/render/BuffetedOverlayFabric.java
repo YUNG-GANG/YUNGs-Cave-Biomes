@@ -14,12 +14,16 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+/**
+ * Static class to render the Buffeted overlay on the player's screen.
+ */
 public class BuffetedOverlayFabric {
-    private static final ResourceLocation texture = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "textures/overlay/buffeted_overlay.png");
-    private static final int maxTicks = 200;
-    private static final float maxOpacity = 1.0f;
-    private static final float minColor = 0.1f;
-    private static final float maxColor = 0.9f;
+    private static final ResourceLocation TEXTURE = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "textures/overlay/buffeted_overlay.png");
+    private static final int MAX_TICKS = 200;
+    private static final float MAX_OPACITY = 1.0f;
+    private static final float MIN_COLOR = 0.1f;
+    private static final float MAX_COLOR = 0.9f;
+
     private static int ticks;
     private static float color = 0.5f;
 
@@ -32,11 +36,11 @@ public class BuffetedOverlayFabric {
         if (client.player == null) return;
 
         ticks = client.player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get())
-                ? Math.min(ticks + 1, maxTicks)
+                ? Math.min(ticks + 1, MAX_TICKS)
                 : Math.max(ticks - 1, 0);
 
         if (!client.player.isSpectator() && ticks > 0) {
-            float opacity = Mth.clamp(ticks / (float) maxTicks, 0, maxOpacity);
+            float opacity = Mth.clamp(ticks / (float) MAX_TICKS, 0, MAX_OPACITY);
             int screenWidth = client.getWindow().getGuiScaledWidth();
             int screenHeight = client.getWindow().getGuiScaledHeight();
 
@@ -48,7 +52,7 @@ public class BuffetedOverlayFabric {
             // Determine color based on light
             int colorDiff = worldLight - currLight;
             color += .003f * colorDiff;
-            color = Mth.clamp(color, minColor, maxColor);
+            color = Mth.clamp(color, MIN_COLOR, MAX_COLOR);
 
             renderOverlay(opacity, screenWidth, screenHeight, color);
         }
@@ -63,7 +67,7 @@ public class BuffetedOverlayFabric {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(color, color, color, opacity);
-        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);

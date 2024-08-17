@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.network;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.ISandstormClientDataProvider;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.SandstormClientData;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -19,11 +20,11 @@ public class SandstormSyncS2CPacket {
         client.execute(() -> {
             if (client.level != null) {
                 // Set state on client level
-                ISandstormClientData sandstormData = (ISandstormClientData) client.level;
-                sandstormData.setSandstormActive(isActive);
-                sandstormData.setSandstormTime(sandstormTime);
-                sandstormData.setSandstormSeed(sandstormSeed);
-                sandstormData.setTotalSandstormDuration(totalSandstormDuration);
+                SandstormClientData sandstormClientData = ((ISandstormClientDataProvider) client.level).getSandstormClientData();
+                sandstormClientData.setSandstormActive(isActive);
+                sandstormClientData.setSandstormTime(sandstormTime);
+                sandstormClientData.setSandstormSeed(sandstormSeed);
+                sandstormClientData.setTotalSandstormDuration(totalSandstormDuration);
             }
         });
     }

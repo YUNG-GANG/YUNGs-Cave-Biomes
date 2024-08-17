@@ -33,7 +33,7 @@ import java.util.function.Supplier;
 @Mixin(ServerLevel.class)
 public abstract class MixinServerLevel extends Level implements ISandstormServerDataProvider {
     @Unique
-    private SandstormServerData sandstorm;
+    private SandstormServerData sandstormServerData;
 
     @Shadow
     public abstract DimensionDataStorage getDataStorage();
@@ -45,12 +45,12 @@ public abstract class MixinServerLevel extends Level implements ISandstormServer
     @Override
     @Unique
     public SandstormServerData getSandstormServerData() {
-        return sandstorm;
+        return sandstormServerData;
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void yungscavebiomes_initSandstorm(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey $$4, Holder $$5, ChunkProgressListener $$6, ChunkGenerator $$7, boolean $$8, long $$9, List $$10, boolean $$11, CallbackInfo ci) {
-        this.sandstorm = this.getDataStorage().computeIfAbsent(
+        this.sandstormServerData = this.getDataStorage().computeIfAbsent(
                 (compoundTag) -> new SandstormServerData((ServerLevel) (Object) this, compoundTag),
                 () -> new SandstormServerData((ServerLevel) (Object) this),
                 "sandstorms");
@@ -58,6 +58,6 @@ public abstract class MixinServerLevel extends Level implements ISandstormServer
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void yungscavebiomes_tickSandstorm(BooleanSupplier $$0, CallbackInfo ci) {
-        this.sandstorm.tick();
+        this.sandstormServerData.tick();
     }
 }
