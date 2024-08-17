@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -40,25 +40,35 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void syncSandstormDataToClients(ServerLevel serverLevel) {
+    public void syncSandstormDataToClients(SandstormServerData sandstormServerData) {
         FriendlyByteBuf buf = PacketByteBufs.create();
-        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
-        buf.writeBoolean(sandstormData.isSandstormActive());
-        buf.writeInt(sandstormData.getSandstormTime());
-        buf.writeLong(sandstormData.getSandstormSeed());
-        buf.writeInt(sandstormData.getTotalSandstormDuration());
-        PlayerLookup.world(serverLevel)
+//        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
+        buf.writeBoolean(sandstormServerData.isSandstormActive());
+        buf.writeInt(sandstormServerData.getCurrSandstormTicks());
+        buf.writeLong(sandstormServerData.getSeed());
+        buf.writeInt(sandstormServerData.getTotalSandstormDurationTicks());
+
+//        buf.writeBoolean(sandstormData.isSandstormActive());
+//        buf.writeInt(sandstormData.getSandstormTime());
+//        buf.writeLong(sandstormData.getSandstormSeed());
+//        buf.writeInt(sandstormData.getTotalSandstormDuration());
+        PlayerLookup.world(sandstormServerData.getServerLevel())
                 .forEach(player -> ServerPlayNetworking.send(player, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf));
     }
 
     @Override
-    public void syncSandstormDataToPlayer(ServerLevel serverLevel, ServerPlayer serverPlayer) {
+    public void syncSandstormDataToPlayer(SandstormServerData sandstormServerData, ServerPlayer serverPlayer) {
         FriendlyByteBuf buf = PacketByteBufs.create();
-        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
-        buf.writeBoolean(sandstormData.isSandstormActive());
-        buf.writeInt(sandstormData.getSandstormTime());
-        buf.writeLong(sandstormData.getSandstormSeed());
-        buf.writeInt(sandstormData.getTotalSandstormDuration());
+//        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
+        buf.writeBoolean(sandstormServerData.isSandstormActive());
+        buf.writeInt(sandstormServerData.getCurrSandstormTicks());
+        buf.writeLong(sandstormServerData.getSeed());
+        buf.writeInt(sandstormServerData.getTotalSandstormDurationTicks());
+
+//        buf.writeBoolean(sandstormData.isSandstormActive());
+//        buf.writeInt(sandstormData.getSandstormTime());
+//        buf.writeLong(sandstormData.getSandstormSeed());
+//        buf.writeInt(sandstormData.getTotalSandstormDuration());
         ServerPlayNetworking.send(serverPlayer, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf);
     }
 }

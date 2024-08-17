@@ -26,9 +26,9 @@ public class ClientPacketHandler {
         if (clientLevel != null) {
             ISandstormClientData sandstormData = (ISandstormClientData) clientLevel;
             sandstormData.setSandstormActive(packet.isActive());
-            sandstormData.setSandstormTime(packet.getSandstormTime());
+            sandstormData.setSandstormTime(packet.getCurrSandstormTicks());
             sandstormData.setSandstormSeed(packet.getSandstormSeed());
-            sandstormData.setTotalSandstormDuration(packet.getTotalSandstormDuration());
+            sandstormData.setTotalSandstormDuration(packet.getTotalSandstormDurationTicks());
         }
     }
 }

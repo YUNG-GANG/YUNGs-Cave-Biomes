@@ -1,9 +1,9 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerData;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleForge;
 import com.yungnickyoung.minecraft.yungscavebiomes.network.IcicleShatterS2CPacket;
 import com.yungnickyoung.minecraft.yungscavebiomes.network.SandstormSyncS2CPacket;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,26 +40,13 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void syncSandstormDataToClients(ServerLevel serverLevel) {
-        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
-        NetworkModuleForge.sendToClientsInLevel(
-                new SandstormSyncS2CPacket(
-                        sandstormData.isSandstormActive(),
-                        sandstormData.getSandstormTime(),
-                        sandstormData.getSandstormSeed(),
-                        sandstormData.getTotalSandstormDuration()),
-                serverLevel.dimension());
+    public void syncSandstormDataToClients(SandstormServerData sandstormServerData) {
+        NetworkModuleForge.sendToClientsInLevel(new SandstormSyncS2CPacket(sandstormServerData),
+                sandstormServerData.getServerLevel().dimension());
     }
 
     @Override
-    public void syncSandstormDataToPlayer(ServerLevel serverLevel, ServerPlayer serverPlayer) {
-        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
-        NetworkModuleForge.sendToClient(
-                new SandstormSyncS2CPacket(
-                        sandstormData.isSandstormActive(),
-                        sandstormData.getSandstormTime(),
-                        sandstormData.getSandstormSeed(),
-                        sandstormData.getTotalSandstormDuration()),
-                serverPlayer);
+    public void syncSandstormDataToPlayer(SandstormServerData sandstormServerData, ServerPlayer serverPlayer) {
+        NetworkModuleForge.sendToClient(new SandstormSyncS2CPacket(sandstormServerData), serverPlayer);
     }
 }

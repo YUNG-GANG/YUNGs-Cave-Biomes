@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.network;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -8,16 +9,16 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class SandstormSyncS2CPacket {
-    private boolean isActive;
-    private int sandstormTime;
-    private long sandstormSeed;
-    private int totalSandstormDuration;
+    private final boolean isActive;
+    private final int currSandstormTicks;
+    private final long sandstormSeed;
+    private final int totalSandstormDurationTicks;
 
-    public SandstormSyncS2CPacket(boolean isActive, int sandstormTime, long sandstormSeed, int totalSandstormDuration) {
-        this.isActive = isActive;
-        this.sandstormTime = sandstormTime;
-        this.sandstormSeed = sandstormSeed;
-        this.totalSandstormDuration = totalSandstormDuration;
+    public SandstormSyncS2CPacket(SandstormServerData sandstormServerData) {
+        this.isActive = sandstormServerData.isSandstormActive();
+        this.currSandstormTicks = sandstormServerData.getCurrSandstormTicks();
+        this.sandstormSeed = sandstormServerData.getSeed();
+        this.totalSandstormDurationTicks = sandstormServerData.getTotalSandstormDurationTicks();
     }
 
     /**
@@ -25,9 +26,9 @@ public class SandstormSyncS2CPacket {
      */
     public SandstormSyncS2CPacket(FriendlyByteBuf buf) {
         this.isActive = buf.readBoolean();
-        this.sandstormTime = buf.readInt();
+        this.currSandstormTicks = buf.readInt();
         this.sandstormSeed = buf.readLong();
-        this.totalSandstormDuration = buf.readInt();
+        this.totalSandstormDurationTicks = buf.readInt();
     }
 
     /**
@@ -35,9 +36,9 @@ public class SandstormSyncS2CPacket {
      */
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeBoolean(this.isActive);
-        buf.writeInt(this.sandstormTime);
+        buf.writeInt(this.currSandstormTicks);
         buf.writeLong(this.sandstormSeed);
-        buf.writeInt(this.totalSandstormDuration);
+        buf.writeInt(this.totalSandstormDurationTicks);
     }
 
     /**
@@ -56,15 +57,15 @@ public class SandstormSyncS2CPacket {
         return isActive;
     }
 
-    public int getSandstormTime() {
-        return sandstormTime;
+    public int getCurrSandstormTicks() {
+        return currSandstormTicks;
     }
 
     public long getSandstormSeed() {
         return sandstormSeed;
     }
 
-    public int getTotalSandstormDuration() {
-        return totalSandstormDuration;
+    public int getTotalSandstormDurationTicks() {
+        return totalSandstormDurationTicks;
     }
 }

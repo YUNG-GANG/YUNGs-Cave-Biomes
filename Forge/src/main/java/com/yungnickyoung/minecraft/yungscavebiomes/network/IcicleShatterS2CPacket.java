@@ -9,7 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class IcicleShatterS2CPacket {
-    private Vec3 pos;
+    private final Vec3 pos;
 
     public IcicleShatterS2CPacket(Vec3 pos) {
         this.pos = pos;
