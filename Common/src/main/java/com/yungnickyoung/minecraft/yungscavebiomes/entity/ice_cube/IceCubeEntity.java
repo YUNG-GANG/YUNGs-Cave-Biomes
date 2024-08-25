@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -40,9 +41,17 @@ public class IceCubeEntity extends Monster {
     public float oSquish;
     private int leapTicks;
 
+    private MoveControl slimeMoveControl;
+    private MoveControl slidingMoveControl;
+
     public IceCubeEntity(EntityType<? extends IceCubeEntity> entityType, Level level) {
         super(entityType, level);
         this.setDiscardFriction(true);
+
+        this.slimeMoveControl = new IceCubeSlimeMoveControl(this);
+        this.slidingMoveControl = new MoveControl(this);
+
+        this.moveControl = this.slimeMoveControl;
     }
 
     @Override
@@ -116,6 +125,12 @@ public class IceCubeEntity extends Monster {
         }
         this.wasOnGround = this.onGround;
         this.decreaseSquish();
+
+        if (this.getTarget() == null || this.distanceToSqr(this.getTarget()) > 100.0F || Math.abs(this.getY() - this.getTarget().getY()) / this.distanceToSqr(this.getTarget().getX(), this.getY(), this.getTarget().getZ()) > 0.5f) {
+            this.moveControl = this.slimeMoveControl;
+        } else {
+            this.moveControl = this.slidingMoveControl;
+        }
     }
 
     protected void decreaseSquish() {
@@ -149,6 +164,10 @@ public class IceCubeEntity extends Monster {
     @Override
     public void playerTouch(Player player) {
         this.dealDamage(player);
+    }
+
+    public int getJumpDelay() {
+        return this.random.nextInt(20) + 10;
     }
 
     @Override
@@ -194,6 +213,10 @@ public class IceCubeEntity extends Monster {
         return SoundEvents.SLIME_HURT;
     }
 
+    float getSoundPitch() {
+        return ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 0.8F;
+    }
+
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.SLIME_DEATH;
@@ -203,7 +226,7 @@ public class IceCubeEntity extends Monster {
         return SoundEvents.GLASS_STEP;
     }
 
-    protected SoundEvent getJumpSound() {
+    public SoundEvent getJumpSound() {
         return SoundEvents.SLIME_JUMP;
     }
 
@@ -214,5 +237,58 @@ public class IceCubeEntity extends Monster {
 
     protected ParticleOptions getParticleType() {
         return ParticleTypes.SNOWFLAKE;
+    }
+
+    private static class IceCubeSlimeMoveControl extends MoveControl {
+        private float yRot;
+        private int jumpDelay;
+        private final IceCubeEntity iceCube;
+        private boolean isAggressive;
+
+        public IceCubeSlimeMoveControl(IceCubeEntity iceCube) {
+            super(iceCube);
+            this.iceCube = iceCube;
+            this.yRot = 180.0F * iceCube.getYRot() / Mth.PI;
+        }
+
+        public void setDirection(float yRot, boolean isAggressive) {
+            this.yRot = yRot;
+            this.isAggressive = isAggressive;
+        }
+
+        public void setWantedMovement(double speedModifier) {
+            this.speedModifier = speedModifier;
+            this.operation = Operation.MOVE_TO;
+        }
+
+        public void tick() {
+            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), this.yRot, 90.0F));
+            this.mob.yHeadRot = this.mob.getYRot();
+            this.mob.yBodyRot = this.mob.getYRot();
+            if (this.operation != Operation.MOVE_TO) {
+                this.mob.setZza(0.0F);
+            } else {
+                this.operation = Operation.WAIT;
+                if (this.mob.isOnGround()) {
+                    this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
+                    if (this.jumpDelay-- <= 0) {
+                        this.jumpDelay = this.iceCube.getJumpDelay();
+                        if (this.isAggressive) {
+                            this.jumpDelay /= 3;
+                        }
+
+                        this.iceCube.getJumpControl().jump();
+                        this.iceCube.playSound(this.iceCube.getJumpSound(), this.iceCube.getSoundVolume(), this.iceCube.getSoundPitch());
+                    } else {
+                        this.iceCube.xxa = 0.0F;
+                        this.iceCube.zza = 0.0F;
+                        this.mob.setSpeed(0.0F);
+                    }
+                } else {
+                    this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
+                }
+
+            }
+        }
     }
 }
