@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm;
+package com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm;
 
 public interface ISandstormClientDataProvider {
     SandstormClientData getSandstormClientData();

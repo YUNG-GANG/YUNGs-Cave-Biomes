@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin.lost_caves.client;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.ISandstormClientDataProvider;
-import com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm.SandstormClientData;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm.ISandstormClientDataProvider;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm.SandstormClientData;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

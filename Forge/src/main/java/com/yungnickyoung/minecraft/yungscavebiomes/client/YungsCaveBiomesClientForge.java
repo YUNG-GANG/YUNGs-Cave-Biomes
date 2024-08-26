@@ -1,14 +1,12 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.model.IceCubeModel;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.FallingAncientDustParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.IceShatterParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.LostCavesAmbientParticle;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.particle.SandstormParticle;
-import com.yungnickyoung.minecraft.yungscavebiomes.client.render.BuffetedOverlayForge;
-import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
-import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectileRenderer;
-import com.yungnickyoung.minecraft.yungscavebiomes.client.render.SandSnapperRenderer;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.*;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
@@ -17,6 +15,8 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.IIngameOverlay;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -32,7 +32,11 @@ public class YungsCaveBiomesClientForge {
 
     private static void clientSetup(final FMLClientSetupEvent event) {
         // Overlay rendering. Doesn't need to be enqueued because the registry is synchronized.
-        OverlayRegistry.registerOverlayTop("Buffeted", BuffetedOverlayForge::render);
+        IIngameOverlay buffetedOverlay = (gui, poseStack, partialTick, screenWidth, screenHeight) -> {
+            gui.setupOverlayRenderState(true, false);
+            BuffetedOverlay.render(poseStack, partialTick, screenWidth, screenHeight);
+        };
+        OverlayRegistry.registerOverlayTop("Buffeted", buffetedOverlay);
 
         // Non-synchronous work -- enqueued for safety.
         event.enqueueWork(() -> {

@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.yungscavebiomes.client.sandstorm;
+package com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm;
 
 import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
@@ -14,13 +14,12 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
 /**
- * Manages sandstorm state on the client.
+ * Manages sandstorm state on the ClientLevel.
  * This class does not actually manage the sandstorm itself; it only manages the client-side representation of the sandstorm
  * for rendering purposes.
  * No data is written to/from disk on the client.

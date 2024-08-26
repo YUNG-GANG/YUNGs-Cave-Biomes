@@ -1,11 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.MobEffectModule;
 import net.minecraft.client.Minecraft;
@@ -14,10 +10,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * Static class to render the Buffeted overlay on the player's screen.
- */
-public class BuffetedOverlayFabric {
+public class BuffetedOverlay {
     private static final ResourceLocation TEXTURE = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "textures/overlay/buffeted_overlay.png");
     private static final int MAX_TICKS = 200;
     private static final float MAX_OPACITY = 1.0f;
@@ -31,7 +24,7 @@ public class BuffetedOverlayFabric {
      * Renders the Buffeted overlay on the player's screen, with variable opacity depending
      * on the remaining duration of the effect.
      */
-    public static void render(PoseStack matrixStack, float partialTicks) {
+    public static void render(PoseStack poseStack, float partialTicks, int screenWidth, int screenHeight) {
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
 
@@ -41,8 +34,6 @@ public class BuffetedOverlayFabric {
 
         if (!client.player.isSpectator() && ticks > 0) {
             float opacity = Mth.clamp(ticks / (float) MAX_TICKS, 0, MAX_OPACITY);
-            int screenWidth = client.getWindow().getGuiScaledWidth();
-            int screenHeight = client.getWindow().getGuiScaledHeight();
 
             // Determine world light at player position
             int packedLight = client.getEntityRenderDispatcher().getPackedLightCoords(client.player, partialTicks);

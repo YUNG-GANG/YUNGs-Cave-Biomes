@@ -1,6 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin.client;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.client.render.SandstormFogRenderer;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm.SandstormFogRenderer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
