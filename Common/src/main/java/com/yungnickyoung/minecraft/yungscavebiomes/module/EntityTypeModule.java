@@ -17,7 +17,7 @@ public class EntityTypeModule {
     public static AutoRegisterEntityType<IceCubeEntity> ICE_CUBE = AutoRegisterEntityType
             .of(() -> AutoRegisterEntityType.Builder
                     .of(IceCubeEntity::new, MobCategory.MONSTER)
-                    .sized(1.5f, 1.5f)
+                    .sized(1.6f, 1.5f)
                     .clientTrackingRange(10)
                     .build())
             .attributes(IceCubeEntity::createAttributes);
