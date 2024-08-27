@@ -12,9 +12,9 @@ public class BiomeModule {
     @AutoRegister("frosted_caves")
     public static final AutoRegisterBiome FROSTED_CAVES = AutoRegisterBiome.of(() -> new FrostedCavesBiomeMaker().make());
 
-    @AutoRegister("marble_caves")
-    public static final AutoRegisterBiome MARBLE_CAVES = AutoRegisterBiome.of(() -> new MarbleCavesBiomeMaker().make());
-
     @AutoRegister("lost_caves")
     public static final AutoRegisterBiome LOST_CAVES = AutoRegisterBiome.of(() -> new LostCavesBiomeMaker().make());
+
+    //    @AutoRegister("marble_caves")
+        public static final AutoRegisterBiome MARBLE_CAVES = AutoRegisterBiome.of(() -> new MarbleCavesBiomeMaker().make());
 }

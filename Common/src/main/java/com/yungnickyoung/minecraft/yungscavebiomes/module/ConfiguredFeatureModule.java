@@ -13,24 +13,12 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
-import net.minecraft.util.valueproviders.ClampedNormalFloat;
-import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.util.valueproviders.UniformFloat;
-import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.util.valueproviders.WeightedListInt;
+import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.BlockColumnConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.GlowLichenConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SpringConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.material.Fluids;
@@ -156,48 +144,6 @@ public class ConfiguredFeatureModule {
             FeatureModule.WATER_SURFACE_ICE_FRAGMENT,
             () -> FeatureConfiguration.NONE);
 
-    @AutoRegister("marble_cave_water_pool")
-    public static final AutoRegisterConfiguredFeature<VegetationPatchConfiguration> MARBLE_CAVE_WATER_POOL = AutoRegisterConfiguredFeature.of(
-            Feature.WATERLOGGED_VEGETATION_PATCH,
-            () -> new VegetationPatchConfiguration(
-                    BlockTags.LUSH_GROUND_REPLACEABLE,
-                    BlockStateProvider.simple(BlockModule.TRAVERTINE.get()),
-                    PlacementUtils.inlinePlaced(NO_OP.holder()),
-                    CaveSurface.FLOOR,
-                    ConstantInt.of(3),
-                    0.8F,
-                    5,
-                    0.1F,
-                    UniformInt.of(4, 7),
-                    0.7F));
-
-    @AutoRegister("marble_water_spring")
-    public static final AutoRegisterConfiguredFeature<SpringConfiguration> MARBLE_WATER_SPRING = AutoRegisterConfiguredFeature.of(
-            Feature.SPRING,
-            () -> new SpringConfiguration(
-                    Fluids.WATER.defaultFluidState(), false, 4, 1,
-                    HolderSet.direct(
-                            Block::builtInRegistryHolder,
-                            Blocks.STONE,
-                            BlockModule.TRAVERTINE.get(),
-                            BlockModule.MARBLE.get())));
-
-    @AutoRegister("marble_patch")
-    public static final AutoRegisterConfiguredFeature<NoisySphereReplaceConfig> MARBLE_PATCH = AutoRegisterConfiguredFeature.of(
-            FeatureModule.SPHERE_REPLACE,
-            () -> new NoisySphereReplaceConfig(
-                    ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
-                    BlockModule.MARBLE.get().defaultBlockState(),
-                    6, 10));
-
-    @AutoRegister("travertine_patch")
-    public static final AutoRegisterConfiguredFeature<NoisySphereReplaceConfig> TRAVERTINE_PATCH = AutoRegisterConfiguredFeature.of(
-            FeatureModule.SPHERE_REPLACE,
-            () -> new NoisySphereReplaceConfig(
-                    ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
-                    BlockModule.TRAVERTINE.get().defaultBlockState(),
-                    6, 10));
-
     @AutoRegister("lost_caves_surface_replace")
     public static final AutoRegisterConfiguredFeature<NoneFeatureConfiguration> LOST_CAVES_SURFACE_REPLACE = AutoRegisterConfiguredFeature.of(
             FeatureModule.LOST_CAVES_SURFACE_REPLACE,
@@ -213,16 +159,6 @@ public class ConfiguredFeatureModule {
                     ImmutableList.of(BlockModule.LAYERED_ANCIENT_SANDSTONE.get()),
                     BlockModule.BRITTLE_ANCIENT_SANDSTONE.get().defaultBlockState(),
                     1, 6, 10));
-
-    @AutoRegister("marble_glow_lichen")
-    public static final AutoRegisterConfiguredFeature<GlowLichenConfiguration> MARBLE_GLOW_LICHEN = AutoRegisterConfiguredFeature.of(
-            Feature.GLOW_LICHEN,
-            () -> new GlowLichenConfiguration(
-                    20, false, true, true, 0.5F,
-                    HolderSet.direct(
-                            Block::builtInRegistryHolder,
-                            BlockModule.TRAVERTINE.get(),
-                            BlockModule.MARBLE.get())));
 
     @AutoRegister("sandstone_glow_lichen")
     public static final AutoRegisterConfiguredFeature<GlowLichenConfiguration> SANDSTONE_GLOW_LICHEN = AutoRegisterConfiguredFeature.of(
@@ -269,4 +205,56 @@ public class ConfiguredFeatureModule {
     public static final AutoRegisterConfiguredFeature<SimpleBlockConfiguration> LAYERED_SANDSTONE_PILLAR = AutoRegisterConfiguredFeature.of(
             FeatureModule.PILLAR_ROCK,
             () -> new SimpleBlockConfiguration(BlockStateProvider.simple(BlockModule.LAYERED_ANCIENT_SANDSTONE.get())));
+
+//    @AutoRegister("marble_cave_water_pool")
+    public static final AutoRegisterConfiguredFeature<VegetationPatchConfiguration> MARBLE_CAVE_WATER_POOL = AutoRegisterConfiguredFeature.of(
+            Feature.WATERLOGGED_VEGETATION_PATCH,
+            () -> new VegetationPatchConfiguration(
+                    BlockTags.LUSH_GROUND_REPLACEABLE,
+                    BlockStateProvider.simple(BlockModule.TRAVERTINE.get()),
+                    PlacementUtils.inlinePlaced(NO_OP.holder()),
+                    CaveSurface.FLOOR,
+                    ConstantInt.of(3),
+                    0.8F,
+                    5,
+                    0.1F,
+                    UniformInt.of(4, 7),
+                    0.7F));
+
+//    @AutoRegister("marble_water_spring")
+    public static final AutoRegisterConfiguredFeature<SpringConfiguration> MARBLE_WATER_SPRING = AutoRegisterConfiguredFeature.of(
+            Feature.SPRING,
+            () -> new SpringConfiguration(
+                    Fluids.WATER.defaultFluidState(), false, 4, 1,
+                    HolderSet.direct(
+                            Block::builtInRegistryHolder,
+                            Blocks.STONE,
+                            BlockModule.TRAVERTINE.get(),
+                            BlockModule.MARBLE.get())));
+
+//    @AutoRegister("marble_patch")
+    public static final AutoRegisterConfiguredFeature<NoisySphereReplaceConfig> MARBLE_PATCH = AutoRegisterConfiguredFeature.of(
+            FeatureModule.SPHERE_REPLACE,
+            () -> new NoisySphereReplaceConfig(
+                    ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
+                    BlockModule.MARBLE.get().defaultBlockState(),
+                    6, 10));
+
+//    @AutoRegister("travertine_patch")
+    public static final AutoRegisterConfiguredFeature<NoisySphereReplaceConfig> TRAVERTINE_PATCH = AutoRegisterConfiguredFeature.of(
+            FeatureModule.SPHERE_REPLACE,
+            () -> new NoisySphereReplaceConfig(
+                    ImmutableList.of(Blocks.STONE, Blocks.DEEPSLATE),
+                    BlockModule.TRAVERTINE.get().defaultBlockState(),
+                    6, 10));
+
+//    @AutoRegister("marble_glow_lichen")
+    public static final AutoRegisterConfiguredFeature<GlowLichenConfiguration> MARBLE_GLOW_LICHEN = AutoRegisterConfiguredFeature.of(
+            Feature.GLOW_LICHEN,
+            () -> new GlowLichenConfiguration(
+                    20, false, true, true, 0.5F,
+                    HolderSet.direct(
+                            Block::builtInRegistryHolder,
+                            BlockModule.TRAVERTINE.get(),
+                            BlockModule.MARBLE.get())));
 }

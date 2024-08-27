@@ -45,22 +45,6 @@ public class BlockModule {
                     .stacksTo(16)
                     .tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
-    @AutoRegister("marble")
-    public static final AutoRegisterBlock MARBLE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
-                    .of(Material.STONE, MaterialColor.TERRACOTTA_WHITE)
-                    .requiresCorrectToolForDrops()
-                    .strength(1.3f, 4.0f)
-                    .sound(SoundType.STONE)))
-            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
-
-    @AutoRegister("travertine")
-    public static final AutoRegisterBlock TRAVERTINE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
-                    .of(Material.STONE, MaterialColor.TERRACOTTA_PINK)
-                    .requiresCorrectToolForDrops()
-                    .strength(1.5f, 6.0f)
-                    .sound(SoundType.CALCITE)))
-            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
-
     @AutoRegister("rare_ice")
     public static final AutoRegisterBlock RARE_ICE = AutoRegisterBlock.of(() -> new RareIceBlock(BlockBehaviour.Properties
                     .of(Material.ICE_SOLID, MaterialColor.ICE)
@@ -197,4 +181,20 @@ public class BlockModule {
             .noCollission()
             .instabreak()
             .sound(SoundType.WEEPING_VINES)));
+
+//    @AutoRegister("marble")
+    public static final AutoRegisterBlock MARBLE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
+                    .of(Material.STONE, MaterialColor.TERRACOTTA_WHITE)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.3f, 4.0f)
+                    .sound(SoundType.STONE)))
+            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+
+//    @AutoRegister("travertine")
+    public static final AutoRegisterBlock TRAVERTINE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
+                    .of(Material.STONE, MaterialColor.TERRACOTTA_PINK)
+                    .requiresCorrectToolForDrops()
+                    .strength(1.5f, 6.0f)
+                    .sound(SoundType.CALCITE)))
+            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 }

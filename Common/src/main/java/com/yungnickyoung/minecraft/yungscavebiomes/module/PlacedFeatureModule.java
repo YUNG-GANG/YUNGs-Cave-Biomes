@@ -147,61 +147,6 @@ public class PlacedFeatureModule {
                     RandomOffsetPlacement.vertical(ConstantInt.of(0)),
                     BiomeFilter.biome()));
 
-    @AutoRegister("marble_cave_water_pool")
-    public static final AutoRegisterPlacedFeature MARBLE_CAVE_WATER_POOL = AutoRegisterPlacedFeature.of(
-            ConfiguredFeatureModule.MARBLE_CAVE_WATER_POOL,
-            List.of(
-                    CountPlacement.of(75),
-                    InSquarePlacement.spread(),
-                    PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-                    EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
-                            BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-                    RandomOffsetPlacement.vertical(ConstantInt.of(1)),
-                    BiomeFilter.biome()));
-
-    @AutoRegister("marble_water_spring")
-    public static final AutoRegisterPlacedFeature MARBLE_WATER_SPRING = AutoRegisterPlacedFeature.of(
-            ConfiguredFeatureModule.MARBLE_WATER_SPRING,
-            List.of(
-                    CountPlacement.of(80),
-                    InSquarePlacement.spread(),
-                    PlacementUtils.RANGE_10_10,
-                    EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-                    BiomeFilter.biome()));
-
-    @AutoRegister("marble_patch")
-    public static final AutoRegisterPlacedFeature MARBLE_PATCH = AutoRegisterPlacedFeature.of(
-            ConfiguredFeatureModule.MARBLE_PATCH,
-            List.of(
-                    CountPlacement.of(250),
-                    InSquarePlacement.spread(),
-                    PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-                    EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
-                            BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
-                    RandomOffsetPlacement.vertical(ConstantInt.of(1)),
-                    BiomeFilter.biome()));
-
-    @AutoRegister("travertine_patch")
-    public static final AutoRegisterPlacedFeature TRAVERTINE_PATCH = AutoRegisterPlacedFeature.of(
-            ConfiguredFeatureModule.TRAVERTINE_PATCH,
-            List.of(
-                    CountPlacement.of(250),
-                    InSquarePlacement.spread(),
-                    PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-                    EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-                    RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
-                    BiomeFilter.biome()));
-
-    @AutoRegister("marble_glow_lichen")
-    public static final AutoRegisterPlacedFeature MARBLE_GLOW_LICHEN = AutoRegisterPlacedFeature.of(
-            ConfiguredFeatureModule.MARBLE_GLOW_LICHEN,
-            List.of(
-                    CountPlacement.of(UniformInt.of(104, 157)),
-                    PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
-                    InSquarePlacement.spread(),
-                    SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13),
-                    BiomeFilter.biome()));
-
     @AutoRegister("sandstone_glow_lichen")
     public static final AutoRegisterPlacedFeature SANDSTONE_GLOW_LICHEN = AutoRegisterPlacedFeature.of(
             ConfiguredFeatureModule.SANDSTONE_GLOW_LICHEN,
@@ -305,5 +250,60 @@ public class PlacedFeatureModule {
                     EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
                             BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
                     RandomOffsetPlacement.vertical(ConstantInt.of(0)),
+                    BiomeFilter.biome()));
+
+//    @AutoRegister("marble_cave_water_pool")
+    public static final AutoRegisterPlacedFeature MARBLE_CAVE_WATER_POOL = AutoRegisterPlacedFeature.of(
+            ConfiguredFeatureModule.MARBLE_CAVE_WATER_POOL,
+            List.of(
+                    CountPlacement.of(75),
+                    InSquarePlacement.spread(),
+                    PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                    EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                            BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                    RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                    BiomeFilter.biome()));
+
+//    @AutoRegister("marble_water_spring")
+    public static final AutoRegisterPlacedFeature MARBLE_WATER_SPRING = AutoRegisterPlacedFeature.of(
+            ConfiguredFeatureModule.MARBLE_WATER_SPRING,
+            List.of(
+                    CountPlacement.of(80),
+                    InSquarePlacement.spread(),
+                    PlacementUtils.RANGE_10_10,
+                    EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                    BiomeFilter.biome()));
+
+//    @AutoRegister("marble_patch")
+    public static final AutoRegisterPlacedFeature MARBLE_PATCH = AutoRegisterPlacedFeature.of(
+            ConfiguredFeatureModule.MARBLE_PATCH,
+            List.of(
+                    CountPlacement.of(250),
+                    InSquarePlacement.spread(),
+                    PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                    EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(),
+                            BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, 12),
+                    RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                    BiomeFilter.biome()));
+
+//    @AutoRegister("travertine_patch")
+    public static final AutoRegisterPlacedFeature TRAVERTINE_PATCH = AutoRegisterPlacedFeature.of(
+            ConfiguredFeatureModule.TRAVERTINE_PATCH,
+            List.of(
+                    CountPlacement.of(250),
+                    InSquarePlacement.spread(),
+                    PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                    EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                    RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                    BiomeFilter.biome()));
+
+//    @AutoRegister("marble_glow_lichen")
+    public static final AutoRegisterPlacedFeature MARBLE_GLOW_LICHEN = AutoRegisterPlacedFeature.of(
+            ConfiguredFeatureModule.MARBLE_GLOW_LICHEN,
+            List.of(
+                    CountPlacement.of(UniformInt.of(104, 157)),
+                    PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
+                    InSquarePlacement.spread(),
+                    SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -13),
                     BiomeFilter.biome()));
 }
