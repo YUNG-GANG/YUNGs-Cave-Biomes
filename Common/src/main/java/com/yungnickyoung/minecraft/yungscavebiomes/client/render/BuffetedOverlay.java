@@ -28,6 +28,11 @@ public class BuffetedOverlay {
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
 
+        // Reset overlay on player death so it doesn't persist on respawn
+        if (!client.player.isAlive()) {
+            ticks = 0;
+        }
+
         ticks = client.player.hasEffect(MobEffectModule.BUFFETED_EFFECT.get())
                 ? Math.min(ticks + 1, MAX_TICKS)
                 : Math.max(ticks - 1, 0);

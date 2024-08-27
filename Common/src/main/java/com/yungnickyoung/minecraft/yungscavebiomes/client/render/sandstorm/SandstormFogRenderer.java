@@ -34,6 +34,11 @@ public class SandstormFogRenderer {
                 this.fogLevel = Mth.clamp(this.fogLevel - 0.002, 0, 1);
             }
 
+            // Reset fog if player is dead so it doesn't persist on respawn
+            if (!localPlayer.isAlive()) {
+                this.fogLevel = 0;
+            }
+
             // Interpolate fog to be closer to the player
             if (this.fogLevel > 0) {
                 RenderSystem.setShaderFogStart((float) Mth.lerp(this.fogLevel, RenderSystem.getShaderFogStart(), -4f));

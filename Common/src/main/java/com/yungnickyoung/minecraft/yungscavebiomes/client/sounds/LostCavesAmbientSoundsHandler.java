@@ -41,18 +41,21 @@ public class LostCavesAmbientSoundsHandler implements AmbientSoundHandler {
 
     @Override
     public void tick() {
+        // Fade out sound when player dies so that it doesn't persist on respawn
+        if (!this.player.isAlive() && this.lostCavesSound != null) {
+            this.lostCavesSound.fadeOut();
+        }
+
         Holder<Biome> currBiome = this.biomeManager.getNoiseBiomeAtPosition(this.player.getX(), this.player.getY(), this.player.getZ());
 
         // Start playing ambient sound when entering lost caves biome
         if (currBiome.is(BiomeModule.LOST_CAVES.getResourceKey()) && !this.inLostCaves) {
             this.inLostCaves = true;
-            this.lostCavesSound = new BiomeAmbientSoundsHandler.LoopSoundInstance(SoundModule.AMBIENT_LOST_CAVES.get());
-            this.soundManager.play(lostCavesSound);
-            this.lostCavesSound.fadeIn();
+            changeAmbientsound(SoundModule.AMBIENT_LOST_CAVES.get());
         }
 
         // Stop playing ambient sounds when leaving lost caves biome
-        if (!currBiome.is(BiomeModule.LOST_CAVES.getResourceKey()) && this.inLostCaves) {
+        if (!currBiome.is(BiomeModule.LOST_CAVES.getResourceKey())) {
             this.inLostCaves = false;
             this.lostCavesSound.fadeOut();
         }
@@ -79,7 +82,9 @@ public class LostCavesAmbientSoundsHandler implements AmbientSoundHandler {
      * @param newAmbientSoundEvent The new ambient sound to play.
      */
     private void changeAmbientsound(SoundEvent newAmbientSoundEvent) {
-        this.lostCavesSound.fadeOut();
+        if (this.lostCavesSound != null) {
+            this.lostCavesSound.fadeOut();
+        }
         this.lostCavesSound = new BiomeAmbientSoundsHandler.LoopSoundInstance(newAmbientSoundEvent);
         this.soundManager.play(lostCavesSound);
         this.lostCavesSound.fadeIn();
