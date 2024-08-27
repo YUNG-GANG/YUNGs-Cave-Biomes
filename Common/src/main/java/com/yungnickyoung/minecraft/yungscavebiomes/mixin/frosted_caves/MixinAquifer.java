@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin.frosted_caves;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder;
 import net.minecraft.core.Holder;
@@ -31,10 +30,6 @@ public abstract class MixinAquifer implements Aquifer {
      */
     @Inject(method = "computeFluid", at = @At("RETURN"), cancellable = true)
     private void yungscavebiomes_noLavaAquifersInFrostedCaves(int x, int y, int z, CallbackInfoReturnable<FluidStatus> cir) {
-        if (!YungsCaveBiomesCommon.FROSTED_CAVES_ENABLED) {
-            return;
-        }
-
         FluidStatus original = cir.getReturnValue();
 
         // For some reason, trying to limit the check to only lava aquifers didn't work. No idea why.

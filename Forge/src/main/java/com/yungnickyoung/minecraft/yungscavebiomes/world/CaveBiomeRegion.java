@@ -28,14 +28,10 @@ public class CaveBiomeRegion extends Region {
             b.replaceParameter(CaveBiomeRegionParameters.DRIPSTONE_OLD, CaveBiomeRegionParameters.DRIPSTONE_NEW);
         });
 
-        if (YungsCaveBiomesCommon.FROSTED_CAVES_ENABLED) {
-            this.addBiome(mapper, CaveBiomeRegionParameters.FROSTED_CAVES, BiomeModule.FROSTED_CAVES.getResourceKey());
-        }
+        this.addBiome(mapper, CaveBiomeRegionParameters.FROSTED_CAVES, BiomeModule.FROSTED_CAVES.getResourceKey());
+        this.addBiome(mapper, CaveBiomeRegionParameters.LOST_CAVES, BiomeModule.LOST_CAVES.getResourceKey());
         if (YungsCaveBiomesCommon.MARBLE_CAVES_ENABLED) {
             this.addBiome(mapper, CaveBiomeRegionParameters.MARBLE_CAVES, BiomeModule.MARBLE_CAVES.getResourceKey());
-        }
-        if (YungsCaveBiomesCommon.LOST_CAVES_ENABLED) {
-            this.addBiome(mapper, CaveBiomeRegionParameters.LOST_CAVES, BiomeModule.LOST_CAVES.getResourceKey());
         }
     }
 }
