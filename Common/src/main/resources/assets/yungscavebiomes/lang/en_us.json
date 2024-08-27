@@ -63,6 +63,9 @@
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Arrow of Frost",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Arrow of Frost",
 
+  "death.attack.pricklyVines": "%1$s was poked to death by prickly vines",
+  "death.attack.pricklyVines.player": "%1$s was poked to death by prickly vines whilst trying to escape %2$s",
+
   "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows",
 
   "command.sandstorm.start": "Sandstorm started in all Lost Caves in %s.",
