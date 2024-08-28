@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EmergeGoal;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -8,6 +9,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -18,9 +21,11 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -88,6 +93,38 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     }
 
     @Override
+    protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+
+        if (itemStack.is(ItemModule.PRICKLY_PEACH_ITEM.get())) {
+            if (this.level.isClientSide) {
+                return InteractionResult.CONSUME;
+            }
+
+            if (!player.getAbilities().instabuild) {
+                itemStack.shrink(1);
+            }
+
+            this.heal(4.0f);
+            this.gameEvent(GameEvent.MOB_INTERACT, this.eyeBlockPosition());
+            this.level.broadcastEntityEvent(this, (byte)7);
+
+            return InteractionResult.SUCCESS;
+        }
+
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public void handleEntityEvent(byte eventId) {
+        if (eventId == 7) {
+            this.spawnHeartParticles();
+        } else {
+            super.handleEntityEvent(eventId);
+        }
+    }
+
+    @Override
     public void aiStep() {
         super.aiStep();
 
@@ -114,6 +151,15 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                 BlockState stateAbove = this.level.getBlockState(pos.above());
                 return !blockState.isAir() && !(blockState.is(TagModule.SAND_SNAPPER_BLOCKS) && stateAbove.is(Blocks.AIR)) && blockState.isSuffocating(this.level, pos) && Shapes.joinIsNotEmpty(blockState.getCollisionShape(this.level, pos).move(pos.getX(), pos.getY(), pos.getZ()), Shapes.create(aabb), BooleanOp.AND);
             });
+        }
+    }
+
+    protected void spawnHeartParticles() {
+        for (int i = 0; i < 7; i++) {
+            double xSpeed = this.random.nextGaussian() * 0.02;
+            double ySpeed = this.random.nextGaussian() * 0.02;
+            double zSpeed = this.random.nextGaussian() * 0.02;
+            this.level.addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), xSpeed, ySpeed, zSpeed);
         }
     }
 
