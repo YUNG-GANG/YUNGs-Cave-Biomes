@@ -55,7 +55,7 @@ public class PlacedFeatureModule {
     public static final AutoRegisterPlacedFeature FROST_LILY = AutoRegisterPlacedFeature.of(
             ConfiguredFeatureModule.FROST_LILY,
             List.of(
-                    CountPlacement.of(40),
+                    CountPlacement.of(20),
                     InSquarePlacement.spread(),
                     PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT,
                     EnvironmentScanPlacement.scanningFor(Direction.DOWN,
