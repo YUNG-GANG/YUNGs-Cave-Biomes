@@ -183,7 +183,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public void aiStep() {
         super.aiStep();
 
-        if (this.level.isClientSide() && !this.isEmerging() && this.getBlockStateOn().is(TagModule.SAND_SNAPPER_BLOCKS)) {
+        if (this.level.isClientSide() && this.isSubmerged()) {
             float width = this.getDimensions(this.getPose()).width * 0.8F;
             Vec3 vec3 = this.getDeltaMovement();
             this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()), this.getX() + (this.random.nextDouble() - 0.5) * (double)width, this.getY() + 0.1, this.getZ() + (this.random.nextDouble() - 0.5) * (double)width, vec3.x * -4.0, 1.5, vec3.z * -4.0);
