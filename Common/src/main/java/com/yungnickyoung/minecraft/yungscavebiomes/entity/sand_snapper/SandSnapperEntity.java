@@ -12,13 +12,16 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -44,9 +47,12 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look");
     private final AnimationBuilder SWIM = new AnimationBuilder().addAnimation("swim");
+    private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
+
 
     private static final EntityDataAccessor<Boolean> EMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean emergedHolder;
+    private boolean isSubmerged;
 
     public SandSnapperEntity(EntityType<SandSnapperEntity> entityType, Level level) {
         super(entityType, level);
@@ -68,15 +74,18 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this,8.0f, 1.0f, 1.25f));
-        this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1.0f));
+        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this,8.0f, 1.15f, 1.25f));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0f));
         this.goalSelector.addGoal(2, new EmergeGoal(this, 8.0f, 2.0f, 100));
     }
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         if (this.isEmerging()) {
-            return EntityDimensions.fixed(0.6f, 1.4f);
+            return EntityDimensions.fixed(0.25f, 1.4f);
+        } else if (this.isSubmerged()) {
+            return EntityDimensions.fixed(0.01f, 0.01f);
         }
 
         return super.getDimensions(pose);
@@ -88,6 +97,23 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
         if (dataAccessor.equals(EMERGED)) {
             this.emergedHolder = this.entityData.get(EMERGED);
+            this.refreshDimensions();
+        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        // Do these checks instead of just always setting based on the block it's on to allow dimension refreshing w/o cost
+        boolean isInBlock = this.getBlockStateOn().is(TagModule.SAND_SNAPPER_BLOCKS) ||
+                this.getBlockStateOn().is(Blocks.AIR) && this.level.getBlockState(this.getOnPos().below()).is(TagModule.SAND_SNAPPER_BLOCKS);
+
+        if (this.isSubmerged && !isInBlock) {
+            this.isSubmerged = false;
+            this.refreshDimensions();
+        } else if (!this.isSubmerged && isInBlock) {
+            this.isSubmerged = true;
             this.refreshDimensions();
         }
     }
@@ -125,17 +151,42 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     }
 
     @Override
+    public boolean canCollideWith(Entity entity) {
+        return !this.isSubmerged() && super.canCollideWith(entity);
+    }
+
+    @Override
+    public boolean isPushable() {
+        return super.isPushable() && !this.isSubmerged();
+    }
+
+    @Override
+    public void push(Entity entity) {
+        if (!this.isSubmerged()) {
+            super.push(entity);
+        }
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        return this.isSubmerged() || super.isInvulnerable();
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource source) {
+        if (this.isSubmerged()) return true;
+
+        return super.isInvulnerableTo(source);
+    }
+
+    @Override
     public void aiStep() {
         super.aiStep();
 
-        if (this.level.isClientSide()) {
+        if (this.level.isClientSide() && !this.isEmerging() && this.getBlockStateOn().is(TagModule.SAND_SNAPPER_BLOCKS)) {
             float width = this.getDimensions(this.getPose()).width * 0.8F;
-            AABB aabb = AABB.ofSize(this.getEyePosition(), width, 1.0E-6, width);
-            BlockPos.betweenClosedStream(aabb).forEach((pos) -> {
-                BlockState blockState = this.level.getBlockState(pos);
-                Vec3 vec3 = this.getDeltaMovement();
-                this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockState), this.getX() + (this.random.nextDouble() - 0.5) * (double)width, this.getY() + 1.1, this.getZ() + (this.random.nextDouble() - 0.5) * (double)width, vec3.x * -4.0, 1.5, vec3.z * -4.0);
-            });
+            Vec3 vec3 = this.getDeltaMovement();
+            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()), this.getX() + (this.random.nextDouble() - 0.5) * (double)width, this.getY() + 0.1, this.getZ() + (this.random.nextDouble() - 0.5) * (double)width, vec3.x * -4.0, 1.5, vec3.z * -4.0);
         }
     }
 
@@ -171,12 +222,21 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         return this.emergedHolder;
     }
 
+    public boolean isSubmerged() {
+        return this.isSubmerged && !this.isEmerging();
+    }
+
     private <E extends IAnimatable> PlayState generalPredicate(AnimationEvent<E> event) {
         if (this.isEmerging()) {
             event.getController().setAnimation(EMERGE);
             return PlayState.CONTINUE;
         } else if (event.isMoving()) {
-            event.getController().setAnimation(SWIM);
+            if (this.isSubmerged()) {
+                event.getController().setAnimation(SWIM);
+            } else {
+                event.getController().setAnimation(WALK);
+            }
+
             return PlayState.CONTINUE;
         }
 
