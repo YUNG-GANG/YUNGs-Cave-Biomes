@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EmergeGoal;
+import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.RunFromPlayerGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
 import net.minecraft.core.BlockPos;
@@ -17,7 +18,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -68,7 +68,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, Player.class, 8.0f, 1.0f, 1.25f));
+        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this,8.0f, 1.0f, 1.25f));
         this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1.0f));
         this.goalSelector.addGoal(2, new EmergeGoal(this, 8.0f, 2.0f, 100));
     }

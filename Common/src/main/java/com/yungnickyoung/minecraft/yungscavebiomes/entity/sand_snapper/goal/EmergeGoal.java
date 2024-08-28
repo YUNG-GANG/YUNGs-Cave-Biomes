@@ -1,6 +1,8 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
+import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -55,9 +57,10 @@ public class EmergeGoal extends Goal {
         if (this.sandSnapper.tickCount - this.lastUseTime < this.cooldown) {
             return false;
         }
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
 
-        // TODO: Add logic for checking if it's a sandstorm
-        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(this.distanceFromPlayer / 2, 4.0f, this.distanceFromPlayer / 2);
+        float dist = sandstormServerData.isSandstormActive() ? this.sandstormDistanceFromPlayer : this.distanceFromPlayer;
+        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(dist / 2, 4.0f, dist / 2);
         List<Player> nearbyPlayers = this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
 
         return nearbyPlayers.isEmpty();
@@ -65,7 +68,10 @@ public class EmergeGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(this.distanceFromPlayer / 2, 4.0f, this.distanceFromPlayer / 2);
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+
+        float dist = sandstormServerData.isSandstormActive() ? this.sandstormDistanceFromPlayer : this.distanceFromPlayer;
+        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(dist / 2, 4.0f, dist / 2);
         List<Player> nearbyPlayers = this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
 
         return nearbyPlayers.isEmpty() && this.ticksRunning <= 57;
