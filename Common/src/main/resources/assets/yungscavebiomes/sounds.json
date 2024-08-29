@@ -68,5 +68,27 @@
         "volume": 1.0
       }
     ]
+  },
+  "entity.sand_snapper.death": {
+    "sounds": [
+      "yungscavebiomes:entity/sand_snapper_death"
+    ]
+  },
+  "entity.sand_snapper.hurt": {
+    "sounds": [
+      "yungscavebiomes:entity/sand_snapper_hurt_1",
+      "yungscavebiomes:entity/sand_snapper_hurt_2",
+      "yungscavebiomes:entity/sand_snapper_hurt_3"
+    ]
+  },
+  "entity.sand_snapper.panic": {
+    "sounds": [
+      "yungscavebiomes:entity/sand_snapper_panic"
+    ]
+  },
+  "entity.sand_snapper.happy": {
+    "sounds": [
+      "yungscavebiomes:entity/sand_snapper_happy"
+    ]
   }
 }
