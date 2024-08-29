@@ -54,6 +54,7 @@ public class EmergeGoal extends Goal {
     @Override
     public void stop() {
         this.sandSnapper.setEmerging(false);
+        this.sandSnapper.setDiving(true);
         this.lastUseTime = this.sandSnapper.tickCount;
     }
 
@@ -98,6 +99,6 @@ public class EmergeGoal extends Goal {
         AABB searchBox = this.sandSnapper.getBoundingBox().inflate(dist / 2, 4.0f, dist / 2);
         List<Player> nearbyPlayers = this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
 
-        return nearbyPlayers.isEmpty() && this.ticksRunning <= 73;
+        return nearbyPlayers.isEmpty() && this.ticksRunning <= 57;
     }
 }

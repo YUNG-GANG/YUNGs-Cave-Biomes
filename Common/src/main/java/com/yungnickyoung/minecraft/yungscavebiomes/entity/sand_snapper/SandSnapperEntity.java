@@ -48,14 +48,20 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look").addAnimation("diveback");
+    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look");
+    private final AnimationBuilder DIVE = new AnimationBuilder().addAnimation("diveback");
     private final AnimationBuilder SWIM = new AnimationBuilder().addAnimation("swim");
     private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
 
 
     private static final EntityDataAccessor<Boolean> EMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DIVING = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
+    private boolean divingHolder;
     private boolean emergedHolder;
     private boolean isSubmerged;
+
+    private int divingTimer;
+    private static final int DIVING_LENGTH = 15;
 
     public SandSnapperEntity(EntityType<SandSnapperEntity> entityType, Level level) {
         super(entityType, level);
@@ -73,6 +79,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(EMERGED, false);
+        this.entityData.define(DIVING, false);
     }
 
     @Override
@@ -85,7 +92,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        if (this.isEmerging()) {
+        if (this.isEmerging() || this.isDiving()) {
             return EntityDimensions.fixed(0.4f, 0.7f);
         } else if (this.isSubmerged()) {
             return EntityDimensions.fixed(0.01f, 0.01f);
@@ -109,6 +116,10 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
             this.emergedHolder = this.entityData.get(EMERGED);
             this.refreshDimensions();
+        } else if (dataAccessor.equals(DIVING)) {
+            this.divingHolder = this.entityData.get(DIVING);
+            this.divingTimer = DIVING_LENGTH;
+            this.refreshDimensions();
         }
     }
 
@@ -126,6 +137,15 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         } else if (!this.isSubmerged && isInBlock) {
             this.isSubmerged = true;
             this.refreshDimensions();
+        }
+
+        if (!this.level.isClientSide && this.isDiving()) {
+            if (this.divingTimer > 0) {
+                this.divingTimer--;
+            } else {
+                this.setDiving(false);
+                this.divingTimer = 0;
+            }
         }
     }
 
@@ -196,6 +216,10 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public void aiStep() {
         super.aiStep();
 
+        if (this.isDiving()) {
+            this.getNavigation().stop();
+        }
+
         Vec3 vec3 = this.getDeltaMovement();
         if (this.level.isClientSide() && this.isSubmerged() && vec3.length() > 0.1d) {
             float width = this.getDimensions(this.getPose()).width * 0.8F;
@@ -235,6 +259,14 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         return this.emergedHolder;
     }
 
+    public void setDiving(boolean isDiving) {
+        this.entityData.set(DIVING, isDiving);
+    }
+
+    public boolean isDiving() {
+        return this.divingHolder;
+    }
+
     public boolean isSubmerged() {
         return this.isSubmerged && !this.isEmerging();
     }
@@ -252,6 +284,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private <E extends IAnimatable> PlayState generalPredicate(AnimationEvent<E> event) {
         if (this.isEmerging()) {
             event.getController().setAnimation(EMERGE);
+            return PlayState.CONTINUE;
+        } else if (this.isDiving()) {
+            event.getController().setAnimation(DIVE);
             return PlayState.CONTINUE;
         } else if (event.isMoving()) {
             if (this.isSubmerged()) {
