@@ -23,4 +23,16 @@ public class SoundModule {
 
     @AutoRegister("entity.sand_snapper.digging")
     public static final AutoRegisterSoundEvent SAND_SNAPPER_DIGGING = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("entity.sand_snapper.death")
+    public static final AutoRegisterSoundEvent SAND_SNAPPER_DEATH = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("entity.sand_snapper.hurt")
+    public static final AutoRegisterSoundEvent SAND_SNAPPER_HURT = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("entity.sand_snapper.panic")
+    public static final AutoRegisterSoundEvent SAND_SNAPPER_PANIC = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("entity.sand_snapper.happy")
+    public static final AutoRegisterSoundEvent SAND_SNAPPER_HAPPY = AutoRegisterSoundEvent.create();
 }

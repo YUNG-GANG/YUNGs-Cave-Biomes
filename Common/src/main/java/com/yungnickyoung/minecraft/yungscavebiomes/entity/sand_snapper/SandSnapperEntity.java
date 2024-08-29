@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EmergeGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.RunFromPlayerGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -10,6 +11,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -33,6 +35,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -224,6 +227,16 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     public boolean isSubmerged() {
         return this.isSubmerged && !this.isEmerging();
+    }
+
+    @Override
+    protected @Nullable SoundEvent getHurtSound(DamageSource $$0) {
+        return SoundModule.SAND_SNAPPER_HURT.get();
+    }
+
+    @Override
+    protected @Nullable SoundEvent getDeathSound() {
+        return SoundModule.SAND_SNAPPER_DEATH.get();
     }
 
     private <E extends IAnimatable> PlayState generalPredicate(AnimationEvent<E> event) {
