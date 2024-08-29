@@ -30,6 +30,7 @@
   ],
   "client": [
     "lost_caves.client.MixinClientLevel",
+    "lost_caves.client.MixinClientPacketListener",
     "lost_caves.client.MixinLocalPlayer"
   ],
   "injectors": {

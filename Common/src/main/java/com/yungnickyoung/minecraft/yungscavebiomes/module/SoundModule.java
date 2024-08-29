@@ -20,4 +20,7 @@ public class SoundModule {
 
     @AutoRegister("ambient.lost_caves.sandstorm_loop")
     public static final AutoRegisterSoundEvent SANDSTORM_AMBIENT_LOST_CAVES = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("entity.sand_snapper.digging")
+    public static final AutoRegisterSoundEvent SAND_SNAPPER_DIGGING = AutoRegisterSoundEvent.create();
 }
