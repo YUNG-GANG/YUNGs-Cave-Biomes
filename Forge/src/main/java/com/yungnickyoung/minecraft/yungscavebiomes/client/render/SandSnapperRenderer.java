@@ -21,4 +21,14 @@ public class SandSnapperRenderer extends GeoEntityRenderer<SandSnapperEntity> {
     public RenderType getRenderType(SandSnapperEntity animatable, float partialTick, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight, ResourceLocation texture) {
         return RenderType.entityCutoutNoCull(texture);
     }
+
+    @Override
+    public void render(SandSnapperEntity animatable, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        poseStack.pushPose();
+        if (animatable.isSubmerged() && !animatable.isDiving() && !animatable.isEmerging()) {
+            poseStack.translate(0, -16.0f, 0);
+        }
+        super.render(animatable, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+        poseStack.popPose();
+    }
 }
