@@ -5,16 +5,17 @@ import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterItem;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterUtils;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.item.PricklyPeachItem;
+import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ItemModule {
-//    @AutoRegister("ice_cube_spawn_egg")
-//    public static final AutoRegisterItem ICE_CUBE_SPAWN_EGG = AutoRegisterItem.of(() ->
-//            new SpawnEggItem(
-//                    EntityTypeModule.ICE_CUBE.get(), 10798332, 15002876,
-//                    new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get())));
+    @AutoRegister("ice_cube_spawn_egg")
+    public static final AutoRegisterItem ICE_CUBE_SPAWN_EGG = AutoRegisterItem.of(Services.PLATFORM.getIceCubeSpawnEggItem());
+
+    @AutoRegister("sand_snapper_spawn_egg")
+    public static final AutoRegisterItem SAND_SNAPPER_SPAWN_EGG = AutoRegisterItem.of(Services.PLATFORM.getSandSnapperSpawnEggItem());
 
     @AutoRegister("prickly_peach")
     public static final AutoRegisterItem PRICKLY_PEACH_ITEM = AutoRegisterItem.of(() -> new PricklyPeachItem(

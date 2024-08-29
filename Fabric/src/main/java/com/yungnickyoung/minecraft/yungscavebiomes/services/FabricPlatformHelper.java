@@ -1,5 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -10,7 +12,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.function.Supplier;
 
 public class FabricPlatformHelper implements IPlatformHelper {
     @Override
@@ -42,16 +48,10 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public void syncSandstormDataToClients(SandstormServerData sandstormServerData) {
         FriendlyByteBuf buf = PacketByteBufs.create();
-//        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
         buf.writeBoolean(sandstormServerData.isSandstormActive());
         buf.writeInt(sandstormServerData.getCurrSandstormTicks());
         buf.writeLong(sandstormServerData.getSeed());
         buf.writeInt(sandstormServerData.getTotalSandstormDurationTicks());
-
-//        buf.writeBoolean(sandstormData.isSandstormActive());
-//        buf.writeInt(sandstormData.getSandstormTime());
-//        buf.writeLong(sandstormData.getSandstormSeed());
-//        buf.writeInt(sandstormData.getTotalSandstormDuration());
         PlayerLookup.world(sandstormServerData.getServerLevel())
                 .forEach(player -> ServerPlayNetworking.send(player, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf));
     }
@@ -59,16 +59,22 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public void syncSandstormDataToPlayer(SandstormServerData sandstormServerData, ServerPlayer serverPlayer) {
         FriendlyByteBuf buf = PacketByteBufs.create();
-//        ISandstormServerData sandstormData = (ISandstormServerData) serverLevel;
         buf.writeBoolean(sandstormServerData.isSandstormActive());
         buf.writeInt(sandstormServerData.getCurrSandstormTicks());
         buf.writeLong(sandstormServerData.getSeed());
         buf.writeInt(sandstormServerData.getTotalSandstormDurationTicks());
-
-//        buf.writeBoolean(sandstormData.isSandstormActive());
-//        buf.writeInt(sandstormData.getSandstormTime());
-//        buf.writeLong(sandstormData.getSandstormSeed());
-//        buf.writeInt(sandstormData.getTotalSandstormDuration());
         ServerPlayNetworking.send(serverPlayer, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf);
+    }
+
+    @Override
+    public Supplier<Item> getIceCubeSpawnEggItem() {
+        return () -> new SpawnEggItem(EntityTypeModule.ICE_CUBE.get(), 0xA4C4FC, 0xE4ECFC,
+                new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+    }
+
+    @Override
+    public Supplier<Item> getSandSnapperSpawnEggItem() {
+        return () -> new SpawnEggItem(EntityTypeModule.SAND_SNAPPER.get(), 0xBA852F, 0xCFAC55,
+                new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
     }
 }

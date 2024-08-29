@@ -47,9 +47,11 @@
   "block.yungscavebiomes.prickly_vines": "Prickly Vines",
 
   "entity.yungscavebiomes.ice_cube": "Ice Cube",
+  "entity.yungscavebiomes.sand_snapper": "Sand Snapper",
   "entity.yungscavebiomes.icicle": "Icicle",
 
   "item.yungscavebiomes.ice_cube_spawn_egg": "Ice Cube Spawn Egg",
+  "item.yungscavebiomes.sand_snapper_spawn_egg": "Sand Snapper Spawn Egg",
   "item.yungscavebiomes.prickly_peach": "Prickly Peach",
 
   "effect.yungscavebiomes.frost": "Frost",

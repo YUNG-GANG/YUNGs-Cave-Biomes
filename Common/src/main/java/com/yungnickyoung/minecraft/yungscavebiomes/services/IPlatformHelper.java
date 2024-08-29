@@ -3,7 +3,10 @@ package com.yungnickyoung.minecraft.yungscavebiomes.services;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.function.Supplier;
 
 public interface IPlatformHelper {
     /**
@@ -32,4 +35,7 @@ public interface IPlatformHelper {
 
     void syncSandstormDataToClients(SandstormServerData sandstormServerData);
     void syncSandstormDataToPlayer(SandstormServerData sandstormServerData, ServerPlayer serverPlayer);
+
+    Supplier<Item> getIceCubeSpawnEggItem();
+    Supplier<Item> getSandSnapperSpawnEggItem();
 }
