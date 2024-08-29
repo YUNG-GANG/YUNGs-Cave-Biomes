@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.biome;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.PlacedFeatureModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
@@ -28,6 +29,7 @@ public class LostCavesBiomeMaker extends BiomeMaker {
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 100, 4, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.WITCH, 5, 1, 1));
+        mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityTypeModule.SAND_SNAPPER.get(), 10, 1, 1));
 
         /* Begin adding biome settings */
         BiomeGenerationSettings.Builder biomeSettings = new BiomeGenerationSettings.Builder();
