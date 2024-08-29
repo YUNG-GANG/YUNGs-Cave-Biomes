@@ -59,5 +59,14 @@
         "volume": 0.4
       }
     ]
+  },
+  "entity.sand_snapper.digging": {
+    "sounds": [
+      {
+        "name": "yungscavebiomes:entity/sand_snapper_digging",
+        "stream": false,
+        "volume": 1.0
+      }
+    ]
   }
 }

@@ -2,6 +2,6 @@
   "parent": "yungscavebiomes:block/frost_lily_template",
   "textures": {
     "fan": "yungscavebiomes:block/frost_lily_base",
-    "cross": "yungscavebiomes:block/frost_lily_middle_2"
+    "cross": "yungscavebiomes:block/frost_lily_middle_3"
   }
 }
