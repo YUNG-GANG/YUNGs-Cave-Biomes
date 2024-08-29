@@ -48,7 +48,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look");
+    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look").addAnimation("diveback");
     private final AnimationBuilder SWIM = new AnimationBuilder().addAnimation("swim");
     private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
 

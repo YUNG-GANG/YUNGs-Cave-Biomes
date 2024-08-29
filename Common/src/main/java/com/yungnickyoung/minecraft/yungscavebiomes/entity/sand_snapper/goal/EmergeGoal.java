@@ -98,6 +98,6 @@ public class EmergeGoal extends Goal {
         AABB searchBox = this.sandSnapper.getBoundingBox().inflate(dist / 2, 4.0f, dist / 2);
         List<Player> nearbyPlayers = this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
 
-        return nearbyPlayers.isEmpty() && this.ticksRunning <= 57;
+        return nearbyPlayers.isEmpty() && this.ticksRunning <= 73;
     }
 }
