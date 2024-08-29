@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EmergeGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.RunFromPlayerGoal;
+import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.SnapperStrollGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
@@ -23,7 +24,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -79,14 +79,14 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new RunFromPlayerGoal(this,8.0f, 1.15f, 1.25f));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0f));
+        this.goalSelector.addGoal(1, new SnapperStrollGoal(this, 1.0f));
         this.goalSelector.addGoal(2, new EmergeGoal(this, 8.0f, 2.0f, 100));
     }
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         if (this.isEmerging()) {
-            return EntityDimensions.fixed(0.25f, 1.4f);
+            return EntityDimensions.fixed(0.4f, 0.7f);
         } else if (this.isSubmerged()) {
             return EntityDimensions.fixed(0.01f, 0.01f);
         }
@@ -99,6 +99,14 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         super.onSyncedDataUpdated(dataAccessor);
 
         if (dataAccessor.equals(EMERGED)) {
+
+            if (this.level.isClientSide) {
+                AnimationController controller = this.getFactory().getOrCreateAnimationData(this.getId()).getAnimationControllers().get("generalController");
+                if (controller != null) {
+                    controller.markNeedsReload();
+                }
+            }
+
             this.emergedHolder = this.entityData.get(EMERGED);
             this.refreshDimensions();
         }
@@ -123,6 +131,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (this.isSubmerged()) return InteractionResult.FAIL;
+
         ItemStack itemStack = player.getItemInHand(hand);
 
         if (itemStack.is(ItemModule.PRICKLY_PEACH_ITEM.get())) {
@@ -177,7 +187,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
-        if (this.isSubmerged()) return true;
+        if (this.isSubmerged() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) return true;
 
         return super.isInvulnerableTo(source);
     }
@@ -186,9 +196,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public void aiStep() {
         super.aiStep();
 
-        if (this.level.isClientSide() && this.isSubmerged()) {
+        Vec3 vec3 = this.getDeltaMovement();
+        if (this.level.isClientSide() && this.isSubmerged() && vec3.length() > 0.1d) {
             float width = this.getDimensions(this.getPose()).width * 0.8F;
-            Vec3 vec3 = this.getDeltaMovement();
             this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()), this.getX() + (this.random.nextDouble() - 0.5) * (double)width, this.getY() + 0.1, this.getZ() + (this.random.nextDouble() - 0.5) * (double)width, vec3.x * -4.0, 1.5, vec3.z * -4.0);
         }
     }
@@ -249,13 +259,19 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             } else {
                 event.getController().setAnimation(WALK);
             }
-
             return PlayState.CONTINUE;
         }
 
         event.getController().markNeedsReload();
 
         return PlayState.STOP;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState stateOn) {
+        if (this.isSubmerged()) return;
+
+        super.playStepSound(pos, stateOn);
     }
 
     @Override
