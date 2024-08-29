@@ -65,7 +65,7 @@ public class EmergeGoal extends Goal {
 
         if (!this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(TagModule.SAND_SNAPPER_BLOCKS)) return false;
 
-        float halfWidth = 0.4f;
+        float halfWidth = 0.8f;
         Vec3 startPos = new Vec3(this.sandSnapper.getX() - (double)halfWidth, this.sandSnapper.getY() - 2.0f, this.sandSnapper.getZ() - (double)halfWidth);
         Vec3 endPos = new Vec3(this.sandSnapper.getX() + (double)halfWidth, this.sandSnapper.getY() - 0.6f, this.sandSnapper.getZ() + (double)halfWidth);
 
