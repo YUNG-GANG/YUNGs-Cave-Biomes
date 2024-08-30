@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.world.entity.EntitySelector;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
@@ -50,6 +52,12 @@ public class RunFromPlayerGoal extends Goal {
     @Override
     public void start() {
         this.pathNav.moveTo(this.path, this.walkSpeedModifier);
+
+        if (this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(TagModule.SAND_SNAPPER_BLOCKS) ||
+                this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(Blocks.AIR) &&
+                        this.sandSnapper.level.getBlockState(this.sandSnapper.getOnPos().below()).is(TagModule.SAND_SNAPPER_BLOCKS)) {
+            this.sandSnapper.setSubmerged(true);
+        }
     }
 
     @Override
@@ -59,6 +67,12 @@ public class RunFromPlayerGoal extends Goal {
 
     @Override
     public void tick() {
+        if (!this.sandSnapper.isSubmerged() && this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(TagModule.SAND_SNAPPER_BLOCKS) ||
+                this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(Blocks.AIR) &&
+                        this.sandSnapper.level.getBlockState(this.sandSnapper.getOnPos().below()).is(TagModule.SAND_SNAPPER_BLOCKS)) {
+            this.sandSnapper.setSubmerged(true);
+        }
+
         int multiplier = this.sandSnapper.isSubmerged() ? 2 : 1;
         if (this.sandSnapper.distanceToSqr(this.toAvoid) < 49.0) {
             this.sandSnapper.getNavigation().setSpeedModifier(this.sprintSpeedModifier * multiplier);

@@ -54,15 +54,18 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private final AnimationBuilder SWIM = new AnimationBuilder().addAnimation("swim");
     private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
 
-
+    private static final EntityDataAccessor<Boolean> SUBMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> EMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIVING = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean divingHolder;
     private boolean emergedHolder;
-    private boolean isSubmerged;
+    private boolean submergedHolder;
 
     private int divingTimer;
     private static final int DIVING_LENGTH = 15;
+
+    private int aboveGroundTimer;
+    private final int MIN_ABOVE_GROUND = 100;
 
     public SandSnapperEntity(EntityType<SandSnapperEntity> entityType, Level level) {
         super(entityType, level);
@@ -81,6 +84,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         super.defineSynchedData();
         this.entityData.define(EMERGED, false);
         this.entityData.define(DIVING, false);
+        this.entityData.define(SUBMERGED, false);
     }
 
     @Override
@@ -121,6 +125,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             this.divingHolder = this.entityData.get(DIVING);
             this.divingTimer = DIVING_LENGTH;
             this.refreshDimensions();
+        } else if (dataAccessor.equals(SUBMERGED)) {
+            this.submergedHolder = this.entityData.get(SUBMERGED);
+            this.refreshDimensions();
         }
     }
 
@@ -132,12 +139,18 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         boolean isInBlock = this.getBlockStateOn().is(TagModule.SAND_SNAPPER_BLOCKS) ||
                 this.getBlockStateOn().is(Blocks.AIR) && this.level.getBlockState(this.getOnPos().below()).is(TagModule.SAND_SNAPPER_BLOCKS);
 
-        if (this.isSubmerged && !isInBlock) {
-            this.isSubmerged = false;
-            this.refreshDimensions();
-        } else if (!this.isSubmerged && isInBlock) {
-            this.isSubmerged = true;
-            this.refreshDimensions();
+        if (!this.level.isClientSide) {
+            if (this.aboveGroundTimer > 0) {
+                this.aboveGroundTimer--;
+            }
+
+            if (this.isSubmerged() && !isInBlock) {
+                this.setSubmerged(false);
+                this.refreshDimensions();
+            } else if (!this.isSubmerged() && isInBlock && this.canSubmerge()) {
+                this.setSubmerged(true);
+                this.refreshDimensions();
+            }
         }
 
         if (!this.level.isClientSide && this.isDiving()) {
@@ -257,8 +270,20 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         }
     }
 
+    public void setSubmerged(boolean isSubmerged) {
+        this.entityData.set(SUBMERGED, isSubmerged);
+
+        this.submergedHolder = isSubmerged;
+        this.aboveGroundTimer = isSubmerged ? 0 : MIN_ABOVE_GROUND;
+    }
+
+    public boolean canSubmerge() {
+        return this.aboveGroundTimer <= 0;
+    }
+
     public void setEmerging(boolean isEmerging) {
         this.entityData.set(EMERGED, isEmerging);
+        this.emergedHolder = isEmerging;
     }
 
     public boolean isEmerging() {
@@ -267,6 +292,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     public void setDiving(boolean isDiving) {
         this.entityData.set(DIVING, isDiving);
+        this.divingHolder = isDiving;
     }
 
     public boolean isDiving() {
@@ -274,7 +300,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     }
 
     public boolean isSubmerged() {
-        return this.isSubmerged && !this.isEmerging();
+        return this.submergedHolder && !this.isEmerging() && !this.isDiving();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.core.BlockPos;
@@ -60,11 +59,11 @@ public class EmergeGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        if (!this.sandSnapper.isSubmerged()) return false;
+
         if (this.sandSnapper.tickCount - this.lastUseTime < this.cooldown) {
             return false;
         }
-
-        if (!this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(TagModule.SAND_SNAPPER_BLOCKS)) return false;
 
         float halfWidth = 0.8f;
         Vec3 startPos = new Vec3(this.sandSnapper.getX() - (double)halfWidth, this.sandSnapper.getY() - 2.0f, this.sandSnapper.getZ() - (double)halfWidth);
