@@ -13,6 +13,8 @@
     "accessor.NoiseChunkAccessor",
     "accessor.PotionBrewingAccessor",
     "accessor.ServerLevelAccessor",
+    "debug.DebugPacketsMixin",
+    "debug.MobAccessor",
     "frosted_caves.MixinAbstractArrow",
     "frosted_caves.MixinAbstractCauldronBlock",
     "frosted_caves.MixinAquifer",
@@ -29,6 +31,7 @@
     "marble_caves.MixinNoiseChunk"
   ],
   "client": [
+    "debug.DebugRendererMixin",
     "lost_caves.client.MixinClientLevel",
     "lost_caves.client.MixinClientPacketListener",
     "lost_caves.client.MixinLocalPlayer"
