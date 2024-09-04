@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 
+import com.mojang.math.Vector3d;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EmergeGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.RunFromPlayerGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.SnapperStrollGoal;
@@ -64,8 +65,15 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private int divingTimer;
     private static final int DIVING_LENGTH = 15;
 
+    /**
+     * Timer tracking how long the Snapper has been above ground, in ticks.
+     */
     private int aboveGroundTimer;
-    private final int MIN_ABOVE_GROUND = 100;
+
+    /**
+     * Minimum number of ticks the Snapper must be above ground before it can submerge.
+     */
+    private static final int MIN_TICKS_ABOVE_GROUND = 100;
 
     public SandSnapperEntity(EntityType<SandSnapperEntity> entityType, Level level) {
         super(entityType, level);
@@ -74,7 +82,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 35.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.2f)
+                .add(Attributes.MOVEMENT_SPEED, 0.15f)
                 .add(Attributes.ATTACK_DAMAGE, 3.0)
                 .add(Attributes.ARMOR, 2.0);
     }
@@ -89,10 +97,10 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this,8.0f, 1.15f, 1.25f));
+        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this, 16.0f, 1.25f));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new SnapperStrollGoal(this, 1.0f));
-        this.goalSelector.addGoal(2, new EmergeGoal(this, 8.0f, 2.0f, 100));
+        this.goalSelector.addGoal(1, new SnapperStrollGoal(this, 1.0f, 1.1f));
+        this.goalSelector.addGoal(2, new EmergeGoal(this, 20.0f, 2.0f, 100));
     }
 
     @Override
@@ -111,9 +119,11 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         super.onSyncedDataUpdated(dataAccessor);
 
         if (dataAccessor.equals(EMERGED)) {
-
             if (this.level.isClientSide) {
-                AnimationController controller = this.getFactory().getOrCreateAnimationData(this.getId()).getAnimationControllers().get("generalController");
+                AnimationController controller = this.getFactory()
+                        .getOrCreateAnimationData(this.getId())
+                        .getAnimationControllers()
+                        .get("generalController");
                 if (controller != null) {
                     controller.markNeedsReload();
                 }
@@ -135,30 +145,24 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public void tick() {
         super.tick();
 
-        // Do these checks instead of just always setting based on the block it's on to allow dimension refreshing w/o cost
-        boolean isInBlock = this.getBlockStateOn().is(TagModule.SAND_SNAPPER_BLOCKS) ||
-                this.getBlockStateOn().is(Blocks.AIR) && this.level.getBlockState(this.getOnPos().below()).is(TagModule.SAND_SNAPPER_BLOCKS);
-
         if (!this.level.isClientSide) {
             if (this.aboveGroundTimer > 0) {
                 this.aboveGroundTimer--;
             }
 
-            if (this.isSubmerged() && !isInBlock) {
-                this.setSubmerged(false);
-                this.refreshDimensions();
-            } else if (!this.isSubmerged() && isInBlock && this.canSubmerge()) {
+            if (!this.isSubmerged() && this.canSubmerge(false)) {
                 this.setSubmerged(true);
-                this.refreshDimensions();
+            } else if (this.isSubmerged() && !this.canSubmerge(false)) {
+                this.setSubmerged(false);
             }
-        }
 
-        if (!this.level.isClientSide && this.isDiving()) {
-            if (this.divingTimer > 0) {
-                this.divingTimer--;
-            } else {
-                this.setDiving(false);
-                this.divingTimer = 0;
+            if (this.isDiving()) {
+                if (this.divingTimer > 0) {
+                    this.divingTimer--;
+                } else {
+                    this.setDiving(false);
+                    this.divingTimer = 0;
+                }
             }
         }
     }
@@ -180,7 +184,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
             this.heal(4.0f);
             this.gameEvent(GameEvent.MOB_INTERACT, this.eyeBlockPosition());
-            this.level.broadcastEntityEvent(this, (byte)7);
+            this.level.broadcastEntityEvent(this, (byte) 7); // Heart particles event
 
             return InteractionResult.SUCCESS;
         }
@@ -194,6 +198,17 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             this.spawnHeartParticles();
         } else {
             super.handleEntityEvent(eventId);
+        }
+    }
+
+    protected void spawnHeartParticles() {
+        for (int i = 0; i < 7; i++) {
+            double xSpeed = this.random.nextGaussian() * 0.02;
+            double ySpeed = this.random.nextGaussian() * 0.02;
+            double zSpeed = this.random.nextGaussian() * 0.02;
+            this.level.addParticle(ParticleTypes.HEART,
+                    this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0),
+                    xSpeed, ySpeed, zSpeed);
         }
     }
 
@@ -222,7 +237,6 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
         if (this.isSubmerged() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) return true;
-
         return super.isInvulnerableTo(source);
     }
 
@@ -235,14 +249,23 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public void aiStep() {
         super.aiStep();
 
+        // Unable to move while playing diving animation
         if (this.isDiving()) {
             this.getNavigation().stop();
         }
 
-        Vec3 vec3 = this.getDeltaMovement();
-        if (this.level.isClientSide() && this.isSubmerged() && vec3.length() > 0.1d) {
+        // Spawn block particles when moving while submerged
+        Vec3 movement = this.getDeltaMovement();
+        if (this.level.isClientSide() && this.isSubmerged() && movement.length() > 0.1) {
             float width = this.getDimensions(this.getPose()).width * 0.8F;
-            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()), this.getX() + (this.random.nextDouble() - 0.5) * (double)width, this.getY() + 0.1, this.getZ() + (this.random.nextDouble() - 0.5) * (double)width, vec3.x * -4.0, 1.5, vec3.z * -4.0);
+            Vector3d particlePos = new Vector3d(
+                    this.getX() + (this.random.nextDouble() - 0.5) * (double) width,
+                    this.getY() + 0.1,
+                    this.getZ() + (this.random.nextDouble() - 0.5) * (double) width);
+            Vector3d particleSpeed = new Vector3d(movement.x * -4.0, 1.5, movement.z * -4.0);
+            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()),
+                    particlePos.x, particlePos.y, particlePos.z,
+                    particleSpeed.x, particleSpeed.y, particleSpeed.z);
         }
     }
 
@@ -261,24 +284,29 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         }
     }
 
-    protected void spawnHeartParticles() {
-        for (int i = 0; i < 7; i++) {
-            double xSpeed = this.random.nextGaussian() * 0.02;
-            double ySpeed = this.random.nextGaussian() * 0.02;
-            double zSpeed = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), xSpeed, ySpeed, zSpeed);
-        }
-    }
-
     public void setSubmerged(boolean isSubmerged) {
         this.entityData.set(SUBMERGED, isSubmerged);
-
         this.submergedHolder = isSubmerged;
-        this.aboveGroundTimer = isSubmerged ? 0 : MIN_ABOVE_GROUND;
+        this.aboveGroundTimer = isSubmerged ? 0 : MIN_TICKS_ABOVE_GROUND;
+        this.refreshDimensions();
     }
 
-    public boolean canSubmerge() {
-        return this.aboveGroundTimer <= 0;
+    /**
+     * Returns whether the Snapper can submerge based on the surrounding blocks and the aboveGroundTimer.
+     *
+     * @param ignoreTimer If true, the aboveGroundTimer will be ignored and the Snapper will be able to submerge regardless,
+     *                    as long as it's in a valid submerging position.
+     * @return Whether the Snapper can submerge.
+     */
+    public boolean canSubmerge(boolean ignoreTimer) {
+        if (!ignoreTimer && this.aboveGroundTimer > 0) return false;
+
+        // Do these checks instead of just always setting based on the block it's on,
+        // to allow dimension refreshing without cost
+        BlockState blockStateOn = this.getBlockStateOn();
+        BlockState blockStateBelow = this.level.getBlockState(this.getOnPos().below());
+        return blockStateOn.is(TagModule.SAND_SNAPPER_BLOCKS) ||
+                (blockStateOn.is(Blocks.AIR) && blockStateBelow.is(TagModule.SAND_SNAPPER_BLOCKS));
     }
 
     public void setEmerging(boolean isEmerging) {

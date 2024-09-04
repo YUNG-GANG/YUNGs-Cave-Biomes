@@ -5,10 +5,12 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 
 public class SnapperStrollGoal extends WaterAvoidingRandomStrollGoal {
     private final SandSnapperEntity sandSnapper;
+    private final double submergedSpeedModifier;
 
-    public SnapperStrollGoal(SandSnapperEntity sandSnapper, double speedModifier) {
+    public SnapperStrollGoal(SandSnapperEntity sandSnapper, double speedModifier, double submergedSpeedModifier) {
         super(sandSnapper, speedModifier);
         this.sandSnapper = sandSnapper;
+        this.submergedSpeedModifier = submergedSpeedModifier;
     }
 
     @Override
@@ -16,7 +18,9 @@ public class SnapperStrollGoal extends WaterAvoidingRandomStrollGoal {
         super.tick();
 
         if (this.sandSnapper.isSubmerged()) {
-            this.sandSnapper.getNavigation().setSpeedModifier(2.0f * this.speedModifier);
+            this.sandSnapper.getNavigation().setSpeedModifier(this.submergedSpeedModifier * this.speedModifier);
+        } else {
+            this.sandSnapper.getNavigation().setSpeedModifier(this.speedModifier);
         }
     }
 }

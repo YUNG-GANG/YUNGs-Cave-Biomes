@@ -1,7 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.world.entity.EntitySelector;
@@ -11,7 +10,6 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
@@ -21,102 +19,102 @@ import java.util.function.Predicate;
 
 public class RunFromPlayerGoal extends Goal {
     private final SandSnapperEntity sandSnapper;
-    private final double walkSpeedModifier;
-    private final double sprintSpeedModifier;
+    private final double speedModifier;
     @Nullable
-    protected Player toAvoid;
+    protected Player playerToAvoid;
     protected final float maxDist;
     @Nullable
     protected Path path;
     protected final PathNavigation pathNav;
-    protected final Predicate<LivingEntity> avoidPredicate;
-    protected final Predicate<LivingEntity> predicateOnAvoidEntity;
     private final TargetingConditions avoidEntityTargeting;
 
-    public RunFromPlayerGoal(SandSnapperEntity sandSnapper, float dist, double walkSpeedModifier, double runSpeedModifier) {
-        this(sandSnapper, avoid -> true, dist, walkSpeedModifier, runSpeedModifier, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
+    public RunFromPlayerGoal(SandSnapperEntity sandSnapper, float dist, double speedModifier) {
+        this(sandSnapper, dist, speedModifier, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
     }
 
-    public RunFromPlayerGoal(SandSnapperEntity sandSnapper, Predicate<LivingEntity> avoidPredicate, float maxDist, double walkSpeedModifier, double runSpeedModifier, Predicate<LivingEntity> predicateOnAvoidEntity) {
+    public RunFromPlayerGoal(SandSnapperEntity sandSnapper, float maxDist,
+                             double speedModifier, Predicate<LivingEntity> avoidEntityPredicate) {
         this.sandSnapper = sandSnapper;
-        this.avoidPredicate = avoidPredicate;
         this.maxDist = maxDist;
-        this.walkSpeedModifier = walkSpeedModifier;
-        this.sprintSpeedModifier = runSpeedModifier;
-        this.predicateOnAvoidEntity = predicateOnAvoidEntity;
+        this.speedModifier = speedModifier;
         this.pathNav = sandSnapper.getNavigation();
+        this.avoidEntityTargeting = TargetingConditions.forCombat().range(maxDist).selector(avoidEntityPredicate);
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
-        this.avoidEntityTargeting = TargetingConditions.forCombat().range(maxDist).selector(predicateOnAvoidEntity.and(avoidPredicate));
     }
 
     @Override
     public void start() {
-        this.pathNav.moveTo(this.path, this.walkSpeedModifier);
-
-        if (this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(TagModule.SAND_SNAPPER_BLOCKS) ||
-                this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(Blocks.AIR) &&
-                        this.sandSnapper.level.getBlockState(this.sandSnapper.getOnPos().below()).is(TagModule.SAND_SNAPPER_BLOCKS)) {
+        this.pathNav.moveTo(this.path, this.speedModifier);
+        if (!this.sandSnapper.isSubmerged() && this.sandSnapper.canSubmerge(true)) {
             this.sandSnapper.setSubmerged(true);
         }
     }
 
     @Override
     public void stop() {
-        this.toAvoid = null;
+        this.playerToAvoid = null;
     }
 
     @Override
     public void tick() {
-        if (!this.sandSnapper.isSubmerged() && this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(TagModule.SAND_SNAPPER_BLOCKS) ||
-                this.sandSnapper.getLevel().getBlockState(this.sandSnapper.getOnPos()).is(Blocks.AIR) &&
-                        this.sandSnapper.level.getBlockState(this.sandSnapper.getOnPos().below()).is(TagModule.SAND_SNAPPER_BLOCKS)) {
+        if (!this.sandSnapper.isSubmerged() && this.sandSnapper.canSubmerge(true)) {
             this.sandSnapper.setSubmerged(true);
         }
 
         int multiplier = this.sandSnapper.isSubmerged() ? 2 : 1;
-        if (this.sandSnapper.distanceToSqr(this.toAvoid) < 49.0) {
-            this.sandSnapper.getNavigation().setSpeedModifier(this.sprintSpeedModifier * multiplier);
-        } else {
-            this.sandSnapper.getNavigation().setSpeedModifier(this.walkSpeedModifier * multiplier);
-        }
+        this.sandSnapper.getNavigation().setSpeedModifier(this.speedModifier * multiplier);
+
+        // TODO - we don't need this do we? It seems odd to have a separate speed when it's within 7 blocks.
+//        if (this.sandSnapper.distanceToSqr(this.toAvoid) < 49.0) {
+//            this.sandSnapper.getNavigation().setSpeedModifier(this.runSpeedModifier * multiplier);
+//        } else {
+//            this.sandSnapper.getNavigation().setSpeedModifier(this.walkSpeedModifier * multiplier);
+//        }
     }
 
     @Override
     public boolean canUse() {
-        this.toAvoid = this.sandSnapper
-                .level
-                .getNearestEntity(
-                        this.sandSnapper
-                                .level
-                                .getEntitiesOfClass(Player.class, this.sandSnapper.getBoundingBox().inflate(this.maxDist, 3.0, this.maxDist), $$0x -> true),
-                        this.avoidEntityTargeting,
-                        this.sandSnapper,
-                        this.sandSnapper.getX(),
-                        this.sandSnapper.getY(),
-                        this.sandSnapper.getZ()
-                );
-        if (this.toAvoid == null) {
+        this.playerToAvoid = this.sandSnapper.level.getNearestEntity(
+                this.sandSnapper.level
+                        .getEntitiesOfClass(Player.class, this.sandSnapper.getBoundingBox().inflate(this.maxDist, 3.0, this.maxDist), p -> true),
+                this.avoidEntityTargeting,
+                this.sandSnapper,
+                this.sandSnapper.getX(),
+                this.sandSnapper.getY(),
+                this.sandSnapper.getZ());
+
+        // No nearby players -> don't run
+        if (this.playerToAvoid == null) {
             return false;
-        } else {
-            Vec3 posAway = DefaultRandomPos.getPosAway(this.sandSnapper, 16, 7, this.toAvoid.position());
-
-            if (posAway == null) {
-                return false;
-            } else if (this.toAvoid.distanceToSqr(posAway.x, posAway.y, posAway.z) < this.toAvoid.distanceToSqr(this.sandSnapper)) {
-                return false;
-            } else {
-                this.path = this.pathNav.createPath(posAway.x, posAway.y, posAway.z, 0);
-                SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
-
-                return this.path != null && !sandstormServerData.isSandstormActive();
-            }
         }
+
+        // Get a random position away from the player to run towards
+        // TODO - comment what the 16 and 7 are for, ideally moving them into named vars.
+        // TODO - make the sand snapper attempt to stay in sand, even if it means turning back towards the player.
+        //        In other words, don't allow the player to chase the sand snapper out of the sand.
+        Vec3 targetPos = DefaultRandomPos.getPosAway(this.sandSnapper, 16, 7, this.playerToAvoid.position());
+        if (targetPos == null) {
+            return false;
+        }
+
+        // Abort if the target position will result in the sand snapper getting closer to the player.
+        // TODO - Revise. Do we need this?
+        if (this.playerToAvoid.distanceToSqr(targetPos.x, targetPos.y, targetPos.z) < this.playerToAvoid.distanceToSqr(this.sandSnapper)) {
+            return false;
+        }
+
+        this.path = this.pathNav.createPath(targetPos.x, targetPos.y, targetPos.z, 0);
+        return this.path != null && !isInActiveSandstorm();
     }
 
     @Override
     public boolean canContinueToUse() {
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        return !this.pathNav.isDone() && !isInActiveSandstorm();
+    }
 
-        return !this.pathNav.isDone() && !sandstormServerData.isSandstormActive();
+    private boolean isInActiveSandstorm() {
+        // TODO - check if the sand snapper is in a Lost Caves biome when checking for sandstorm
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        return sandstormServerData.isSandstormActive();
     }
 }

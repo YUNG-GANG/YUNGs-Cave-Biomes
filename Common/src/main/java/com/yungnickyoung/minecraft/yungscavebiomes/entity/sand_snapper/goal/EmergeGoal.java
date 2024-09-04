@@ -7,29 +7,26 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EmergeGoal extends Goal {
     private final SandSnapperEntity sandSnapper;
-    private final float distanceFromPlayer;
-    private final float sandstormDistanceFromPlayer;
+    private final float minDistanceFromPlayer;
+    private final float minDistanceFromPlayerDuringSandstorm;
     private final int cooldown;
 
     private int ticksRunning;
-    private long lastUseTime;
+    private int lastUseTime;
 
-    public EmergeGoal(SandSnapperEntity sandSnapper, float distanceFromPlayer, float sandstormDistanceFromPlayer, int cooldown) {
+    public EmergeGoal(SandSnapperEntity sandSnapper, float minDistanceFromPlayer, float minDistanceFromPlayerDuringSandstorm, int cooldown) {
         this.sandSnapper = sandSnapper;
-        this.distanceFromPlayer = distanceFromPlayer;
-        this.sandstormDistanceFromPlayer = sandstormDistanceFromPlayer;
+        this.minDistanceFromPlayer = minDistanceFromPlayer;
+        this.minDistanceFromPlayerDuringSandstorm = minDistanceFromPlayerDuringSandstorm;
         this.cooldown = cooldown;
-
         this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
     }
 
@@ -65,39 +62,28 @@ public class EmergeGoal extends Goal {
             return false;
         }
 
+        // Abort if there is any air around the sand snapper
         float halfWidth = 0.8f;
-        Vec3 startPos = new Vec3(this.sandSnapper.getX() - (double)halfWidth, this.sandSnapper.getY() - 2.0f, this.sandSnapper.getZ() - (double)halfWidth);
-        Vec3 endPos = new Vec3(this.sandSnapper.getX() + (double)halfWidth, this.sandSnapper.getY() - 0.6f, this.sandSnapper.getZ() + (double)halfWidth);
+        Vec3 startPos = new Vec3(this.sandSnapper.getX() - (double) halfWidth, this.sandSnapper.getY() - 2.0f, this.sandSnapper.getZ() - (double) halfWidth);
+        Vec3 endPos = new Vec3(this.sandSnapper.getX() + (double) halfWidth, this.sandSnapper.getY() - 0.6f, this.sandSnapper.getZ() + (double) halfWidth);
+        boolean intersectsAir = BlockPos.betweenClosedStream(new AABB(startPos, endPos))
+                .anyMatch((pos) -> this.sandSnapper.level.getBlockState(pos).isAir());
+        if (intersectsAir) return false;
 
-        AtomicBoolean intersectsAir = new AtomicBoolean(false);
-        AABB emergeBox = new AABB(startPos, endPos);
-        BlockPos.betweenClosedStream(emergeBox).forEach((pos) -> {
-            BlockState blockState = this.sandSnapper.level.getBlockState(pos);
-
-            if (blockState.isAir()) {
-                intersectsAir.set(true);
-            }
-        });
-
-        if (intersectsAir.get()) return false;
-
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
-
-        float dist = sandstormServerData.isSandstormActive() ? this.sandstormDistanceFromPlayer : this.distanceFromPlayer;
-        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(dist / 2, 4.0f, dist / 2);
-        List<Player> nearbyPlayers = this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
-
-        return nearbyPlayers.isEmpty();
+        return getPlayersInRange().isEmpty();
     }
 
     @Override
     public boolean canContinueToUse() {
+        return getPlayersInRange().isEmpty() && this.ticksRunning <= 57;
+    }
+
+    private List<Player> getPlayersInRange() {
         SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
-
-        float dist = sandstormServerData.isSandstormActive() ? this.sandstormDistanceFromPlayer : this.distanceFromPlayer;
+        float dist = sandstormServerData.isSandstormActive() ?
+                this.minDistanceFromPlayerDuringSandstorm :
+                this.minDistanceFromPlayer;
         AABB searchBox = this.sandSnapper.getBoundingBox().inflate(dist / 2, 4.0f, dist / 2);
-        List<Player> nearbyPlayers = this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
-
-        return nearbyPlayers.isEmpty() && this.ticksRunning <= 57;
+        return this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
     }
 }
