@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin.debug;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
@@ -26,7 +27,7 @@ public abstract class DebugPacketsMixin {
 
     @Inject(method = "sendGoalSelector", at = @At("HEAD"))
     private static void yungscavebiomes_debugSendGoalSelector(Level level, Mob mob, GoalSelector goalSelector, CallbackInfo ci) {
-        if (level instanceof ServerLevel serverLevel) {
+        if (level instanceof ServerLevel serverLevel && YungsCaveBiomesCommon.DEBUG_RENDERING) {
             FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
             buf.writeBlockPos(mob.blockPosition());
             buf.writeInt(mob.getId());

@@ -19,11 +19,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Blaze;
@@ -41,8 +37,8 @@ public class IceCubeEntity extends Monster {
     public float oSquish;
     private int leapTicks;
 
-    private MoveControl slimeMoveControl;
-    private MoveControl slidingMoveControl;
+    private final MoveControl slimeMoveControl;
+    private final MoveControl slidingMoveControl;
 
     public IceCubeEntity(EntityType<? extends IceCubeEntity> entityType, Level level) {
         super(entityType, level);
@@ -67,7 +63,6 @@ public class IceCubeEntity extends Monster {
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -112,11 +107,11 @@ public class IceCubeEntity extends Monster {
         super.tick();
         if (this.onGround && !this.wasOnGround) {
             for (int j = 0; j < 3 * 8; ++j) {
-                float f = this.random.nextFloat() * ((float)Math.PI * 2);
+                float f = this.random.nextFloat() * ((float) Math.PI * 2);
                 float g = this.random.nextFloat() * 0.5f + 0.5f;
-                float xOffset = Mth.sin(f) * (float)3 * 0.5f * g;
-                float zOffset = Mth.cos(f) * (float)3 * 0.5f * g;
-                this.level.addParticle(this.getParticleType(), this.getX() + (double)xOffset, this.getY(), this.getZ() + (double)zOffset, 0.0, 0.0, 0.0);
+                float xOffset = Mth.sin(f) * (float) 3 * 0.5f * g;
+                float zOffset = Mth.cos(f) * (float) 3 * 0.5f * g;
+                this.level.addParticle(this.getParticleType(), this.getX() + (double) xOffset, this.getY(), this.getZ() + (double) zOffset, 0.0, 0.0, 0.0);
                 this.targetSquish = -0.5f;
             }
             this.playSound(SoundEvents.SLIME_SQUISH, this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f) / 0.8f);
@@ -133,7 +128,7 @@ public class IceCubeEntity extends Monster {
         }
     }
 
-    protected void decreaseSquish() {
+    private void decreaseSquish() {
         this.targetSquish *= 0.6f;
     }
 
@@ -205,7 +200,7 @@ public class IceCubeEntity extends Monster {
     }
 
     protected float getAttackDamage() {
-        return (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        return (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
     }
 
     @Override
@@ -270,7 +265,7 @@ public class IceCubeEntity extends Monster {
             } else {
                 this.operation = Operation.WAIT;
                 if (this.mob.isOnGround()) {
-                    this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
+                    this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
                     if (this.jumpDelay-- <= 0) {
                         this.jumpDelay = this.iceCube.getJumpDelay();
                         if (this.isAggressive) {
@@ -285,7 +280,7 @@ public class IceCubeEntity extends Monster {
                         this.mob.setSpeed(0.0F);
                     }
                 } else {
-                    this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
+                    this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
                 }
 
             }

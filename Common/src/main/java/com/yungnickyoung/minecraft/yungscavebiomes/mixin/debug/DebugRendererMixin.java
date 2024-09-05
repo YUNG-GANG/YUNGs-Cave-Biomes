@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin.debug;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.client.renderer.debug.GoalSelectorDebugRenderer;
@@ -17,6 +18,8 @@ public class DebugRendererMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     private void yungscavebiomes_debugGoalSelectorRender(PoseStack $$0, MultiBufferSource.BufferSource $$1, double $$2, double $$3, double $$4, CallbackInfo ci) {
-        this.goalSelectorRenderer.render($$0, $$1, $$2, $$3, $$4);
+        if (YungsCaveBiomesCommon.DEBUG_RENDERING) {
+            this.goalSelectorRenderer.render($$0, $$1, $$2, $$3, $$4);
+        }
     }
 }
