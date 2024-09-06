@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -27,6 +28,7 @@ public class RunFromPlayerGoal extends Goal {
     protected Path path;
     protected final PathNavigation pathNav;
     private final TargetingConditions avoidEntityTargeting;
+    private boolean playedPanicSound;
 
     public RunFromPlayerGoal(SandSnapperEntity sandSnapper, float dist, double speedModifier) {
         this(sandSnapper, dist, speedModifier, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
@@ -39,6 +41,7 @@ public class RunFromPlayerGoal extends Goal {
         this.speedModifier = speedModifier;
         this.pathNav = sandSnapper.getNavigation();
         this.avoidEntityTargeting = TargetingConditions.forCombat().range(maxDist).selector(avoidEntityPredicate);
+        this.playedPanicSound = false;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
@@ -53,12 +56,17 @@ public class RunFromPlayerGoal extends Goal {
     @Override
     public void stop() {
         this.playerToAvoid = null;
+        this.playedPanicSound = false;
     }
 
     @Override
     public void tick() {
         if (!this.sandSnapper.isSubmerged() && this.sandSnapper.canSubmerge(true)) {
             this.sandSnapper.setSubmerged(true);
+            if (!this.playedPanicSound) {
+                this.playPanicSound();
+                this.playedPanicSound = true;
+            }
         }
 
         int multiplier = this.sandSnapper.isSubmerged() ? 2 : 1;
@@ -116,5 +124,10 @@ public class RunFromPlayerGoal extends Goal {
         // TODO - check if the sand snapper is in a Lost Caves biome when checking for sandstorm
         SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
         return sandstormServerData.isSandstormActive();
+    }
+
+    private void playPanicSound() {
+        float pitch = Mth.randomBetween(this.sandSnapper.getRandom(), 1.0F, 1.2F);
+        this.sandSnapper.playSound(this.sandSnapper.getPanicSound(), 1.0F, pitch);
     }
 }

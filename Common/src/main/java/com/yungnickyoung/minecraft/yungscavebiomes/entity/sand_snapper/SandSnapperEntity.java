@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -185,6 +186,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             this.heal(4.0f);
             this.gameEvent(GameEvent.MOB_INTERACT, this.eyeBlockPosition());
             this.level.broadcastEntityEvent(this, (byte) 7); // Heart particles event
+            float pitch = Mth.randomBetween(this.random, 0.9f, 1.2f);
+            this.playSound(SoundModule.SAND_SNAPPER_HAPPY.get(), 1.0f, pitch);
 
             return InteractionResult.SUCCESS;
         }
@@ -339,6 +342,10 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     @Override
     protected @Nullable SoundEvent getDeathSound() {
         return SoundModule.SAND_SNAPPER_DEATH.get();
+    }
+
+    public SoundEvent getPanicSound() {
+        return SoundModule.SAND_SNAPPER_PANIC.get();
     }
 
     private <E extends IAnimatable> PlayState generalPredicate(AnimationEvent<E> event) {
