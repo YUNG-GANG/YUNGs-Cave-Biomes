@@ -18,11 +18,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -245,6 +241,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     public float getWalkTargetValue(BlockPos movePos, LevelReader level) {
+        // prefer moving on sand
         return level.getBlockState(movePos.below()).is(TagModule.SAND_SNAPPER_BLOCKS) ? 10.0F : 0.0F;
     }
 
