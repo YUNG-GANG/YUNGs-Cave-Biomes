@@ -11,12 +11,16 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.Target;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Mixin(DebugPackets.class)
@@ -42,6 +46,28 @@ public abstract class DebugPacketsMixin {
             });
 
             sendPacketToAllPlayers(serverLevel, buf, ClientboundCustomPayloadPacket.DEBUG_GOAL_SELECTOR);
+        }
+    }
+
+    @Inject(method = "sendPathFindingPacket", at = @At("HEAD"))
+    private static void yungscavebiomes_debugPathfinding(Level level, Mob mob, @Nullable Path path, float maxDistanceToWaypoint, CallbackInfo ci) {
+        if (path == null) return;
+
+        if (level instanceof ServerLevel serverLevel && YungsCaveBiomesCommon.DEBUG_RENDERING) {
+            if (((PathAccessor) path).getTargetNodes() == null || ((PathAccessor) path).getTargetNodes().isEmpty()) {
+                // Fill path target nodes with dummy values.
+                // targetNodes is not actually used, but the client expects it to be non-null for some reason.
+                Set<Target> targetNodes = new HashSet<>();
+                targetNodes.add(new Target(0, 0, 0));
+                ((PathAccessor) path).setTargetNodes(targetNodes);
+            }
+
+            FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+            buf.writeInt(mob.getId());
+            buf.writeFloat(maxDistanceToWaypoint);
+            path.writeToStream(buf);
+
+            sendPacketToAllPlayers(serverLevel, buf, ClientboundCustomPayloadPacket.DEBUG_PATHFINDING_PACKET);
         }
     }
 }

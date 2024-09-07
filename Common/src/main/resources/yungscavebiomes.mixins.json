@@ -15,6 +15,7 @@
     "accessor.ServerLevelAccessor",
     "debug.DebugPacketsMixin",
     "debug.MobAccessor",
+    "debug.PathAccessor",
     "frosted_caves.MixinAbstractArrow",
     "frosted_caves.MixinAbstractCauldronBlock",
     "frosted_caves.MixinAquifer",
