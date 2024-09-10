@@ -48,6 +48,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look");
+    private final AnimationBuilder LOOKAROUND = new AnimationBuilder().addAnimation("look_turn_head");
     private final AnimationBuilder DIVE = new AnimationBuilder().addAnimation("diveback");
     private final AnimationBuilder SWIM = new AnimationBuilder().addAnimation("swim");
     private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
@@ -94,9 +95,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this, 16.0f, 1.25f));
+        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this, 16.0f, 1.25, 2.0));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new SnapperStrollGoal(this, 1.0f, 1.1f));
+        this.goalSelector.addGoal(1, new SnapperStrollGoal(this, 1.0, 1.25));
         this.goalSelector.addGoal(2, new EmergeGoal(this, 20.0f, 2.0f, 100));
     }
 
@@ -256,7 +257,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
         // Spawn block particles when moving while submerged
         Vec3 movement = this.getDeltaMovement();
-        if (this.level.isClientSide() && this.isSubmerged() && movement.length() > 0.1) {
+        if (this.level.isClientSide() && this.isSubmerged() && movement.length() > 0.01F) {
             float width = this.getDimensions(this.getPose()).width * 0.8F;
             Vector3d particlePos = new Vector3d(
                     this.getX() + (this.random.nextDouble() - 0.5) * (double) width,

@@ -29,6 +29,7 @@ public class RunFromPlayerGoal extends Goal {
 
     private final SandSnapperEntity sandSnapper;
     private final double speedModifier;
+    private final double submergedSpeedModifier;
     @Nullable
     protected Player playerToAvoid;
     protected final float maxDist;
@@ -39,15 +40,16 @@ public class RunFromPlayerGoal extends Goal {
     private boolean playedPanicSound;
     private int refreshPathTimer;
 
-    public RunFromPlayerGoal(SandSnapperEntity sandSnapper, float dist, double speedModifier) {
-        this(sandSnapper, dist, speedModifier, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
+    public RunFromPlayerGoal(SandSnapperEntity sandSnapper, float dist, double speedModifier, double submergedSpeedModifier) {
+        this(sandSnapper, dist, speedModifier, submergedSpeedModifier, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
     }
 
-    public RunFromPlayerGoal(SandSnapperEntity sandSnapper, float maxDist,
-                             double speedModifier, Predicate<LivingEntity> avoidEntityPredicate) {
+    private RunFromPlayerGoal(SandSnapperEntity sandSnapper, float maxDist, double speedModifier,
+                             double submergedSpeedModifier, Predicate<LivingEntity> avoidEntityPredicate) {
         this.sandSnapper = sandSnapper;
         this.maxDist = maxDist;
         this.speedModifier = speedModifier;
+        this.submergedSpeedModifier = submergedSpeedModifier;
         this.pathNav = sandSnapper.getNavigation();
         this.avoidEntityTargeting = TargetingConditions.forCombat().range(maxDist).selector(avoidEntityPredicate);
         this.playedPanicSound = false;
@@ -80,7 +82,7 @@ public class RunFromPlayerGoal extends Goal {
             }
         }
 
-        int multiplier = this.sandSnapper.isSubmerged() ? 2 : 1;
+        double multiplier = this.sandSnapper.isSubmerged() ? submergedSpeedModifier : 1.0;
         this.sandSnapper.getNavigation().setSpeedModifier(this.speedModifier * multiplier);
 
         this.refreshPathTimer--;
