@@ -18,7 +18,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -47,18 +51,20 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look");
-    private final AnimationBuilder LOOKAROUND = new AnimationBuilder().addAnimation("look_turn_head");
+    private final AnimationBuilder EMERGE_PLAYER = new AnimationBuilder().addAnimation("look").addAnimation("look_loop");
+    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look").addAnimation("look_turn_head");
     private final AnimationBuilder DIVE = new AnimationBuilder().addAnimation("diveback");
     private final AnimationBuilder SWIM = new AnimationBuilder().addAnimation("swim");
     private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
 
     private static final EntityDataAccessor<Boolean> SUBMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> EMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> LOOKING_AT_PLAYER = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIVING = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean divingHolder;
     private boolean emergedHolder;
     private boolean submergedHolder;
+    private boolean lookingAtPlayerHolder;
 
     private int divingTimer;
     private static final int DIVING_LENGTH = 15;
@@ -91,6 +97,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         this.entityData.define(EMERGED, false);
         this.entityData.define(DIVING, false);
         this.entityData.define(SUBMERGED, false);
+        this.entityData.define(LOOKING_AT_PLAYER, false);
     }
 
     @Override
@@ -98,7 +105,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         this.goalSelector.addGoal(0, new RunFromPlayerGoal(this, 16.0f, 1.25, 2.0));
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SnapperStrollGoal(this, 1.0, 1.25));
-        this.goalSelector.addGoal(2, new EmergeGoal(this, 20.0f, 2.0f, 100));
+        this.goalSelector.addGoal(2, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
     }
 
     @Override
@@ -136,6 +143,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         } else if (dataAccessor.equals(SUBMERGED)) {
             this.submergedHolder = this.entityData.get(SUBMERGED);
             this.refreshDimensions();
+        } else if (dataAccessor.equals(LOOKING_AT_PLAYER)) {
+            this.lookingAtPlayerHolder = this.entityData.get(LOOKING_AT_PLAYER);
         }
     }
 
@@ -332,6 +341,15 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         return this.submergedHolder && !this.isEmerging() && !this.isDiving();
     }
 
+    public boolean isLookingAtPlayer() {
+        return this.lookingAtPlayerHolder;
+    }
+
+    public void setLookingAtPlayer(boolean isLookingAtPlayer) {
+        this.entityData.set(LOOKING_AT_PLAYER, isLookingAtPlayer);
+        this.lookingAtPlayerHolder = isLookingAtPlayer;
+    }
+
     @Override
     protected @Nullable SoundEvent getHurtSound(DamageSource $$0) {
         return SoundModule.SAND_SNAPPER_HURT.get();
@@ -348,7 +366,11 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     private <E extends IAnimatable> PlayState generalPredicate(AnimationEvent<E> event) {
         if (this.isEmerging()) {
-            event.getController().setAnimation(EMERGE);
+            if (this.isLookingAtPlayer()) {
+                event.getController().setAnimation(EMERGE_PLAYER);
+            } else {
+                event.getController().setAnimation(EMERGE);
+            }
             return PlayState.CONTINUE;
         } else if (this.isDiving()) {
             event.getController().setAnimation(DIVE);

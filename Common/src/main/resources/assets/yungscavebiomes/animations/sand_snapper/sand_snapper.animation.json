@@ -534,6 +534,38 @@
 					}
 				}
 			}
+		},
+		"look_loop": {
+			"loop": true,
+			"animation_length": 0.375,
+			"bones": {
+				"bone8": {
+					"rotation": [-75, 0, 0],
+					"position": [0, -5, 0]
+				},
+				"bone7": {
+					"rotation": [78.71825, -12.2113, -40.39901],
+					"position": [0, 0, -3]
+				},
+				"bone6": {
+					"rotation": [94.41623, 66.8249, 25.11575],
+					"position": [0, 0, 1]
+				},
+				"bone5": {
+					"rotation": [94.4162, -66.8249, -25.1157],
+					"position": [0, 0, 1]
+				},
+				"bone4": {
+					"rotation": [78.71825, 12.2113, 40.399],
+					"position": [0, 0, -3]
+				},
+				"bone3": {
+					"rotation": [-37.5, 0, 0]
+				},
+				"bone": {
+					"rotation": [55, 0, 0]
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

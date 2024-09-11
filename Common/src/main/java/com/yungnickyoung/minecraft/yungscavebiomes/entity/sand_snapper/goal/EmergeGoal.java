@@ -17,15 +17,17 @@ public class EmergeGoal extends Goal {
     private final SandSnapperEntity sandSnapper;
     private final float minDistanceFromPlayer;
     private final float minDistanceFromPlayerDuringSandstorm;
+    private final float lookAtPlayerRange;
     private final int cooldown;
 
     private int ticksRunning;
     private int lastUseTime;
 
-    public EmergeGoal(SandSnapperEntity sandSnapper, float minDistanceFromPlayer, float minDistanceFromPlayerDuringSandstorm, int cooldown) {
+    public EmergeGoal(SandSnapperEntity sandSnapper, float minDistanceFromPlayer, float minDistanceFromPlayerDuringSandstorm, float lookAtPlayerRange, int cooldown) {
         this.sandSnapper = sandSnapper;
         this.minDistanceFromPlayer = minDistanceFromPlayer;
         this.minDistanceFromPlayerDuringSandstorm = minDistanceFromPlayerDuringSandstorm;
+        this.lookAtPlayerRange = lookAtPlayerRange;
         this.cooldown = cooldown;
         this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
     }
@@ -33,6 +35,11 @@ public class EmergeGoal extends Goal {
     @Override
     public void tick() {
         this.ticksRunning++;
+
+        Player nearestPlayer = this.sandSnapper.level.getNearestPlayer(this.sandSnapper, this.lookAtPlayerRange);
+        if (this.sandSnapper.isLookingAtPlayer() && nearestPlayer != null) {
+            this.sandSnapper.getLookControl().setLookAt(nearestPlayer);
+        }
     }
 
     @Override
@@ -44,6 +51,8 @@ public class EmergeGoal extends Goal {
     public void start() {
         this.ticksRunning = 0;
         this.sandSnapper.setEmerging(true);
+        this.sandSnapper.setLookingAtPlayer(!this.getPlayersInRange(this.lookAtPlayerRange).isEmpty());
+
         this.sandSnapper.getNavigation().stop();
     }
 
@@ -70,20 +79,26 @@ public class EmergeGoal extends Goal {
                 .anyMatch((pos) -> this.sandSnapper.level.getBlockState(pos).isAir());
         if (intersectsAir) return false;
 
-        return getPlayersInRange().isEmpty();
-    }
-
-    @Override
-    public boolean canContinueToUse() {
-        return getPlayersInRange().isEmpty() && this.ticksRunning <= 57;
-    }
-
-    private List<Player> getPlayersInRange() {
         SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
         float dist = sandstormServerData.isSandstormActive() ?
                 this.minDistanceFromPlayerDuringSandstorm :
                 this.minDistanceFromPlayer;
-        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(dist / 2, 4.0f, dist / 2);
+
+        return getPlayersInRange(dist).isEmpty();
+    }
+
+    @Override
+    public boolean canContinueToUse() {
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        float dist = sandstormServerData.isSandstormActive() ?
+                this.minDistanceFromPlayerDuringSandstorm :
+                this.minDistanceFromPlayer;
+        return getPlayersInRange(dist).isEmpty() && this.ticksRunning <= 57;
+    }
+
+    private List<Player> getPlayersInRange(float range) {
+
+        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(range / 2, 4.0f, range / 2);
         return this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
     }
 }
