@@ -65,7 +65,7 @@ public class EmergeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.sandSnapper.isSubmerged()) return false;
+        if (!this.sandSnapper.isSubmerged() || this.sandSnapper.isDiggingDown() || this.sandSnapper.isDiggingUp()) return false;
 
         if (this.sandSnapper.tickCount - this.lastUseTime < this.cooldown) {
             return false;
@@ -94,6 +94,11 @@ public class EmergeGoal extends Goal {
                 this.minDistanceFromPlayerDuringSandstorm :
                 this.minDistanceFromPlayer;
         return getPlayersInRange(dist).isEmpty() && this.ticksRunning <= 57;
+    }
+
+    @Override
+    public boolean isInterruptable() {
+        return false;
     }
 
     private List<Player> getPlayersInRange(float range) {
