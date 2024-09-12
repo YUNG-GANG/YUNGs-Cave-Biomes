@@ -102,7 +102,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this, 16.0f, 1.25, 2.0));
+        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0));
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SnapperStrollGoal(this, 1.0, 1.25));
         this.goalSelector.addGoal(2, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
