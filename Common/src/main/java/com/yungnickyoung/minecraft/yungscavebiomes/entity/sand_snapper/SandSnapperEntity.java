@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 
 import com.mojang.math.Vector3d;
+import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EatPeachGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EmergeGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.RunFromPlayerGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.SnapperStrollGoal;
@@ -58,6 +59,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
     private final AnimationBuilder DIG_DOWN = new AnimationBuilder().addAnimation("dig_down");
     private final AnimationBuilder DIG_UP = new AnimationBuilder().addAnimation("dig_up");
+    private final AnimationBuilder EAT = new AnimationBuilder().addAnimation("eat");
 
     private static final EntityDataAccessor<Boolean> SUBMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> EMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
@@ -65,6 +67,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private static final EntityDataAccessor<Boolean> DIVING = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIGGING_DOWN = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIGGING_UP = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
 
     private boolean divingHolder;
     private boolean emergedHolder;
@@ -72,6 +75,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private boolean lookingAtPlayerHolder;
     private boolean diggingDownHolder;
     private boolean diggingUpHolder;
+    private boolean eatingHolder;
 
     private int divingTimer;
     private static final int DIVING_LENGTH = 15;
@@ -91,6 +95,11 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
      * Minimum number of ticks the Snapper must be above ground before it can submerge.
      */
     private static final int MIN_TICKS_ABOVE_GROUND = 100;
+
+    /**
+     * Locks the submerging behavior to stop the Snapper from going under
+     */
+    private boolean submergeLocked = false;
 
     public SandSnapperEntity(EntityType<SandSnapperEntity> entityType, Level level) {
         super(entityType, level);
@@ -113,14 +122,16 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         this.entityData.define(LOOKING_AT_PLAYER, false);
         this.entityData.define(DIGGING_DOWN, false);
         this.entityData.define(DIGGING_UP, false);
+        this.entityData.define(EATING, false);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new SnapperStrollGoal(this, 1.0, 1.25));
-        this.goalSelector.addGoal(2, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
+        this.goalSelector.addGoal(1, new EatPeachGoal(this, 16.0f, 4.0f, 8.0f, 2.0f));
+        this.goalSelector.addGoal(2, new SnapperStrollGoal(this, 1.0, 1.25));
+        this.goalSelector.addGoal(3, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
     }
 
     @Override
@@ -176,6 +187,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             }
 
             this.refreshDimensions();
+        } else if (dataAccessor.equals(EATING)) {
+            this.eatingHolder = this.entityData.get(EATING);
         }
     }
 
@@ -373,12 +386,22 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public boolean canSubmerge(boolean ignoreTimer) {
         if (!ignoreTimer && this.aboveGroundTimer > 0) return false;
 
+        if (this.submergeLocked) return false;
+
         // Do these checks instead of just always setting based on the block it's on,
         // to allow dimension refreshing without cost
         BlockState blockStateOn = this.getBlockStateOn();
         BlockState blockStateBelow = this.level.getBlockState(this.getOnPos().below());
         return blockStateOn.is(TagModule.SAND_SNAPPER_BLOCKS) ||
                 (blockStateOn.is(Blocks.AIR) && blockStateBelow.is(TagModule.SAND_SNAPPER_BLOCKS));
+    }
+
+    public void setSubmergeLocked(boolean locked) {
+        this.submergeLocked = locked;
+    }
+
+    public boolean isSubmergeLocked() {
+        return this.submergeLocked;
     }
 
     public void setEmerging(boolean isEmerging) {
@@ -428,6 +451,15 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         this.lookingAtPlayerHolder = isLookingAtPlayer;
     }
 
+    public boolean isEating() {
+        return this.eatingHolder;
+    }
+
+    public void setEating(boolean isEating) {
+        this.entityData.set(EATING, isEating);
+        this.eatingHolder = isEating;
+    }
+
     @Override
     protected @Nullable SoundEvent getHurtSound(DamageSource $$0) {
         return SoundModule.SAND_SNAPPER_HURT.get();
@@ -449,6 +481,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             } else {
                 event.getController().setAnimation(EMERGE);
             }
+            return PlayState.CONTINUE;
+        } else if (this.isEating()) {
+            event.getController().setAnimation(EAT);
             return PlayState.CONTINUE;
         } else if (this.isDiving()) {
             event.getController().setAnimation(DIVE);
