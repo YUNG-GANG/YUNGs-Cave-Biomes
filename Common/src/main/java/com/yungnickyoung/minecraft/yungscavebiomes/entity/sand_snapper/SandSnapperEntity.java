@@ -105,6 +105,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private int friendlyTimer;
     private static final int FRIENDLY_TIMER_LENGTH = 3600; // 3600 ticks = 3 minutes
 
+    private int panicSoundCooldownTimer;
+    private static final int PANIC_SOUND_COOLDOWN = 60;
+
     public SandSnapperEntity(EntityType<SandSnapperEntity> entityType, Level level) {
         super(entityType, level);
     }
@@ -133,7 +136,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     protected void registerGoals() {
         this.runFromPlayerGoal = new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0);
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 1.75f));
+        this.goalSelector.addGoal(2, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 2.0f));
         this.goalSelector.addGoal(3, this.runFromPlayerGoal);
         this.goalSelector.addGoal(4, new SnapperStrollGoal(this, 1.0, 1.25));
         this.goalSelector.addGoal(5, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
@@ -204,6 +207,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         if (!this.level.isClientSide) {
             if (this.aboveGroundTimer > 0) {
                 this.aboveGroundTimer--;
+            }
+            if (this.panicSoundCooldownTimer > 0) {
+                this.panicSoundCooldownTimer--;
             }
             if (this.friendlyTimer > 0) {
                 this.friendlyTimer--;
@@ -491,6 +497,14 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     public SoundEvent getPanicSound() {
         return SoundModule.SAND_SNAPPER_PANIC.get();
+    }
+
+    public void tryPlayPanicSound() {
+        if (this.panicSoundCooldownTimer > 0) return;
+
+        float pitch = Mth.randomBetween(this.getRandom(), 1.0F, 1.2F);
+        this.playSound(this.getPanicSound(), 1.0F, pitch);
+        this.panicSoundCooldownTimer = PANIC_SOUND_COOLDOWN;
     }
 
     private <E extends IAnimatable> PlayState generalPredicate(AnimationEvent<E> event) {
