@@ -134,6 +134,11 @@ public class RunFromPlayerGoal extends Goal {
         return !this.pathNav.isDone() && !isInActiveSandstorm();
     }
 
+    @Override
+    public boolean isInterruptable() {
+        return false;
+    }
+
     /**
      * Attempts to find a target position away from the player for the sand snapper to run to.
      * @return The target position, or null if no target position is found or if the playerToAvoid is null.

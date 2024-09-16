@@ -102,7 +102,6 @@ public class EmergeGoal extends Goal {
     }
 
     private List<Player> getPlayersInRange(float range) {
-
         AABB searchBox = this.sandSnapper.getBoundingBox().inflate(range / 2, 4.0f, range / 2);
         return this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
     }

@@ -19,11 +19,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -69,6 +65,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private static final EntityDataAccessor<Boolean> DIGGING_UP = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> EATING = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
 
+    private RunFromPlayerGoal runFromPlayerGoal;
+
     private boolean divingHolder;
     private boolean emergedHolder;
     private boolean submergedHolder;
@@ -101,6 +99,12 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
      */
     private boolean submergeLocked = false;
 
+    /**
+     * Timer tracking how long the Snapper will be friendly to players after being fed a prickly peach.
+     */
+    private int friendlyTimer;
+    private static final int FRIENDLY_TIMER_LENGTH = 3600; // 3600 ticks = 3 minutes
+
     public SandSnapperEntity(EntityType<SandSnapperEntity> entityType, Level level) {
         super(entityType, level);
     }
@@ -127,11 +131,12 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0));
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new EatPeachGoal(this, 16.0f, 4.0f, 8.0f, 2.0f));
-        this.goalSelector.addGoal(2, new SnapperStrollGoal(this, 1.0, 1.25));
-        this.goalSelector.addGoal(3, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
+        this.runFromPlayerGoal = new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0);
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 1.75f));
+        this.goalSelector.addGoal(3, this.runFromPlayerGoal);
+        this.goalSelector.addGoal(4, new SnapperStrollGoal(this, 1.0, 1.25));
+        this.goalSelector.addGoal(5, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
     }
 
     @Override
@@ -200,6 +205,16 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             if (this.aboveGroundTimer > 0) {
                 this.aboveGroundTimer--;
             }
+            if (this.friendlyTimer > 0) {
+                this.friendlyTimer--;
+                if (this.friendlyTimer <= 0) {
+                    if (this.runFromPlayerGoal == null) {
+                        this.runFromPlayerGoal = new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0);
+                    }
+                    this.goalSelector.removeGoal(this.runFromPlayerGoal);
+                    this.goalSelector.addGoal(3, this.runFromPlayerGoal);
+                }
+            }
 
             if (!this.isSubmerged() && this.canSubmerge(false)) {
                 this.setSubmerged(true);
@@ -260,6 +275,10 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             this.level.broadcastEntityEvent(this, (byte) 7); // Heart particles event
             float pitch = Mth.randomBetween(this.random, 0.9f, 1.2f);
             this.playSound(SoundModule.SAND_SNAPPER_HAPPY.get(), 1.0f, pitch);
+
+            // Make the Snapper friendly to players for a set amount of time
+            this.friendlyTimer = FRIENDLY_TIMER_LENGTH;
+            this.goalSelector.removeGoal(this.runFromPlayerGoal);
 
             return InteractionResult.SUCCESS;
         }

@@ -78,7 +78,7 @@ public class EatPeachGoal extends Goal {
     @Override
     public boolean canUse() {
         List<ItemEntity> itemsNearby = this.sandSnapper.getLevel().getEntitiesOfClass(ItemEntity.class,
-                this.sandSnapper.getBoundingBox().inflate(this.horizontalRange / 2, this.verticalRange / 2, this.horizontalRange / 2),
+                this.sandSnapper.getBoundingBox().inflate(this.horizontalRange, this.verticalRange, this.horizontalRange),
                 entity -> entity.getItem().is(ItemModule.PRICKLY_PEACH_ITEM.get()));
 
         if (itemsNearby.isEmpty()) return false;
