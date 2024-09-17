@@ -43,6 +43,7 @@ public class IceCubeEntity extends Monster {
     public IceCubeEntity(EntityType<? extends IceCubeEntity> entityType, Level level) {
         super(entityType, level);
         this.setDiscardFriction(true);
+        this.xpReward = 12;
 
         this.slimeMoveControl = new IceCubeSlimeMoveControl(this);
         this.slidingMoveControl = new MoveControl(this);
@@ -67,6 +68,7 @@ public class IceCubeEntity extends Monster {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 32.0)
                 .add(Attributes.FOLLOW_RANGE, 35.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.2f)
                 .add(Attributes.ATTACK_DAMAGE, 3.0)
@@ -190,6 +192,7 @@ public class IceCubeEntity extends Monster {
             if (this.distanceToSqr(livingEntity) < 2.5 && this.hasLineOfSight(livingEntity) && livingEntity.hurt(DamageSource.mobAttack(this), this.getAttackDamage())) {
                 this.playSound(SoundEvents.SLIME_ATTACK, 1.0f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
                 this.doEnchantDamageEffects(this, livingEntity);
+                livingEntity.setTicksFrozen(livingEntity.getTicksFrozen() + 200);
             }
         }
     }
