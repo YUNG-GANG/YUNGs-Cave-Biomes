@@ -65,6 +65,7 @@ public class BlockModule {
                     .strength(0.3f)
                     .lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 4 : 0)
                     .randomTicks()
+                    .isValidSpawn((state, world, pos, entityType) -> true)
                     .sound(SoundType.GLASS)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
@@ -182,7 +183,7 @@ public class BlockModule {
             .instabreak()
             .sound(SoundType.WEEPING_VINES)));
 
-//    @AutoRegister("marble")
+    //    @AutoRegister("marble")
     public static final AutoRegisterBlock MARBLE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
                     .of(Material.STONE, MaterialColor.TERRACOTTA_WHITE)
                     .requiresCorrectToolForDrops()
@@ -190,7 +191,7 @@ public class BlockModule {
                     .sound(SoundType.STONE)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
-//    @AutoRegister("travertine")
+    //    @AutoRegister("travertine")
     public static final AutoRegisterBlock TRAVERTINE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
                     .of(Material.STONE, MaterialColor.TERRACOTTA_PINK)
                     .requiresCorrectToolForDrops()
