@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageSourceModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +31,7 @@ public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
 
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
-        if (!(entity instanceof LivingEntity) || entity.getType() == EntityType.FOX || entity.getType() == EntityType.BEE) {
+        if (!(entity instanceof LivingEntity) || entity.getType() == EntityType.FOX || entity.getType() == EntityType.BEE || entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
             return;
         }
         entity.makeStuckInBlock(blockState, new Vec3(0.8f, 0.75, 0.8f));

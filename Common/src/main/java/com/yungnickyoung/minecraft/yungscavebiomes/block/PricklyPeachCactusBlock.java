@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.module.CriteriaModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,6 +16,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -149,6 +151,9 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
 
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+        if (entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
+            return; // Sand snapper is immune to prickly cactus
+        }
         entity.hurt(DamageSource.CACTUS, 1.0f);
     }
 
