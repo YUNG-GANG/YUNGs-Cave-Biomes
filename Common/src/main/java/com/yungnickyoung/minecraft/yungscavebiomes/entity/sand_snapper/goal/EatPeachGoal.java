@@ -105,7 +105,6 @@ public class EatPeachGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-
         if (this.peachItem.isRemoved()) return false;
 
         SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();

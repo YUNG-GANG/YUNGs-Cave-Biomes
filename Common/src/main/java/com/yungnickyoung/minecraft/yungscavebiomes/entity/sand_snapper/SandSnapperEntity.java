@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -143,6 +144,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     protected void registerGoals() {
         this.runFromPlayerGoal = new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0);
         this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new SnapperTemptGoal(this, 1.0, Ingredient.of(ItemModule.PRICKLY_PEACH_ITEM.get()), false, 2.5f));
         this.goalSelector.addGoal(2, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 2.0f));
         this.goalSelector.addGoal(3, this.runFromPlayerGoal);
         this.goalSelector.addGoal(4, new SnapperStrollGoal(this, 1.0, 1.25));
