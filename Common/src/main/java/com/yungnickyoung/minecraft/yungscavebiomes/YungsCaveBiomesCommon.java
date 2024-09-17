@@ -27,6 +27,9 @@ public class YungsCaveBiomesCommon {
             .build();
 
 	public static void init() {
+        DEBUG_LOG = DEBUG_LOG && Services.PLATFORM.isDevelopmentEnvironment();
+        DEBUG_RENDERING = DEBUG_RENDERING && Services.PLATFORM.isDevelopmentEnvironment();
+
         YungAutoRegister.scanPackageForAnnotations("com.yungnickyoung.minecraft.yungscavebiomes");
 		Services.MODULES.loadModules();
 	}
