@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeAttackGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeLeapGoal;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class IceCubeEntity extends Monster {
@@ -161,6 +163,11 @@ public class IceCubeEntity extends Monster {
     @Override
     public void playerTouch(Player player) {
         this.dealDamage(player);
+    }
+
+    @Override
+    protected void checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3) {
+        // Ice Cubes don't take fall damage
     }
 
     public int getJumpDelay() {
