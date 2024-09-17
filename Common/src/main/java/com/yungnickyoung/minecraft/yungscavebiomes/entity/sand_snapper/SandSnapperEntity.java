@@ -1,10 +1,9 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 
 import com.mojang.math.Vector3d;
-import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EatPeachGoal;
-import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EmergeGoal;
-import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.RunFromPlayerGoal;
-import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.SnapperStrollGoal;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock;
+import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.*;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
@@ -28,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -105,6 +105,13 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private int friendlyTimer;
     private static final int FRIENDLY_TIMER_LENGTH = 3600; // 3600 ticks = 3 minutes
 
+    /**
+     * Timer tracking how long since the Snapper ate a prickly peach from a cactus.
+     */
+    public int cactusEatCooldownTimer;
+    public static final int CACTUS_EAT_COOLDOWN = 6000; // 6000 ticks = 5 minutes
+    public static final int CACTUS_EAT_INTERRUPTED_COOLDOWN = 200; // cooldown when player interrupts cactus eating
+
     private int panicSoundCooldownTimer;
     private static final int PANIC_SOUND_COOLDOWN = 60;
 
@@ -139,6 +146,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         this.goalSelector.addGoal(2, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 2.0f));
         this.goalSelector.addGoal(3, this.runFromPlayerGoal);
         this.goalSelector.addGoal(4, new SnapperStrollGoal(this, 1.0, 1.25));
+        this.goalSelector.addGoal(5, new EatPricklyPeachCactusGoal(this, 6, 1, 4.0f, 2.0f));
         this.goalSelector.addGoal(5, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
     }
 
@@ -220,6 +228,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                     this.goalSelector.removeGoal(this.runFromPlayerGoal);
                     this.goalSelector.addGoal(3, this.runFromPlayerGoal);
                 }
+            }
+            if (this.cactusEatCooldownTimer > 0) {
+                this.cactusEatCooldownTimer--;
             }
 
             if (!this.isSubmerged() && this.canSubmerge(false)) {
@@ -382,6 +393,21 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                 BlockState stateAbove = this.level.getBlockState(pos.above());
                 return !blockState.isAir() && !(blockState.is(TagModule.SAND_SNAPPER_BLOCKS) && stateAbove.is(Blocks.AIR)) && blockState.isSuffocating(this.level, pos) && Shapes.joinIsNotEmpty(blockState.getCollisionShape(this.level, pos).move(pos.getX(), pos.getY(), pos.getZ()), Shapes.create(aabb), BooleanOp.AND);
             });
+        }
+    }
+
+    public boolean isOnCactusEatCooldown() {
+        return this.cactusEatCooldownTimer > 0;
+    }
+
+    public void eatCactus(BlockPos cactusPos) {
+        BlockPos cactusBlockPos = new BlockPos(cactusPos);
+        BlockState state = this.level.getBlockState(cactusBlockPos);
+        if (state.is(BlockModule.PRICKLY_PEACH_CACTUS.get()) && state.getValue(PricklyPeachCactusBlock.FRUIT)) {
+            // Remove peach from cactus
+            this.level.setBlock(cactusBlockPos, state
+                    .setValue(PricklyPeachCactusBlock.FRUIT, false)
+                    .setValue(PricklyPeachCactusBlock.AGE, 0), Block.UPDATE_ALL);
         }
     }
 
