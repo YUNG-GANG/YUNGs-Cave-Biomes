@@ -21,6 +21,7 @@
     "frosted_caves.MixinAquifer",
     "frosted_caves.MixinBlock",
     "frosted_caves.MixinCrossbowItem",
+    "frosted_caves.MixinEntity",
     "frosted_caves.MixinThrownPotion",
     "lost_caves.MixinCactusBlock",
     "lost_caves.MixinDeadBushBlock",
