@@ -50,7 +50,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private final AnimationBuilder EMERGE_PLAYER = new AnimationBuilder().addAnimation("look").addAnimation("look_loop");
-    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look").addAnimation("look_turn_head");
+    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look_turn_head");
     private final AnimationBuilder DIVE = new AnimationBuilder().addAnimation("diveback");
     private final AnimationBuilder SWIM = new AnimationBuilder().addAnimation("swim");
     private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
