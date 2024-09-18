@@ -5,6 +5,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.criteria.BreakEnchantedIceTrigger;
 import com.yungnickyoung.minecraft.yungscavebiomes.criteria.EatPricklyPeachTrigger;
 import com.yungnickyoung.minecraft.yungscavebiomes.criteria.InteractEmptyPricklyCactusTrigger;
+import com.yungnickyoung.minecraft.yungscavebiomes.criteria.SandstormEndTrigger;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class CriteriaModule {
@@ -16,4 +17,7 @@ public class CriteriaModule {
 
     @AutoRegister("break_enchanted_ice")
     public static final BreakEnchantedIceTrigger BREAK_ENCHANTED_ICE = new BreakEnchantedIceTrigger();
+
+    @AutoRegister("sandstorm_end")
+    public static final SandstormEndTrigger SANDSTORM_END = new SandstormEndTrigger();
 }

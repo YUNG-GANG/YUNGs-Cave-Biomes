@@ -3,6 +3,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.sandstorm;
 import com.google.common.hash.Hashing;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.ServerLevelAccessor;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.CriteriaModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -105,6 +107,13 @@ public class SandstormServerData extends SavedData {
         // Initialize new cooldown and mark sandstorm as inactive
         resetSandstormCooldownAndTotalCoolDown();
         this.isSandstormActive = false;
+
+        // Trigger sandstorm end criteria for all players in the server level if they are in the Lost Caves biome
+        this.serverLevel.players().forEach(player -> {
+            if (!player.isSpectator() && serverLevel.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey())) {
+                CriteriaModule.SANDSTORM_END.trigger(player);
+            }
+        });
 
         syncToClients();
     }

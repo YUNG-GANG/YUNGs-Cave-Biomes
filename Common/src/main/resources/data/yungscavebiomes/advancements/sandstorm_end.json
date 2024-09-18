@@ -1,0 +1,29 @@
+{
+  "parent": "yungscavebiomes:lost_caves",
+  "display": {
+    "icon": {
+      "item": "yungscavebiomes:ancient_sand"
+    },
+    "title": {
+      "translate": "yungscavebiomes.advancements.sandstorm_end.title"
+    },
+    "description": {
+      "translate": "yungscavebiomes.advancements.sandstorm_end.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sandstorm_end": {
+      "trigger": "yungscavebiomes:sandstorm_end",
+      "conditions": {
+      }
+    }
+  },
+  "requirements": [
+    [
+      "sandstorm_end"
+    ]
+  ]
+}
