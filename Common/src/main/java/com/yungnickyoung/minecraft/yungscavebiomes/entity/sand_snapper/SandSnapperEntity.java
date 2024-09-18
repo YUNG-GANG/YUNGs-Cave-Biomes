@@ -83,7 +83,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private static final int DIG_UP_LENGTH = 34;
 
     private int digDownTimer;
-    private static final int DIG_DOWN_LENGTH = 100;
+    private static final int DIG_DOWN_LENGTH = 37;
 
     /**
      * Timer tracking how long the Snapper has been above ground, in ticks.
