@@ -21,7 +21,6 @@ public class LostCavesBiomeMaker extends BiomeMaker {
     public Biome make() {
         // Mob spawns
         MobSpawnSettings.Builder mobSettings = new MobSpawnSettings.Builder();
-        mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 10, 8, 8));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 100, 4, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.HUSK, 100, 4, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE_VILLAGER, 5, 1, 1));
@@ -29,7 +28,8 @@ public class LostCavesBiomeMaker extends BiomeMaker {
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 100, 4, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.WITCH, 5, 1, 1));
-//        mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityTypeModule.SAND_SNAPPER.get(), 10, 1, 1));
+        mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 10, 8, 8));
+        mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityTypeModule.SAND_SNAPPER.get(), 2, 1, 1));
 
         /* Begin adding biome settings */
         BiomeGenerationSettings.Builder biomeSettings = new BiomeGenerationSettings.Builder();

@@ -19,7 +19,7 @@ public class YungsCaveBiomesCommon {
 
     public static boolean MARBLE_CAVES_ENABLED = false; // Rest in peace. Maybe one day...
     public static boolean DEBUG_LOG = false;
-    public static boolean DEBUG_RENDERING = true;
+    public static boolean DEBUG_RENDERING = false;
 
     @AutoRegister("general")
     public static final AutoRegisterCreativeTab TAB_CAVEBIOMES = new AutoRegisterCreativeTab.Builder()
