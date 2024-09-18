@@ -147,7 +147,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         this.runFromPlayerGoal = new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0);
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SnapperTemptGoal(this, 1.0, Ingredient.of(ItemModule.PRICKLY_PEACH_ITEM.get()), false, 2.5f));
-        this.goalSelector.addGoal(2, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 2.0f));
+        this.goalSelector.addGoal(2, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 1.5f));
         this.goalSelector.addGoal(3, this.runFromPlayerGoal);
         this.goalSelector.addGoal(4, new SnapperStrollGoal(this, 1.0, 1.25));
         this.goalSelector.addGoal(5, new EatPricklyPeachCactusGoal(this, 6, 1, 4.0f, 2.0f));
@@ -304,11 +304,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                 itemStack.shrink(1);
             }
 
-            this.heal(4.0f);
-            this.gameEvent(GameEvent.MOB_INTERACT, this.eyeBlockPosition());
-            this.level.broadcastEntityEvent(this, (byte) 7); // Heart particles event
-            float pitch = Mth.randomBetween(this.random, 0.9f, 1.2f);
-            this.playSound(SoundModule.SAND_SNAPPER_HAPPY.get(), 1.0f, pitch);
+            this.onEat();
 
             // Make the Snapper friendly to players for a set amount of time
             this.friendlyTimer = FRIENDLY_TIMER_LENGTH;
@@ -320,13 +316,12 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         return InteractionResult.PASS;
     }
 
-    @Override
-    public void handleEntityEvent(byte eventId) {
-        if (eventId == 7) {
-            this.spawnHeartParticles();
-        } else {
-            super.handleEntityEvent(eventId);
-        }
+    public void onEat() {
+        this.heal(4.0f);
+        this.gameEvent(GameEvent.MOB_INTERACT, this.eyeBlockPosition());
+        this.level.broadcastEntityEvent(this, (byte) 7); // Heart particles event
+        float pitch = Mth.randomBetween(this.random, 0.9f, 1.2f);
+        this.playSound(SoundModule.SAND_SNAPPER_HAPPY.get(), 1.0f, pitch);
     }
 
     protected void spawnHeartParticles() {
@@ -337,6 +332,15 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             this.level.addParticle(ParticleTypes.HEART,
                     this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0),
                     xSpeed, ySpeed, zSpeed);
+        }
+    }
+
+    @Override
+    public void handleEntityEvent(byte eventId) {
+        if (eventId == 7) {
+            this.spawnHeartParticles();
+        } else {
+            super.handleEntityEvent(eventId);
         }
     }
 
@@ -425,6 +429,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             this.level.setBlock(cactusBlockPos, state
                     .setValue(PricklyPeachCactusBlock.FRUIT, false)
                     .setValue(PricklyPeachCactusBlock.AGE, 0), Block.UPDATE_ALL);
+            this.onEat();
         }
     }
 

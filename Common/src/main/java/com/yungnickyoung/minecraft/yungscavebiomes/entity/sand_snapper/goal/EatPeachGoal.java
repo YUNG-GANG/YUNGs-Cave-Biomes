@@ -66,6 +66,7 @@ public class EatPeachGoal extends Goal {
             if (this.eatingTimer <= 0) {
                 this.sandSnapper.setEating(false);
                 this.peachItem.discard();
+                this.sandSnapper.onEat();
             }
         }
     }
