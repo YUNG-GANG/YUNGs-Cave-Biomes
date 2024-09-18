@@ -412,7 +412,10 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             return BlockPos.betweenClosedStream(aabb).anyMatch((pos) -> {
                 BlockState blockState = this.level.getBlockState(pos);
                 BlockState stateAbove = this.level.getBlockState(pos.above());
-                return !blockState.isAir() && !(blockState.is(TagModule.SAND_SNAPPER_BLOCKS) && stateAbove.is(Blocks.AIR)) && blockState.isSuffocating(this.level, pos) && Shapes.joinIsNotEmpty(blockState.getCollisionShape(this.level, pos).move(pos.getX(), pos.getY(), pos.getZ()), Shapes.create(aabb), BooleanOp.AND);
+                return !blockState.isAir()
+                        && !(blockState.is(TagModule.SAND_SNAPPER_BLOCKS) && stateAbove.is(Blocks.AIR))
+                        && blockState.isSuffocating(this.level, pos)
+                        && Shapes.joinIsNotEmpty(blockState.getCollisionShape(this.level, pos).move(pos.getX(), pos.getY(), pos.getZ()), Shapes.create(aabb), BooleanOp.AND);
             });
         }
     }

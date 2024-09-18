@@ -178,7 +178,6 @@ public class BlockModule {
     @AutoRegister("prickly_vines_plant")
     public static final AutoRegisterBlock PRICKLY_VINES_PLANT = AutoRegisterBlock.of(() -> new PricklyVinesPlantBlock(BlockBehaviour.Properties
             .of(Material.PLANT)
-            .randomTicks()
             .noCollission()
             .instabreak()
             .sound(SoundType.WEEPING_VINES)));
