@@ -87,7 +87,7 @@ public class RunFromPlayerGoal extends Goal {
                 && this.playerToAvoid.distanceToSqr(this.sandSnapper) < UPDATE_TARGET_POS_DISTANCE_SQUARED) {
             this.refreshPathTimer = adjustedTickDelay(REFRESH_PATH_INTERVAL);
             Vec3 newTargetPos = findTargetPos();
-            if (newTargetPos != null) {
+            if (newTargetPos != null && this.sandSnapper.canMove()) {
                 this.path = this.pathNav.createPath(newTargetPos.x, newTargetPos.y, newTargetPos.z, 0);
                 this.pathNav.moveTo(this.path, this.speedModifier);
             }
@@ -103,6 +103,10 @@ public class RunFromPlayerGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        if (!this.sandSnapper.canMove()) {
+            return false;
+        }
+
         this.playerToAvoid = this.sandSnapper.level.getNearestEntity(
                 this.sandSnapper.level
                         .getEntitiesOfClass(Player.class, this.sandSnapper.getBoundingBox().inflate(this.maxDist, 3.0, this.maxDist), p -> true),

@@ -65,7 +65,7 @@ public class EmergeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.sandSnapper.isSubmerged() || this.sandSnapper.isDiggingDown() || this.sandSnapper.isDiggingUp()) return false;
+        if (!this.sandSnapper.isSubmerged() || !this.sandSnapper.canMove()) return false;
 
         if (this.sandSnapper.tickCount - this.lastUseTime < this.cooldown) {
             return false;

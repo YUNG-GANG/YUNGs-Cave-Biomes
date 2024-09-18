@@ -59,8 +59,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private final AnimationBuilder EAT = new AnimationBuilder().addAnimation("eat");
 
     private static final EntityDataAccessor<Boolean> SUBMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> EMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LOOKING_AT_PLAYER = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> EMERGING = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIVING = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIGGING_DOWN = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIGGING_UP = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
@@ -68,10 +68,10 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     private RunFromPlayerGoal runFromPlayerGoal;
 
-    private boolean divingHolder;
-    private boolean emergedHolder;
     private boolean submergedHolder;
     private boolean lookingAtPlayerHolder;
+    private boolean emergingHolder;
+    private boolean divingHolder;
     private boolean diggingDownHolder;
     private boolean diggingUpHolder;
     private boolean eatingHolder;
@@ -106,6 +106,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     private int friendlyTimer;
     private static final int FRIENDLY_TIMER_LENGTH = 3600; // 3600 ticks = 3 minutes
 
+    private int invalidSubmergeTimer;
+
     /**
      * Timer tracking how long since the Snapper ate a prickly peach from a cactus.
      */
@@ -131,7 +133,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(EMERGED, false);
+        this.entityData.define(EMERGING, false);
         this.entityData.define(DIVING, false);
         this.entityData.define(SUBMERGED, false);
         this.entityData.define(LOOKING_AT_PLAYER, false);
@@ -167,7 +169,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public void onSyncedDataUpdated(EntityDataAccessor<?> dataAccessor) {
         super.onSyncedDataUpdated(dataAccessor);
 
-        if (dataAccessor.equals(EMERGED)) {
+        if (dataAccessor.equals(EMERGING)) {
             if (this.level.isClientSide) {
                 AnimationController controller = this.getFactory()
                         .getOrCreateAnimationData(this.getId())
@@ -178,7 +180,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                 }
             }
 
-            this.emergedHolder = this.entityData.get(EMERGED);
+            this.emergingHolder = this.entityData.get(EMERGING);
             this.refreshDimensions();
         } else if (dataAccessor.equals(DIVING)) {
             this.divingHolder = this.entityData.get(DIVING);
@@ -235,10 +237,17 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                 this.cactusEatCooldownTimer--;
             }
 
-            if (!this.isSubmerged() && this.canSubmerge(false)) {
-                this.setSubmerged(true);
-            } else if (this.isSubmerged() && !this.canSubmerge(false)) {
-                this.setSubmerged(false);
+            if (canMove()) {
+                if (!this.isSubmerged() && this.canSubmerge(false)) {
+                    this.setSubmerged(true);
+                    invalidSubmergeTimer = 0;
+                } else if (this.isSubmerged() && !this.canSubmerge(false)) {
+                    invalidSubmergeTimer++;
+                    if (invalidSubmergeTimer > 10) {
+                        this.setSubmerged(false);
+                        invalidSubmergeTimer = 0;
+                    }
+                }
             }
 
             if (this.isDiving()) {
@@ -256,6 +265,9 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                 } else {
                     this.setDiggingDown(false);
                     this.digDownTimer = 0;
+                    this.entityData.set(SUBMERGED, true);
+                    this.submergedHolder = true;
+                    this.refreshDimensions();
                 }
             }
 
@@ -265,13 +277,16 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                 } else {
                     this.setDiggingUp(false);
                     this.digUpTimer = 0;
+                    this.entityData.set(SUBMERGED, false);
+                    this.submergedHolder = false;
+                    this.refreshDimensions();
                 }
             }
-
-            if (this.isDiggingUp() || this.isDiggingDown()) {
-                this.getNavigation().stop();
-            }
         }
+    }
+
+    public boolean canMove() {
+        return !this.isDiving() && !this.isDiggingUp() && !this.isDiggingDown() && !this.isEmerging() && !this.isEating();
     }
 
     @Override
@@ -363,8 +378,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public void aiStep() {
         super.aiStep();
 
-        // Unable to move while playing diving animation
-        if (this.isDiving()) {
+        // Unable to move while playing animations
+        if (!this.canMove()) {
             this.getNavigation().stop();
         }
 
@@ -417,7 +432,6 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         boolean prevValue = this.submergedHolder;
 
         this.entityData.set(SUBMERGED, isSubmerged);
-        this.submergedHolder = isSubmerged;
         this.aboveGroundTimer = isSubmerged ? 0 : MIN_TICKS_ABOVE_GROUND;
 
         if (isSubmerged && !prevValue) {
@@ -438,6 +452,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
      */
     public boolean canSubmerge(boolean ignoreTimer) {
         if (!ignoreTimer && this.aboveGroundTimer > 0) return false;
+        if (!this.canMove()) return false;
 
         if (this.submergeLocked) return false;
 
@@ -458,12 +473,14 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     }
 
     public void setEmerging(boolean isEmerging) {
-        this.entityData.set(EMERGED, isEmerging);
-        this.emergedHolder = isEmerging;
+        this.entityData.set(EMERGING, isEmerging);
+        this.emergingHolder = isEmerging;
+        this.entityData.set(SUBMERGED, !isEmerging);
+        this.submergedHolder = !isEmerging;
     }
 
     public boolean isEmerging() {
-        return this.emergedHolder;
+        return this.emergingHolder;
     }
 
     public void setDiving(boolean isDiving) {
@@ -476,11 +493,12 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     }
 
     public boolean isSubmerged() {
-        return this.submergedHolder && !this.isEmerging() && !this.isDiving();
+        return this.submergedHolder;
     }
 
     public void setDiggingUp(boolean diggingUp) {
         this.entityData.set(DIGGING_UP, diggingUp);
+        this.diggingUpHolder = diggingUp;
     }
 
     public boolean isDiggingUp() {
@@ -489,6 +507,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     public void setDiggingDown(boolean diggingDown) {
         this.entityData.set(DIGGING_DOWN, diggingDown);
+        this.diggingDownHolder = diggingDown;
     }
 
     public boolean isDiggingDown() {
