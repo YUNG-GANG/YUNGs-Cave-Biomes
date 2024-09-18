@@ -10,6 +10,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,6 +46,7 @@ public abstract class MixinLivingEntity extends Entity {
     @Inject(method = "tick", at = @At("RETURN"))
     public void yungscavebiomes_buffetEntitiesInSandstorm(CallbackInfo ci) {
         if (YungsCaveBiomesCommon.CONFIG.lostCaves.enableSandstorms
+                && this.isPlayer(this)
                 && !this.level.isClientSide
                 && !this.isSpectator()
                 && this.tickCount % 10 == 0
@@ -57,5 +59,10 @@ public abstract class MixinLivingEntity extends Entity {
                 this.addEffect(new MobEffectInstance(MobEffectModule.BUFFETED_EFFECT.get(), BUFFETED_EFFECT_DURATION, 0, false, false, true));
             }
         }
+    }
+
+    @Unique
+    private boolean isPlayer(Object object) {
+        return object instanceof Player;
     }
 }
