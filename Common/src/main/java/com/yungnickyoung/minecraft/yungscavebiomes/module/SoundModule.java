@@ -35,4 +35,7 @@ public class SoundModule {
 
     @AutoRegister("entity.sand_snapper.happy")
     public static final AutoRegisterSoundEvent SAND_SNAPPER_HAPPY = AutoRegisterSoundEvent.create();
+
+    @AutoRegister("entity.sand_snapper.emerge")
+    public static final AutoRegisterSoundEvent SAND_SNAPPER_EMERGE = AutoRegisterSoundEvent.create();
 }

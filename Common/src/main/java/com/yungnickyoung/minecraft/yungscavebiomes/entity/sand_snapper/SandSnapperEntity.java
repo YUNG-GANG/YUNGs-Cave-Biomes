@@ -160,7 +160,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         this.goalSelector.addGoal(3, this.runFromPlayerGoal);
         this.goalSelector.addGoal(4, new SnapperStrollGoal(this, 1.0, 1.25));
         this.goalSelector.addGoal(5, new EatPricklyPeachCactusGoal(this, 6, 1, 4.0f, 2.0f));
-        this.goalSelector.addGoal(5, new EmergeGoal(this, 16.0f, 2.0f, 32.0f, 100));
+        this.goalSelector.addGoal(5, new EmergeGoal(this, 8.0f, 2.0f, 32.0f, 100));
     }
 
     @Override
@@ -559,15 +559,11 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         return SoundModule.SAND_SNAPPER_DEATH.get();
     }
 
-    public SoundEvent getPanicSound() {
-        return SoundModule.SAND_SNAPPER_PANIC.get();
-    }
-
     public void tryPlayPanicSound() {
         if (this.panicSoundCooldownTimer > 0) return;
 
         float pitch = Mth.randomBetween(this.getRandom(), 1.0F, 1.2F);
-        this.playSound(this.getPanicSound(), 1.0F, pitch);
+        this.playSound(SoundModule.SAND_SNAPPER_PANIC.get(), 1.0F, pitch);
         this.panicSoundCooldownTimer = PANIC_SOUND_COOLDOWN;
     }
 

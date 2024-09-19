@@ -53,6 +53,10 @@ public class EmergeGoal extends Goal {
         this.sandSnapper.setEmerging(true);
         this.sandSnapper.setLookingAtPlayer(!this.getPlayersInRange(this.lookAtPlayerRange).isEmpty());
 
+//        if (!this.sandSnapper.isLookingAtPlayer()) {
+//            this.sandSnapper.playSound(SoundModule.SAND_SNAPPER_EMERGE.get(), 1f, 1f);
+//        }
+
         this.sandSnapper.getNavigation().stop();
     }
 
@@ -61,6 +65,14 @@ public class EmergeGoal extends Goal {
         this.sandSnapper.setEmerging(false);
         this.sandSnapper.setDiving(true);
         this.lastUseTime = this.sandSnapper.tickCount;
+
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        float dist = sandstormServerData.isSandstormActive() ?
+                this.minDistanceFromPlayerDuringSandstorm :
+                this.minDistanceFromPlayer;
+        if (!getPlayersInRange(dist).isEmpty()) {
+            sandSnapper.tryPlayPanicSound();
+        }
     }
 
     @Override
@@ -102,7 +114,7 @@ public class EmergeGoal extends Goal {
     }
 
     private List<Player> getPlayersInRange(float range) {
-        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(range / 2, 4.0f, range / 2);
+        AABB searchBox = this.sandSnapper.getBoundingBox().inflate(range, 4.0f, range);
         return this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
     }
 }

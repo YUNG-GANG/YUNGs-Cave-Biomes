@@ -90,5 +90,10 @@
     "sounds": [
       "yungscavebiomes:entity/sand_snapper_happy"
     ]
+  },
+  "entity.sand_snapper.emerge": {
+    "sounds": [
+      "yungscavebiomes:entity/sand_snapper_emerge"
+    ]
   }
 }
