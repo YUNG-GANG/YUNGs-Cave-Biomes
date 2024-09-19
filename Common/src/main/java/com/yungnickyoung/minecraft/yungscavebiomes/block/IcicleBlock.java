@@ -2,10 +2,12 @@ package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.AbstractCauldronBlockAccessor;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -193,8 +195,9 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
 
     @Override
     public void onBrokenAfterFall(Level level, BlockPos blockPos, FallingBlockEntity fallingBlockEntity) {
-        if (!fallingBlockEntity.isSilent()) {
-            level.levelEvent(1045, blockPos, 0);
+        if (!fallingBlockEntity.isSilent() && level instanceof ServerLevel serverLevel) {
+            Services.PLATFORM.sendIcicleProjectileShatterS2CPacket(serverLevel, Vec3.atCenterOf(blockPos));
+            fallingBlockEntity.playSound(SoundEvents.GLASS_BREAK, 1.0F, 1.2F / (new Random().nextFloat() * 0.2F + 0.9F));
         }
     }
 
