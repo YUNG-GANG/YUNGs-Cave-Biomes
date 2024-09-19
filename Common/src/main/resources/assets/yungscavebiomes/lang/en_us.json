@@ -67,8 +67,10 @@
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Arrow of Frost",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Arrow of Frost",
 
-  "death.attack.pricklyVines": "%1$s was poked to death by prickly vines",
-  "death.attack.pricklyVines.player": "%1$s was poked to death by prickly vines whilst trying to escape %2$s",
+  "death.attack.ycb_pricklyVines": "%1$s was poked to death by prickly vines",
+  "death.attack.ycb_pricklyVines.player": "%1$s was poked to death by prickly vines whilst trying to escape %2$s",
+  "death.attack.ycb_icicle": "%1$s was skewered by a falling icicle",
+  "death.attack.ycb_icicle.player": "%1$s was skewered by a falling icicle whilst fighting %2$s",
 
   "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows",
 

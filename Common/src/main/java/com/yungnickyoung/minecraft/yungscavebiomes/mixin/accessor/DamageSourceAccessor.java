@@ -10,4 +10,7 @@ public interface DamageSourceAccessor {
     static DamageSource createDamageSource(String messageId) {
         throw new UnsupportedOperationException();
     }
+
+    @Invoker("damageHelmet")
+    DamageSource invokeDamageHelmet();
 }
