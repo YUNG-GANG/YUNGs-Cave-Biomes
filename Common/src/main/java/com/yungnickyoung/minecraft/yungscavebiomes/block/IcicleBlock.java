@@ -67,7 +67,8 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Override
-    public BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState, LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState,
+                                  LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
         // Schedule fluid tick if waterlogged
         if (currState.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(currPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
@@ -85,7 +86,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
 
         // Schedule fall tick if block above is no longer valid support
         if (neighborDirection == Direction.UP && !this.canSurvive(currState, levelAccessor, currPos)) {
-            this.scheduleFallingTicks(currState, levelAccessor, currPos);
+            levelAccessor.scheduleTick(currPos, this, 2);
             return currState;
         }
 
@@ -215,33 +216,6 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
         return super.getFluidState(blockState);
     }
 
-    /**
-     * Schedules ticks for an entire icicle, from the tip up.
-     * Should only be called after determining the icicle is no longer valid.
-     */
-    private void scheduleFallingTicks(BlockState blockState, LevelAccessor levelAccessor, BlockPos blockPos) {
-        BlockPos tipPos = findTip(blockState, levelAccessor, blockPos, Integer.MAX_VALUE);
-        if (tipPos == null) return;
-
-        BlockPos.MutableBlockPos mutable = tipPos.mutable();
-        mutable.move(Direction.DOWN);
-        BlockState blockBelowTip = levelAccessor.getBlockState(mutable);
-
-        // If a whole block is directly below tip, no need to schedule tick on tip - just destroy it
-        if (blockBelowTip.getCollisionShape(levelAccessor, mutable, CollisionContext.empty()).max(Direction.Axis.Y) >= 1.0 || blockBelowTip.is(Blocks.POWDER_SNOW)) {
-            levelAccessor.destroyBlock(tipPos, true);
-            mutable.move(Direction.UP);
-        }
-
-        mutable.move(Direction.UP);
-
-        // Schedule ticks on the rest of the stalactite
-        while (levelAccessor.getBlockState(mutable).is(BlockModule.ICICLE.get())) {
-            levelAccessor.scheduleTick(mutable, this, 2);
-            mutable.move(Direction.UP);
-        }
-    }
-
     @Nullable
     private static BlockPos findTip(BlockState blockState, LevelAccessor levelAccessor, BlockPos blockPos, int searchDistance) {
         if (isTip(blockState)) return blockPos;
@@ -255,6 +229,10 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
         return findBlockVertical(levelAccessor, blockPos, Direction.UP, matchingPredicate, stoppingPredicate, searchDistance).orElse(null);
     }
 
+    /**
+     * Determines if the position is valid for an icicle to be placed.
+     * An icicle can be placed if the block above is sturdy or another icicle.
+     */
     private static boolean isValidPosition(LevelReader levelReader, BlockPos blockPos) {
         BlockPos posAbove = blockPos.relative(Direction.UP);
         BlockState blockStateAbove = levelReader.getBlockState(posAbove);
@@ -305,16 +283,20 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     private static void spawnFallingIcicle(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos) {
-        Vec3 vec3 = Vec3.atBottomCenterOf(blockPos);
-        FallingBlockEntity fallingBlockEntity = FallingBlockEntity.fall(serverLevel, blockPos, blockState);
+        BlockPos.MutableBlockPos mutable = blockPos.mutable();
+        BlockState blockState2 = blockState;
 
-        if (isTip(blockState)) {
-            int icicleSize = getIcicleSizeFromTip(serverLevel, blockPos, 5);
-            float damagePerBlock = .5f * (float) icicleSize;
-            fallingBlockEntity.setHurtsEntities(damagePerBlock, 20);
+        while (blockState2.is(BlockModule.ICICLE.get())) {
+            FallingBlockEntity fallingBlockEntity = FallingBlockEntity.fall(serverLevel, mutable, blockState2);
+            if (isTip(blockState2)) {
+                int icicleSize = Math.max(1 + blockPos.getY() - mutable.getY(), 6);
+                float damagePerBlock = .5f * (float) icicleSize;
+                fallingBlockEntity.setHurtsEntities(damagePerBlock, 10);
+                break;
+            }
+            mutable.move(Direction.DOWN);
+            blockState2 = serverLevel.getBlockState(mutable);
         }
-
-        serverLevel.addFreshEntity(fallingBlockEntity);
     }
 
     /**
@@ -364,16 +346,6 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
                 .setValue(THICKNESS, thickness)
                 .setValue(WATERLOGGED, levelAccessor.getFluidState(blockPos).getType() == Fluids.WATER);
         levelAccessor.setBlock(blockPos, blockState, 3);
-    }
-
-    private static int getIcicleSizeFromTip(ServerLevel serverLevel, BlockPos tipPos, int maxLength) {
-        int size;
-        BlockPos.MutableBlockPos mutable = tipPos.mutable().move(Direction.UP);
-
-        for (size = 1; size < maxLength && serverLevel.getBlockState(mutable).is(BlockModule.ICICLE.get()); ++size) {
-            mutable.move(Direction.UP);
-        }
-        return size;
     }
 
     /******************************************
