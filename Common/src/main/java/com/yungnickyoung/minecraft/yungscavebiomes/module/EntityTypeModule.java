@@ -8,7 +8,12 @@ import com.yungnickyoung.minecraft.yungscavebiomes.block.entity.RareIceBlockEnti
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.IcicleProjectileEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
+import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.SpawnPlacementsAccessor;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class EntityTypeModule {
@@ -46,4 +51,19 @@ public class EntityTypeModule {
             .of(() -> AutoRegisterBlockEntityType.Builder
                     .of(RareIceBlockEntity::new, BlockModule.RARE_ICE.get())
                     .build(null));
+
+    /**
+     * Methods with the AutoRegister annotations will be executed after registration.
+     *
+     * For Fabric, this means the method is executed during mod initialization as normal.
+     * For Forge, the method is queued to execute in common setup.
+     *
+     * Any methods used with the AutoRegister annotation must be static and take no arguments.
+     * Note that the annotation value is ignored.
+     */
+    @AutoRegister("_ignored")
+    private static void init() {
+        SpawnPlacementsAccessor.callRegister(ICE_CUBE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        SpawnPlacementsAccessor.callRegister(SAND_SNAPPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+    }
 }

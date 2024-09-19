@@ -29,7 +29,7 @@ public class LostCavesBiomeMaker extends BiomeMaker {
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 10, 1, 4));
         mobSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.WITCH, 5, 1, 1));
         mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 10, 8, 8));
-        mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityTypeModule.SAND_SNAPPER.get(), 2, 1, 1));
+        mobSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityTypeModule.SAND_SNAPPER.get(), 50, 1, 1));
 
         /* Begin adding biome settings */
         BiomeGenerationSettings.Builder biomeSettings = new BiomeGenerationSettings.Builder();
