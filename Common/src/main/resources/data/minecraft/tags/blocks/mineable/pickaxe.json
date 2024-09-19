@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "yungscavebiomes:rare_ice",
+    "yungscavebiomes:ice_sheet",
+    "yungscavebiomes:icicle",
     "yungscavebiomes:ancient_sandstone",
     "yungscavebiomes:ancient_sandstone_slab",
     "yungscavebiomes:ancient_sandstone_stairs",
