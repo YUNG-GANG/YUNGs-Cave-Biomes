@@ -8,13 +8,14 @@ issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Cave-Biomes/issues"
     version="${version}"
     displayName="${mod_full_name}"
     credits="Thanks so much to all my patrons!"
-    authors="YUNGNICKYOUNG, SuperCoder79, Sully, LudoCrypt, K.jpg, Frenderman"
+    authors="YUNGNICKYOUNG, HellionGames, Sully, LudoCrypt, Jasmine, K.jpg, Neko, Frenderman, Refresh Studios"
     description="${mod_description}"
     logoFile="logo.png"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/yungs-cave-biomes"
 
 [modproperties.${mod_id}]
-    catalogueImageIcon="catagloue_icon.png"
+    catalogueImageIcon="catalogue_icon.png"
+    catalogueBackground="catalogue_background.png"
 
 [[dependencies.${mod_id}]]
     modId="minecraft"

@@ -6,11 +6,14 @@
   "description": "${mod_description}",
   "authors": [
     "YUNGNICKYOUNG",
-    "SuperCoder79",
+    "HellionGames",
     "Sully",
     "LudoCrypt",
+    "Jasmine",
     "K.jpg",
-    "Frenderman"
+    "Neko",
+    "Frenderman",
+    "Refresh Studios"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/yungs-cave-biomes-fabric",
@@ -49,5 +52,14 @@
     "yungsapi": ">=${mc_version}-Fabric-${yungsapi_version}",
     "terrablender": ">=${terrablender_version}",
     "geckolib3": ">=${fabric_geckolib_version}"
+  },
+  "custom": {
+    "catalogue": {
+      "icon": {
+        "image": "catalogue_icon.png"
+      },
+      "banner": "logo.png",
+      "background": "catalogue_background.png"
+    }
   }
 }
