@@ -22,6 +22,9 @@ public class CaveBiomeRegionParameters {
     };
     private static final Climate.Parameter frozenTemp = temperatures[0];
     private static final Climate.Parameter unfrozenTemp = Climate.Parameter.span(temperatures[1], temperatures[4]);
+    private static final Climate.Parameter frostedCavesTemp = Climate.Parameter.span(temperatures[0], Climate.Parameter.span(-0.45F, -0.3F));
+    private static final Climate.Parameter nonFrostedCavesTemp = Climate.Parameter.span(Climate.Parameter.span(-0.3F, 0.2F), temperatures[4]);
+    private static final Climate.Parameter lostCavesTemp = Climate.Parameter.span(Climate.Parameter.span(0.4F, 0.55F), temperatures[4]);
 
     // Humidity
     private static final Climate.Parameter[] humidities = new Climate.Parameter[]{
@@ -31,6 +34,7 @@ public class CaveBiomeRegionParameters {
             Climate.Parameter.span(0.1F, 0.3F),
             Climate.Parameter.span(0.3F, 1.0F)
     };
+    private static final Climate.Parameter lostCavesHumidity = Climate.Parameter.span(humidities[0], Climate.Parameter.span(0.1F, 0.6F));
 
     // Continentalness
     private static final Climate.Parameter deepOceanContinentalness = Climate.Parameter.span(-1.05F, -0.455F);
@@ -57,7 +61,7 @@ public class CaveBiomeRegionParameters {
             .offset(0.0F)
             .build();
     public static final Climate.ParameterPoint DRIPSTONE_NEW = new ParameterPointBuilder()
-            .temperature(unfrozenTemp)
+            .temperature(nonFrostedCavesTemp)
             .humidity(FULL_RANGE)
             .continentalness(Climate.Parameter.span(0.8F, 1.0F))
             .erosion(FULL_RANGE)
@@ -68,7 +72,7 @@ public class CaveBiomeRegionParameters {
 
     // New cave biomes
     public static final Climate.ParameterPoint FROSTED_CAVES = new ParameterPointBuilder()
-            .temperature(frozenTemp)
+            .temperature(frostedCavesTemp)
             .humidity(FULL_RANGE)
             .continentalness(Climate.Parameter.span(coastContinentalness, farInlandContinentalness))
             .erosion(FULL_RANGE)
@@ -87,7 +91,9 @@ public class CaveBiomeRegionParameters {
             .build();
     public static final Climate.ParameterPoint LOST_CAVES = new ParameterPointBuilder()
             .temperature(temperatures[4])
-            .humidity(Climate.Parameter.span(humidities[0], humidities[3]))
+//            .temperature(lostCavesTemp)
+//            .humidity(Climate.Parameter.span(humidities[0], humidities[3]))
+            .humidity(lostCavesHumidity)
             .continentalness(Climate.Parameter.span(inlandContinentalness, farInlandContinentalness))
             .erosion(FULL_RANGE)
             .depth(undergroundDepth)
