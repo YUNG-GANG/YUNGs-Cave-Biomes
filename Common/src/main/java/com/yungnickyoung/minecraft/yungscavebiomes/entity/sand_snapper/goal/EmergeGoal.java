@@ -36,7 +36,7 @@ public class EmergeGoal extends Goal {
     public void tick() {
         this.ticksRunning++;
 
-        Player nearestPlayer = this.sandSnapper.level.getNearestPlayer(this.sandSnapper, this.lookAtPlayerRange);
+        Player nearestPlayer = this.sandSnapper.level().getNearestPlayer(this.sandSnapper, this.lookAtPlayerRange);
         if (this.sandSnapper.isLookingAtPlayer() && nearestPlayer != null) {
             this.sandSnapper.getLookControl().setLookAt(nearestPlayer);
         }
@@ -66,7 +66,7 @@ public class EmergeGoal extends Goal {
         this.sandSnapper.setDiving(true);
         this.lastUseTime = this.sandSnapper.tickCount;
 
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level()).getSandstormServerData();
         float dist = sandstormServerData.isSandstormActive() ?
                 this.minDistanceFromPlayerDuringSandstorm :
                 this.minDistanceFromPlayer;
@@ -88,10 +88,10 @@ public class EmergeGoal extends Goal {
         Vec3 startPos = new Vec3(this.sandSnapper.getX() - (double) halfWidth, this.sandSnapper.getY() - 2.0f, this.sandSnapper.getZ() - (double) halfWidth);
         Vec3 endPos = new Vec3(this.sandSnapper.getX() + (double) halfWidth, this.sandSnapper.getY() - 0.6f, this.sandSnapper.getZ() + (double) halfWidth);
         boolean intersectsAir = BlockPos.betweenClosedStream(new AABB(startPos, endPos))
-                .anyMatch((pos) -> this.sandSnapper.level.getBlockState(pos).isAir());
+                .anyMatch((pos) -> this.sandSnapper.level().getBlockState(pos).isAir());
         if (intersectsAir) return false;
 
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level()).getSandstormServerData();
         float dist = sandstormServerData.isSandstormActive() ?
                 this.minDistanceFromPlayerDuringSandstorm :
                 this.minDistanceFromPlayer;
@@ -101,7 +101,7 @@ public class EmergeGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level()).getSandstormServerData();
         float dist = sandstormServerData.isSandstormActive() ?
                 this.minDistanceFromPlayerDuringSandstorm :
                 this.minDistanceFromPlayer;
@@ -115,6 +115,6 @@ public class EmergeGoal extends Goal {
 
     private List<Player> getPlayersInRange(float range) {
         AABB searchBox = this.sandSnapper.getBoundingBox().inflate(range, 4.0f, range);
-        return this.sandSnapper.level.getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
+        return this.sandSnapper.level().getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
     }
 }

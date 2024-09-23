@@ -21,11 +21,8 @@ import net.minecraft.world.level.biome.BiomeManager;
  * depending on whether a sandstorm is active.
  */
 public class LostCavesAmbientSoundsHandler implements AmbientSoundHandler {
-    private static final ResourceLocation regularAmbientSound =
-            new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ambient.lost_caves.loop");
-
-    private static final ResourceLocation sandstormAmbientSound =
-            new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ambient.lost_caves.sandstorm_loop");
+    private static final ResourceLocation regularAmbientSound = YungsCaveBiomesCommon.id("ambient.lost_caves.loop");
+    private static final ResourceLocation sandstormAmbientSound = YungsCaveBiomesCommon.id("ambient.lost_caves.sandstorm_loop");
 
     private final LocalPlayer player;
     private final SoundManager soundManager;
@@ -49,18 +46,18 @@ public class LostCavesAmbientSoundsHandler implements AmbientSoundHandler {
         Holder<Biome> currBiome = this.biomeManager.getNoiseBiomeAtPosition(this.player.getX(), this.player.getY(), this.player.getZ());
 
         // Start playing ambient sound when entering lost caves biome
-        if (currBiome.is(BiomeModule.LOST_CAVES.getResourceKey()) && !this.inLostCaves) {
+        if (currBiome.is(BiomeModule.LOST_CAVES) && !this.inLostCaves) {
             this.inLostCaves = true;
             changeAmbientsound(SoundModule.AMBIENT_LOST_CAVES.get());
         }
 
         // Stop playing ambient sounds when leaving lost caves biome
-        if (!currBiome.is(BiomeModule.LOST_CAVES.getResourceKey())) {
+        if (!currBiome.is(BiomeModule.LOST_CAVES)) {
             this.inLostCaves = false;
             this.lostCavesSound.fadeOut();
         }
 
-        SandstormClientData sandstormClientData = ((ISandstormClientDataProvider) this.player.level).getSandstormClientData();
+        SandstormClientData sandstormClientData = ((ISandstormClientDataProvider) this.player.level()).getSandstormClientData();
 
         if (this.inLostCaves) {
             // Set sandstorm sound

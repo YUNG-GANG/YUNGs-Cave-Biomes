@@ -110,7 +110,7 @@ public class SandstormServerData extends SavedData {
 
         // Trigger sandstorm end criteria for all players in the server level if they are in the Lost Caves biome
         this.serverLevel.players().forEach(player -> {
-            if (!player.isSpectator() && serverLevel.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey())) {
+            if (!player.isSpectator() && serverLevel.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES)) {
                 CriteriaModule.SANDSTORM_END.trigger(player);
             }
         });

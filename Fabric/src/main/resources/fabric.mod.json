@@ -44,14 +44,14 @@
   ],
   "accessWidener": "yungscavebiomes.accesswidener",
   "depends": {
-    "fabricloader": ">=0.14.5",
-    "fabric": ">=0.58.0",
-    "minecraft": ">=1.18.2",
-    "cloth-config2": ">=6.2.57",
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric": ">=${fabric_version}",
+    "minecraft": ">=${mc_version}",
+    "cloth-config2": ">=${clothconfig_version_fabric}",
     "java": ">=17",
-    "yungsapi": ">=${mc_version}-Fabric-${yungsapi_version}",
+    "yungsapi": ">=${yungsapi_mc_version}-Fabric-${yungsapi_version}",
     "terrablender": ">=${terrablender_version}",
-    "geckolib3": ">=${fabric_geckolib_version}"
+    "geckolib3": ">=${geckolib_version}"
   },
   "custom": {
     "catalogue": {

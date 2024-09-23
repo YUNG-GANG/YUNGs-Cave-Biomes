@@ -5,8 +5,10 @@ import com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm.Sands
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Random;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -37,8 +38,8 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
     @Shadow
     public abstract void addParticle(ParticleOptions p_104706_, double p_104707_, double p_104708_, double p_104709_, double p_104710_, double p_104711_, double p_104712_);
 
-    protected MixinClientLevel(WritableLevelData $$0, ResourceKey<Level> $$1, Holder<DimensionType> $$2, Supplier<ProfilerFiller> $$3, boolean $$4, boolean $$5, long $$6) {
-        super($$0, $$1, $$2, $$3, $$4, $$5, $$6);
+    protected MixinClientLevel(WritableLevelData $$0, ResourceKey<Level> $$1, RegistryAccess $$2, Holder<DimensionType> $$3, Supplier<ProfilerFiller> $$4, boolean $$5, boolean $$6, long $$7, int $$8) {
+        super($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -50,7 +51,7 @@ public abstract class MixinClientLevel extends Level implements ISandstormClient
      * Spawns sandstorm particles around the player.
      */
     @Inject(method = "doAnimateTick", at = @At("TAIL"))
-    private void yungscavebiomes_addSandstormParticles(int x, int y, int z, int maxDistance, Random random, Block markerTarget, BlockPos.MutableBlockPos pos, CallbackInfo ci) {
+    private void yungscavebiomes_addSandstormParticles(int x, int y, int z, int maxDistance, RandomSource random, Block markerTarget, BlockPos.MutableBlockPos pos, CallbackInfo ci) {
         sandstormClientData.addSandstormParticles(((ClientLevel) (Object) this), x, y, z, maxDistance, random, pos);
     }
 

@@ -11,6 +11,8 @@ import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyVinesBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyVinesPlantBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.RareIceBlock;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerPotBlock;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.PushReaction;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class BlockModule {
@@ -30,6 +33,8 @@ public class BlockModule {
                     .randomTicks()
                     .strength(0.5f)
                     .dynamicShape()
+                    .pushReaction(PushReaction.DESTROY)
+                    .offsetType(BlockBehaviour.OffsetType.XZ)
                     .sound(SoundType.GLASS)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
@@ -40,6 +45,7 @@ public class BlockModule {
                     .instabreak()
                     .dynamicShape()
                     .lightLevel(blockState -> 10)
+                    .offsetType(BlockBehaviour.OffsetType.XZ)
                     .sound(SoundType.GLASS)))
             .withItem(() -> new Item.Properties()
                     .stacksTo(16)
@@ -66,6 +72,7 @@ public class BlockModule {
                     .lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 4 : 0)
                     .randomTicks()
                     .isValidSpawn((state, world, pos, entityType) -> true)
+                    .pushReaction(PushReaction.DESTROY)
                     .sound(SoundType.GLASS)))
             .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
@@ -182,19 +189,22 @@ public class BlockModule {
             .instabreak()
             .sound(SoundType.WEEPING_VINES)));
 
-    //    @AutoRegister("marble")
-    public static final AutoRegisterBlock MARBLE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
-                    .of(Material.STONE, MaterialColor.TERRACOTTA_WHITE)
-                    .requiresCorrectToolForDrops()
-                    .strength(1.3f, 4.0f)
-                    .sound(SoundType.STONE)))
-            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+//    //    @AutoRegister("marble")
+//    public static final AutoRegisterBlock MARBLE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
+//                    .of(Material.STONE, MaterialColor.TERRACOTTA_WHITE)
+//                    .requiresCorrectToolForDrops()
+//                    .strength(1.3f, 4.0f)
+//                    .sound(SoundType.STONE)))
+//            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+//
+//    //    @AutoRegister("travertine")
+//    public static final AutoRegisterBlock TRAVERTINE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
+//                    .of(Material.STONE, MaterialColor.TERRACOTTA_PINK)
+//                    .requiresCorrectToolForDrops()
+//                    .strength(1.5f, 6.0f)
+//                    .sound(SoundType.CALCITE)))
+//            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
 
-    //    @AutoRegister("travertine")
-    public static final AutoRegisterBlock TRAVERTINE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
-                    .of(Material.STONE, MaterialColor.TERRACOTTA_PINK)
-                    .requiresCorrectToolForDrops()
-                    .strength(1.5f, 6.0f)
-                    .sound(SoundType.CALCITE)))
-            .withItem(() -> new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+    public static final TagKey<Block> SAND_SNAPPER_BLOCKS = TagKey.create(Registries.BLOCK,
+            YungsCaveBiomesCommon.id("sand_snapper_blocks"));
 }

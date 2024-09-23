@@ -27,7 +27,7 @@ public class SandstormFogRenderer {
             if (localPlayer == null || clientLevel == null) return;
 
             // Increase fog if in active sandstorm, decrease if not
-            if (clientLevel.getBiome(localPlayer.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey())
+            if (clientLevel.getBiome(localPlayer.blockPosition()).is(BiomeModule.LOST_CAVES)
                     && ((ISandstormClientDataProvider) clientLevel).getSandstormClientData().isSandstormActive()) {
                 this.fogLevel = Mth.clamp(this.fogLevel + 0.002, 0, 1);
             } else {

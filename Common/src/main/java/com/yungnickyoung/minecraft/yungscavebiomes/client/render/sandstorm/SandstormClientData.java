@@ -1,8 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm;
 
-import com.mojang.math.Vector3d;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
@@ -14,7 +11,11 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.Random;
 
@@ -59,7 +60,7 @@ public class SandstormClientData {
      * @return The new speed vector of the particle.
      */
     public Vector3f getSandstormParticleSpeedVector(double worldX, double worldY, double worldZ, Vector3f prevParticleSpeedVector) {
-        Vector3f output = prevParticleSpeedVector.copy();
+        Vector3f output = new Vector3f(prevParticleSpeedVector);
 
         Vector4f noise4GradientA = new Vector4f();
         Vector4f noise4GradientB = new Vector4f();
@@ -129,7 +130,7 @@ public class SandstormClientData {
     /**
      * Spawns sandstorm particles around the player.
      */
-    public void addSandstormParticles(ClientLevel clientLevel, int x, int y, int z, int maxDistance, Random random, BlockPos.MutableBlockPos pos) {
+    public void addSandstormParticles(ClientLevel clientLevel, int x, int y, int z, int maxDistance, RandomSource random, BlockPos.MutableBlockPos pos) {
         if (!this.isSandstormActive) {
             return;
         }
@@ -146,7 +147,7 @@ public class SandstormClientData {
             return;
         }
 
-        boolean isPlayerInLostCaves = clientLevel.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey());
+        boolean isPlayerInLostCaves = clientLevel.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES);
         if (!isPlayerInLostCaves) {
             return;
         }
@@ -171,7 +172,7 @@ public class SandstormClientData {
             return;
         }
 
-        boolean isPlayerInLostCaves = clientLevel.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey());
+        boolean isPlayerInLostCaves = clientLevel.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES);
         if (!isPlayerInLostCaves) {
             return;
         }
@@ -191,12 +192,12 @@ public class SandstormClientData {
         }
     }
 
-    private void addSandstormParticle(ClientLevel clientLevel, int x, int y, int z, boolean overrideLimiter, int maxDistance, Random random, BlockPos.MutableBlockPos pos) {
+    private void addSandstormParticle(ClientLevel clientLevel, int x, int y, int z, boolean overrideLimiter, int maxDistance, RandomSource random, BlockPos.MutableBlockPos pos) {
         Vector3d particlePos = DistributionUtils.ellipsoidCenterBiasedSpread(maxDistance, maxDistance, random, Vector3d::new);
         particlePos.x += x;
         particlePos.y += y;
         particlePos.z += z;
-        pos.set(Mth.fastFloor(particlePos.x), Mth.fastFloor(particlePos.y), Mth.fastFloor(particlePos.z));
+        pos.set(Mth.floor(particlePos.x), Mth.floor(particlePos.y), Mth.floor(particlePos.z));
         BlockState blockState = clientLevel.getBlockState(pos);
         if (blockState.isAir()) {
             clientLevel.addParticle((ParticleOptions) ParticleTypeModule.SANDSTORM.get(), overrideLimiter,

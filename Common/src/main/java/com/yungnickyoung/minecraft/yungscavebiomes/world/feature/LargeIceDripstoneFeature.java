@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -20,7 +21,6 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.Random;
 
 public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfiguration> {
     public LargeIceDripstoneFeature(Codec<LargeIceDripstoneConfiguration> codec) {
@@ -32,7 +32,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
         WorldGenLevel worldGenLevel = featurePlaceContext.level();
         BlockPos origin = featurePlaceContext.origin();
         LargeIceDripstoneConfiguration config = featurePlaceContext.config();
-        Random random = featurePlaceContext.random();
+        RandomSource random = featurePlaceContext.random();
 
         if (!DripstoneIceUtils.isEmptyOrWater(worldGenLevel, origin)) return false;
 
@@ -69,7 +69,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
 
     private static LargeIceDripstone makeIceDripstone(BlockPos blockPos,
                                                       boolean isPointingUp,
-                                                      Random random,
+                                                      RandomSource random,
                                                       int radius,
                                                       FloatProvider bluntnessProvider,
                                                       FloatProvider scaleProvider
@@ -153,7 +153,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
             return (int)DripstoneIceUtils.getDripstoneHeight(radialDistance, this.radius, this.scale, this.bluntness);
         }
 
-        void placeBlocks(WorldGenLevel worldGenLevel, Random random, LargeIceDripstoneFeature.WindOffsetter windOffsetter, float rareIceChance) {
+        void placeBlocks(WorldGenLevel worldGenLevel, RandomSource random, LargeIceDripstoneFeature.WindOffsetter windOffsetter, float rareIceChance) {
             boolean hasRareIce = random.nextFloat() < rareIceChance;
             if (this.getHeightAtRadius(0) < 6) {
                 hasRareIce = false;
@@ -211,7 +211,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
         @Nullable
         private final Vec3 windSpeed;
 
-        WindOffsetter(int originY, Random random, FloatProvider windSpeedProvider, FloatProvider angleProvider) {
+        WindOffsetter(int originY, RandomSource random, FloatProvider windSpeedProvider, FloatProvider angleProvider) {
             this.originY = originY;
             float speedAmp = windSpeedProvider.sample(random);
             float radAngle = angleProvider.sample(random);
@@ -233,7 +233,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
             } else {
                 int dy = this.originY - blockPos.getY();
                 Vec3 vec3 = this.windSpeed.scale(dy);
-                return blockPos.offset(vec3.x, 0.0, vec3.z);
+                return blockPos.offset((int) vec3.x, 0, (int) vec3.z);
             }
         }
     }

@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class BuffetedOverlay {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "textures/overlay/buffeted_overlay.png");
+    private static final ResourceLocation TEXTURE = YungsCaveBiomesCommon.id("textures/overlay/buffeted_overlay.png");
     private static final int MAX_TICKS = 200;
     private static final float MAX_OPACITY = 1.0f;
     private static final float MIN_COLOR = 0.1f;
@@ -24,7 +24,7 @@ public class BuffetedOverlay {
      * Renders the Buffeted overlay on the player's screen, with variable opacity depending
      * on the remaining duration of the effect.
      */
-    public static void render(PoseStack poseStack, float partialTicks, int screenWidth, int screenHeight) {
+    public static void render(float partialTicks, int screenWidth, int screenHeight) {
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
 

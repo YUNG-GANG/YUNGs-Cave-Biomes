@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class NoisySphereReplaceConfig implements FeatureConfiguration {
     public static final Codec<NoisySphereReplaceConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.BLOCK.byNameCodec().listOf().fieldOf("matches").forGetter(c -> c.matches),
+            BuiltInRegistries.BLOCK.byNameCodec().listOf().fieldOf("matches").forGetter(c -> c.matches),
             BlockState.CODEC.fieldOf("place").forGetter(c -> c.place),
             Codec.INT.fieldOf("radiusMin").forGetter(c -> c.radiusMin),
             Codec.INT.fieldOf("radiusMax").forGetter(c -> c.radiusMax)

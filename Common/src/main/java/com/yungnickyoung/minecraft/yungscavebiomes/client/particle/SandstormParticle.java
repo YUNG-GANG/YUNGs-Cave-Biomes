@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
-import com.mojang.math.Vector3f;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm.ISandstormClientDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.sandstorm.SandstormClientData;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -11,8 +10,10 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
-import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class SandstormParticle extends TextureSheetParticle {
     private final float rotSpeed;
@@ -36,7 +37,7 @@ public class SandstormParticle extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
@@ -83,7 +84,7 @@ public class SandstormParticle extends TextureSheetParticle {
         }
 
         @Override
-        @Nullable
+        @ParametersAreNonnullByDefault
         public Particle createParticle(SimpleParticleType type, ClientLevel clientLevel, double xo, double yo, double zo, double dx, double dy, double dz) {
             int color = 0xd1b482;
             float r = (float) (color >> 16 & 0xFF) / 255.0f;

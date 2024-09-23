@@ -74,7 +74,7 @@ public class EatPricklyPeachCactusGoal extends Goal {
 
             if (this.eatingTimer <= 0) {
                 this.sandSnapper.setEating(false);
-                this.sandSnapper.eatCactus(new BlockPos(this.cactusPos));
+                this.sandSnapper.eatCactus(BlockPos.containing(this.cactusPos));
                 this.sandSnapper.cactusEatCooldownTimer = SandSnapperEntity.CACTUS_EAT_COOLDOWN;
             }
         }
@@ -100,7 +100,7 @@ public class EatPricklyPeachCactusGoal extends Goal {
                 this.sandSnapper.blockPosition().getY() + this.verticalRange,
                 this.sandSnapper.blockPosition().getZ() + this.horizontalRange
         ).forEach(p -> {
-            BlockState state = this.sandSnapper.level.getBlockState(p);
+            BlockState state = this.sandSnapper.level().getBlockState(p);
             if (state.is(BlockModule.PRICKLY_PEACH_CACTUS.get()) && state.getValue(PricklyPeachCactusBlock.FRUIT)) {
                 cactusPositions.add(new BlockPos(p));
             }
@@ -108,11 +108,11 @@ public class EatPricklyPeachCactusGoal extends Goal {
 
         if (cactusPositions.isEmpty()) return false;
 
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level()).getSandstormServerData();
 
         if (!sandstormServerData.isSandstormActive()) {
             for (BlockPos pos : cactusPositions) {
-                Player nearestPlayer = this.sandSnapper.getLevel().getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), this.playerDist, true);
+                Player nearestPlayer = this.sandSnapper.level().getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), this.playerDist, true);
                 if (nearestPlayer == null) {
                     this.cactusPos = Vec3.atCenterOf(pos);
                     return true;
@@ -133,15 +133,15 @@ public class EatPricklyPeachCactusGoal extends Goal {
             return false;
         }
 
-        BlockState state = this.sandSnapper.level.getBlockState(new BlockPos(this.cactusPos));
+        BlockState state = this.sandSnapper.level().getBlockState(BlockPos.containing(this.cactusPos));
         if (!state.is(BlockModule.PRICKLY_PEACH_CACTUS.get()) || !state.getValue(PricklyPeachCactusBlock.FRUIT)) {
             return false;
         }
 
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level()).getSandstormServerData();
 
         if (!sandstormServerData.isSandstormActive()) {
-            Player nearestPlayer = this.sandSnapper.getLevel().getNearestPlayer(this.cactusPos.x(), this.cactusPos.y(), this.cactusPos.z(), this.playerDist, true);
+            Player nearestPlayer = this.sandSnapper.level().getNearestPlayer(this.cactusPos.x(), this.cactusPos.y(), this.cactusPos.z(), this.playerDist, true);
             return nearestPlayer == null;
         }
 

@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.noise;
 
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class OpenSimplex2S {
 

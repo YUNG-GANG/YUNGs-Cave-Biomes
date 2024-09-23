@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.ClampedNormalFloat;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.DripstoneCluste
 
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.Random;
 
 public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration> {
     public IcicleClusterFeature(Codec<DripstoneClusterConfiguration> codec) {
@@ -33,7 +33,7 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
         WorldGenLevel worldGenLevel = featurePlaceContext.level();
         BlockPos origin = featurePlaceContext.origin();
         DripstoneClusterConfiguration config = featurePlaceContext.config();
-        Random random = featurePlaceContext.random();
+        RandomSource random = featurePlaceContext.random();
         if (!DripstoneIceUtils.isEmpty(worldGenLevel, origin)) {
             return false;
         } else {
@@ -45,7 +45,7 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
             int uRadius = config.radius.sample(random);
             int vRadius = config.radius.sample(random);
             int uvRadiusMax = Math.max(uRadius, vRadius);
-            float angle = random.nextFloat(Mth.TWO_PI);
+            float angle = random.nextFloat() * Mth.TWO_PI;
             float rx = Mth.cos(angle), rz = Mth.sin(angle);
             float ux = rx / uRadius, uz = rz / uRadius;
             float vx = rz / vRadius, vz = -rx / vRadius;
@@ -66,7 +66,7 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
     }
 
     private void placeColumn(WorldGenLevel worldGenLevel,
-                             Random random,
+                             RandomSource random,
                              BlockPos blockPos,
                              int xOffset,
                              int zOffset,
@@ -157,7 +157,7 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
         return levelReader.getBlockState(blockPos).is(Blocks.LAVA);
     }
 
-    private int getDripstoneHeight(Random random, int xOffset, int zOffset, float density, int height, DripstoneClusterConfiguration config) {
+    private int getDripstoneHeight(RandomSource random, int xOffset, int zOffset, float density, int height, DripstoneClusterConfiguration config) {
         if (random.nextFloat() > density) {
             return 0;
         } else {
@@ -207,7 +207,7 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
                 1.0F);
     }
 
-    private static float randomBetweenBiased(Random random, float f, float g, float h, float i) {
+    private static float randomBetweenBiased(RandomSource random, float f, float g, float h, float i) {
         return ClampedNormalFloat.sample(random, h, i, f, g);
     }
 }

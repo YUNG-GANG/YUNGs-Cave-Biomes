@@ -6,6 +6,7 @@ import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterCreativ
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ConfigModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +23,7 @@ public class YungsCaveBiomesCommon {
     public static boolean DEBUG_RENDERING = false;
 
     @AutoRegister("general")
-    public static final AutoRegisterCreativeTab TAB_CAVEBIOMES = new AutoRegisterCreativeTab.Builder()
+    public static final AutoRegisterCreativeTab TAB_CAVEBIOMES = new AutoRegisterCreativeTab.builder()
             .iconItem(() -> new ItemStack(BlockModule.LAYERED_ANCIENT_SANDSTONE.get()))
             .build();
 
@@ -33,4 +34,8 @@ public class YungsCaveBiomesCommon {
         YungAutoRegister.scanPackageForAnnotations("com.yungnickyoung.minecraft.yungscavebiomes");
 		Services.MODULES.loadModules();
 	}
+
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
+    }
 }

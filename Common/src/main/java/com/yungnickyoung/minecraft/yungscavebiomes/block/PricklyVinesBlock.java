@@ -5,6 +5,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageSourceModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,9 +17,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class PricklyVinesBlock extends GrowingPlantHeadBlock {
     protected static final VoxelShape SHAPE = Block.box(4.0, 9.0, 4.0, 12.0, 16.0, 12.0);
 
@@ -27,12 +30,12 @@ public class PricklyVinesBlock extends GrowingPlantHeadBlock {
     }
 
     @Override
-    protected int getBlocksToGrowWhenBonemealed(Random random) {
+    protected int getBlocksToGrowWhenBonemealed(RandomSource random) {
         return NetherVines.getBlocksToGrowWhenBonemealed(random);
     }
 
     @Override
-    protected Block getBodyBlock() {
+    protected @NotNull Block getBodyBlock() {
         return BlockModule.PRICKLY_VINES_PLANT.get();
     }
 

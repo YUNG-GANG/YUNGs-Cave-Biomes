@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleForge;
 import com.yungnickyoung.minecraft.yungscavebiomes.network.IcicleShatterS2CPacket;
@@ -37,8 +36,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public void sendIcicleProjectileShatterS2CPacket(ServerLevel serverLevel, Vec3 pos) {
-        if (serverLevel.isLoaded(new BlockPos(pos))) {
-            ChunkAccess chunkAccess = serverLevel.getChunk(new BlockPos(pos));
+        if (serverLevel.isLoaded(BlockPos.containing(pos))) {
+            ChunkAccess chunkAccess = serverLevel.getChunk(BlockPos.containing(pos));
             if (chunkAccess instanceof LevelChunk levelChunk) {
                 NetworkModuleForge.sendToClientsTrackingChunk(new IcicleShatterS2CPacket(pos), levelChunk);
             }
@@ -59,12 +58,12 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public Supplier<Item> getIceCubeSpawnEggItem() {
         return () -> new ForgeSpawnEggItem(() -> EntityTypeModule.ICE_CUBE.get(), 0xA4C4FC, 0xE4ECFC,
-                new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+                new Item.Properties());
     }
 
     @Override
     public Supplier<Item> getSandSnapperSpawnEggItem() {
         return () -> new ForgeSpawnEggItem(() -> EntityTypeModule.SAND_SNAPPER.get(), 0xBA852F, 0xCFAC55,
-                new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+                new Item.Properties());
     }
 }

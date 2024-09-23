@@ -30,6 +30,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class IceCubeEntity extends Monster {
     private static final EntityDataAccessor<Boolean> IS_LEAPING = SynchedEntityData.defineId(IceCubeEntity.class, EntityDataSerializers.BOOLEAN);
@@ -78,13 +81,13 @@ public class IceCubeEntity extends Monster {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compoundTag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putBoolean("wasOnGround", this.wasOnGround);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compoundTag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.wasOnGround = compoundTag.getBoolean("wasOnGround");
     }
@@ -109,20 +112,20 @@ public class IceCubeEntity extends Monster {
         this.squish += (this.targetSquish - this.squish) * 0.5f;
         this.oSquish = this.squish;
         super.tick();
-        if (this.onGround && !this.wasOnGround) {
+        if (this.onGround() && !this.wasOnGround) {
             for (int j = 0; j < 3 * 8; ++j) {
                 float f = this.random.nextFloat() * ((float) Math.PI * 2);
                 float g = this.random.nextFloat() * 0.5f + 0.5f;
                 float xOffset = Mth.sin(f) * (float) 3 * 0.5f * g;
                 float zOffset = Mth.cos(f) * (float) 3 * 0.5f * g;
-                this.level.addParticle(this.getParticleType(), this.getX() + (double) xOffset, this.getY(), this.getZ() + (double) zOffset, 0.0, 0.0, 0.0);
+                this.level().addParticle(this.getParticleType(), this.getX() + (double) xOffset, this.getY(), this.getZ() + (double) zOffset, 0.0, 0.0, 0.0);
                 this.targetSquish = -0.5f;
             }
             this.playSound(SoundEvents.SLIME_SQUISH, this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f) / 0.8f);
-        } else if (!this.onGround && this.wasOnGround) {
+        } else if (!this.onGround() && this.wasOnGround) {
             this.targetSquish = 1.0f;
         }
-        this.wasOnGround = this.onGround;
+        this.wasOnGround = this.onGround();
         this.decreaseSquish();
 
         if (this.getTarget() == null || this.distanceToSqr(this.getTarget()) > 100.0F || Math.abs(this.getY() - this.getTarget().getY()) / this.distanceToSqr(this.getTarget().getX(), this.getY(), this.getTarget().getZ()) > 0.5f) {
@@ -146,7 +149,7 @@ public class IceCubeEntity extends Monster {
             // TODO - melt when near lava/fire/daylight?
         }
 
-        if (!this.level.isClientSide() && this.getLeaping() && this.leapTicks-- <= 0) {
+        if (!this.level().isClientSide() && this.getLeaping() && this.leapTicks-- <= 0) {
             this.setLeaping(false);
         }
 
@@ -161,7 +164,7 @@ public class IceCubeEntity extends Monster {
     }
 
     @Override
-    public void playerTouch(Player player) {
+    public void playerTouch(@NotNull Player player) {
         this.dealDamage(player);
     }
 
@@ -194,7 +197,7 @@ public class IceCubeEntity extends Monster {
     }
 
     @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
+    public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> entityDataAccessor) {
         this.refreshDimensions();
         this.setYRot(this.yHeadRot);
         this.yBodyRot = this.yHeadRot;
@@ -206,7 +209,7 @@ public class IceCubeEntity extends Monster {
 
     protected void dealDamage(LivingEntity livingEntity) {
         if (this.isAlive()) {
-            if (this.distanceToSqr(livingEntity) < 2.5 && this.hasLineOfSight(livingEntity) && livingEntity.hurt(DamageSource.mobAttack(this), this.getAttackDamage())) {
+            if (this.distanceToSqr(livingEntity) < 2.5 && this.hasLineOfSight(livingEntity) && livingEntity.hurt(this.damageSources().mobAttack(this), this.getAttackDamage())) {
                 this.playSound(SoundEvents.SLIME_ATTACK, 1.0f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
                 this.doEnchantDamageEffects(this, livingEntity);
                 livingEntity.setTicksFrozen(livingEntity.getTicksFrozen() + 200);
@@ -215,6 +218,7 @@ public class IceCubeEntity extends Monster {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
         return 0.15f;
     }
@@ -224,7 +228,7 @@ public class IceCubeEntity extends Monster {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return SoundEvents.SLIME_HURT;
     }
 
@@ -284,7 +288,7 @@ public class IceCubeEntity extends Monster {
                 this.mob.setZza(0.0F);
             } else {
                 this.operation = Operation.WAIT;
-                if (this.mob.isOnGround()) {
+                if (this.mob.onGround()) {
                     this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
                     if (this.jumpDelay-- <= 0) {
                         this.jumpDelay = this.iceCube.getJumpDelay();

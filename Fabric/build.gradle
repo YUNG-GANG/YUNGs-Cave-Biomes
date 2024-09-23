@@ -1,7 +1,11 @@
 plugins {
     id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'idea'
+    id 'net.darkhax.curseforgegradle' version "${cursegradle_version}"
+    id 'com.modrinth.minotaur' version '2.+'
 }
+
+def modVersion = version
 
 archivesBaseName = "${mod_name}"
 version = "${mc_version}-Fabric-${version}"
@@ -23,9 +27,9 @@ dependencies {
 
     // YUNG's API
     if (useLocalYungsApi) {
-        modImplementation files("libs/YungsApi-${mc_version}-Fabric-${yungsapi_version}.jar")
+        modImplementation files("libs/YungsApi-${yungsapi_mc_version}-Fabric-${yungsapi_version}.jar")
     } else {
-        modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-Fabric-${yungsapi_version}"
+        modImplementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${yungsapi_mc_version}-Fabric-${yungsapi_version}"
     }
     implementation("org.reflections:reflections:0.10.2")
     include("org.reflections:reflections:0.10.2")
@@ -35,13 +39,10 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
     // ClothConfig
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version_fabric}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
+    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version_fabric}"
 
     // ModMenu
-//    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version_fabric}") { transitive = false }
-    modApi "com.terraformersmc:modmenu:${project.modmenu_version_fabric}"
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version_fabric}") { transitive = false }
 
     // Terrablender
     modImplementation("com.github.glitchfiend:TerraBlender-fabric:${project.mc_version}-${project.terrablender_version}") {
@@ -49,9 +50,10 @@ dependencies {
     }
 
     // GeckoLib
-    modImplementation files("libs/geckolib-fabric-1.18-${fabric_geckolib_version}.jar")
+//    modImplementation files("libs/geckolib-fabric-${mc_version}-${geckolib_version}.jar")
+    modImplementation("software.bernie.geckolib:geckolib-fabric-${mc_version}:${geckolib_version}")
 
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     compileOnly project(":Common")
 }
 
@@ -83,18 +85,25 @@ processResources {
     inputs.property "mod_description", project.mod_description
     inputs.property "mod_full_name", project.mod_full_name
     inputs.property "mod_id", project.mod_id
+    inputs.property "fabric_version", project.fabric_version
+    inputs.property "fabric_loader_version", project.fabric_loader_version
     inputs.property "terrablender_version", project.terrablender_version
-    inputs.property "fabric_geckolib_version", project.fabric_geckolib_version
+    inputs.property "geckolib_version", project.geckolib_version
+    inputs.property "clothconfig_version_fabric", project.clothconfig_version_fabric
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
                 "yungsapi_version": project.yungsapi_version,
+                "yungsapi_mc_version": project.yungsapi_mc_version,
                 "terrablender_version": project.terrablender_version,
                 "fabric_geckolib_version": project.fabric_geckolib_version,
                 "mc_version": project.mc_version,
                 "mod_description": project.mod_description,
                 "mod_full_name": project.mod_full_name,
-                "mod_id": project.mod_id
+                "mod_id": project.mod_id,
+                "fabric_version": project.fabric_version,
+                "fabric_loader_version": project.fabric_loader_version,
+                "clothconfig_version_fabric": project.clothconfig_version_fabric
     }
 }
 
@@ -107,3 +116,57 @@ jar {
         rename { "${it}_${mod_name}" }
     }
 }
+
+
+artifacts {
+    archives(tasks.remapJar)
+    archives(tasks.remapSourcesJar)
+}
+
+String[] compatibleVersions = project.compatible_versions.split(',')
+task publishCurseForgeFabric(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    dependsOn(tasks.remapJar)
+    apiToken = curseforgeApiKey
+
+    debugMode = true
+
+    def mainFile = upload(curseforge_project_id_fabric, tasks.remapJar.archiveFile)
+    mainFile.changelogType = 'markdown'
+    mainFile.changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "No changelog provided"
+    mainFile.releaseType = 'release'
+    mainFile.addRequirement('yungs-api-fabric')
+    mainFile.addRequirement('fabric-api')
+    mainFile.addRequirement('cloth-config')
+    mainFile.addRequirement('terrablender-fabric')
+    mainFile.addRequirement('geckolib')
+    mainFile.addOptional('modmenu')
+    mainFile.displayName = "[${mc_version}] ${mod_full_name} v${modVersion} (Fabric)"
+    compatibleVersions.each { version ->
+        mainFile.addGameVersion(version)
+    }
+}
+
+List compatibleVersionsList = project.compatible_versions.split(',')
+modrinth {
+    token = modrinthToken
+    projectId = modrinth_project_id
+    versionNumber = version
+    versionName = "[${mc_version}] v${modVersion} (Fabric)"
+    versionType = "release"
+    uploadFile = remapJar
+    gameVersions = compatibleVersionsList
+    debugMode = true
+    changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "No changelog provided"
+    dependencies { // A special DSL for creating dependencies
+        // scope.type
+        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
+        // The type can either be `project` or `version`
+        required.project "yungs-api"
+        required.project "fabric-api"
+        required.project "cloth-config"
+        required.project "terrablender"
+        required.project "geckolib"
+        optional.project "modmenu"
+    }
+}
+tasks.modrinth.dependsOn(tasks.remapJar)

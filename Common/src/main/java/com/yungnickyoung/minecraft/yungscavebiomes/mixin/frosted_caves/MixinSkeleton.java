@@ -13,28 +13,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Skeleton.class)
 public abstract class MixinSkeleton extends AbstractSkeleton {
-    @Shadow
-    private int inPowderSnowTime;
-
     protected MixinSkeleton(EntityType<? extends AbstractSkeleton> $$0, Level $$1) {
         super($$0, $$1);
     }
 
     @Shadow
-    protected abstract void startFreezeConversion(int $$0);
-
-    @Shadow public abstract boolean isFreezeConverting();
+    public abstract boolean isFreezeConverting();
 
     /**
      * Skeletons in Frosted Caves transform into strays.
      */
     @Inject(method = "tick", at = @At("HEAD"))
     private void yungscavebiomes_transformSkeletonsInFrostedCaves(CallbackInfo ci) {
-        if (!this.level.isClientSide
+        if (!this.level().isClientSide
                 && this.isAlive()
                 && !this.isNoAi()
                 && !this.isFreezeConverting()
-                && this.level.getBiome(this.blockPosition()).is(BiomeModule.FROSTED_CAVES.getResourceKey())) {
+                && this.level().getBiome(this.blockPosition()).is(BiomeModule.FROSTED_CAVES)) {
             this.isInPowderSnow = true;
         }
     }

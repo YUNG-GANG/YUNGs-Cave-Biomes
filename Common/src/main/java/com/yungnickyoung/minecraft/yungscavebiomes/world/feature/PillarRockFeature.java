@@ -4,13 +4,12 @@ import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.noise.OpenSimplex2S;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-
-import java.util.Random;
 
 public class PillarRockFeature extends Feature<SimpleBlockConfiguration> {
 
@@ -47,7 +46,7 @@ public class PillarRockFeature extends Feature<SimpleBlockConfiguration> {
     public boolean place(FeaturePlaceContext<SimpleBlockConfiguration> context) {
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
-        Random random = context.random();
+        RandomSource random = context.random();
 
         SimpleBlockConfiguration config = context.config();
         BlockState state = config.toPlace().getState(context.random(), context.origin());
@@ -57,7 +56,7 @@ public class PillarRockFeature extends Feature<SimpleBlockConfiguration> {
         float radXZ = Mth.square(random.nextFloat()) * (RADIUS_MAX - RADIUS_MIN) + RADIUS_MIN;
 
         // Height is chosen relative to the XZ radius.
-        float height = random.nextFloat(HEIGHT_RELATIVE_TO_RADIUS_MIN, HEIGHT_RELATIVE_TO_RADIUS_MAX) * radXZ;
+        float height = Mth.nextFloat(random, HEIGHT_RELATIVE_TO_RADIUS_MIN, HEIGHT_RELATIVE_TO_RADIUS_MAX) * radXZ;
 
         // Height of top portion is also relative to the XZ radius.
         float topHeight = radXZ * TOP_HEIGHT_PROPORTION;
@@ -65,8 +64,8 @@ public class PillarRockFeature extends Feature<SimpleBlockConfiguration> {
         float creasePositionY = height * 0.5f - topHeight;
 
         // The top and bottom sections are offset and vertically-rescaled hemispheres. These offsets determine the initial taper.
-        float topStartHemisphereOffset = random.nextFloat(TOP_START_HEMISPHERE_OFFSET_MIN, TOP_START_HEMISPHERE_OFFSET_MAX);
-        float bottomStartHemisphereOffset = random.nextFloat(BOTTOM_START_HEMISPHERE_OFFSET_MIN, BOTTOM_START_HEMISPHERE_OFFSET_MAX);
+        float topStartHemisphereOffset =  Mth.nextFloat(random, TOP_START_HEMISPHERE_OFFSET_MIN, TOP_START_HEMISPHERE_OFFSET_MAX);
+        float bottomStartHemisphereOffset =  Mth.nextFloat(random, BOTTOM_START_HEMISPHERE_OFFSET_MIN, BOTTOM_START_HEMISPHERE_OFFSET_MAX);
 
         // To map dy to startHemisphereOffset at the crease, 1 at the boundary.
         float dyTopMultiplier = (1.0f - topStartHemisphereOffset) / topHeight;

@@ -10,9 +10,9 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class SandSnapperModel extends AnimatedGeoModel<SandSnapperEntity> {
-    private static final ResourceLocation MODEL = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "geo/sand_snapper/sand_snapper.geo.json");
-    private static final ResourceLocation TEXTURE = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "textures/entity/sand_snapper/sand_snapper.png");
-    private static final ResourceLocation ANIMATION = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "animations/sand_snapper/sand_snapper.animation.json");
+    private static final ResourceLocation MODEL = YungsCaveBiomesCommon.id("geo/sand_snapper/sand_snapper.geo.json");
+    private static final ResourceLocation TEXTURE = YungsCaveBiomesCommon.id("textures/entity/sand_snapper/sand_snapper.png");
+    private static final ResourceLocation ANIMATION = YungsCaveBiomesCommon.id("animations/sand_snapper/sand_snapper.animation.json");
 
     @Override
     public ResourceLocation getModelLocation(SandSnapperEntity sandSnapper) {

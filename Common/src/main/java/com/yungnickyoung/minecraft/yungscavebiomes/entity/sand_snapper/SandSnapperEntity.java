@@ -11,7 +11,6 @@ import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.Snap
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -384,7 +383,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     @Override
     public float getWalkTargetValue(BlockPos movePos, LevelReader level) {
         // prefer moving on sand
-        return level.getBlockState(movePos.below()).is(TagModule.SAND_SNAPPER_BLOCKS) ? 10.0F : 0.0F;
+        return level.getBlockState(movePos.below()).is(BlockModule.SAND_SNAPPER_BLOCKS) ? 10.0F : 0.0F;
     }
 
     @Override
@@ -422,7 +421,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
                 BlockState blockState = this.level.getBlockState(pos);
                 BlockState stateAbove = this.level.getBlockState(pos.above());
                 return !blockState.isAir()
-                        && !(blockState.is(TagModule.SAND_SNAPPER_BLOCKS) && stateAbove.is(Blocks.AIR))
+                        && !(blockState.is(BlockModule.SAND_SNAPPER_BLOCKS) && stateAbove.is(Blocks.AIR))
                         && blockState.isSuffocating(this.level, pos)
                         && Shapes.joinIsNotEmpty(blockState.getCollisionShape(this.level, pos).move(pos.getX(), pos.getY(), pos.getZ()), Shapes.create(aabb), BooleanOp.AND);
             });
@@ -477,8 +476,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         // to allow dimension refreshing without cost
         BlockState blockStateOn = this.getBlockStateOn();
         BlockState blockStateBelow = this.level.getBlockState(this.getOnPos().below());
-        return blockStateOn.is(TagModule.SAND_SNAPPER_BLOCKS) ||
-                (blockStateOn.is(Blocks.AIR) && blockStateBelow.is(TagModule.SAND_SNAPPER_BLOCKS));
+        return blockStateOn.is(BlockModule.SAND_SNAPPER_BLOCKS) ||
+                (blockStateOn.is(Blocks.AIR) && blockStateBelow.is(BlockModule.SAND_SNAPPER_BLOCKS));
     }
 
     public void setSubmergeLocked(boolean locked) {

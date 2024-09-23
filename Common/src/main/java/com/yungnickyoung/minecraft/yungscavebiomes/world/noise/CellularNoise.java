@@ -36,14 +36,14 @@ public class CellularNoise {
     public static float sampleDistance2Sub(long seed, double x, double y, double z) {
 
         // Lowest axis positions for cells that could contain points in range.
-        int xBaseStart = Mth.fastFloor(x - MAX_DISTANCE_TO_CLOSEST);
-        int yBaseStart = Mth.fastFloor(y - MAX_DISTANCE_TO_CLOSEST);
-        int zBaseStart = Mth.fastFloor(z - MAX_DISTANCE_TO_CLOSEST);
+        int xBaseStart = Mth.floor(x - MAX_DISTANCE_TO_CLOSEST);
+        int yBaseStart = Mth.floor(y - MAX_DISTANCE_TO_CLOSEST);
+        int zBaseStart = Mth.floor(z - MAX_DISTANCE_TO_CLOSEST);
 
         // Axis loop ranges.
-        int xRange = Mth.fastFloor(x + MAX_DISTANCE_TO_CLOSEST) - xBaseStart;
-        int yRange = Mth.fastFloor(y + MAX_DISTANCE_TO_CLOSEST) - yBaseStart;
-        int zRange = Mth.fastFloor(z + MAX_DISTANCE_TO_CLOSEST) - zBaseStart;
+        int xRange = Mth.floor(x + MAX_DISTANCE_TO_CLOSEST) - xBaseStart;
+        int yRange = Mth.floor(y + MAX_DISTANCE_TO_CLOSEST) - yBaseStart;
+        int zRange = Mth.floor(z + MAX_DISTANCE_TO_CLOSEST) - zBaseStart;
 
         // Offset from the lowest corner of the loop start cell.
         float xiStart = (float)(x - xBaseStart);

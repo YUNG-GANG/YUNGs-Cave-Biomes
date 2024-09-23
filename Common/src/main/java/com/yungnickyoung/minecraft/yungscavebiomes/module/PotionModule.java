@@ -27,7 +27,7 @@ public class PotionModule {
      * Any methods used with the AutoRegister annotation must be static and take no arguments.
      * Note that the annotation value is ignored.
      */
-    @AutoRegister("_ignored")
+    @AutoRegister("init")
     private static void init() {
         AutoRegisterUtils.registerBrewingRecipe(() -> Potions.AWKWARD, () -> BlockModule.FROST_LILY.get().asItem(), FROST_POTION.getSupplier());
         AutoRegisterUtils.registerBrewingRecipe(FROST_POTION.getSupplier(), () -> Items.FERMENTED_SPIDER_EYE, () -> Potions.FIRE_RESISTANCE);

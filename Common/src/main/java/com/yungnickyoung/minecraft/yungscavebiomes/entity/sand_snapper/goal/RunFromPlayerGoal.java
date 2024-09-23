@@ -1,10 +1,11 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.TagModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -17,7 +18,6 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -107,8 +107,8 @@ public class RunFromPlayerGoal extends Goal {
             return false;
         }
 
-        this.playerToAvoid = this.sandSnapper.level.getNearestEntity(
-                this.sandSnapper.level
+        this.playerToAvoid = this.sandSnapper.level().getNearestEntity(
+                this.sandSnapper.level()
                         .getEntitiesOfClass(Player.class, this.sandSnapper.getBoundingBox().inflate(this.maxDist, 3.0, this.maxDist), p -> true),
                 this.avoidEntityTargeting,
                 this.sandSnapper,
@@ -152,8 +152,8 @@ public class RunFromPlayerGoal extends Goal {
         int maxVerticalDist = 7;
 
         // First try to find a sand block away from the player
-        Function<BlockPos, Boolean> isValidSandPos = (pos) -> this.sandSnapper.level.getBlockState(pos).is(TagModule.SAND_SNAPPER_BLOCKS)
-                && this.sandSnapper.level.getBlockState(pos.above()).isAir();
+        Function<BlockPos, Boolean> isValidSandPos = (pos) -> this.sandSnapper.level().getBlockState(pos).is(BlockModule.SAND_SNAPPER_BLOCKS)
+                && this.sandSnapper.level().getBlockState(pos.above()).isAir();
         Vec3 targetPos = getPosAway(minHorizontalDist, maxHorizontalDist, maxVerticalDist, Math.PI / 2, this.playerToAvoid.position(), isValidSandPos);
 
         // If no sand blocks are found, try to find a sand block in almost any direction (270 degrees away from the player)
@@ -194,7 +194,7 @@ public class RunFromPlayerGoal extends Goal {
         return RandomPos.generateRandomPos(this.sandSnapper, () -> {
             BlockPos randomlyOffsetPos = generateRandomOffsetInDirection(this.sandSnapper.getRandom(), minHorizontalDist, maxHorizontalDist, maxVerticalDist,
                     awayDirection.x, awayDirection.z, searchAngle);
-            BlockPos pos = new BlockPos(this.sandSnapper.getX() + randomlyOffsetPos.getX(),
+            BlockPos pos = BlockPos.containing(this.sandSnapper.getX() + randomlyOffsetPos.getX(),
                     this.sandSnapper.getY() + randomlyOffsetPos.getY(),
                     this.sandSnapper.getZ() + randomlyOffsetPos.getZ());
 
@@ -213,7 +213,7 @@ public class RunFromPlayerGoal extends Goal {
      *                    E.g. Math.PI / 2 will search in a 90 degree arc centered on the aforementioned direction.
      * @return The randomly generated offset.
      */
-    private static BlockPos generateRandomOffsetInDirection(Random random, int minHorizontalDist, int maxHorizontalDistance, int maxVerticalDistance,
+    private static BlockPos generateRandomOffsetInDirection(RandomSource random, int minHorizontalDist, int maxHorizontalDistance, int maxVerticalDistance,
                                                             double dirX, double dirZ, double searchAngle) {
         double theta = Math.atan2(dirZ, dirX); // angle between x-axis and point, from -pi to +pi
         double randomAngleOffset = (random.nextDouble() * searchAngle) - (searchAngle / 2.0D); // random angle offset from -searchAngle/2 to +searchAngle/2
@@ -225,12 +225,12 @@ public class RunFromPlayerGoal extends Goal {
         double randomZ = amplitude * Math.sin(randomAngle);
         int randomY = random.nextInt(2 * maxVerticalDistance + 1) - maxVerticalDistance;
 
-        return new BlockPos(randomX, randomY, randomZ);
+        return BlockPos.containing(randomX, randomY, randomZ);
     }
 
     private boolean isInActiveSandstorm() {
         // TODO - check if the sand snapper is in a Lost Caves biome when checking for sandstorm
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level()).getSandstormServerData();
         return sandstormServerData.isSandstormActive();
     }
 }

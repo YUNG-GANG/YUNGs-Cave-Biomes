@@ -23,7 +23,7 @@ public abstract class MixinCactusBlock {
     public void yungscavebiomes_allowCactusOnAncientSand(BlockState blockState, LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockStateBelow = levelReader.getBlockState(blockPos.below());
         BlockState blockStateAbove = levelReader.getBlockState(blockPos.above());
-        if (blockStateBelow.is(BlockModule.ANCIENT_SAND.get()) && !blockStateAbove.getMaterial().isLiquid()) {
+        if (blockStateBelow.is(BlockModule.ANCIENT_SAND.get()) && !blockStateAbove.liquid()) {
             cir.setReturnValue(true);
         }
     }

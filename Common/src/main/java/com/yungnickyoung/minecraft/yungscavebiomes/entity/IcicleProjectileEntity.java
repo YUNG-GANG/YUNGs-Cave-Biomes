@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class IcicleProjectileEntity extends AbstractArrow {
     private boolean hit;
@@ -31,7 +32,7 @@ public class IcicleProjectileEntity extends AbstractArrow {
     }
 
     @Override
-    protected ItemStack getPickupItem() {
+    protected @NotNull ItemStack getPickupItem() {
         return new ItemStack(BlockModule.ICICLE.get().asItem());
     }
 
@@ -41,8 +42,8 @@ public class IcicleProjectileEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult blockHitResult) {
-        BlockState hitBlockState = this.level.getBlockState(blockHitResult.getBlockPos());
-        hitBlockState.onProjectileHit(this.level, hitBlockState, blockHitResult, this);
+        BlockState hitBlockState = this.level().getBlockState(blockHitResult.getBlockPos());
+        hitBlockState.onProjectileHit(this.level(), hitBlockState, blockHitResult, this);
         Vec3 $$1 = blockHitResult.getLocation().subtract(this.getX(), this.getY(), this.getZ());
         this.setDeltaMovement($$1);
         Vec3 $$2 = $$1.normalize().scale(0.05F);
@@ -56,7 +57,7 @@ public class IcicleProjectileEntity extends AbstractArrow {
         this.setShotFromCrossbow(false);
         ((AbstractArrowAccessor) this).callResetPiercedEntities();
         this.hit = true;
-        if (this.level instanceof ServerLevel serverLevel) {
+        if (this.level() instanceof ServerLevel serverLevel) {
             Services.PLATFORM.sendIcicleProjectileShatterS2CPacket(serverLevel, this.position());
         }
         this.playSound(SoundEvents.GLASS_BREAK, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
@@ -64,9 +65,9 @@ public class IcicleProjectileEntity extends AbstractArrow {
     }
 
     @Override
-    protected void onHitEntity(EntityHitResult $$0) {
-        super.onHitEntity($$0);
-        if (this.level instanceof ServerLevel serverLevel) {
+    protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
+        super.onHitEntity(entityHitResult);
+        if (this.level() instanceof ServerLevel serverLevel) {
             Services.PLATFORM.sendIcicleProjectileShatterS2CPacket(serverLevel, this.position());
         }
     }
@@ -76,12 +77,12 @@ public class IcicleProjectileEntity extends AbstractArrow {
         super.tick();
     }
 
-    public void addAdditionalSaveData(CompoundTag compoundTag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putBoolean("hit", this.hit);
     }
 
-    public void readAdditionalSaveData(CompoundTag compoundTag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.hit = compoundTag.getBoolean("hit");
     }

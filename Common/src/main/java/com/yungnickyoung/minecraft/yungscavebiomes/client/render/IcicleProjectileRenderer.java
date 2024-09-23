@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class IcicleProjectileRenderer extends ArrowRenderer<IcicleProjectileEntity> {
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "textures/entity/projectiles/icicle.png");
+    public static final ResourceLocation TEXTURE_LOCATION = YungsCaveBiomesCommon.id("textures/entity/projectiles/icicle.png");
 
     public IcicleProjectileRenderer(EntityRendererProvider.Context content) {
         super(content);

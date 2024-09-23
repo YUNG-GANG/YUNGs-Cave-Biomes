@@ -29,12 +29,12 @@ public abstract class MixinFogRendererFabric {
     private static final SandstormFogRenderer sandstormFogRenderer = new SandstormFogRenderer();
 
     @Inject(method = "setupFog", at = @At("TAIL"))
-    private static void yungscavebiomes_handleLostCavesFogFabric(Camera camera, FogRenderer.FogMode mode, float renderDistance, boolean isVeryFoggy, CallbackInfo ci) {
+    private static void yungscavebiomes_handleLostCavesFogFabric(Camera camera, FogRenderer.FogMode mode, float renderDistance, boolean isVeryFoggy, float g, CallbackInfo ci) {
         sandstormFogRenderer.render(mode, renderDistance);
     }
 
     @Inject(method = "setupColor", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/FogRenderer;biomeChangedTime:J", ordinal = 4, opcode = 179 /*PUTFIELD*/, shift = At.Shift.AFTER))
-    private static void yungscavebiomes_setupLostCavesColorFabric(Camera camera, float f, ClientLevel clientLevel, int i2, float g, CallbackInfo ci) {        // Interpolate fog if needed
+    private static void yungscavebiomes_setupLostCavesColorFabric(Camera camera, float f, ClientLevel clientLevel, int i2, float g, CallbackInfo ci) { // Interpolate fog if needed
         if (sandstormFogRenderer.getFogLevel() > 0) {
             fogRed = (float) Mth.lerp(sandstormFogRenderer.getFogLevel(), fogRed, 0.8f);
             fogGreen = (float) Mth.lerp(sandstormFogRenderer.getFogLevel(), fogGreen, 0.5f);

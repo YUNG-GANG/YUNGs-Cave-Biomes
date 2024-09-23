@@ -47,12 +47,12 @@ public abstract class MixinLivingEntity extends Entity {
     public void yungscavebiomes_buffetEntitiesInSandstorm(CallbackInfo ci) {
         if (YungsCaveBiomesCommon.CONFIG.lostCaves.enableSandstorms
                 && this.isPlayer(this)
-                && !this.level.isClientSide
+                && !this.level().isClientSide
                 && !this.isSpectator()
                 && this.tickCount % 10 == 0
-                && this.level instanceof ServerLevel serverLevel
+                && this.level() instanceof ServerLevel serverLevel
                 && ((ISandstormServerDataProvider) serverLevel).getSandstormServerData().isSandstormActive()
-                && this.level.getBiome(this.blockPosition()).is(BiomeModule.LOST_CAVES.getResourceKey())
+                && this.level().getBiome(this.blockPosition()).is(BiomeModule.LOST_CAVES)
         ) {
             MobEffectInstance buffetedEffect = this.getEffect(MobEffectModule.BUFFETED_EFFECT.get());
             if (buffetedEffect == null || buffetedEffect.getDuration() < BUFFETED_EFFECT_REAPPLY_THRESHOLD) {

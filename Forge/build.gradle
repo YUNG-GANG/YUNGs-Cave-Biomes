@@ -5,12 +5,21 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.25', changing: true
+//        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.25', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
+
+plugins {
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.darkhax.curseforgegradle' version "${cursegradle_version}"
+    id 'com.modrinth.minotaur' version '2.+'
+}
+
 apply plugin: 'org.spongepowered.mixin'
+
+def modVersion = version
 
 archivesBaseName = "${mod_name}"
 version = "${mc_version}-Forge-${version}"
@@ -82,13 +91,14 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
     // YUNG's API
-    implementation fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-Forge-${yungsapi_version}")
+    implementation fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${yungsapi_mc_version}-Forge-${yungsapi_version}")
 
     // Terrablender
     implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${mc_version}-${terrablender_version}")
 
     // GeckoLib
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.18:${forge_geckolib_version}")
+//    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
 
     // Other
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -103,22 +113,26 @@ processResources {
     from project(":Common").sourceSets.main.resources
     inputs.property "version", project.version
     inputs.property "yungsapi_version", project.yungsapi_version
+    inputs.property "yungsapi_mc_version", project.yungsapi_mc_version
     inputs.property "mc_version", project.mc_version
     inputs.property "mod_description", project.mod_description
     inputs.property "mod_full_name", project.mod_full_name
     inputs.property "mod_id", project.mod_id
+    inputs.property "forge_version", project.forge_version
     inputs.property "terrablender_version", project.terrablender_version
-    inputs.property "forge_geckolib_version", project.forge_geckolib_version
+    inputs.property "geckolib_version", project.geckolib_version
 
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version,
                 "yungsapi_version": project.yungsapi_version,
+                "yungsapi_mc_version": project.yungsapi_mc_version,
                 "terrablender_version": project.terrablender_version,
-                "forge_geckolib_version": project.forge_geckolib_version,
+                "geckolib_version": project.geckolib_version,
                 "mc_version": project.mc_version,
                 "mod_description": project.mod_description,
                 "mod_full_name": project.mod_full_name,
-                "mod_id": project.mod_id
+                "mod_id": project.mod_id,
+                "forge_version": project.forge_version
     }
 }
 
@@ -129,3 +143,45 @@ mixin {
 }
 
 jar.finalizedBy('reobfJar')
+
+String[] compatibleVersions = project.compatible_versions.split(',')
+task publishCurseForgeForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    dependsOn(tasks.jar)
+    apiToken = curseforgeApiKey
+
+    debugMode = false
+
+    def mainFile = upload(curseforge_project_id_forge, tasks.jar.archiveFile)
+    mainFile.changelogType = 'markdown'
+    mainFile.changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "No changelog provided"
+    mainFile.releaseType = 'release'
+    mainFile.addRequirement('terrablender')
+    mainFile.addRequirement('geckolib')
+    mainFile.addRequirement('yungs-api')
+    mainFile.displayName = "[${mc_version}] ${mod_full_name} v${modVersion} (Forge)"
+    compatibleVersions.each { version ->
+        mainFile.addGameVersion(version)
+    }
+}
+
+List compatibleVersionsList = project.compatible_versions.split(',')
+modrinth {
+    token = modrinthToken
+    projectId = modrinth_project_id
+    versionNumber = version
+    versionName = "[${mc_version}] v${modVersion} (Forge)"
+    versionType = "release"
+    uploadFile = jar
+    gameVersions = compatibleVersionsList
+    debugMode = false
+    changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "No changelog provided"
+    dependencies { // A special DSL for creating dependencies
+        // scope.type
+        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
+        // The type can either be `project` or `version`
+        required.project "yungs-api"
+        required.project "terrablender"
+        required.project "geckolib"
+    }
+}
+tasks.modrinth.dependsOn(tasks.jar)

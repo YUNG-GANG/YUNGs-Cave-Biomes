@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
@@ -40,7 +39,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
         buf.writeDouble(pos.x());
         buf.writeDouble(pos.y());
         buf.writeDouble(pos.z());
-        for (ServerPlayer player : PlayerLookup.tracking(level, new BlockPos(pos))) {
+        for (ServerPlayer player : PlayerLookup.tracking(level, BlockPos.containing(pos))) {
             ServerPlayNetworking.send(player, NetworkModuleFabric.ICICLE_SHATTER_ID, buf);
         }
     }
@@ -69,12 +68,12 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public Supplier<Item> getIceCubeSpawnEggItem() {
         return () -> new SpawnEggItem(EntityTypeModule.ICE_CUBE.get(), 0xA4C4FC, 0xE4ECFC,
-                new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+                new Item.Properties());
     }
 
     @Override
     public Supplier<Item> getSandSnapperSpawnEggItem() {
         return () -> new SpawnEggItem(EntityTypeModule.SAND_SNAPPER.get(), 0xBA852F, 0xCFAC55,
-                new Item.Properties().tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get()));
+                new Item.Properties());
     }
 }

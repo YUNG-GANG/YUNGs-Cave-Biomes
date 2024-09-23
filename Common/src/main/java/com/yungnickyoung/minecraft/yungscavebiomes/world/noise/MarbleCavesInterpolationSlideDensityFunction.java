@@ -6,6 +6,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
+import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.util.LinearCongruentialGenerator;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
@@ -132,7 +133,7 @@ public class MarbleCavesInterpolationSlideDensityFunction implements DensityFunc
     }
 
     @Override
-    public Codec<? extends DensityFunction> codec() {
+    public KeyDispatchDataCodec<? extends DensityFunction> codec() {
         // TODO: is this needed? at the point where this is injected no deserialization is taking place.
         return null;
     }

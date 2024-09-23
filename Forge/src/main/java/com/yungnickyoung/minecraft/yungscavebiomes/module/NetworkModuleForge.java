@@ -4,7 +4,6 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.network.IcicleShatterS2CPacket;
 import com.yungnickyoung.minecraft.yungscavebiomes.network.SandstormSyncS2CPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -31,7 +30,7 @@ public class NetworkModuleForge {
     private static void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             INSTANCE = NetworkRegistry.ChannelBuilder
-                    .named(new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "messages"))
+                    .named(YungsCaveBiomesCommon.id("messages"))
                     .networkProtocolVersion(() -> PROTOCOL_VERSION)
                     .clientAcceptedVersions(PROTOCOL_VERSION::equals)
                     .serverAcceptedVersions(PROTOCOL_VERSION::equals)

@@ -17,7 +17,7 @@ public class IceCubeLeapGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !this.iceCube.isOnGround();
+        return !this.iceCube.onGround();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class IceCubeLeapGoal extends Goal {
 
                 if (dist - velocity > 16.0) {
                     return false;
-                } else if (!this.iceCube.isOnGround()) {
+                } else if (!this.iceCube.onGround()) {
                     return false;
                 }
             }

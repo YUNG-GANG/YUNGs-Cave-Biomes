@@ -7,6 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -41,9 +42,9 @@ public abstract class MixinNoiseBasedChunkGenerator extends ChunkGenerator {
     }
 
     @Inject(method = "createBiomes", at = @At("HEAD"))
-    private void yungscavebiomes_captureBiomeRegistry(Registry<Biome> registry, Executor executor, Blender blender, StructureFeatureManager structureFeatureManager, ChunkAccess chunkAccess, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
+    private void yungscavebiomes_captureBiomeRegistry(Executor executor, RandomState randomState, Blender blender, StructureManager structureManager, ChunkAccess chunkAccess, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
         NoiseChunk nc = chunkAccess.getOrCreateNoiseChunk(this.router, () -> {
-            return BeardifierAccessor.createBeardifier(structureFeatureManager, chunkAccess);
+            return BeardifierAccessor.createBeardifier(structureManager, chunkAccess);
         }, this.settings.value(), this.globalFluidPicker, blender);
 
         ((NoiseSamplerBiomeHolder) nc).setBiomeSource(this.runtimeBiomeSource);

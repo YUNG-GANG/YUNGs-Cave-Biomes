@@ -78,18 +78,18 @@ public class EatPeachGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        List<ItemEntity> itemsNearby = this.sandSnapper.getLevel().getEntitiesOfClass(ItemEntity.class,
+        List<ItemEntity> itemsNearby = this.sandSnapper.level().getEntitiesOfClass(ItemEntity.class,
                 this.sandSnapper.getBoundingBox().inflate(this.horizontalRange, this.verticalRange, this.horizontalRange),
                 entity -> entity.getItem().is(ItemModule.PRICKLY_PEACH_ITEM.get()));
 
         if (itemsNearby.isEmpty()) return false;
 
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level()).getSandstormServerData();
 
         Collections.shuffle(itemsNearby);
         if (!sandstormServerData.isSandstormActive()) {
             for (ItemEntity item : itemsNearby) {
-                Player nearestPlayer = item.getLevel().getNearestPlayer(item.getX(), item.getY(), item.getZ(), this.playerDist, true);
+                Player nearestPlayer = item.level().getNearestPlayer(item.getX(), item.getY(), item.getZ(), this.playerDist, true);
 
                 if (nearestPlayer == null) {
                     this.peachItem = item;
@@ -108,10 +108,10 @@ public class EatPeachGoal extends Goal {
     public boolean canContinueToUse() {
         if (this.peachItem.isRemoved()) return false;
 
-        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level).getSandstormServerData();
+        SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) this.sandSnapper.level()).getSandstormServerData();
 
         if (!sandstormServerData.isSandstormActive()) {
-            Player nearestPlayer = this.peachItem.getLevel().getNearestPlayer(this.peachItem.getX(), this.peachItem.getY(), this.peachItem.getZ(), this.playerDist, true);
+            Player nearestPlayer = this.peachItem.level().getNearestPlayer(this.peachItem.getX(), this.peachItem.getY(), this.peachItem.getZ(), this.playerDist, true);
             return nearestPlayer == null;
         }
 

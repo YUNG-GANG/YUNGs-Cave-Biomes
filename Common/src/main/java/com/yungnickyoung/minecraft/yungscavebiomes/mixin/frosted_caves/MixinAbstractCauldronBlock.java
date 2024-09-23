@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.mixin.frosted_caves;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.IcicleBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Block;
@@ -14,8 +15,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Random;
 
 @Mixin(AbstractCauldronBlock.class)
 public abstract class MixinAbstractCauldronBlock extends Block {
@@ -33,7 +32,7 @@ public abstract class MixinAbstractCauldronBlock extends Block {
      * Allows cauldrons to receive icicle drips.
      */
     @Inject(method = "tick", at = @At("HEAD"))
-    private void yungscavebiomes_checkForIcicleDrip(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random, CallbackInfo ci) {
+    private void yungscavebiomes_checkForIcicleDrip(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random, CallbackInfo ci) {
         BlockPos iciclePos = IcicleBlock.findIcicleTipAboveCauldron(serverLevel, blockPos);
         if (iciclePos == null) {
             return;

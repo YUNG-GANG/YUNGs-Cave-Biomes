@@ -34,7 +34,7 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
      */
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ThrownPotion;discard()V", ordinal = 0))
     protected void yungscavebiomes_onFrostSplashPotionHit(HitResult hitResult, CallbackInfo ci) {
-        if (!this.level.isClientSide && !level.dimensionType().ultraWarm()) {
+        if (!this.level().isClientSide && !this.level().dimensionType().ultraWarm()) {
             ItemStack itemStack = this.getItem();
             Potion potion = PotionUtils.getPotion(itemStack);
             if (potion == PotionModule.FROST_POTION.get() || potion == PotionModule.STRONG_FROST_POTION.get()) {
@@ -65,9 +65,9 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
                             }
 
                             currPos.setWithOffset(originPos, x, y, z);
-                            BlockState currState = level.getBlockState(currPos);
+                            BlockState currState = this.level().getBlockState(currPos);
 
-                            if (!currState.isAir() && !currState.is(Blocks.WATER) && !(currState.is(BlockTags.REPLACEABLE_PLANTS))) {
+                            if (!currState.isAir() && !currState.is(Blocks.WATER) && !(currState.is(BlockTags.REPLACEABLE))) {
                                 continue;
                             }
 
@@ -75,14 +75,14 @@ public abstract class MixinThrownPotion extends ThrowableItemProjectile {
                                 mutable.setWithOffset(currPos, direction);
 
                                 IceSheetBlock iceSheetBlock = (IceSheetBlock) BlockModule.ICE_SHEET.get();
-                                BlockState updatedBlockState = iceSheetBlock.getStateForPlacement(currState, level, currPos, direction);
+                                BlockState updatedBlockState = iceSheetBlock.getStateForPlacement(currState, this.level(), currPos, direction);
                                 if (updatedBlockState == null) {
                                     continue;
                                 }
                                 updatedBlockState = updatedBlockState.setValue(IceSheetBlock.GROWTH_DISTANCE, 0);
 
                                 currState = updatedBlockState;
-                                level.setBlock(currPos, updatedBlockState, 3);
+                                this.level().setBlock(currPos, updatedBlockState, 3);
                             }
                         }
                     }

@@ -5,11 +5,19 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.world.level.block.MultifaceSpreader;
+import net.minecraft.world.level.block.PipeBlock;
+import net.minecraft.world.level.block.RedStoneOreBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -17,15 +25,24 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.PushReaction;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
+@ParametersAreNonnullByDefault
 public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty GLOWING = BlockStateProperties.LIT;
     public static final IntegerProperty GROWTH_DISTANCE = BlockStateProperties.AGE_3;
+
+    private final MultifaceSpreader spreader = new MultifaceSpreader(this);
 
     public IceSheetBlock(Properties properties) {
         super(properties);
@@ -35,7 +52,8 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
                 .setValue(GROWTH_DISTANCE, 0));
     }
 
-    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+    @Override
+    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
         // Melt
         if (random.nextFloat() < 0.25f && serverLevel.getBrightness(LightLayer.BLOCK, blockPos) > 12 - blockState.getLightBlock(serverLevel, blockPos)) {
             serverLevel.removeBlock(blockPos, false);
@@ -50,8 +68,8 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         }
     }
 
-
-    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
+    @Override
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource random) {
         if (level.getBrightness(LightLayer.BLOCK, blockPos) > 12 - blockState.getLightBlock(level, blockPos) && random.nextFloat() < 0.2f) {
             // TODO - melting particle
 //            Vec3 vec3 = blockState.getOffset(level, blockPos);
@@ -90,7 +108,7 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         if (canAttachTo(blockGetter, neighborDirection, neighborPos, blockGetter.getBlockState(neighborPos))) {
             updatedState = updatedState.setValue(getFaceProperty(neighborDirection), true);
             Block adjacentBlock = blockGetter.getBlockState(neighborPos).getBlock();
-            if (adjacentBlock instanceof OreBlock || adjacentBlock instanceof RedStoneOreBlock) {
+            if (adjacentBlock instanceof DropExperienceBlock || adjacentBlock instanceof RedStoneOreBlock) {
                 updatedState = updatedState.setValue(GLOWING, true);
             }
         } else {
@@ -98,6 +116,11 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         }
 
         return updatedState;
+    }
+
+    @Override
+    public @NotNull MultifaceSpreader getSpreader() {
+        return this.spreader;
     }
 
     @Override
@@ -113,7 +136,7 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
             if (blockState.getValue(property)) {
                 BlockPos adjacentPos = blockPos.relative(direction);
                 Block adjacentBlock = level.getBlockState(adjacentPos).getBlock();
-                boolean isAdjacentBlockOre = adjacentBlock instanceof OreBlock || adjacentBlock instanceof RedStoneOreBlock;
+                boolean isAdjacentBlockOre = adjacentBlock instanceof DropExperienceBlock || adjacentBlock instanceof RedStoneOreBlock;
                 if (isAdjacentBlockOre) {
                     if (!blockState.getValue(GLOWING)) {
                         level.setBlock(blockPos, blockState.setValue(GLOWING, true), 2);
@@ -138,26 +161,21 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(GLOWING, WATERLOGGED, GROWTH_DISTANCE);
     }
-
-    @Override
-    public PushReaction getPistonPushReaction(BlockState blockState) {
-        return PushReaction.DESTROY;
-    }
-
-    private static boolean canAttachTo(BlockGetter blockGetter, Direction direction, BlockPos blockPos, BlockState blockState) {
-        return Block.isFaceFull(blockState.getCollisionShape(blockGetter, blockPos), direction.getOpposite());
-    }
+//
+//    private static boolean canAttachTo(BlockGetter blockGetter, Direction direction, BlockPos blockPos, BlockState blockState) {
+//        return Block.isFaceFull(blockState.getCollisionShape(blockGetter, blockPos), direction.getOpposite());
+//    }
 
 //    @Override
 //    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
 //        return  Block.box(0, 0, 0, 0, 0, 0);
 //    }
 
-    public boolean spreadFromRandomFaceWithinBlock(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+    public boolean spreadFromRandomFaceWithinBlock(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
         List<Direction> possibleSourceDirections = Lists.newArrayList(DIRECTIONS).stream()
                 .filter(direction -> hasFace(blockState, direction))
                 .collect(Collectors.toList());
@@ -175,7 +193,7 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
                 if (canAttachTo(serverLevel, targetDirection, neighborPos, serverLevel.getBlockState(neighborPos))) {
                     BlockState updatedState = blockState.setValue(getFaceProperty(targetDirection), true);
                     Block adjacentBlock = serverLevel.getBlockState(neighborPos).getBlock();
-                    if (adjacentBlock instanceof OreBlock || adjacentBlock instanceof RedStoneOreBlock) {
+                    if (adjacentBlock instanceof DropExperienceBlock || adjacentBlock instanceof RedStoneOreBlock) {
                         updatedState = updatedState.setValue(GLOWING, true);
                     }
                     serverLevel.setBlock(blockPos, updatedState, 2);
@@ -187,7 +205,7 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         return false;
     }
 
-    public boolean spreadFromRandomFaceTowardRandomDirection(BlockState spreadOriginBlockState, ServerLevel serverLevel, BlockPos spreadOriginBlockPos, Random random) {
+    public boolean spreadFromRandomFaceTowardRandomDirection(BlockState spreadOriginBlockState, ServerLevel serverLevel, BlockPos spreadOriginBlockPos, RandomSource random) {
         List<Direction> directions = Lists.newArrayList(DIRECTIONS);
         Collections.shuffle(directions);
         return directions.stream()
@@ -195,9 +213,9 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
                 .anyMatch((direction) -> this.spreadFromFaceTowardRandomDirection(spreadOriginBlockState, serverLevel, spreadOriginBlockPos, direction, random, false));
     }
 
-    public boolean spreadFromFaceTowardRandomDirection(BlockState spreadOriginBlockState, LevelAccessor levelAccessor, BlockPos spreadOriginBlockPos, Direction faceDirection, Random random, boolean bl) {
+    public boolean spreadFromFaceTowardRandomDirection(BlockState spreadOriginBlockState, LevelAccessor levelAccessor, BlockPos spreadOriginBlockPos, Direction faceDirection, RandomSource random, boolean bl) {
         List<Direction> list = Arrays.asList(DIRECTIONS);
-        Collections.shuffle(list, random);
+        Collections.shuffle(list, new Random(random.nextLong()));
         return list.stream()
                 .anyMatch((targetDirection) -> this.spreadFromFaceTowardDirection(spreadOriginBlockState, levelAccessor, spreadOriginBlockPos, faceDirection, targetDirection, bl));
     }
@@ -266,8 +284,8 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
                 && levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) <= 12 - blockState.getLightBlock(levelAccessor, blockPos);
     }
 
-    private static boolean hasFace(BlockState blockState, Direction direction) {
-        BooleanProperty booleanProperty = getFaceProperty(direction);
-        return blockState.hasProperty(booleanProperty) && blockState.getValue(booleanProperty);
-    }
+//    private static boolean hasFace(BlockState blockState, Direction direction) {
+//        BooleanProperty booleanProperty = getFaceProperty(direction);
+//        return blockState.hasProperty(booleanProperty) && blockState.getValue(booleanProperty);
+//    }
 }

@@ -6,6 +6,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.util.DistributionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -13,8 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Random;
 
 public class PricklyPeachCactusPatchFeature extends Feature<NoneFeatureConfiguration> {
 
@@ -33,7 +32,7 @@ public class PricklyPeachCactusPatchFeature extends Feature<NoneFeatureConfigura
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
-        Random random = context.random();
+        RandomSource random = context.random();
 
         int cactiRemaining = MAX_TOTAL_PLACEMENTS;
 

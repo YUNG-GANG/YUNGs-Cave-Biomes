@@ -11,12 +11,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,8 +37,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.Random;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class PricklyPeachCactusBlock extends Block implements BonemealableBlock {
     public static final BooleanProperty FRUIT = BlockStateProperties.BERRIES;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_25;
@@ -71,7 +71,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
             // Hurt player if nothing in hand
             ItemStack itemInHand = player.getItemInHand(interactionHand);
             if (itemInHand.isEmpty()) {
-                player.hurt(DamageSource.CACTUS, 1.0f);
+                player.hurt(level.damageSources().cactus(), 1.0f);
                 if (player instanceof ServerPlayer serverPlayer) {
                     CriteriaModule.INTERACT_EMPTY_PRICKLY_CACTUS.trigger(serverPlayer);
                 }
@@ -83,7 +83,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
-    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
         if (isMaxAge(blockState) || hasFruit(blockState)) {
             return;
         }
@@ -103,25 +103,25 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
-    public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack) {
-        super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack);
+    public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack, boolean bl) {
+        super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack, bl);
         if (blockState.hasProperty(FRUIT) && blockState.getValue(FRUIT)) {
             Block.popResource(serverLevel, blockPos, new ItemStack(ItemModule.PRICKLY_PEACH_ITEM.get(), 1));
         }
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, boolean b) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
         return blockState.hasProperty(FRUIT) && !blockState.getValue(FRUIT);
     }
 
     @Override
-    public boolean isBonemealSuccess(Level var1, Random var2, BlockPos var3, BlockState var4) {
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos blockPos, BlockState blockState) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel serverLevel, Random random, BlockPos blockPos, BlockState blockState) {
+    public void performBonemeal(ServerLevel serverLevel, RandomSource random, BlockPos blockPos, BlockState blockState) {
         serverLevel.setBlock(blockPos, blockState.setValue(FRUIT, true), 2);
     }
 
@@ -154,7 +154,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
         if (entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
             return; // Sand snapper is immune to prickly cactus
         }
-        entity.hurt(DamageSource.CACTUS, 1.0f);
+        entity.hurt(level.damageSources().cactus(), 1.0f);
     }
 
     @Override

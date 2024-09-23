@@ -16,7 +16,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
     public static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
 
@@ -25,7 +29,7 @@ public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
     }
 
     @Override
-    protected GrowingPlantHeadBlock getHeadBlock() {
+    protected @NotNull GrowingPlantHeadBlock getHeadBlock() {
         return (GrowingPlantHeadBlock) BlockModule.PRICKLY_VINES.get();
     }
 
@@ -38,7 +42,7 @@ public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
         if (!(level.isClientSide || entity.xOld == entity.getX() && entity.zOld == entity.getZ())) {
             double d = Math.abs(entity.getX() - entity.xOld);
             double e = Math.abs(entity.getZ() - entity.zOld);
-            if (d >= (double)0.003f || e >= (double)0.003f) {
+            if (d >= (double) 0.003f || e >= (double) 0.003f) {
                 entity.hurt(DamageSourceModule.PRICKLY_VINES, 1.0f);
             }
         }

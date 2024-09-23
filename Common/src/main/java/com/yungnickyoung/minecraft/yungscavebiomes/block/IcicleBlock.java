@@ -10,9 +10,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -21,7 +21,11 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.AbstractCauldronBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Fallable;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -32,17 +36,19 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 
+@ParametersAreNonnullByDefault
 public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlock {
     public static final EnumProperty<DripstoneThickness> THICKNESS = BlockStateProperties.DRIPSTONE_THICKNESS;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -104,7 +110,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
      * It also only requires a projectile speed of 0.4, as opposed to 0.6 for dripstone.
      */
     @Override
-    public void onProjectileHit(Level level, BlockState blockState, BlockHitResult blockHitResult, Projectile projectile) {
+    public void onProjectileHit(Level level, @NotNull BlockState blockState, BlockHitResult blockHitResult, @NotNull Projectile projectile) {
         BlockPos blockPos = blockHitResult.getBlockPos();
         if (!level.isClientSide && projectile.mayInteract(level, blockPos) && projectile instanceof AbstractArrow && projectile.getDeltaMovement().length() > 0.4) {
             level.destroyBlock(blockPos, true);
@@ -112,7 +118,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Override
-    public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+    public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
         spawnFallingIcicle(blockState, serverLevel, blockPos);
     }
 
@@ -120,7 +126,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
      * Randomly attempt to grow icicle.
      */
     @Override
-    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
         maybeFillCauldron(blockState, serverLevel, blockPos, random.nextFloat());
         if (random.nextFloat() < 0.011377778f && isTop(blockState, serverLevel, blockPos)) {
             tryToGrowIcicle(blockState, serverLevel, blockPos);
@@ -128,7 +134,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Override
-    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource random) {
         if (!canDrip(blockState)) {
             return;
         }
@@ -141,11 +147,6 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
         getFluidAboveIcicle(level, blockPos)
                 .filter(fluid -> chance < 0.02f || canFillCauldron(fluid))
                 .ifPresent(fluid -> spawnDripParticle(level, blockPos, blockState, fluid));
-    }
-
-    @Override
-    public PushReaction getPistonPushReaction(BlockState blockState) {
-        return PushReaction.DESTROY;
     }
 
     @Override
@@ -165,7 +166,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Override
-    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+    public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         DripstoneThickness thickness = blockState.getValue(THICKNESS);
         VoxelShape voxelShape;
         switch (thickness) {
@@ -185,11 +186,6 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Override
-    public BlockBehaviour.OffsetType getOffsetType() {
-        return BlockBehaviour.OffsetType.XZ;
-    }
-
-    @Override
     public float getMaxHorizontalOffset() {
         return 0.125f;
     }
@@ -203,17 +199,17 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Override
-    public DamageSource getFallDamageSource() {
+    public @NotNull DamageSource getFallDamageSource(@NotNull Entity entity) {
         return DamageSourceModule.ICICLE;
     }
 
-    @Override
-    public Predicate<Entity> getHurtsEntitySelector() {
-        return EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(EntitySelector.LIVING_ENTITY_STILL_ALIVE);
-    }
+//    @Override
+//    public Predicate<Entity> getHurtsEntitySelector() {
+//        return EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(EntitySelector.LIVING_ENTITY_STILL_ALIVE);
+//    }
 
     @Override
-    public FluidState getFluidState(BlockState blockState) {
+    public @NotNull FluidState getFluidState(BlockState blockState) {
         if (blockState.getValue(WATERLOGGED)) {
             return Fluids.WATER.getSource(false);
         }
@@ -227,10 +223,10 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Nullable
-    private static BlockPos findRoot(LevelAccessor levelAccessor, BlockPos blockPos, int searchDistance) {
+    private static BlockPos findRoot(LevelAccessor levelAccessor, BlockPos blockPos) {
         Predicate<BlockState> matchingPredicate = state -> state.is(BlockModule.ICICLE.get());
         Predicate<BlockState> stoppingPredicate = state -> !state.is(BlockModule.ICICLE.get());
-        return findBlockVertical(levelAccessor, blockPos, Direction.UP, matchingPredicate, stoppingPredicate, searchDistance).orElse(null);
+        return findBlockVertical(levelAccessor, blockPos, Direction.UP, matchingPredicate, stoppingPredicate, 11).orElse(null);
     }
 
     /**
@@ -366,7 +362,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     private static Optional<Fluid> getFluidAboveIcicle(Level level, BlockPos blockPos) {
-        BlockPos rootPos = findRoot(level, blockPos, 11);
+        BlockPos rootPos = findRoot(level, blockPos);
         if (rootPos == null) return Optional.empty();
         return Optional.of(level.getFluidState(rootPos.above()).getType());
     }
@@ -378,9 +374,9 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     private static void spawnDripParticle(Level level, BlockPos blockPos, BlockState blockState, Fluid fluid) {
         Vec3 vec3 = blockState.getOffset(level, blockPos);
         double d = 0.0625;
-        double x = (double)blockPos.getX() + 0.5 + vec3.x;
-        double y = (double)((float)(blockPos.getY() + 1) - 0.6875f) - d;
-        double z = (double)blockPos.getZ() + 0.5 + vec3.z;
+        double x = (double) blockPos.getX() + 0.5 + vec3.x;
+        double y = (double) ((float) (blockPos.getY() + 1) - 0.6875f) - d;
+        double z = (double) blockPos.getZ() + 0.5 + vec3.z;
         level.addParticle(ParticleTypes.DRIPPING_DRIPSTONE_WATER, x, y, z, 0.0, 0.0, 0.0);
     }
 
@@ -412,7 +408,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
 
         // Determine cauldron pos
         Predicate<BlockState> isValidCauldron = state -> state.getBlock() instanceof AbstractCauldronBlock
-                && ((AbstractCauldronBlockAccessor)state.getBlock()).callCanReceiveStalactiteDrip(fluid);
+                && ((AbstractCauldronBlockAccessor) state.getBlock()).callCanReceiveStalactiteDrip(fluid);
         BlockPos cauldronPos = findBlockVertical(serverLevel, tipPos, Direction.DOWN, BlockStateBase::isAir, isValidCauldron, 11).orElse(null);
         if (cauldronPos == null) {
             return;

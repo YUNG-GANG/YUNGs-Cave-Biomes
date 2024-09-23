@@ -13,6 +13,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -36,7 +37,7 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
@@ -75,12 +76,13 @@ public class FallingAncientDustParticle extends TextureSheetParticle {
 
         @Override
         @Nullable
-        public Particle createParticle(BlockParticleOption blockParticleOption, ClientLevel clientLevel, double xo, double yo, double zo, double dx, double dy, double dz) {
+        public Particle createParticle(BlockParticleOption blockParticleOption, @NotNull ClientLevel clientLevel,
+                                       double xo, double yo, double zo, double dx, double dy, double dz) {
             BlockState blockState = blockParticleOption.getState();
             if (!blockState.isAir() && blockState.getRenderShape() == RenderShape.INVISIBLE) {
                 return null;
             }
-            BlockPos blockPos = new BlockPos(xo, yo, zo);
+            BlockPos blockPos = BlockPos.containing(xo, yo, zo);
             int color = Minecraft.getInstance().getBlockColors().getColor(blockState, clientLevel, blockPos);
             if (blockState.getBlock() instanceof BrittleSandstoneBlock) {
                 color = ((BrittleSandstoneBlock) blockState.getBlock()).getDustColor();

@@ -22,7 +22,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class FrostLilyBlock extends BushBlock implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape AABB = Block.box(2.0, 0.0, 2.0, 14.0, 4.0, 14.0);
@@ -51,11 +53,6 @@ public class FrostLilyBlock extends BushBlock implements SimpleWaterloggedBlock 
             levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }
         return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
-    }
-
-    @Override
-    public BlockBehaviour.OffsetType getOffsetType() {
-        return BlockBehaviour.OffsetType.XZ;
     }
 
     @Override

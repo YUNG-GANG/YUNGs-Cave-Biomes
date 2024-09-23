@@ -34,7 +34,7 @@ public abstract class MixinAbstractArrow extends Entity {
      */
     @Inject(method = "onHitBlock", at = @At("RETURN"))
     public void yungscavebiomes_tippedArrowOnHitBlockSpawnIceSheets(BlockHitResult blockHitResult, CallbackInfo ci) {
-        if (!this.level.isClientSide && isArrow(this)) {
+        if (!this.level().isClientSide && isArrow(this)) {
             Arrow arrow = asArrow(this);
             for (MobEffectInstance mobEffectInstance : ((ArrowAccessor) arrow).getPotion().getEffects()) {
                 if (mobEffectInstance.getEffect() != MobEffectModule.FROZEN_EFFECT.get()) {
@@ -44,7 +44,7 @@ public abstract class MixinAbstractArrow extends Entity {
                 BlockPos originPos = blockHitResult.getBlockPos();
                 boolean amplified = mobEffectInstance.getAmplifier() > 0;
 
-                placeIceSheets(level, originPos, amplified);
+                placeIceSheets(this.level(), originPos, amplified);
             }
         }
     }
@@ -54,7 +54,7 @@ public abstract class MixinAbstractArrow extends Entity {
      */
     @Inject(method = "onHitEntity", at = @At("RETURN"))
     public void yungscavebiomes_tippedArrowOnHitEntitySpawnIceSheets(EntityHitResult entityHitResult, CallbackInfo ci) {
-        if (!this.level.isClientSide && isArrow(this)) {
+        if (!this.level().isClientSide && isArrow(this)) {
             Arrow arrow = asArrow(this);
             for (MobEffectInstance mobEffectInstance : ((ArrowAccessor) arrow).getPotion().getEffects()) {
                 if (mobEffectInstance.getEffect() != MobEffectModule.FROZEN_EFFECT.get()) {
@@ -64,7 +64,7 @@ public abstract class MixinAbstractArrow extends Entity {
                 BlockPos originPos = entityHitResult.getEntity().getOnPos();
                 boolean amplified = mobEffectInstance.getAmplifier() > 0;
 
-                placeIceSheets(level, originPos, amplified);
+                placeIceSheets(this.level(), originPos, amplified);
             }
         }
     }
@@ -92,7 +92,7 @@ public abstract class MixinAbstractArrow extends Entity {
                     currPos.setWithOffset(originPos, x, y, z);
                     BlockState currState = level.getBlockState(currPos);
 
-                    if (!currState.isAir() && !currState.is(Blocks.WATER) && !(currState.is(BlockTags.REPLACEABLE_PLANTS))) {
+                    if (!currState.isAir() && !currState.is(Blocks.WATER) && !(currState.is(BlockTags.REPLACEABLE))) {
                         continue;
                     }
 

@@ -20,7 +20,6 @@ public class ItemModule {
     @AutoRegister("prickly_peach")
     public static final AutoRegisterItem PRICKLY_PEACH_ITEM = AutoRegisterItem.of(() -> new PricklyPeachItem(
                 new Item.Properties()
-                        .tab(YungsCaveBiomesCommon.TAB_CAVEBIOMES.get())
                         .food(new FoodProperties.Builder()
                                 .nutrition(4)
                                 .saturationMod(0.3F)
@@ -35,7 +34,7 @@ public class ItemModule {
      * Any methods used with the AutoRegister annotation must be static and take no arguments.
      * Note that the annotation value is ignored.
      */
-    @AutoRegister("_ignored")
+    @AutoRegister("init")
     private static void addCompostables() {
         AutoRegisterUtils.addCompostableItem(() -> BlockModule.PRICKLY_VINES.get().asItem(), 0.5F);
         AutoRegisterUtils.addCompostableItem(() -> BlockModule.PRICKLY_PEACH_CACTUS.get().asItem(), 0.5F);

@@ -1,7 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin.frosted_caves;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.IcicleProjectileEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.sounds.SoundEvents;
@@ -14,6 +12,8 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,10 +41,9 @@ public abstract class MixinCrossbowItem {
                 crossbowAttackMob.shootCrossbowProjectile(crossbowAttackMob.getTarget(), bowItemStack, projectile, $$9);
             } else {
                 Vec3 upVector = shooter.getUpVector(1.0F);
-                Quaternion quaternion = new Quaternion(new Vector3f(upVector), $$9, true);
+                Quaternionf quaternion = new Quaternionf().setAngleAxis(($$9 * (float) (Math.PI / 180.0)), upVector.x(), upVector.y(), upVector.z());
                 Vec3 viewVector = shooter.getViewVector(1.0F);
-                Vector3f vector3f = new Vector3f(viewVector);
-                vector3f.transform(quaternion);
+                Vector3f vector3f = viewVector.toVector3f().rotate(quaternion);
                 projectile.shoot(vector3f.x(), vector3f.y(), vector3f.z(), $$7, $$8);
             }
 

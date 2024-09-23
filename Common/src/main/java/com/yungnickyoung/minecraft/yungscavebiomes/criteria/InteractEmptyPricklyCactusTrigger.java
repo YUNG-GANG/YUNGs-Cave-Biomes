@@ -3,26 +3,27 @@ package com.yungnickyoung.minecraft.yungscavebiomes.criteria;
 import com.google.gson.JsonObject;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class InteractEmptyPricklyCactusTrigger extends SimpleCriterionTrigger<InteractEmptyPricklyCactusTrigger.TriggerInstance> {
-    private static final ResourceLocation ID = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "interact_empty_prickly_cactus");
+    private static final ResourceLocation ID = YungsCaveBiomesCommon.id("interact_empty_prickly_cactus");
 
     @Override
-    public ResourceLocation getId() {
+    public @NotNull ResourceLocation getId() {
         return ID;
     }
 
     @Override
-    protected TriggerInstance createInstance(JsonObject jsonObject, EntityPredicate.Composite composite, DeserializationContext deserializationContext) {
-        return new InteractEmptyPricklyCactusTrigger.TriggerInstance(composite);
+    @ParametersAreNonnullByDefault
+    protected @NotNull TriggerInstance createInstance(JsonObject jsonObject, ContextAwarePredicate predicate, DeserializationContext ctx) {
+        return new TriggerInstance(predicate);
     }
 
     public void trigger(ServerPlayer serverPlayer) {
@@ -30,8 +31,8 @@ public class InteractEmptyPricklyCactusTrigger extends SimpleCriterionTrigger<In
     }
 
     public static class TriggerInstance extends AbstractCriterionTriggerInstance {
-        public TriggerInstance(EntityPredicate.Composite $$0) {
-            super(InteractEmptyPricklyCactusTrigger.ID, $$0);
+        public TriggerInstance(ContextAwarePredicate predicate) {
+            super(InteractEmptyPricklyCactusTrigger.ID, predicate);
         }
 
         public boolean matches() {

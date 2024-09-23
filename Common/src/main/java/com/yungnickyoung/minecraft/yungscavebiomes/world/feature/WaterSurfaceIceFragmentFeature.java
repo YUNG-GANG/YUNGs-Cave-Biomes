@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 
-import com.mojang.math.Vector3f;
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.noise.CellularNoise;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.noise.OpenSimplex2S;
@@ -11,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import org.joml.Vector3f;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;

@@ -10,7 +10,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ParticleTypeModule {
-
     @AutoRegister("ice_shatter")
     public static final AutoRegisterParticleType<SimpleParticleType> ICE_SHATTER = AutoRegisterParticleType
             .simple();

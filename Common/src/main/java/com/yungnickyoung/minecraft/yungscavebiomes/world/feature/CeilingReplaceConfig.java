@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CeilingReplaceConfig implements FeatureConfiguration {
     public static final Codec<CeilingReplaceConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.BLOCK.byNameCodec().listOf().fieldOf("matches").forGetter(c -> c.matches),
+            BuiltInRegistries.BLOCK.byNameCodec().listOf().fieldOf("matches").forGetter(c -> c.matches),
             BlockState.CODEC.fieldOf("place").forGetter(c -> c.place),
             ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("width", 1).forGetter(c -> c.width),
             Codec.INT.fieldOf("radiusMin").forGetter(c -> c.radiusMin),

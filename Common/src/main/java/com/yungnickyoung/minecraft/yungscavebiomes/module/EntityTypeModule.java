@@ -54,14 +54,12 @@ public class EntityTypeModule {
 
     /**
      * Methods with the AutoRegister annotations will be executed after registration.
-     *
      * For Fabric, this means the method is executed during mod initialization as normal.
      * For Forge, the method is queued to execute in common setup.
-     *
      * Any methods used with the AutoRegister annotation must be static and take no arguments.
      * Note that the annotation value is ignored.
      */
-    @AutoRegister("_ignored")
+    @AutoRegister("init")
     private static void init() {
         SpawnPlacementsAccessor.callRegister(ICE_CUBE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
         SpawnPlacementsAccessor.callRegister(SAND_SNAPPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);

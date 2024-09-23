@@ -3,14 +3,16 @@ package com.yungnickyoung.minecraft.yungscavebiomes.block;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Random;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class BrittleSandstoneBlock extends Block {
     private final int dustColor;
 
@@ -20,7 +22,7 @@ public class BrittleSandstoneBlock extends Block {
     }
 
     @Override
-    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource random) {
         if (random.nextInt(36) == 0 && FallingBlock.isFree(level.getBlockState(blockPos.below()))) {
             double d = (double)blockPos.getX() + random.nextDouble();
             double e = (double)blockPos.getY() - 0.05;

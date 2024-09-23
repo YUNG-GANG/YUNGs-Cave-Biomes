@@ -6,6 +6,9 @@ import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class IceShatterParticle extends TextureSheetParticle {
     private final float uo;
@@ -20,13 +23,13 @@ public class IceShatterParticle extends TextureSheetParticle {
         this.zd *= random.nextFloat() * 8f;
         this.yd *= random.nextFloat() * 8f;
         this.quadSize /= 5.0F;
-        this.lifetime = Mth.randomBetweenInclusive(this.random, 20, 40);;
+        this.lifetime = Mth.randomBetweenInclusive(this.random, 20, 40);
         this.uo = this.random.nextFloat();
         this.vo = this.random.nextFloat();
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public @NotNull ParticleRenderType getRenderType() {
         return ParticleRenderType.TERRAIN_SHEET;
     }
 
@@ -65,7 +68,9 @@ public class IceShatterParticle extends TextureSheetParticle {
         }
 
         @Override
-        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double xo, double yo, double zo, double dx, double dy, double dz){
+        @ParametersAreNonnullByDefault
+        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel,
+                                       double xo, double yo, double zo, double dx, double dy, double dz){
             return new IceShatterParticle(clientLevel, xo, yo, zo);
         }
     }

@@ -7,8 +7,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.resources.ResourceLocation;
 
 public class NetworkModuleFabric {
-    public static final ResourceLocation ICICLE_SHATTER_ID = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "icicle_shatter");
-    public static final ResourceLocation SANDSTORM_SYNC_ID = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "sandstorm_sync");
+    public static final ResourceLocation ICICLE_SHATTER_ID = YungsCaveBiomesCommon.id("icicle_shatter");
+    public static final ResourceLocation SANDSTORM_SYNC_ID = YungsCaveBiomesCommon.id("sandstorm_sync");
 
     public static void registerC2SPackets() {
     }

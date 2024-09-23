@@ -11,8 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class IceCubeRenderer extends MobRenderer<IceCubeEntity, IceCubeModel<IceCubeEntity>> {
-    public static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "textures/entity/ice_cube/ice_cube.png");
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(YungsCaveBiomesCommon.MOD_ID, "ice_cube"), "main");
+    public static final ResourceLocation RESOURCE_LOCATION = YungsCaveBiomesCommon.id("textures/entity/ice_cube/ice_cube.png");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(YungsCaveBiomesCommon.id("ice_cube"), "main");
 
     public IceCubeRenderer(EntityRendererProvider.Context context) {
         super(context, new IceCubeModel<>(context.bakeLayer(LAYER_LOCATION)), 0.7f);

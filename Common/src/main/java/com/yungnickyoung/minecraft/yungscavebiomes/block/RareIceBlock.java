@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -21,16 +22,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEventListener;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     public RareIceBlock(Properties properties) {
         super(properties);
     }
 
     @Override
-    public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack) {
-        super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack);
+    public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack, boolean bl) {
+        super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack, bl);
         if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, itemStack) == 0) {
             int xp = 15 + serverLevel.random.nextInt(20) + serverLevel.random.nextInt(20);
             this.popExperience(serverLevel, blockPos, xp);
@@ -46,7 +48,7 @@ public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     }
 
     @Override
-    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource random) {
         double x = (double)blockPos.getX() + 0.5 + ((0.5 + random.nextDouble() * 0.5) * (random.nextBoolean() ? 1 : -1));
         double y = (double)blockPos.getY() + 0.5 + ((0.5 + random.nextDouble() * 0.5) * (random.nextBoolean() ? 1 : -1));
         double z = (double)blockPos.getZ() + 0.5 + ((0.5 + random.nextDouble() * 0.5) * (random.nextBoolean() ? 1 : -1));
@@ -69,8 +71,8 @@ public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
 
     @Nullable
     @Override
-    public <T extends BlockEntity> GameEventListener getListener(Level level, T blockEntity) {
-        return EntityBlock.super.getListener(level, blockEntity);
+    public <T extends BlockEntity> GameEventListener getListener(ServerLevel serverLevel, T blockEntity) {
+        return EntityBlock.super.getListener(serverLevel, blockEntity);
     }
 
     @SuppressWarnings("unchecked")

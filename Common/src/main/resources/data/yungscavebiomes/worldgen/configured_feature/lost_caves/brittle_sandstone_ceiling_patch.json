@@ -1,0 +1,15 @@
+{
+  "type": "yungscavebiomes:ceiling_replace",
+  "config": {
+    "matches": [
+      "yungscavebiomes:layered_ancient_sandstone"
+    ],
+    "place": {
+      "Name": "yungscavebiomes:brittle_ancient_sandstone"
+    },
+    "width": 1,
+    "radius": 7,
+    "radiusMin": 6,
+    "radiusMax": 10
+  }
+}

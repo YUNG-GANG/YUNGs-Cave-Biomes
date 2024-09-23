@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 public class ThreeLayerNoisySphereReplaceConfig implements FeatureConfiguration {
     public static final Codec<ThreeLayerNoisySphereReplaceConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.BLOCK.byNameCodec().listOf().fieldOf("matches").forGetter(c -> c.matches),
+            BuiltInRegistries.BLOCK.byNameCodec().listOf().fieldOf("matches").forGetter(c -> c.matches),
             BlockState.CODEC.optionalFieldOf("floor").forGetter(c -> c.floor),
             BlockState.CODEC.fieldOf("regular").forGetter(c -> c.regular),
             BlockState.CODEC.optionalFieldOf("ceiling").forGetter(c -> c.ceiling),

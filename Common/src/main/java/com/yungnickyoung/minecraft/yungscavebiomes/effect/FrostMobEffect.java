@@ -6,6 +6,7 @@ import net.minecraft.world.effect.InstantenousMobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 public class FrostMobEffect extends InstantenousMobEffect {
     private final int minFreezeTicks;
@@ -19,10 +20,10 @@ public class FrostMobEffect extends InstantenousMobEffect {
         this.maxFreezeTicks = maxFreezeTicks;
     }
 
-    public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
+    public void applyEffectTick(@NotNull LivingEntity livingEntity, int amplifier) {
         // Ignore in spectator and peaceful mode
         if (livingEntity instanceof ServerPlayer serverPlayer) {
-            if (serverPlayer.isSpectator() || serverPlayer.getLevel().getDifficulty() == Difficulty.PEACEFUL) {
+            if (serverPlayer.isSpectator() || serverPlayer.serverLevel().getDifficulty() == Difficulty.PEACEFUL) {
                 return;
             }
         }
@@ -32,7 +33,7 @@ public class FrostMobEffect extends InstantenousMobEffect {
     }
 
     @Override
-    public void applyInstantenousEffect(Entity areaCloud, Entity areaCloudThrower, LivingEntity target, int amplifier, double damage) {
+    public void applyInstantenousEffect(Entity areaCloud, Entity areaCloudThrower, @NotNull LivingEntity target, int amplifier, double damage) {
         this.applyEffectTick(target, amplifier);
     }
 }
