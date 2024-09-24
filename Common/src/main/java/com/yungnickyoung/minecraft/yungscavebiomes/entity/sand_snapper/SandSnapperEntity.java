@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 
-import com.mojang.math.Vector3d;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EatPeachGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EatPricklyPeachCactusGoal;
@@ -18,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -45,26 +45,28 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import org.joml.Vector3d;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    private final AnimationBuilder EMERGE_PLAYER = new AnimationBuilder().addAnimation("look").addAnimation("look_loop");
-    private final AnimationBuilder EMERGE = new AnimationBuilder().addAnimation("look_turn_head");
-    private final AnimationBuilder DIVE = new AnimationBuilder().addAnimation("diveback");
-    private final AnimationBuilder SWIM = new AnimationBuilder().addAnimation("swim");
-    private final AnimationBuilder WALK = new AnimationBuilder().addAnimation("walk");
-    private final AnimationBuilder DIG_DOWN = new AnimationBuilder().addAnimation("dig_down");
-    private final AnimationBuilder DIG_UP = new AnimationBuilder().addAnimation("dig_up");
-    private final AnimationBuilder EAT = new AnimationBuilder().addAnimation("eat");
+    private final RawAnimation EMERGE_PLAYER = RawAnimation.begin().thenPlay("look").thenPlay("look_loop");
+    private final RawAnimation EMERGE = RawAnimation.begin().thenPlay("look_turn_head");
+    private final RawAnimation DIVE = RawAnimation.begin().thenPlay("diveback");
+    private final RawAnimation SWIM = RawAnimation.begin().thenPlay("swim");
+    private final RawAnimation WALK = RawAnimation.begin().thenPlay("walk");
+    private final RawAnimation DIG_DOWN = RawAnimation.begin().thenPlay("dig_down");
+    private final RawAnimation DIG_UP = RawAnimation.begin().thenPlay("dig_up");
+    private final RawAnimation EAT = RawAnimation.begin().thenPlay("eat");
 
     private static final EntityDataAccessor<Boolean> SUBMERGED = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LOOKING_AT_PLAYER = SynchedEntityData.defineId(SandSnapperEntity.class, EntityDataSerializers.BOOLEAN);
@@ -178,13 +180,13 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         super.onSyncedDataUpdated(dataAccessor);
 
         if (dataAccessor.equals(EMERGING)) {
-            if (this.level.isClientSide) {
-                AnimationController controller = this.getFactory()
-                        .getOrCreateAnimationData(this.getId())
+            if (this.level().isClientSide) {
+                AnimationController controller = this.getAnimatableInstanceCache()
+                        .getManagerForId(this.getId())
                         .getAnimationControllers()
                         .get("generalController");
                 if (controller != null) {
-                    controller.markNeedsReload();
+                    controller.forceAnimationReset();
                 }
             }
 
@@ -224,7 +226,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     public void tick() {
         super.tick();
 
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (this.aboveGroundTimer > 0) {
                 this.aboveGroundTimer--;
             }
@@ -304,7 +306,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         ItemStack itemStack = player.getItemInHand(hand);
 
         if (itemStack.is(ItemModule.PRICKLY_PEACH_ITEM.get())) {
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 return InteractionResult.CONSUME;
             }
 
@@ -326,8 +328,8 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     public void onEat() {
         this.heal(4.0f);
-        this.gameEvent(GameEvent.MOB_INTERACT, this.eyeBlockPosition());
-        this.level.broadcastEntityEvent(this, (byte) 7); // Heart particles event
+        this.gameEvent(GameEvent.ENTITY_INTERACT);
+        this.level().broadcastEntityEvent(this, (byte) 7); // Heart particles event
         float pitch = Mth.randomBetween(this.random, 0.9f, 1.2f);
         this.playSound(SoundModule.SAND_SNAPPER_HAPPY.get(), 1.0f, pitch);
     }
@@ -337,7 +339,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             double xSpeed = this.random.nextGaussian() * 0.02;
             double ySpeed = this.random.nextGaussian() * 0.02;
             double zSpeed = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(ParticleTypes.HEART,
+            this.level().addParticle(ParticleTypes.HEART,
                     this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0),
                     xSpeed, ySpeed, zSpeed);
         }
@@ -376,7 +378,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
-        if (this.isSubmerged() && source != DamageSource.OUT_OF_WORLD && !source.isCreativePlayer()) return true;
+        if (this.isSubmerged() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !source.isCreativePlayer()) return true;
         return super.isInvulnerableTo(source);
     }
 
@@ -397,14 +399,14 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
         // Spawn block particles when moving while submerged
         Vec3 movement = this.getDeltaMovement();
-        if (this.level.isClientSide() && this.isSubmerged() && movement.length() > 0.01F) {
+        if (this.level().isClientSide() && this.isSubmerged() && movement.length() > 0.01F) {
             float width = this.getDimensions(this.getPose()).width * 0.8F;
             Vector3d particlePos = new Vector3d(
                     this.getX() + (this.random.nextDouble() - 0.5) * (double) width,
                     this.getY() + 0.1,
                     this.getZ() + (this.random.nextDouble() - 0.5) * (double) width);
             Vector3d particleSpeed = new Vector3d(movement.x * -4.0, 1.5, movement.z * -4.0);
-            this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()),
+            this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()),
                     particlePos.x, particlePos.y, particlePos.z,
                     particleSpeed.x, particleSpeed.y, particleSpeed.z);
         }
@@ -418,12 +420,12 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             float width = this.getDimensions(this.getPose()).width * 0.8F;
             AABB aabb = AABB.ofSize(this.getEyePosition(), width, 1.0E-6, width);
             return BlockPos.betweenClosedStream(aabb).anyMatch((pos) -> {
-                BlockState blockState = this.level.getBlockState(pos);
-                BlockState stateAbove = this.level.getBlockState(pos.above());
+                BlockState blockState = this.level().getBlockState(pos);
+                BlockState stateAbove = this.level().getBlockState(pos.above());
                 return !blockState.isAir()
                         && !(blockState.is(BlockModule.SAND_SNAPPER_BLOCKS) && stateAbove.is(Blocks.AIR))
-                        && blockState.isSuffocating(this.level, pos)
-                        && Shapes.joinIsNotEmpty(blockState.getCollisionShape(this.level, pos).move(pos.getX(), pos.getY(), pos.getZ()), Shapes.create(aabb), BooleanOp.AND);
+                        && blockState.isSuffocating(this.level(), pos)
+                        && Shapes.joinIsNotEmpty(blockState.getCollisionShape(this.level(), pos).move(pos.getX(), pos.getY(), pos.getZ()), Shapes.create(aabb), BooleanOp.AND);
             });
         }
     }
@@ -434,10 +436,10 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
 
     public void eatCactus(BlockPos cactusPos) {
         BlockPos cactusBlockPos = new BlockPos(cactusPos);
-        BlockState state = this.level.getBlockState(cactusBlockPos);
+        BlockState state = this.level().getBlockState(cactusBlockPos);
         if (state.is(BlockModule.PRICKLY_PEACH_CACTUS.get()) && state.getValue(PricklyPeachCactusBlock.FRUIT)) {
             // Remove peach from cactus
-            this.level.setBlock(cactusBlockPos, state
+            this.level().setBlock(cactusBlockPos, state
                     .setValue(PricklyPeachCactusBlock.FRUIT, false)
                     .setValue(PricklyPeachCactusBlock.AGE, 0), Block.UPDATE_ALL);
             this.onEat();
@@ -475,7 +477,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         // Do these checks instead of just always setting based on the block it's on,
         // to allow dimension refreshing without cost
         BlockState blockStateOn = this.getBlockStateOn();
-        BlockState blockStateBelow = this.level.getBlockState(this.getOnPos().below());
+        BlockState blockStateBelow = this.level().getBlockState(this.getOnPos().below());
         return blockStateOn.is(BlockModule.SAND_SNAPPER_BLOCKS) ||
                 (blockStateOn.is(Blocks.AIR) && blockStateBelow.is(BlockModule.SAND_SNAPPER_BLOCKS));
     }
@@ -566,7 +568,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
         this.panicSoundCooldownTimer = PANIC_SOUND_COOLDOWN;
     }
 
-    private <E extends IAnimatable> PlayState generalPredicate(AnimationEvent<E> event) {
+    private <E extends GeoAnimatable> PlayState generalPredicate(AnimationState<E> event) {
         if (this.isEmerging()) {
             if (this.isLookingAtPlayer()) {
                 event.getController().setAnimation(EMERGE_PLAYER);
@@ -595,7 +597,7 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
             return PlayState.CONTINUE;
         }
 
-        event.getController().markNeedsReload();
+        event.getController().forceAnimationReset();
 
         return PlayState.STOP;
     }
@@ -608,12 +610,14 @@ public class SandSnapperEntity extends PathfinderMob implements IAnimatable {
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "generalController", 0, this::generalPredicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this,
+                "generalController",
+                0,
+                this::generalPredicate));
     }
 
-    @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
     }
 }
