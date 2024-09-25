@@ -7,9 +7,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import terrablender.api.RegionType;
 import terrablender.api.Regions;
 
-public class TerraBlenderModule {
+public class TerraBlenderModuleForge {
     public static void init() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(TerraBlenderModule::commonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(TerraBlenderModuleForge::commonSetup);
     }
 
     private static void commonSetup (FMLCommonSetupEvent event) {

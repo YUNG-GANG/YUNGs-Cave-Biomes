@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CactusBlock.class)
-public abstract class MixinCactusBlock {
+public abstract class CactusBlockMixin {
     /**
      * Allow cactus blocks to be placed on ancient sand.
      */

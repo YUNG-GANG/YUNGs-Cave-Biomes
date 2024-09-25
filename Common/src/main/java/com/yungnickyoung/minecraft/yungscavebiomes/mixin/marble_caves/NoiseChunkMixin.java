@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(NoiseChunk.class)
-public abstract class MixinNoiseChunk implements NoiseSamplerBiomeHolder {
+public abstract class NoiseChunkMixin implements NoiseSamplerBiomeHolder {
 
     // NoiseSamplerBiomeHolder impl
     @Unique

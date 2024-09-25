@@ -51,7 +51,7 @@
     "java": ">=17",
     "yungsapi": ">=${yungsapi_mc_version}-Fabric-${yungsapi_version}",
     "terrablender": ">=${terrablender_version}",
-    "geckolib3": ">=${geckolib_version}"
+    "geckolib": ">=${geckolib_version}"
   },
   "custom": {
     "catalogue": {

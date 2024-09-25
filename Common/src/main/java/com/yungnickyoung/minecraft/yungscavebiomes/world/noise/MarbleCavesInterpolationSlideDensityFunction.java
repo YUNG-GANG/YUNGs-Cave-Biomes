@@ -1,7 +1,5 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.noise;
 
-import com.mojang.serialization.Codec;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.NoiseSamplerBiomeHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
@@ -27,7 +25,7 @@ public class MarbleCavesInterpolationSlideDensityFunction implements DensityFunc
     private static final double FIDDLE_MAGNITUDE = 1.0; // 0.9 in net.minecraft.world.level.biome.BiomeManager
 
     private final NoiseSamplerBiomeHolder holder;
-    private long biomeZoomSeed;
+    private final long biomeZoomSeed;
 
     public MarbleCavesInterpolationSlideDensityFunction(NoiseSamplerBiomeHolder holder) {
         this.holder = holder;
@@ -89,7 +87,8 @@ public class MarbleCavesInterpolationSlideDensityFunction implements DensityFunc
     }
 
     private boolean shouldSolidifyForMarbleCaves(Holder<Biome> biome, int quartY) {
-        return (quartY <= 0 && biome.unwrapKey().get() == BiomeModule.MARBLE_CAVES.getResourceKey());
+        return quartY <= 0;
+//                && biome.unwrapKey().get() == BiomeModule.MARBLE_CAVES.getResourceKey();
     }
 
     private static double getFiddledDistance(long seed, int quartX, int quartY, int quartZ, double dx, double dy, double dz) {

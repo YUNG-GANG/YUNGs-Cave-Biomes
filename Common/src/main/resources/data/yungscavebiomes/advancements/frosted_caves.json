@@ -18,9 +18,17 @@
     "frosted_caves": {
       "trigger": "minecraft:location",
       "conditions": {
-        "location": {
-          "biome": "yungscavebiomes:frosted_caves"
-        }
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "yungscavebiomes:frosted_caves"
+              }
+            }
+          }
+        ]
       }
     }
   },

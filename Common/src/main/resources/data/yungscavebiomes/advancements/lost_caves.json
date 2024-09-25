@@ -18,9 +18,17 @@
     "lost_caves": {
       "trigger": "minecraft:location",
       "conditions": {
-        "location": {
-          "biome": "yungscavebiomes:lost_caves"
-        }
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biome": "yungscavebiomes:lost_caves"
+              }
+            }
+          }
+        ]
       }
     }
   },

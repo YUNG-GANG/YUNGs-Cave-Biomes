@@ -3,6 +3,7 @@
     "particle": "block/ice",
     "ice": "yungscavebiomes:block/ice_sheet"
   },
+  "render_type": "translucent",
   "elements": [
     {
       "from": [ 0, 0, 0 ],

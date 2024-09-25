@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(LocalPlayer.class)
-public class MixinLocalPlayer {
+public class LocalPlayerMixin {
     @Shadow @Final private List<AmbientSoundHandler> ambientSoundHandlers;
 
     @Inject(method = "<init>", at = @At("RETURN"))

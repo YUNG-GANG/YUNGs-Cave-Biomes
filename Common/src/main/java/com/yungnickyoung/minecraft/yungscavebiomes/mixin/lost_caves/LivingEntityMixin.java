@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends Entity {
+public abstract class LivingEntityMixin extends Entity {
     @Unique
     private static final int BUFFETED_EFFECT_DURATION = 100; // In ticks
 
@@ -36,7 +36,7 @@ public abstract class MixinLivingEntity extends Entity {
     @Shadow
     public abstract boolean addEffect(MobEffectInstance mobEffectInstance);
 
-    public MixinLivingEntity(EntityType<?> entityType, Level level) {
+    public LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 

@@ -39,13 +39,13 @@ public class NetworkModuleForge {
             INSTANCE.messageBuilder(IcicleShatterS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                     .decoder(IcicleShatterS2CPacket::new)
                     .encoder(IcicleShatterS2CPacket::toBytes)
-                    .consumer(IcicleShatterS2CPacket::handle)
+                    .consumerNetworkThread(IcicleShatterS2CPacket::handle)
                     .add();
 
             INSTANCE.messageBuilder(SandstormSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                     .decoder(SandstormSyncS2CPacket::new)
                     .encoder(SandstormSyncS2CPacket::toBytes)
-                    .consumer(SandstormSyncS2CPacket::handle)
+                    .consumerNetworkThread(SandstormSyncS2CPacket::handle)
                     .add();
         });
     }

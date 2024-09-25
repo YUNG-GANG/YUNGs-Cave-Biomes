@@ -9,6 +9,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
 public class PlayerJoinHandler implements ServerEntityEvents.Load {
+    /**
+     * Syncs sandstorm data to player when they join the server.
+     */
     @Override
     public void onLoad(Entity entity, ServerLevel serverLevel) {
         if (entity instanceof ServerPlayer serverPlayer) {

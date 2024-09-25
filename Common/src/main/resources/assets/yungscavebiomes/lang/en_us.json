@@ -67,21 +67,21 @@
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Arrow of Frost",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Arrow of Frost",
 
-  "death.attack.ycb_pricklyVines": "%1$s was poked to death by prickly vines",
-  "death.attack.ycb_pricklyVines.player": "%1$s was poked to death by prickly vines whilst trying to escape %2$s",
-  "death.attack.ycb_icicle": "%1$s was skewered by a falling icicle",
-  "death.attack.ycb_icicle.player": "%1$s was skewered by a falling icicle whilst fighting %2$s",
+  "death.attack.prickly_vines": "%1$s was poked to death by prickly vines",
+  "death.attack.prickly_vines.player": "%1$s was poked to death by prickly vines whilst trying to escape %2$s",
+  "death.attack.icicle": "%1$s was skewered by a falling icicle",
+  "death.attack.icicle.player": "%1$s was skewered by a falling icicle whilst fighting %2$s",
 
   "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows",
 
   "command.sandstorm.start": "Sandstorm started in all Lost Caves in %s.",
   "command.sandstorm.stop": "Sandstorm stopped in all Lost Caves in %s.",
 
-  "text.autoconfig.yungscavebiomes-fabric-1_18_2.title": "YUNG's Cave Biomes",
-  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.enableSandstorms": "Enable Sandstorms",
-  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.extraSandstormParticles": "Render Extra Particles During Sandstorms",
-  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.minSandstormDuration": "Min Sandstorm Duration (seconds)",
-  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.maxSandstormDuration": "Max Sandstorm Duration (seconds)",
-  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.minTimeBetweenSandstorms": "Min Time Between Sandstorms (seconds)",
-  "text.autoconfig.yungscavebiomes-fabric-1_18_2.option.lostCaves.maxTimeBetweenSandstorms": "Max Time Between Sandstorms (seconds)"
+  "text.autoconfig.yungscavebiomes-fabric-1_20_1.title": "YUNG's Cave Biomes",
+  "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.lostCaves.enableSandstorms": "Enable Sandstorms",
+  "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.lostCaves.extraSandstormParticles": "Render Extra Particles During Sandstorms",
+  "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.lostCaves.minSandstormDuration": "Min Sandstorm Duration (seconds)",
+  "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.lostCaves.maxSandstormDuration": "Max Sandstorm Duration (seconds)",
+  "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.lostCaves.minTimeBetweenSandstorms": "Min Time Between Sandstorms (seconds)",
+  "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.lostCaves.maxTimeBetweenSandstorms": "Max Time Between Sandstorms (seconds)"
 }

@@ -96,7 +96,7 @@ processResources {
                 "yungsapi_version": project.yungsapi_version,
                 "yungsapi_mc_version": project.yungsapi_mc_version,
                 "terrablender_version": project.terrablender_version,
-                "fabric_geckolib_version": project.fabric_geckolib_version,
+                "geckolib_version": project.geckolib_version,
                 "mc_version": project.mc_version,
                 "mod_description": project.mod_description,
                 "mod_full_name": project.mod_full_name,

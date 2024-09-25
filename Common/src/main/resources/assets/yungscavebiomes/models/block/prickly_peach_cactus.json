@@ -3,6 +3,7 @@
     "0": "yungscavebiomes:block/prickly_peach_cactus",
     "particle": "yungscavebiomes:block/prickly_peach_cactus"
   },
+  "render_type": "cutout",
   "elements": [
     {
       "from": [12, 0, 2],

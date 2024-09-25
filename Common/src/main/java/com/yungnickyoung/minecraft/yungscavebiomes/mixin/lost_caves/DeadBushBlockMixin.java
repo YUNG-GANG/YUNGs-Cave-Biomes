@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DeadBushBlock.class)
-public abstract class MixinDeadBushBlock {
+public abstract class DeadBushBlockMixin {
     /**
      * Allow dead bush blocks to be placed on ancient sand.
      */

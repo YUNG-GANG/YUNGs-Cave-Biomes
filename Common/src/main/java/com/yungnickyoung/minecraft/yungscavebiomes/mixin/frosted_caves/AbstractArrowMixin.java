@@ -24,8 +24,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractArrow.class)
-public abstract class MixinAbstractArrow extends Entity {
-    private MixinAbstractArrow(EntityType<?> entityType, Level level) {
+public abstract class AbstractArrowMixin extends Entity {
+    private AbstractArrowMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 

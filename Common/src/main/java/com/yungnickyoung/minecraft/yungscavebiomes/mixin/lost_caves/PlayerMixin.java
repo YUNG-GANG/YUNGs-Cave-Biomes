@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public abstract class MixinPlayer {
+public abstract class PlayerMixin {
     /**
      * Uses the sweet berry bush hurt sound for prickly vines damage.
      * NOTE -- currently does nothing since we do not emit a distinct entity event for Prickly Vines damage

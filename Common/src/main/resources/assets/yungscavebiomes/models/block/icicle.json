@@ -3,6 +3,7 @@
   "textures": {
     "particle": "#cross"
   },
+  "render_type": "cutout",
   "elements": [
     {
       "from": [ 0.8, 0, 8 ],

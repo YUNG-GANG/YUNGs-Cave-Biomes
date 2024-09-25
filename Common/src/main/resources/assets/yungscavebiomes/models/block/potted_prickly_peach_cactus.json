@@ -5,6 +5,7 @@
     "0": "yungscavebiomes:block/potted_prickly_peach_cactus",
     "flowerpot": "block/flower_pot"
   },
+  "render_type": "cutout",
   "elements": [
     {
       "from": [ 5, 0, 5 ],

@@ -6,19 +6,12 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.material.Material;
-
-import java.util.Set;
 
 public class IceSheetFeature extends Feature<IceSheetConfiguration> {
-    private static final Set<Block> invalid_blocks = Set.of(Blocks.ICE, Blocks.PACKED_ICE, Blocks.BLUE_ICE);
-    private static final Set<Material> valid_materials = Set.of(Material.DIRT, Material.STONE, Material.SAND, Material.CLAY, Material.GRASS);
-
     public IceSheetFeature(Codec<IceSheetConfiguration> codec) {
         super(codec);
     }
@@ -55,7 +48,7 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
                         BlockState neighborBlockState = worldGenLevel.getBlockState(mutable);
 
                         // Validate neighbor blockstate
-                        if (invalid_blocks.contains(neighborBlockState.getBlock()) || !valid_materials.contains(neighborBlockState.getMaterial())) {
+                        if (neighborBlockState.is(BlockModule.ICE_SHEET_FEATURE_AVOID)) {
                             continue;
                         }
 

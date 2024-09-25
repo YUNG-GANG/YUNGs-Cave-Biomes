@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Block.class)
-public abstract class MixinBlock {
+public abstract class BlockMixin {
     /**
      * Prevents rare ice rendering faces when embedded in ice.
      */

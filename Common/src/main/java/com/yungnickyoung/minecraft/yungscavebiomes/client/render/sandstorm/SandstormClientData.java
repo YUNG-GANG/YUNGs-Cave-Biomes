@@ -17,8 +17,6 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.util.Random;
-
 /**
  * Manages sandstorm state on the ClientLevel.
  * This class does not actually manage the sandstorm itself; it only manages the client-side representation of the sandstorm
@@ -177,18 +175,17 @@ public class SandstormClientData {
             return;
         }
 
-        Random random = new Random();
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
         for (int i = 0; i < 667; ++i) {
             // Random chance of spawning particle.
             // Chance is lower when sandstorm is first starting up.
             double chance = Mth.clamp(Mth.lerp((this.totalSandstormDuration - sandstormTime) / 20.0, 0, 0.03), 0, 0.03);
-            if (random.nextDouble() > chance) {
+            if (clientLevel.getRandom().nextDouble() > chance) {
                 continue;
             }
 
-            this.addSandstormParticle(clientLevel, x, y, z, true, 64, random, mutable);
+            this.addSandstormParticle(clientLevel, x, y, z, true, 64, clientLevel.getRandom(), mutable);
         }
     }
 

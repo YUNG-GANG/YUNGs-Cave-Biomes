@@ -8,6 +8,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 
 public class PlayerJoinHandler {
+    /**
+     * Syncs sandstorm data to player when they join the server.
+     */
     public static void onPlayerJoin(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer && event.getLevel() instanceof ServerLevel serverLevel) {
             SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) serverLevel).getSandstormServerData();

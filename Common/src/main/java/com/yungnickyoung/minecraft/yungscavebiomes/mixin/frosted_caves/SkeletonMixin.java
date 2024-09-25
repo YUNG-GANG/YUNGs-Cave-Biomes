@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Skeleton.class)
-public abstract class MixinSkeleton extends AbstractSkeleton {
-    protected MixinSkeleton(EntityType<? extends AbstractSkeleton> $$0, Level $$1) {
+public abstract class SkeletonMixin extends AbstractSkeleton {
+    protected SkeletonMixin(EntityType<? extends AbstractSkeleton> $$0, Level $$1) {
         super($$0, $$1);
     }
 

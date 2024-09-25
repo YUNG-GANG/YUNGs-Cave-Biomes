@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractCauldronBlock.class)
-public abstract class MixinAbstractCauldronBlock extends Block {
-    public MixinAbstractCauldronBlock(Properties properties) {
+public abstract class AbstractCauldronBlockMixin extends Block {
+    public AbstractCauldronBlockMixin(Properties properties) {
         super(properties);
     }
 

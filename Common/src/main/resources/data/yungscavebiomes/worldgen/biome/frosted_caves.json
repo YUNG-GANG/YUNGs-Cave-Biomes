@@ -1,5 +1,13 @@
 {
+  "spawn_costs": {},
+  "temperature": 0,
+  "downfall": 0.4,
+  "has_precipitation": true,
   "effects": {
+    "water_color": 4159204,
+    "water_fog_color": 329011,
+    "fog_color": 12638463,
+    "sky_color": 8364543,
     "mood_sound": {
       "sound": "minecraft:ambient.cave",
       "tick_delay": 6000,
@@ -11,11 +19,7 @@
       "min_delay": 12000,
       "max_delay": 24000,
       "replace_current_music": false
-    },
-    "sky_color": 7776511,
-    "fog_color": 12638463,
-    "water_color": 4159204,
-    "water_fog_color": 329011
+    }
   },
   "carvers": {
     "air": [
@@ -34,15 +38,15 @@
     // LOCAL_MODIFICATIONS
     [
       "minecraft:amethyst_geode",
-      "yungscavebiomes:large_icicle",
-      "yungscavebiomes:large_icicle_tilted",
-      "yungscavebiomes:small_icicle",
-      "yungscavebiomes:ice_patch",
-      "yungscavebiomes:ice_patch_ceiling",
-      "yungscavebiomes:frost_lily",
-      "yungscavebiomes:water_surface_ice_fragment",
-      "yungscavebiomes:water_surface_ice_fragment_2",
-      "yungscavebiomes:icicles"
+      "yungscavebiomes:frosted_caves/large_icicle",
+      "yungscavebiomes:frosted_caves/large_icicle_tilted",
+      "yungscavebiomes:frosted_caves/ice_patch",
+      "yungscavebiomes:frosted_caves/ice_patch_ceiling",
+      "yungscavebiomes:frosted_caves/small_icicle",
+      "yungscavebiomes:frosted_caves/frost_lily",
+      "yungscavebiomes:frosted_caves/water_surface_ice_fragment",
+      "yungscavebiomes:frosted_caves/water_surface_ice_fragment_2",
+      "yungscavebiomes:frosted_caves/icicles"
     ],
     // UNDERGROUND_STRUCTURES,
     [
@@ -78,7 +82,7 @@
       "minecraft:ore_diamond_buried",
       "minecraft:ore_lapis",
       "minecraft:ore_lapis_buried",
-      "minecraft:ore_copper",
+      "minecraft:ore_copper_large",
       "minecraft:underwater_magma",
       "minecraft:disk_sand",
       "minecraft:disk_clay",
@@ -97,8 +101,8 @@
     // TOP_LAYER_MODIFICATION
     [
       "minecraft:freeze_top_layer",
-      "yungscavebiomes:ice_sheet_replace",
-      "yungscavebiomes:ice_sheet_replace_2"
+      "yungscavebiomes:frosted_caves/ice_sheet_replace",
+      "yungscavebiomes:frosted_caves/ice_sheet_replace_2"
     ]
   ],
   "spawners": {
@@ -128,6 +132,12 @@
         "maxCount": 4
       },
       {
+        "type": "minecraft:skeleton",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
         "type": "minecraft:creeper",
         "weight": 100,
         "minCount": 4,
@@ -148,8 +158,8 @@
       {
         "type": "yungscavebiomes:ice_cube",
         "weight": 100,
-        "minCount": 4,
-        "maxCount": 4
+        "minCount": 1,
+        "maxCount": 2
       }
     ],
     "creature": [],
@@ -173,11 +183,5 @@
     "water_creature": [],
     "water_ambient": [],
     "misc": []
-  },
-  "spawn_costs": {},
-  "player_spawn_friendly": false,
-  "precipitation": "snow",
-  "temperature": 0.8,
-  "downfall": 0.4,
-  "category": "underground"
+  }
 }

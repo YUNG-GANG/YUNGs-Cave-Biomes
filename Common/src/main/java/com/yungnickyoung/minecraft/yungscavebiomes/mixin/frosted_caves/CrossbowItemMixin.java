@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.Predicate;
 
 @Mixin(CrossbowItem.class)
-public abstract class MixinCrossbowItem {
+public abstract class CrossbowItemMixin {
     /**
      * Allows crossbows to shoot icicles.
      */

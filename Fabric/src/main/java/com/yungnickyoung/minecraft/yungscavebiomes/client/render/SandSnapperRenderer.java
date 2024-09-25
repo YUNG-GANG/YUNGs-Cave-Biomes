@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
@@ -22,7 +23,7 @@ public class SandSnapperRenderer extends GeoEntityRenderer<SandSnapperEntity> {
     }
 
     @Override
-    public void render(SandSnapperEntity animatable, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(SandSnapperEntity animatable, float entityYaw, float partialTick, PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         if (animatable.isSubmerged() && !animatable.isDiving() && !animatable.isEmerging() && !animatable.isDiggingDown() && !animatable.isDiggingUp()) {
             poseStack.translate(0, -16.0f, 0);

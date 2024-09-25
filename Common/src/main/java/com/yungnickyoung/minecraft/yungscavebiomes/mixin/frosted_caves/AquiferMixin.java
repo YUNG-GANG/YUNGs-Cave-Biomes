@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(Aquifer.NoiseBasedAquifer.class)
-public abstract class MixinAquifer implements Aquifer {
+public abstract class AquiferMixin implements Aquifer {
     @Shadow @Final private NoiseChunk noiseChunk;
 
     /**

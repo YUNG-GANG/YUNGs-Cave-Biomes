@@ -33,14 +33,14 @@ import java.util.function.Supplier;
  * Attaches a SandstormServerData to each ServerLevel and ticks it.
  */
 @Mixin(ServerLevel.class)
-public abstract class MixinServerLevel extends Level implements ISandstormServerDataProvider {
+public abstract class ServerLevelMixin extends Level implements ISandstormServerDataProvider {
     @Unique
     private SandstormServerData sandstormServerData;
 
     @Shadow
     public abstract DimensionDataStorage getDataStorage();
 
-    protected MixinServerLevel(WritableLevelData $$0, ResourceKey<Level> $$1, RegistryAccess $$2, Holder<DimensionType> $$3, Supplier<ProfilerFiller> $$4, boolean $$5, boolean $$6, long $$7, int $$8) {
+    protected ServerLevelMixin(WritableLevelData $$0, ResourceKey<Level> $$1, RegistryAccess $$2, Holder<DimensionType> $$3, Supplier<ProfilerFiller> $$4, boolean $$5, boolean $$6, long $$7, int $$8) {
         super($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8);
     }
 
