@@ -33,6 +33,7 @@ public class BlockModule {
                     .noOcclusion()
                     .randomTicks()
                     .strength(0.5f)
+                    .forceSolidOn()
                     .dynamicShape()
                     .pushReaction(PushReaction.DESTROY)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
