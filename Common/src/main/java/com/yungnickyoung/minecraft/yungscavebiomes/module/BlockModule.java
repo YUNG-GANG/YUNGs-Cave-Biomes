@@ -225,10 +225,7 @@ public class BlockModule {
 
     public static final TagKey<Block> SAND_SNAPPER_BLOCKS = TagKey.create(Registries.BLOCK,
             YungsCaveBiomesCommon.id("sand_snapper_blocks"));
-
-    public static final TagKey<Block> ICE_SHEET_FEATURE_PLACEABLE_ON = TagKey.create(Registries.BLOCK,
-            YungsCaveBiomesCommon.id("ice_sheet_feature_placeable_on"));
-
+    
     public static final TagKey<Block> ICE_SHEET_FEATURE_AVOID = TagKey.create(Registries.BLOCK,
             YungsCaveBiomesCommon.id("ice_sheet_feature_avoid"));
 }
