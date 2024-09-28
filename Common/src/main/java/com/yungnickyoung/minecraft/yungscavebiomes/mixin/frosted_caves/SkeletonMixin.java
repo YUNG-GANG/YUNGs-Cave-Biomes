@@ -6,7 +6,6 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -16,10 +15,7 @@ public abstract class SkeletonMixin extends AbstractSkeleton {
     protected SkeletonMixin(EntityType<? extends AbstractSkeleton> $$0, Level $$1) {
         super($$0, $$1);
     }
-
-    @Shadow
-    public abstract boolean isFreezeConverting();
-
+    
     /**
      * Skeletons in Frosted Caves transform into strays.
      */
@@ -28,7 +24,6 @@ public abstract class SkeletonMixin extends AbstractSkeleton {
         if (!this.level().isClientSide
                 && this.isAlive()
                 && !this.isNoAi()
-                && !this.isFreezeConverting()
                 && this.level().getBiome(this.blockPosition()).is(BiomeModule.FROSTED_CAVES)) {
             this.isInPowderSnow = true;
         }
