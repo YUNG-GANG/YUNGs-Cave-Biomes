@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
@@ -13,6 +14,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Supplier;
@@ -75,5 +80,14 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public Supplier<Item> getSandSnapperSpawnEggItem() {
         return () -> new SpawnEggItem(EntityTypeModule.SAND_SNAPPER.get(), 0xBA852F, 0xCFAC55,
                 new Item.Properties());
+    }
+
+    @Override
+    public Block getPottedPricklyPeachCactusBlock() {
+        return new FlowerPotBlock(BlockModule.PRICKLY_PEACH_CACTUS.get(), BlockBehaviour.Properties
+                .of()
+                .instabreak()
+                .noOcclusion()
+                .pushReaction(PushReaction.DESTROY));
     }
 }

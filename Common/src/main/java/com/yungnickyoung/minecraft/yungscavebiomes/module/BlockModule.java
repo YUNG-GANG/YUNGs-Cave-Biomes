@@ -11,11 +11,11 @@ import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyVinesBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyVinesPlantBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.RareIceBlock;
+import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.SandBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -201,11 +201,7 @@ public class BlockModule {
             .withItem(Item.Properties::new);
 
     @AutoRegister("potted_prickly_peach_cactus")
-    public static final AutoRegisterBlock POTTED_PRICKLY_PEACH_CACTUS = AutoRegisterBlock.of(() -> new FlowerPotBlock(PRICKLY_PEACH_CACTUS.get(), BlockBehaviour.Properties
-            .of()
-            .instabreak()
-            .noOcclusion()
-            .pushReaction(PushReaction.DESTROY)));
+    public static final AutoRegisterBlock POTTED_PRICKLY_PEACH_CACTUS = AutoRegisterBlock.of(() -> Services.PLATFORM.getPottedPricklyPeachCactusBlock());
 
     @AutoRegister("prickly_vines")
     public static final AutoRegisterBlock PRICKLY_VINES = AutoRegisterBlock.of(() -> new PricklyVinesBlock(BlockBehaviour.Properties

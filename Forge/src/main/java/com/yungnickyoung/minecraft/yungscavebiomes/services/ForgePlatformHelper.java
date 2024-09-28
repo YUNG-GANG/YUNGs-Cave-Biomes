@@ -1,5 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleForge;
 import com.yungnickyoung.minecraft.yungscavebiomes.network.IcicleShatterS2CPacket;
@@ -9,8 +11,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.ModList;
@@ -65,5 +72,19 @@ public class ForgePlatformHelper implements IPlatformHelper {
     public Supplier<Item> getSandSnapperSpawnEggItem() {
         return () -> new ForgeSpawnEggItem(() -> EntityTypeModule.SAND_SNAPPER.get(), 0xBA852F, 0xCFAC55,
                 new Item.Properties());
+    }
+
+    @Override
+    public Block getPottedPricklyPeachCactusBlock() {
+        FlowerPotBlock flowerPotBlock = new FlowerPotBlock(
+                () -> (FlowerPotBlock) Blocks.FLOWER_POT,
+                () -> BlockModule.PRICKLY_PEACH_CACTUS.get(),
+                BlockBehaviour.Properties
+                        .of()
+                        .instabreak()
+                        .noOcclusion()
+                        .pushReaction(PushReaction.DESTROY));
+        ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(YungsCaveBiomesCommon.id("prickly_peach_cactus"), () -> flowerPotBlock);
+        return flowerPotBlock;
     }
 }

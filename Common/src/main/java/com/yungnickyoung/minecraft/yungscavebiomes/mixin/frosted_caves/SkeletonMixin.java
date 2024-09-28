@@ -15,7 +15,7 @@ public abstract class SkeletonMixin extends AbstractSkeleton {
     protected SkeletonMixin(EntityType<? extends AbstractSkeleton> $$0, Level $$1) {
         super($$0, $$1);
     }
-    
+
     /**
      * Skeletons in Frosted Caves transform into strays.
      */
