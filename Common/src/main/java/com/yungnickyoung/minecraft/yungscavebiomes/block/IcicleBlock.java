@@ -200,7 +200,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
 
     @Override
     public @NotNull DamageSource getFallDamageSource(@NotNull Entity entity) {
-        return DamageSourceModule.ICICLE;
+        return DamageSourceModule.FALLING_ICICLE;
     }
 
 //    @Override

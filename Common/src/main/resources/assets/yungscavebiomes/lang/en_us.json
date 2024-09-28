@@ -69,8 +69,8 @@
 
   "death.attack.prickly_vines": "%1$s was poked to death by prickly vines",
   "death.attack.prickly_vines.player": "%1$s was poked to death by prickly vines whilst trying to escape %2$s",
-  "death.attack.icicle": "%1$s was skewered by a falling icicle",
-  "death.attack.icicle.player": "%1$s was skewered by a falling icicle whilst fighting %2$s",
+  "death.attack.falling_icicle": "%1$s was skewered by a falling icicle",
+  "death.attack.falling_icicle.player": "%1$s was skewered by a falling icicle whilst fighting %2$s",
 
   "subtitles.yungscavebiomes.block.rare_ice.ambient": "Enchanted Ice Glows",
 

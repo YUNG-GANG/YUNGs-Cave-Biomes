@@ -9,10 +9,10 @@ import net.minecraft.world.damagesource.DamageSource;
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class DamageSourceModule {
     public static DamageSource PRICKLY_VINES;
-    public static DamageSource ICICLE;
+    public static DamageSource FALLING_ICICLE;
 
     public static void init(RegistryAccess registryAccess) {
         PRICKLY_VINES = new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypeModule.PRICKLY_VINES));
-        ICICLE = new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypeModule.ICICLE));
+        FALLING_ICICLE = new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypeModule.FALLING_ICICLE));
     }
 }
