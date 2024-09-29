@@ -28,7 +28,7 @@ public abstract class MixinFogRendererForge {
     @Unique
     private static final SandstormFogRenderer sandstormFogRenderer = new SandstormFogRenderer();
 
-    @Inject(method = "setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V", at = @At("TAIL"), remap = false)
+    @Inject(method = "setupFog", at = @At("TAIL"))
     private static void yungscavebiomes_handleLostCavesFogForge(Camera camera, FogRenderer.FogMode mode, float renderDistance, boolean isVeryFoggy, float partialTicks, CallbackInfo ci) {
         sandstormFogRenderer.render(mode, renderDistance);
     }
