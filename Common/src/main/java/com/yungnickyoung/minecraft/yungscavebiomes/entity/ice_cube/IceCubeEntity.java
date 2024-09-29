@@ -62,7 +62,7 @@ public class IceCubeEntity extends Monster {
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, MagmaCube.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Blaze.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(4, new IceCubeLeapGoal(this, 0.4f));
-        this.goalSelector.addGoal(5, new IceCubeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(5, new IceCubeAttackGoal(this, 1.0, 1.0f, false));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
