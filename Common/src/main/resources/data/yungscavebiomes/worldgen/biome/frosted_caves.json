@@ -158,8 +158,8 @@
       {
         "type": "yungscavebiomes:ice_cube",
         "weight": 100,
-        "minCount": 1,
-        "maxCount": 2
+        "minCount": 2,
+        "maxCount": 4
       }
     ],
     "creature": [],
