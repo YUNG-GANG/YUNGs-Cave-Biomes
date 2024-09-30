@@ -149,7 +149,7 @@ task publishCurseForgeForge(type: net.darkhax.curseforgegradle.TaskPublishCurseF
     dependsOn(tasks.jar)
     apiToken = curseforgeApiKey
 
-    debugMode = false
+    debugMode = debug_publish.toBoolean()
 
     def mainFile = upload(curseforge_project_id_forge, tasks.jar.archiveFile)
     mainFile.changelogType = 'markdown'
@@ -173,7 +173,7 @@ modrinth {
     versionType = "release"
     uploadFile = jar
     gameVersions = compatibleVersionsList
-    debugMode = false
+    debugMode = debug_publish.toBoolean()
     changelog = file("../CHANGELOG.md").exists() ? file("../CHANGELOG.md").text : "No changelog provided"
     dependencies { // A special DSL for creating dependencies
         // scope.type
