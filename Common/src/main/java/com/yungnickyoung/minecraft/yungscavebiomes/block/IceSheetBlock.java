@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -12,11 +13,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.MultifaceSpreader;
 import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -107,8 +106,8 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
 
         if (canAttachTo(blockGetter, neighborDirection, neighborPos, blockGetter.getBlockState(neighborPos))) {
             updatedState = updatedState.setValue(getFaceProperty(neighborDirection), true);
-            Block adjacentBlock = blockGetter.getBlockState(neighborPos).getBlock();
-            if (adjacentBlock instanceof DropExperienceBlock || adjacentBlock instanceof RedStoneOreBlock) {
+            BlockState adjacentBlock = blockGetter.getBlockState(neighborPos);
+            if (adjacentBlock.is(BlockModule.CREEPING_ICE_GLOWS_ON)) {
                 updatedState = updatedState.setValue(GLOWING, true);
             }
         } else {
@@ -135,9 +134,8 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
             BooleanProperty property = entry.getValue();
             if (blockState.getValue(property)) {
                 BlockPos adjacentPos = blockPos.relative(direction);
-                Block adjacentBlock = level.getBlockState(adjacentPos).getBlock();
-                boolean isAdjacentBlockOre = adjacentBlock instanceof DropExperienceBlock || adjacentBlock instanceof RedStoneOreBlock;
-                if (isAdjacentBlockOre) {
+                BlockState adjacentBlock = level.getBlockState(adjacentPos);
+                if (adjacentBlock.is(BlockModule.CREEPING_ICE_GLOWS_ON)) {
                     if (!blockState.getValue(GLOWING)) {
                         level.setBlock(blockPos, blockState.setValue(GLOWING, true), 2);
                     }
@@ -192,8 +190,8 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
 
                 if (canAttachTo(serverLevel, targetDirection, neighborPos, serverLevel.getBlockState(neighborPos))) {
                     BlockState updatedState = blockState.setValue(getFaceProperty(targetDirection), true);
-                    Block adjacentBlock = serverLevel.getBlockState(neighborPos).getBlock();
-                    if (adjacentBlock instanceof DropExperienceBlock || adjacentBlock instanceof RedStoneOreBlock) {
+                    BlockState adjacentBlock = serverLevel.getBlockState(neighborPos);
+                    if (adjacentBlock.is(BlockModule.CREEPING_ICE_GLOWS_ON)) {
                         updatedState = updatedState.setValue(GLOWING, true);
                     }
                     serverLevel.setBlock(blockPos, updatedState, 2);

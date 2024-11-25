@@ -228,4 +228,7 @@ public class BlockModule {
 
     public static final TagKey<Block> ICE_SHEET_FEATURE_AVOID = TagKey.create(Registries.BLOCK,
             YungsCaveBiomesCommon.id("ice_sheet_feature_avoid"));
+
+    public static final TagKey<Block> CREEPING_ICE_GLOWS_ON = TagKey.create(Registries.BLOCK,
+            YungsCaveBiomesCommon.id("creeping_ice_glows_on"));
 }

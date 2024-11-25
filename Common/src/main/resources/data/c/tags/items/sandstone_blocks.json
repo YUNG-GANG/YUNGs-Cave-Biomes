@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "yungscavebiomes:ancient_sandstone",
+    "yungscavebiomes:brittle_ancient_sandstone",
+    "yungscavebiomes:cut_ancient_sandstone",
+    "yungscavebiomes:chiseled_ancient_sandstone",
+    "yungscavebiomes:layered_ancient_sandstone",
+    "yungscavebiomes:smooth_ancient_sandstone"
+  ]
+}
