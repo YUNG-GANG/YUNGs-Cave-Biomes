@@ -1,8 +1,11 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.block.IceSheetBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeAttackGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.goal.IceCubeLeapGoal;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +23,11 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Blaze;
@@ -29,6 +36,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -154,6 +162,26 @@ public class IceCubeEntity extends Monster {
         }
 
         super.aiStep();
+
+        // Leave a trail of ice sheets behind the ice cube.
+        // Copied from vanilla SnowGolem
+        IceSheetBlock iceSheet = (IceSheetBlock) BlockModule.ICE_SHEET.get();
+        for (int i = 0; i < 4; i++) {
+            int x = Mth.floor(this.getX() + ((float) (i % 2 * 2 - 1) * 0.25F));
+            int y = Mth.floor(this.getY());
+            int z = Mth.floor(this.getZ() + (double) ((float) (i / 2 % 2 * 2 - 1) * 0.25F));
+            BlockPos blockPos = new BlockPos(x, y, z);
+            BlockState blockState = this.level().getBlockState(blockPos);
+            if (blockState.isAir()) {
+                BlockState updatedBlockState = iceSheet.getStateForPlacement(blockState, this.level(), blockPos, Direction.DOWN);
+                if (updatedBlockState == null) {
+                    continue;
+                }
+
+                this.level().setBlockAndUpdate(blockPos, updatedBlockState);
+                this.level().gameEvent(GameEvent.BLOCK_PLACE, blockPos, GameEvent.Context.of(this, updatedBlockState));
+            }
+        }
     }
 
     @Override
