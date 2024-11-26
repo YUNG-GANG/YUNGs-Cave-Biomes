@@ -5,6 +5,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.util.DripstoneIceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.SectionPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -31,6 +32,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
     public boolean place(FeaturePlaceContext<LargeIceDripstoneConfiguration> featurePlaceContext) {
         WorldGenLevel worldGenLevel = featurePlaceContext.level();
         BlockPos origin = featurePlaceContext.origin();
+        SectionPos originSectionPos = SectionPos.of(origin);
         LargeIceDripstoneConfiguration config = featurePlaceContext.config();
         RandomSource random = featurePlaceContext.random();
 
@@ -43,7 +45,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
         if (range.height() < 4) return false;
 
         // Determine column radius
-        int maxColumnRadius = (int)((float)range.height() * config.maxColumnRadiusToCaveHeightRatio);
+        int maxColumnRadius = (int) ((float) range.height() * config.maxColumnRadiusToCaveHeightRatio);
         maxColumnRadius = Mth.clamp(maxColumnRadius, config.columnRadius.getMinValue(), config.columnRadius.getMaxValue());
         int columnRadius = Mth.randomBetweenInclusive(random, config.columnRadius.getMinValue(), maxColumnRadius);
 
@@ -61,8 +63,10 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
 
         boolean canSpawnStalactite = stalactite.moveBackUntilBaseIsInsideStoneAndShrinkRadiusIfNecessary(worldGenLevel, windOffsetter);
         boolean canspawnStalagmite = stalagmite.moveBackUntilBaseIsInsideStoneAndShrinkRadiusIfNecessary(worldGenLevel, windOffsetter);
-        if (canSpawnStalactite) stalactite.placeBlocks(worldGenLevel, random, windOffsetter, config.rareIceChance);
-        if (canspawnStalagmite) stalagmite.placeBlocks(worldGenLevel, random, windOffsetter, config.rareIceChance);
+        if (canSpawnStalactite)
+            stalactite.placeBlocks(worldGenLevel, random, windOffsetter, config.rareIceChance, originSectionPos);
+        if (canspawnStalagmite)
+            stalagmite.placeBlocks(worldGenLevel, random, windOffsetter, config.rareIceChance, originSectionPos);
 
         return true;
     }
@@ -81,7 +85,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
         worldGenLevel.setBlock(windOffsetter.offset(blockPos.atY(range.ceiling() - 1)), Blocks.DIAMOND_BLOCK.defaultBlockState(), 2);
         worldGenLevel.setBlock(windOffsetter.offset(blockPos.atY(range.floor() + 1)), Blocks.GOLD_BLOCK.defaultBlockState(), 2);
 
-        for(BlockPos.MutableBlockPos mutableBlockPos = blockPos.atY(range.floor() + 2).mutable(); mutableBlockPos.getY() < range.ceiling() - 1; mutableBlockPos.move(Direction.UP)) {
+        for (BlockPos.MutableBlockPos mutableBlockPos = blockPos.atY(range.floor() + 2).mutable(); mutableBlockPos.getY() < range.ceiling() - 1; mutableBlockPos.move(Direction.UP)) {
             BlockPos blockPos2 = windOffsetter.offset(mutableBlockPos);
             if (DripstoneIceUtils.isEmptyOrWater(worldGenLevel, blockPos2) || worldGenLevel.getBlockState(blockPos2).is(Blocks.DRIPSTONE_BLOCK)) {
                 worldGenLevel.setBlock(blockPos2, Blocks.CREEPER_HEAD.defaultBlockState(), 2);
@@ -145,15 +149,19 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
         }
 
         /**
-         *
          * @param radialDistance x-z distance from the center
          * @return height at given radial distance
          */
         private int getHeightAtRadius(float radialDistance) {
-            return (int)DripstoneIceUtils.getDripstoneHeight(radialDistance, this.radius, this.scale, this.bluntness);
+            return (int) DripstoneIceUtils.getDripstoneHeight(radialDistance, this.radius, this.scale, this.bluntness);
         }
 
-        void placeBlocks(WorldGenLevel worldGenLevel, RandomSource random, LargeIceDripstoneFeature.WindOffsetter windOffsetter, float rareIceChance) {
+        void placeBlocks(WorldGenLevel worldGenLevel,
+                         RandomSource random,
+                         LargeIceDripstoneFeature.WindOffsetter windOffsetter,
+                         float rareIceChance,
+                         SectionPos originSectionPos)
+        {
             boolean hasRareIce = random.nextFloat() < rareIceChance;
             if (this.getHeightAtRadius(0) < 6) {
                 hasRareIce = false;
@@ -161,12 +169,12 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
 
             for (int dx = -this.radius; dx <= this.radius; ++dx) {
                 for (int dz = -this.radius; dz <= this.radius; ++dz) {
-                    float distToCenter = Mth.sqrt((float)(dx * dx + dz * dz));
-                    if (distToCenter <= (float)this.radius) {
+                    float distToCenter = Mth.sqrt((float) (dx * dx + dz * dz));
+                    if (distToCenter <= (float) this.radius) {
                         int heightAtCurrPos = this.getHeightAtRadius(distToCenter);
                         if (heightAtCurrPos > 0) {
                             if (random.nextDouble() < 0.2) {
-                                heightAtCurrPos = (int)((float)heightAtCurrPos * Mth.randomBetween(random, 0.8F, 1.0F));
+                                heightAtCurrPos = (int) ((float) heightAtCurrPos * Mth.randomBetween(random, 0.8F, 1.0F));
                             }
 
                             BlockPos.MutableBlockPos mutable = this.root.offset(dx, 0, dz).mutable();
@@ -180,15 +188,17 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
                                     Block block = Blocks.PACKED_ICE;
 
                                     if (hasRareIce) {
-                                        double progress = (double)dy / (double)heightAtCurrPos;
-                                        if (dx == 0 && dz == 0 && dy == (int)(heightAtCurrPos / 2.2)) {
+                                        double progress = (double) dy / (double) heightAtCurrPos;
+                                        if (dx == 0 && dz == 0 && dy == (int) (heightAtCurrPos / 2.2)) {
                                             block = BlockModule.RARE_ICE.get();
                                         } else if (progress > 0.3 + random.nextDouble() * 0.04) {
                                             block = Blocks.ICE;
                                         }
                                     }
 
-                                    worldGenLevel.setBlock(blockPos, block.defaultBlockState(), 2);
+                                    if (isBlockInPlacementRange(originSectionPos, blockPos)) {
+                                        worldGenLevel.setBlock(blockPos, block.defaultBlockState(), 2);
+                                    }
                                 } else if (placed && worldGenLevel.getBlockState(blockPos).is(BlockTags.BASE_STONE_OVERWORLD)) {
                                     break;
                                 }
@@ -201,8 +211,13 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
             }
         }
 
-        boolean isSuitableForWind(LargeIceDripstoneConfiguration largeDripstoneConfiguration) {
-            return this.radius >= largeDripstoneConfiguration.minRadiusForWind && this.bluntness >= (double)largeDripstoneConfiguration.minBluntnessForWind;
+        private boolean isSuitableForWind(LargeIceDripstoneConfiguration largeDripstoneConfiguration) {
+            return this.radius >= largeDripstoneConfiguration.minRadiusForWind && this.bluntness >= (double) largeDripstoneConfiguration.minBluntnessForWind;
+        }
+
+        private boolean isBlockInPlacementRange(SectionPos originSectionPos, BlockPos blockPos) {
+            SectionPos blockSectionPos = SectionPos.of(blockPos);
+            return Mth.abs(originSectionPos.x() - blockSectionPos.x()) <= 1 && Mth.abs(originSectionPos.z() - blockSectionPos.z()) <= 1;
         }
     }
 
