@@ -49,7 +49,7 @@ public class PillarRockFeature extends Feature<SimpleBlockConfiguration> {
         RandomSource random = context.random();
 
         SimpleBlockConfiguration config = context.config();
-        BlockState state = config.toPlace().getState(context.random(), context.origin());
+        BlockState state = config.toPlace().getState(random, context.origin());
         long noiseSeed = level.getSeed() ^ NOISE_SEED_FLIP_MASK;
 
         // Choose radius in a way that fits the range but makes smaller sizes more common.

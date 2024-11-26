@@ -6,6 +6,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -22,8 +23,8 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
         BlockPos originPos = featurePlaceContext.origin();
         IceSheetConfiguration config = featurePlaceContext.config();
         int radius = config.searchRange;
-        BlockPos.MutableBlockPos currPos = originPos.mutable();
-        BlockPos.MutableBlockPos mutable = currPos.mutable();
+        BlockPos.MutableBlockPos blockPos = originPos.mutable();
+        BlockPos.MutableBlockPos neighborPos = blockPos.mutable();
 
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
@@ -35,17 +36,18 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
                         continue;
                     }
 
-                    currPos.setWithOffset(originPos, x, y, z);
-                    BlockState currState = worldGenLevel.getBlockState(currPos);
+                    blockPos.setWithOffset(originPos, x, y, z);
+                    BlockState blockState = worldGenLevel.getBlockState(blockPos);
 
                     // Only replace air or water
-                    if (!isAirOrWater(currState)) {
+                    if (!isAirOrWater(blockState)) {
                         continue;
                     }
 
+                    // Determine which faces are valid for the ice sheet
                     for (Direction direction : config.validDirections) {
-                        mutable.setWithOffset(currPos, direction);
-                        BlockState neighborBlockState = worldGenLevel.getBlockState(mutable);
+                        neighborPos.setWithOffset(blockPos, direction);
+                        BlockState neighborBlockState = worldGenLevel.getBlockState(neighborPos);
 
                         // Validate neighbor blockstate
                         if (neighborBlockState.is(BlockModule.ICE_SHEET_FEATURE_AVOID)) {
@@ -53,15 +55,19 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
                         }
 
                         IceSheetBlock iceSheetBlock = (IceSheetBlock) BlockModule.ICE_SHEET.get();
-                        BlockState updatedBlockState = iceSheetBlock.getStateForPlacement(currState, worldGenLevel, currPos, direction);
+                        BlockState updatedBlockState = iceSheetBlock.getStateForPlacement(blockState, worldGenLevel, blockPos, direction);
                         if (updatedBlockState == null) {
                             continue;
                         }
-                        updatedBlockState = updatedBlockState.setValue(IceSheetBlock.GROWTH_DISTANCE, 3);
 
-                        currState = updatedBlockState;
-                        worldGenLevel.setBlock(currPos, updatedBlockState, 3);
-                        worldGenLevel.getChunk(currPos).markPosForPostprocessing(currPos);
+                        blockState = updatedBlockState;
+                    }
+
+                    // If valid location for an ice sheet, place it and update the chunk
+                    if (blockState.is(BlockModule.ICE_SHEET.get())) {
+                        blockState = blockState.setValue(IceSheetBlock.GROWTH_DISTANCE, 3);
+                        worldGenLevel.setBlock(blockPos, blockState, Block.UPDATE_ALL);
+                        worldGenLevel.getChunk(blockPos).markPosForPostprocessing(blockPos);
                     }
                 }
             }
