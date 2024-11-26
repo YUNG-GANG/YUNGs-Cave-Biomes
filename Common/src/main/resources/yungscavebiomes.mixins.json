@@ -28,7 +28,6 @@
     "lost_caves.CactusBlockMixin",
     "lost_caves.DeadBushBlockMixin",
     "lost_caves.LivingEntityMixin",
-    "lost_caves.PlayerMixin",
     "lost_caves.ServerLevelMixin",
     "marble_caves.AquiferMixin",
     "marble_caves.NoiseChunkMixin"
