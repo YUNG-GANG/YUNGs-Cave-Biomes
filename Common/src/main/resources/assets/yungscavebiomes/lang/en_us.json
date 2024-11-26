@@ -57,7 +57,9 @@
   "item.yungscavebiomes.prickly_peach": "Prickly Peach",
 
   "effect.yungscavebiomes.frost": "Frost",
+	"effect.yungscavebiomes.frost.description": "",
   "effect.yungscavebiomes.buffeted": "Buffeted",
+	"effect.yungscavebiomes.buffeted.description": "",
   "item.minecraft.potion.effect.yungscavebiomes.frost": "Potion of Frost",
   "item.minecraft.potion.effect.yungscavebiomes.strong_frost": "Potion of Frost",
   "item.minecraft.splash_potion.effect.yungscavebiomes.frost": "Splash Potion of Frost",
