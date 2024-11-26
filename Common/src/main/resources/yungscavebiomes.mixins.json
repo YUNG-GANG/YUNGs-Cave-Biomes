@@ -23,6 +23,7 @@
     "frosted_caves.BlockMixin",
     "frosted_caves.CrossbowItemMixin",
     "frosted_caves.EntityMixin",
+    "frosted_caves.LivingEntityMixin",
     "frosted_caves.SkeletonMixin",
     "frosted_caves.ThrownPotionMixin",
     "lost_caves.CactusBlockMixin",
