@@ -1,6 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.mixin.lost_caves;
 
-import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageSourceModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageTypeModule;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,7 +19,7 @@ public abstract class PlayerMixin {
      */
     @Inject(method = "getHurtSound", at = @At("HEAD"), cancellable = true)
     public void yungscavebiomes_playerPricklyVinesSound(DamageSource damageSource, CallbackInfoReturnable<SoundEvent> cir) {
-        if (damageSource == DamageSourceModule.PRICKLY_VINES) {
+        if (damageSource.is(DamageTypeModule.PRICKLY_VINES)) {
             cir.setReturnValue(SoundEvents.PLAYER_HURT_SWEET_BERRY_BUSH);
         }
     }

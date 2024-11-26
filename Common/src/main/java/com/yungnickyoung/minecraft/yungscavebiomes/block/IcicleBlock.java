@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.AbstractCauldronBlockAccessor;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageSourceModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -200,7 +200,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
 
     @Override
     public @NotNull DamageSource getFallDamageSource(@NotNull Entity entity) {
-        return DamageSourceModule.FALLING_ICICLE;
+        return DamageTypeModule.of(entity.level().registryAccess(), DamageTypeModule.FALLING_ICICLE);
     }
 
 //    @Override

@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageSourceModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -53,8 +53,8 @@ public class PricklyVinesBlock extends GrowingPlantHeadBlock {
         if (!(level.isClientSide || blockState.getValue(AGE) <= 0 || entity.xOld == entity.getX() && entity.zOld == entity.getZ())) {
             double d = Math.abs(entity.getX() - entity.xOld);
             double e = Math.abs(entity.getZ() - entity.zOld);
-            if (d >= (double)0.003f || e >= (double)0.003f) {
-                entity.hurt(DamageSourceModule.PRICKLY_VINES, 1.0f);
+            if (d >= (double) 0.003f || e >= (double) 0.003f) {
+                entity.hurt(DamageTypeModule.of(level.registryAccess(), DamageTypeModule.PRICKLY_VINES), 1.0f);
             }
         }
     }
