@@ -206,11 +206,6 @@ public class IceCubeEntity extends Monster {
         // Ice Cubes can't be frozen
     }
 
-    @Override
-    public int getTicksFrozen() {
-        return 0; // Ice Cubes can't be frozen
-    }
-
     public int getJumpDelay() {
         return this.random.nextInt(20) + 10;
     }
