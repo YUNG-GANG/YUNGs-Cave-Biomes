@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.world.terrablender;
 
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import net.minecraft.world.level.biome.Climate;
 
 /**
@@ -7,46 +8,7 @@ import net.minecraft.world.level.biome.Climate;
  * The actual creation of TerraBlender region is handled in loader-specific modules.
  */
 public class CaveBiomeRegionParameters {
-    ////////////////////////////// CLIMATE PARAMETERS //////////////////////////////
-    // Most of these are duplicates of OverworldBiomeBuilder fields.
-
-    private static final Climate.Parameter FULL_RANGE = Climate.Parameter.span(-1.0F, 1.0F);
-
-    // Temperature
-    private static final Climate.Parameter[] temperatures = new Climate.Parameter[]{
-            Climate.Parameter.span(-1.0F, -0.45F),
-            Climate.Parameter.span(-0.45F, -0.15F),
-            Climate.Parameter.span(-0.15F, 0.2F),
-            Climate.Parameter.span(0.2F, 0.55F),
-            Climate.Parameter.span(0.55F, 1.0F)
-    };
-    private static final Climate.Parameter frozenTemp = temperatures[0];
-    private static final Climate.Parameter unfrozenTemp = Climate.Parameter.span(temperatures[1], temperatures[4]);
-    private static final Climate.Parameter frostedCavesTemp = Climate.Parameter.span(temperatures[0], Climate.Parameter.span(-0.45F, -0.3F));
-    private static final Climate.Parameter nonFrostedCavesTemp = Climate.Parameter.span(Climate.Parameter.span(-0.3F, 0.2F), temperatures[4]);
-    private static final Climate.Parameter lostCavesTemp = Climate.Parameter.span(Climate.Parameter.span(0.4F, 0.55F), temperatures[4]);
-
-    // Humidity
-    private static final Climate.Parameter[] humidities = new Climate.Parameter[]{
-            Climate.Parameter.span(-1.0F, -0.35F),
-            Climate.Parameter.span(-0.35F, -0.1F),
-            Climate.Parameter.span(-0.1F, 0.1F),
-            Climate.Parameter.span(0.1F, 0.3F),
-            Climate.Parameter.span(0.3F, 1.0F)
-    };
-    private static final Climate.Parameter lostCavesHumidity = Climate.Parameter.span(humidities[0], Climate.Parameter.span(0.1F, 0.6F));
-
-    // Continentalness
-    private static final Climate.Parameter deepOceanContinentalness = Climate.Parameter.span(-1.05F, -0.455F);
-    private static final Climate.Parameter oceanContinentalness = Climate.Parameter.span(-0.455F, -0.19F);
-    private static final Climate.Parameter coastContinentalness = Climate.Parameter.span(-0.19F, -0.11F);
-    private static final Climate.Parameter inlandContinentalness = Climate.Parameter.span(-0.11F, 0.55F);
-    private static final Climate.Parameter nearInlandContinentalness = Climate.Parameter.span(-0.11F, 0.03F);
-    private static final Climate.Parameter midInlandContinentalness = Climate.Parameter.span(0.03F, 0.3F);
-    private static final Climate.Parameter farInlandContinentalness = Climate.Parameter.span(0.3F, 1.0F);
-
-    // Depth
-    private static final Climate.Parameter undergroundDepth = Climate.Parameter.span(0.2F, 0.9F);
+    private static final Climate.Parameter FULL_RANGE = span(-1.0F, 1.0F);
 
     // Dripstone modifications.
     // Dripstone caves are modified to only spawn in the unfrozen temperature range,
@@ -54,53 +16,82 @@ public class CaveBiomeRegionParameters {
     public static final Climate.ParameterPoint DRIPSTONE_OLD = new ParameterPointBuilder()
             .temperature(FULL_RANGE)
             .humidity(FULL_RANGE)
-            .continentalness(Climate.Parameter.span(0.8F, 1.0F))
+            .continentalness(span(0.8F, 1.0F))
             .erosion(FULL_RANGE)
-            .depth(undergroundDepth)
+            .depth(span(0.2F, 0.9F))
             .weirdness(FULL_RANGE)
             .offset(0.0F)
             .build();
     public static final Climate.ParameterPoint DRIPSTONE_NEW = new ParameterPointBuilder()
-            .temperature(Climate.Parameter.span(-0.7F, 1.0F))
-            .humidity(FULL_RANGE)
-            .continentalness(Climate.Parameter.span(0.8F, 1.0F))
-            .erosion(FULL_RANGE)
-            .depth(undergroundDepth)
-            .weirdness(FULL_RANGE)
-            .offset(0.0F)
+            .temperature(span(
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.temperatureMin,
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.temperatureMax))
+            .humidity(span(
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.humidityMin,
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.humidityMax))
+            .continentalness(span(
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.continentalnessMin,
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.continentalnessMax))
+            .erosion(span(
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.erosionMin,
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.erosionMax))
+            .depth(span(
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.depthMin,
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.depthMax))
+            .weirdness(span(
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.weirdnessMin,
+                    YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.weirdnessMax))
+            .offset(YungsCaveBiomesCommon.CONFIG.other.vanillaBiomeModifications.dripstoneCaves.offset)
             .build();
 
     // New cave biomes
     public static final Climate.ParameterPoint FROSTED_CAVES = new ParameterPointBuilder()
-            .temperature(Climate.Parameter.span(-1.0F, -0.7F))
-            .humidity(FULL_RANGE)
-            .continentalness(Climate.Parameter.span(coastContinentalness, farInlandContinentalness))
-            .erosion(FULL_RANGE)
-            .depth(undergroundDepth)
-            .weirdness(FULL_RANGE)
-            .offset(0.0F)
+            .temperature(span(
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.temperatureMin,
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.temperatureMax))
+            .humidity(span(
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.humidityMin,
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.humidityMax))
+            .continentalness(span(
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.continentalnessMin,
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.continentalnessMax))
+            .erosion(span(
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.erosionMin,
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.erosionMax))
+            .depth(span(
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.depthMin,
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.depthMax))
+            .weirdness(span(
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.weirdnessMin,
+                    YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.weirdnessMax))
+            .offset(YungsCaveBiomesCommon.CONFIG.frostedCaves.noiseParameters.offset)
             .build();
-//    public static final Climate.ParameterPoint MARBLE_CAVES = new ParameterPointBuilder()
-//            .temperature(frozenTemp)
-//            .humidity(FULL_RANGE)
-//            .continentalness(Climate.Parameter.span(deepOceanContinentalness, oceanContinentalness))
-//            .erosion(FULL_RANGE)
-//            .depth(undergroundDepth)
-//            .weirdness(FULL_RANGE)
-//            .offset(0.0F)
-//            .build();
+
     public static final Climate.ParameterPoint LOST_CAVES = new ParameterPointBuilder()
-            .temperature(temperatures[4])
-//            .temperature(Climate.Parameter.span(0.9F, 1.0F))
-//            .temperature(lostCavesTemp)
-//            .humidity(Climate.Parameter.span(humidities[0], humidities[3]))
-            .humidity(lostCavesHumidity)
-            .continentalness(farInlandContinentalness)
-            .erosion(FULL_RANGE)
-            .depth(undergroundDepth)
-            .weirdness(FULL_RANGE)
-            .offset(0.0F)
+            .temperature(span(
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.temperatureMin,
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.temperatureMax))
+            .humidity(span(
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.humidityMin,
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.humidityMax))
+            .continentalness(span(
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.continentalnessMin,
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.continentalnessMax))
+            .erosion(span(
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.erosionMin,
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.erosionMax))
+            .depth(span(
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.depthMin,
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.depthMax))
+            .weirdness(span(
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.weirdnessMin,
+                    YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.weirdnessMax))
+            .offset(YungsCaveBiomesCommon.CONFIG.lostCaves.noiseParameters.offset)
             .build();
+
+    private static Climate.Parameter span(float min, float max) {
+        return Climate.Parameter.span(min, max);
+    }
 
     /**
      * Convenience builder for creating new {@link Climate.ParameterPoint}s.

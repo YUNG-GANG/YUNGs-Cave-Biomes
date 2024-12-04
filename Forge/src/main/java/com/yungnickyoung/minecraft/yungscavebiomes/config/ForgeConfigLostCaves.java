@@ -2,14 +2,17 @@ package com.yungnickyoung.minecraft.yungscavebiomes.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class ConfigLostCavesForge {
+public class ForgeConfigLostCaves {
     public final ForgeConfigSpec.ConfigValue<Boolean> enableSandstorms;
     public final ForgeConfigSpec.ConfigValue<Integer> minSandstormDuration;
     public final ForgeConfigSpec.ConfigValue<Integer> maxSandstormDuration;
     public final ForgeConfigSpec.ConfigValue<Integer> minTimeBetweenSandstorms;
     public final ForgeConfigSpec.ConfigValue<Integer> maxTimeBetweenSandstorms;
     public final ForgeConfigSpec.ConfigValue<Boolean> extraSandstormParticles;
-    public ConfigLostCavesForge(final ForgeConfigSpec.Builder BUILDER) {
+
+    public final ForgeConfigLostCavesNoiseParams noiseParameters;
+
+    public ForgeConfigLostCaves(final ForgeConfigSpec.Builder BUILDER) {
         BUILDER.push("Lost Caves");
 
         enableSandstorms = BUILDER
@@ -34,6 +37,8 @@ public class ConfigLostCavesForge {
 
         extraSandstormParticles = BUILDER
                 .define("Render Extra Particles During Sandstorms", true);
+
+        noiseParameters = new ForgeConfigLostCavesNoiseParams(BUILDER);
 
         BUILDER.pop();
     }

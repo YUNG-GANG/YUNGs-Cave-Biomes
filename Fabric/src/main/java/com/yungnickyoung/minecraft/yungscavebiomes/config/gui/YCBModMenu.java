@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.config.gui;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import com.yungnickyoung.minecraft.yungscavebiomes.config.YCBConfigFabric;
+import com.yungnickyoung.minecraft.yungscavebiomes.config.YCBFabricConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,6 +11,6 @@ import net.fabricmc.api.Environment;
 public class YCBModMenu implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> AutoConfig.getConfigScreen(YCBConfigFabric.class, parent).get();
+        return parent -> AutoConfig.getConfigScreen(YCBFabricConfig.class, parent).get();
     }
 }
