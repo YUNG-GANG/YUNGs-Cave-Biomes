@@ -69,6 +69,7 @@
   "item.minecraft.lingering_potion.effect.yungscavebiomes.strong_frost": "Lingering Potion of Frost",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Arrow of Frost",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Arrow of Frost",
+  "trim_pattern.yungscavebiomes.ancient": "Ancient Armor Trim",
 
   "death.attack.prickly_vines": "%1$s was poked to death by prickly vines",
   "death.attack.prickly_vines.player": "%1$s was poked to death by prickly vines whilst trying to escape %2$s",

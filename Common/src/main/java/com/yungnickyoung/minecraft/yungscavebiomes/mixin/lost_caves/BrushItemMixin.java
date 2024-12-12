@@ -18,6 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(BrushItem.class)
 public abstract class BrushItemMixin {
+    /**
+     * Makes Suspicious Ancient Sand blocks brushable.
+     */
     @Inject(
             method = "onUseTick",
             at = @At(

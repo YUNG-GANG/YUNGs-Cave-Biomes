@@ -1,0 +1,7 @@
+{
+  "asset_id": "yungscavebiomes:ancient",
+  "description": {
+    "translate": "trim_pattern.yungscavebiomes.ancient"
+  },
+  "template_item": "yungscavebiomes:ancient_armor_trim_smithing_template"
+}

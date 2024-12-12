@@ -8,6 +8,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.item.PricklyPeachItem;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SmithingTemplateItem;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ItemModule {
@@ -24,6 +25,11 @@ public class ItemModule {
                                 .nutrition(4)
                                 .saturationMod(0.3F)
                                 .build())));
+
+    @AutoRegister("ancient_armor_trim_smithing_template")
+    public static final AutoRegisterItem ANCIENT_ARMOR_TRIM_SMITHING_TEMPLATE = AutoRegisterItem.of(() ->
+            SmithingTemplateItem.createArmorTrimTemplate(TrimPatternsModule.ANCIENT)
+    );
 
     /**
      * Methods with the AutoRegister annotations will be executed after registration.
