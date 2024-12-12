@@ -11,8 +11,10 @@ import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyVinesBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyVinesPlantBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.RareIceBlock;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.SuspiciousAncientSandBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -92,6 +94,18 @@ public class BlockModule {
                     .strength(0.5f)
                     .instrument(NoteBlockInstrument.SNARE)
                     .sound(SoundType.SAND)))
+            .withItem(Item.Properties::new);
+
+    @AutoRegister("suspicious_ancient_sand")
+    public static final AutoRegisterBlock SUSPICIOUS_ANCIENT_SAND = AutoRegisterBlock.of(() -> new SuspiciousAncientSandBlock(BlockBehaviour.Properties
+                    .of()
+                    .mapColor(MapColor.SAND)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(0.25F)
+                    .sound(SoundType.SUSPICIOUS_SAND)
+                    .pushReaction(PushReaction.DESTROY),
+                    SoundEvents.BRUSH_SAND,
+                    SoundEvents.BRUSH_SAND_COMPLETED))
             .withItem(Item.Properties::new);
 
     @AutoRegister("ancient_sandstone")

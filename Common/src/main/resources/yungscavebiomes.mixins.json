@@ -25,6 +25,7 @@
     "frosted_caves.LivingEntityMixin",
     "frosted_caves.SkeletonMixin",
     "frosted_caves.ThrownPotionMixin",
+    "lost_caves.BrushItemMixin",
     "lost_caves.CactusBlockMixin",
     "lost_caves.DeadBushBlockMixin",
     "lost_caves.LivingEntityMixin",

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "yungscavebiomes:ancient_sand"
+    "yungscavebiomes:ancient_sand",
+    "yungscavebiomes:suspicious_ancient_sand"
   ]
 }

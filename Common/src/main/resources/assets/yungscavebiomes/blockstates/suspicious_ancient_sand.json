@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "dusted=0": {
+      "model": "yungscavebiomes:block/suspicious_ancient_sand_0"
+    },
+    "dusted=1": {
+      "model": "yungscavebiomes:block/suspicious_ancient_sand_1"
+    },
+    "dusted=2": {
+      "model": "yungscavebiomes:block/suspicious_ancient_sand_2"
+    },
+    "dusted=3": {
+      "model": "yungscavebiomes:block/suspicious_ancient_sand_3"
+    }
+  }
+}

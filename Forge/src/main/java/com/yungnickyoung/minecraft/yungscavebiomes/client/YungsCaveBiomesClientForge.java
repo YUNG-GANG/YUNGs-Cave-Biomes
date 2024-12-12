@@ -9,6 +9,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.client.render.BuffetedOverlay
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectileRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.SandSnapperRenderer;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.SuspiciousAncientSandBlockRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import net.minecraft.client.Minecraft;
@@ -43,6 +44,7 @@ public class YungsCaveBiomesClientForge {
         event.registerEntityRenderer(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
         event.registerEntityRenderer(EntityTypeModule.SAND_SNAPPER.get(), SandSnapperRenderer::new);
         event.registerEntityRenderer(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);
+        event.registerBlockEntityRenderer(EntityTypeModule.SUSPICIOUS_ANCIENT_SAND.get(), SuspiciousAncientSandBlockRenderer::new);
     }
 
     private static void registerParticleFactories(RegisterParticleProvidersEvent event) {

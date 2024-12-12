@@ -19,6 +19,7 @@ public class CreativeTabModule {
                 output.accept(BlockModule.ICE_SHEET.get());
 
                 output.accept(BlockModule.ANCIENT_SAND.get());
+                output.accept(BlockModule.SUSPICIOUS_ANCIENT_SAND.get());
                 output.accept(BlockModule.ANCIENT_SANDSTONE.get());
                 output.accept(BlockModule.ANCIENT_SANDSTONE.getStairs());
                 output.accept(BlockModule.ANCIENT_SANDSTONE.getSlab());
