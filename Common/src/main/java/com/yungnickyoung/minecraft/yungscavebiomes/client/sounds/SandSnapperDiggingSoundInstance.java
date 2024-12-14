@@ -5,6 +5,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 
 public class SandSnapperDiggingSoundInstance extends AbstractTickableSoundInstance {
     private final SandSnapperEntity sandSnapper;
@@ -27,7 +28,7 @@ public class SandSnapperDiggingSoundInstance extends AbstractTickableSoundInstan
             this.y = this.sandSnapper.getY();
             this.z = this.sandSnapper.getZ();
             float horizontalSpeed = (float) this.sandSnapper.getDeltaMovement().horizontalDistance();
-            if (horizontalSpeed >= 0.01F && this.sandSnapper.isSubmerged()) {
+            if (this.sandSnapper.isSubmerged() && (horizontalSpeed >= 0.01F || this.sandSnapper.isForceSpawnDigParticles())) {
                 // Only play sound if snapper is moving and submerged.
                 // Sound volume while submerged depends on the snapper's speed.
 //                this.volume = Mth.lerp(Mth.clamp(horizontalSpeed, 0.0F, 1.0F), 0.0F, 1.0F);

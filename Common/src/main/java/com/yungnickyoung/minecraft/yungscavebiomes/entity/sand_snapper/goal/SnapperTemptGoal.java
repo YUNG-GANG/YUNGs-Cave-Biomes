@@ -44,7 +44,7 @@ public class SnapperTemptGoal extends Goal {
             return false;
         } else {
             this.player = this.sandSnapper.level().getNearestPlayer(this.targetingConditions, this.sandSnapper);
-            return this.player != null;
+            return this.player != null && this.sandSnapper.recentlyFedTimer <= 0;
         }
     }
 
