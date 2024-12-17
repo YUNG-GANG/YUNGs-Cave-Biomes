@@ -248,4 +248,8 @@ public class SuspiciousAncientSandBlockEntity extends BlockEntity {
     public ItemStack getItem() {
         return this.item;
     }
+
+    public void setItem(ItemStack itemStack) {
+        this.item = itemStack;
+    }
 }

@@ -9,6 +9,7 @@
     "accessor.AbstractArrowAccessor",
     "accessor.AbstractCauldronBlockAccessor",
     "accessor.ArrowAccessor",
+    "accessor.BrushableBlockEntityAccessor",
     "accessor.NoiseChunkAccessor",
     "accessor.ServerLevelAccessor",
     "accessor.SpawnPlacementsAccessor",

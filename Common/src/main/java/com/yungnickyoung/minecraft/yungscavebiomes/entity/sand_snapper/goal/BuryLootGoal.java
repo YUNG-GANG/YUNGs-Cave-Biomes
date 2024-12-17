@@ -1,10 +1,10 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.LootTableModule;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.BrushableBlockEntityAccessor;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -12,34 +12,34 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
 
-public class GiftLootGoal extends Goal {
+public class BuryLootGoal extends Goal {
     private final SandSnapperEntity sandSnapper;
     @Nullable
     private final PathNavigation pathNav;
-
     private int timer;
     private final int DURATION;
+    private int maxDistance;
 
-    public GiftLootGoal(SandSnapperEntity sandSnapper, int duration) {
+    public BuryLootGoal(SandSnapperEntity sandSnapper, int maxDistance, int duration) {
         this.sandSnapper = sandSnapper;
         this.pathNav = sandSnapper.getNavigation();
         this.DURATION = duration;
+        this.maxDistance = maxDistance;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
     public boolean canUse() {
         // Only fetch items if the snapper is able to submerge in the block it's on
-        return this.sandSnapper.searchingForGift && this.sandSnapper.canSubmerge(true);
+        return this.sandSnapper.buryingLoot && this.sandSnapper.canSubmerge(true);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class GiftLootGoal extends Goal {
 
     @Override
     public void stop() {
-        this.sandSnapper.searchingForGift = false;
+        this.sandSnapper.buryingLoot = false;
         this.sandSnapper.setForceSpawnDigParticles(false);
     }
 
@@ -68,17 +68,28 @@ public class GiftLootGoal extends Goal {
     public void tick() {
         timer--;
         if (timer == 0) {
-            // Spawn loot
-            LootTable lootTable = this.sandSnapper.getServer().getLootData().getLootTable(LootTableModule.LOST_CAVES_ANCIENT_SAND);
-            LootParams lootParams = new LootParams.Builder((ServerLevel) this.sandSnapper.level())
-                    .withParameter(LootContextParams.ORIGIN, this.sandSnapper.position())
-                    .withParameter(LootContextParams.THIS_ENTITY, this.sandSnapper)
-                    .create(LootContextParamSets.GIFT);
-            ObjectArrayList<ItemStack> lootChoices = lootTable.getRandomItems(lootParams, new Random().nextLong());
-            ItemStack loot = lootChoices.isEmpty() ? ItemStack.EMPTY : lootChoices.get(0);
-            spawnLoot(loot);
+            // Turn block into suspicious counterpart
+            BlockState blockStateOn = sandSnapper.getBlockStateOn();
+            if (blockStateOn.is(Blocks.SAND)) {
+                sandSnapper.level().broadcastEntityEvent(sandSnapper, (byte) 8); // Sand particles event
+                sandSnapper.level().setBlock(sandSnapper.getOnPos(), Blocks.SUSPICIOUS_SAND.defaultBlockState(), Block.UPDATE_ALL);
+                sandSnapper.level().getBlockEntity(sandSnapper.getOnPos(), BlockEntityType.BRUSHABLE_BLOCK)
+                        .ifPresentOrElse(blockEntity -> {
+                            ((BrushableBlockEntityAccessor) blockEntity).setItem(sandSnapper.carryingItem);
+                            sandSnapper.carryingItem = ItemStack.EMPTY;
+                        }, this::popItem);
+
+            } else if (blockStateOn.is(BlockModule.ANCIENT_SAND.get())) {
+                sandSnapper.level().broadcastEntityEvent(sandSnapper, (byte) 9); // Sand particles event
+                sandSnapper.level().setBlock(sandSnapper.getOnPos(), BlockModule.SUSPICIOUS_ANCIENT_SAND.get().defaultBlockState(), Block.UPDATE_ALL);
+                sandSnapper.level().getBlockEntity(sandSnapper.getOnPos(), EntityTypeModule.SUSPICIOUS_ANCIENT_SAND.get())
+                        .ifPresentOrElse(blockEntity -> {
+                            blockEntity.setItem(sandSnapper.carryingItem);
+                            sandSnapper.carryingItem = ItemStack.EMPTY;
+                        }, this::popItem);
+            }
         } else if (timer == DURATION / 2) {
-            this.sandSnapper.setForceSpawnDigParticles(true);
+            sandSnapper.setForceSpawnDigParticles(true);
         }
     }
 
@@ -87,8 +98,8 @@ public class GiftLootGoal extends Goal {
         return false;
     }
 
-    private void spawnLoot(ItemStack loot) {
-        if (!loot.isEmpty()) {
+    private void popItem() {
+        if (!sandSnapper.carryingItem.isEmpty()) {
             BlockPos spawnPos = this.sandSnapper.blockPosition();
             double x = (double) spawnPos.getX() + 0.5;
             double y = (double) spawnPos.getY() + 0.5 - (EntityType.ITEM.getHeight() / 2.0F);
@@ -117,7 +128,7 @@ public class GiftLootGoal extends Goal {
             y += yOffset;
             z += zOffset;
 
-            ItemEntity itemEntity = new ItemEntity(this.sandSnapper.level(), x, y, z, loot, dx, dy, dz);
+            ItemEntity itemEntity = new ItemEntity(this.sandSnapper.level(), x, y, z, sandSnapper.carryingItem, dx, dy, dz);
             itemEntity.setDefaultPickUpDelay();
             this.sandSnapper.level().addFreshEntity(itemEntity);
         }

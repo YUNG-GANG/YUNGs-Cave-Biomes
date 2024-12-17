@@ -25,7 +25,6 @@ public class RunFromPlayerGoal extends Goal {
     private static final double UPDATE_TARGET_POS_DISTANCE_SQUARED = 9.0;
     private static final int REFRESH_PATH_INTERVAL = 20;
 
-
     private final SandSnapperEntity sandSnapper;
     private final double speedModifier;
     private final double submergedSpeedModifier;
@@ -81,6 +80,7 @@ public class RunFromPlayerGoal extends Goal {
         this.refreshPathTimer--;
 
         // TODO - also periodically check if there's a closer player, in which case we should also update the playerToAvoid
+
         // Update targetPos if the player gets too close
         if (this.playerToAvoid != null
                 && this.refreshPathTimer <= 0
@@ -92,18 +92,11 @@ public class RunFromPlayerGoal extends Goal {
                 this.pathNav.moveTo(this.path, this.speedModifier);
             }
         }
-
-        // TODO - we don't need this do we? It seems odd to have a separate speed when it's within 7 blocks.
-//        if (this.sandSnapper.distanceToSqr(this.toAvoid) < 49.0) {
-//            this.sandSnapper.getNavigation().setSpeedModifier(this.runSpeedModifier * multiplier);
-//        } else {
-//            this.sandSnapper.getNavigation().setSpeedModifier(this.walkSpeedModifier * multiplier);
-//        }
     }
 
     @Override
     public boolean canUse() {
-        if (!this.sandSnapper.canMove()) {
+        if (this.sandSnapper.friendlyTimer > 0 || !this.sandSnapper.canMove()) {
             return false;
         }
 
@@ -116,7 +109,6 @@ public class RunFromPlayerGoal extends Goal {
                 this.sandSnapper.getY(),
                 this.sandSnapper.getZ());
 
-
         Vec3 targetPos = findTargetPos();
         if (targetPos == null) {
             return false;
@@ -128,7 +120,7 @@ public class RunFromPlayerGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !this.pathNav.isDone() && !isInActiveSandstorm();
+        return this.sandSnapper.friendlyTimer <= 0 && !this.pathNav.isDone() && !isInActiveSandstorm();
     }
 
     @Override
@@ -219,7 +211,6 @@ public class RunFromPlayerGoal extends Goal {
         double randomAngleOffset = (random.nextDouble() * searchAngle) - (searchAngle / 2.0D); // random angle offset from -searchAngle/2 to +searchAngle/2
         double randomAngle = theta + randomAngleOffset;
 
-//        double amplitude = Math.sqrt(random.nextDouble()) * (double) maxHorizontalDistance;
         double amplitude = Math.sqrt(random.nextDouble()) * (double) (maxHorizontalDistance - minHorizontalDist) + minHorizontalDist;
         double randomX = amplitude * Math.cos(randomAngle);
         double randomZ = amplitude * Math.sin(randomAngle);

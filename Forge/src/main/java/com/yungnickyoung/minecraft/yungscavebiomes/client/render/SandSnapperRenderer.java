@@ -12,23 +12,22 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class SandSnapperRenderer extends GeoEntityRenderer<SandSnapperEntity> {
-
-    public SandSnapperRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new SandSnapperModel());
+    public SandSnapperRenderer(EntityRendererProvider.Context context) {
+        super(context, new SandSnapperModel());
     }
 
     @Override
-    public RenderType getRenderType(SandSnapperEntity animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+    public RenderType getRenderType(SandSnapperEntity entity, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
         return RenderType.entityCutoutNoCull(texture);
     }
 
     @Override
-    public void render(SandSnapperEntity animatable, float entityYaw, float partialTick, PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
+    public void render(SandSnapperEntity entity, float entityYaw, float partialTick, PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
-        if (animatable.isSubmerged() && !animatable.isDiving() && !animatable.isEmerging() && !animatable.isDiggingDown() && !animatable.isDiggingUp()) {
+        if (entity.isSubmerged() && !entity.isDiving() && !entity.isEmerging() && !entity.isDiggingDown() && !entity.isDiggingUp()) {
             poseStack.translate(0, -16.0f, 0);
         }
-        super.render(animatable, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         poseStack.popPose();
     }
 }
