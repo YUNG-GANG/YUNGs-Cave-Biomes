@@ -361,7 +361,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
-        if (this.isSubmerged() || searchingForGift || buryingLoot) return InteractionResult.FAIL;
+        if (this.isSubmerged() || this.isDiggingDown() || this.isDiggingUp() || this.isDiving() || searchingForGift || buryingLoot) return InteractionResult.FAIL;
 
         ItemStack itemStack = player.getItemInHand(hand);
 
