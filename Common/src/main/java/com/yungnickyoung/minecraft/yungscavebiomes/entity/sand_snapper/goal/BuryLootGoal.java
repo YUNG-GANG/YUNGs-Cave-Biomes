@@ -71,7 +71,7 @@ public class BuryLootGoal extends Goal {
             // Turn block into suspicious counterpart
             BlockState blockStateOn = sandSnapper.getBlockStateOn();
             if (blockStateOn.is(Blocks.SAND)) {
-                sandSnapper.level().broadcastEntityEvent(sandSnapper, (byte) 8); // Sand particles event
+                sandSnapper.level().broadcastEntityEvent(sandSnapper, SandSnapperEntity.BURY_LOOT_PARTICLES_EVENT_SAND);
                 sandSnapper.level().setBlock(sandSnapper.getOnPos(), Blocks.SUSPICIOUS_SAND.defaultBlockState(), Block.UPDATE_ALL);
                 sandSnapper.level().getBlockEntity(sandSnapper.getOnPos(), BlockEntityType.BRUSHABLE_BLOCK)
                         .ifPresentOrElse(blockEntity -> {
@@ -80,11 +80,19 @@ public class BuryLootGoal extends Goal {
                         }, this::popItem);
 
             } else if (blockStateOn.is(BlockModule.ANCIENT_SAND.get())) {
-                sandSnapper.level().broadcastEntityEvent(sandSnapper, (byte) 9); // Sand particles event
+                sandSnapper.level().broadcastEntityEvent(sandSnapper, SandSnapperEntity.BURY_LOOT_PARTICLES_EVENT_ANCIENT_SAND);
                 sandSnapper.level().setBlock(sandSnapper.getOnPos(), BlockModule.SUSPICIOUS_ANCIENT_SAND.get().defaultBlockState(), Block.UPDATE_ALL);
                 sandSnapper.level().getBlockEntity(sandSnapper.getOnPos(), EntityTypeModule.SUSPICIOUS_ANCIENT_SAND.get())
                         .ifPresentOrElse(blockEntity -> {
                             blockEntity.setItem(sandSnapper.carryingItem);
+                            sandSnapper.carryingItem = ItemStack.EMPTY;
+                        }, this::popItem);
+            } else if (blockStateOn.is(Blocks.GRAVEL)) {
+                sandSnapper.level().broadcastEntityEvent(sandSnapper, SandSnapperEntity.BURY_LOOT_PARTICLES_EVENT_GRAVEL);
+                sandSnapper.level().setBlock(sandSnapper.getOnPos(), Blocks.SUSPICIOUS_GRAVEL.defaultBlockState(), Block.UPDATE_ALL);
+                sandSnapper.level().getBlockEntity(sandSnapper.getOnPos(), BlockEntityType.BRUSHABLE_BLOCK)
+                        .ifPresentOrElse(blockEntity -> {
+                            ((BrushableBlockEntityAccessor) blockEntity).setItem(sandSnapper.carryingItem);
                             sandSnapper.carryingItem = ItemStack.EMPTY;
                         }, this::popItem);
             }

@@ -57,6 +57,11 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
+    public static final byte HEART_PARTICLES_EVENT = 7;
+    public static final byte BURY_LOOT_PARTICLES_EVENT_SAND = 8;
+    public static final byte BURY_LOOT_PARTICLES_EVENT_ANCIENT_SAND = 9;
+    public static final byte BURY_LOOT_PARTICLES_EVENT_GRAVEL = 10;
+
     // ANIMATION DATA
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final RawAnimation EMERGE_PLAYER = RawAnimation.begin().thenPlay("look").thenPlay("look_loop");
@@ -437,12 +442,14 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public void handleEntityEvent(byte eventId) {
-        if (eventId == 7) {
+        if (eventId == HEART_PARTICLES_EVENT) {
             this.spawnHeartParticles();
-        } else if (eventId == 8) {
+        } else if (eventId == BURY_LOOT_PARTICLES_EVENT_SAND) {
             this.spawnLootBuryParticles(Blocks.SAND.defaultBlockState());
-        } else if (eventId == 9) {
+        } else if (eventId == BURY_LOOT_PARTICLES_EVENT_ANCIENT_SAND) {
             this.spawnLootBuryParticles(BlockModule.ANCIENT_SAND.get().defaultBlockState());
+        } else if (eventId == BURY_LOOT_PARTICLES_EVENT_GRAVEL) {
+            this.spawnLootBuryParticles(Blocks.GRAVEL.defaultBlockState());
         } else {
             super.handleEntityEvent(eventId);
         }
