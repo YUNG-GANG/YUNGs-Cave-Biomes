@@ -211,7 +211,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new BuryLootGoal(this, 8, 60));
+        this.goalSelector.addGoal(1, new BuryLootGoal(this, 4, 1, 120));
         this.goalSelector.addGoal(1, new GiftLootGoal(this, 60));
         this.goalSelector.addGoal(2, new SnapperTemptGoal(this, 1.0, 2.5f, 10f));
         this.goalSelector.addGoal(3, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 1.5f));
@@ -499,7 +499,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
             this.getNavigation().stop();
         }
 
-        // Spawn block particles when moving while submerged or while digging for a gift
+        // Spawn block particles when moving while submerged or while digging for a gift or burying loot
         Vec3 movement = this.getDeltaMovement();
         if (this.level().isClientSide() && this.isSubmerged()) {
             if (movement.horizontalDistance() > 0.01F || this.forceSpawnDigParticlesHolder) {
@@ -573,13 +573,16 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     public boolean canSubmerge(boolean ignoreTimer) {
         if (!ignoreTimer && this.aboveGroundTimer > 0) return false;
         if (!this.canMove()) return false;
-
         if (this.isSubmergeLocked()) return false;
 
+        return this.canSubmergeAt(this.getOnPos());
+    }
+
+    public boolean canSubmergeAt(BlockPos blockPos) {
         // Do these checks instead of just always setting based on the block it's on,
         // to allow dimension refreshing without cost
-        BlockState blockStateOn = this.getBlockStateOn();
-        BlockState blockStateBelow = this.level().getBlockState(this.getOnPos().below());
+        BlockState blockStateOn = this.level().getBlockState(blockPos);
+        BlockState blockStateBelow = this.level().getBlockState(blockPos.below());
         return blockStateOn.is(BlockModule.SAND_SNAPPER_BLOCKS) ||
                 (blockStateOn.is(Blocks.AIR) && blockStateBelow.is(BlockModule.SAND_SNAPPER_BLOCKS));
     }
