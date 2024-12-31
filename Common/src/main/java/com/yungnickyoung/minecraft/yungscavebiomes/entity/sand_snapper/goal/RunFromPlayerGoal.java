@@ -42,7 +42,7 @@ public class RunFromPlayerGoal extends Goal {
     }
 
     private RunFromPlayerGoal(SandSnapperEntity sandSnapper, float maxDist, double speedModifier,
-                             double submergedSpeedModifier, Predicate<LivingEntity> avoidEntityPredicate) {
+                              double submergedSpeedModifier, Predicate<LivingEntity> avoidEntityPredicate) {
         this.sandSnapper = sandSnapper;
         this.maxDist = maxDist;
         this.speedModifier = speedModifier;
@@ -96,7 +96,7 @@ public class RunFromPlayerGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (this.sandSnapper.friendlyTimer > 0 || !this.sandSnapper.canMove()) {
+        if (this.sandSnapper.friendlyTimer > 0 || !this.sandSnapper.canMove() || this.sandSnapper.hasCustomName()) {
             return false;
         }
 
@@ -120,7 +120,7 @@ public class RunFromPlayerGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.sandSnapper.friendlyTimer <= 0 && !this.pathNav.isDone() && !isInActiveSandstorm();
+        return this.sandSnapper.friendlyTimer <= 0 && !this.pathNav.isDone() && !isInActiveSandstorm() && !this.sandSnapper.hasCustomName();
     }
 
     @Override
@@ -130,6 +130,7 @@ public class RunFromPlayerGoal extends Goal {
 
     /**
      * Attempts to find a target position away from the player for the sand snapper to run to.
+     *
      * @return The target position, or null if no target position is found or if the playerToAvoid is null.
      */
     @Nullable
@@ -170,12 +171,13 @@ public class RunFromPlayerGoal extends Goal {
 
     /**
      * Attempts to find a position away from the avoidPos for the snapper to run to.
+     *
      * @param maxHorizontalDist The maximum horizontal distance away from the avoidPos to search for a position.
-     * @param maxVerticalDist The maximum vertical distance away from the avoidPos to search for a position.
-     * @param searchAngle The angle in radians to search for a position in.
-     *                    E.g. Math.PI / 2 will search in a 90 degree arc away from the avoidPos.
-     * @param avoidPos The position to avoid.
-     * @param blockFilter A function that returns true if the block at the given position is valid, or null if any block is valid.
+     * @param maxVerticalDist   The maximum vertical distance away from the avoidPos to search for a position.
+     * @param searchAngle       The angle in radians to search for a position in.
+     *                          E.g. Math.PI / 2 will search in a 90 degree arc away from the avoidPos.
+     * @param avoidPos          The position to avoid.
+     * @param blockFilter       A function that returns true if the block at the given position is valid, or null if any block is valid.
      * @return The position to run to, or null if no valid position is found.
      */
     @Nullable
@@ -196,13 +198,14 @@ public class RunFromPlayerGoal extends Goal {
 
     /**
      * Generates a random offset in the given direction, with constraints on distance and angle.
-     * @param random The mob's random.
+     *
+     * @param random                The mob's random.
      * @param maxHorizontalDistance The maximum horizontal distance to offset.
-     * @param maxVerticalDistance The maximum vertical distance to offset.
-     * @param dirX The x component of the direction to offset in.
-     * @param dirZ The z component of the direction to offset in.
-     * @param searchAngle The angle in radians to search for a position in.
-     *                    E.g. Math.PI / 2 will search in a 90 degree arc centered on the aforementioned direction.
+     * @param maxVerticalDistance   The maximum vertical distance to offset.
+     * @param dirX                  The x component of the direction to offset in.
+     * @param dirZ                  The z component of the direction to offset in.
+     * @param searchAngle           The angle in radians to search for a position in.
+     *                              E.g. Math.PI / 2 will search in a 90 degree arc centered on the aforementioned direction.
      * @return The randomly generated offset.
      */
     private static BlockPos generateRandomOffsetInDirection(RandomSource random, int minHorizontalDist, int maxHorizontalDistance, int maxVerticalDistance,
