@@ -32,7 +32,7 @@ public class EntityTypeModule {
     public static AutoRegisterEntityType<SandSnapperEntity> SAND_SNAPPER = AutoRegisterEntityType
             .of(() -> AutoRegisterEntityType.Builder
                     .of(SandSnapperEntity::new, MobCategory.MONSTER)
-                    .sized(1.4f, 0.5f)
+                    .sized(0.9f, 0.5f)
                     .clientTrackingRange(10)
                     .build())
             .attributes(SandSnapperEntity::createAttributes);
