@@ -69,7 +69,7 @@ public class BuryLootGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.sandSnapper.buryingLoot || this.isDone) return false;
+        if (this.sandSnapper.carryingItem.isEmpty() || this.isDone) return false;
         this.targetPos = this.findTargetPos();
         return this.targetPos != null;
     }
@@ -96,7 +96,6 @@ public class BuryLootGoal extends Goal {
 
     @Override
     public void stop() {
-        this.sandSnapper.buryingLoot = false;
         this.sandSnapper.setForceSpawnDigParticles(false);
         this.buryingTimer = 0;
         this.isDone = false;
@@ -221,6 +220,7 @@ public class BuryLootGoal extends Goal {
             ItemEntity itemEntity = new ItemEntity(this.sandSnapper.level(), x, y, z, sandSnapper.carryingItem, dx, dy, dz);
             itemEntity.setDefaultPickUpDelay();
             this.sandSnapper.level().addFreshEntity(itemEntity);
+            sandSnapper.carryingItem = ItemStack.EMPTY;
         }
     }
 }

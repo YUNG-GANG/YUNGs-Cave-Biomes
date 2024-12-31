@@ -156,7 +156,6 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
      * (e.g. GiftLootGoal, BuryLootGoal)
      */
     public boolean searchingForGift;
-    public boolean buryingLoot;
 
     public SandSnapperEntity(EntityType<SandSnapperEntity> entityType, Level level) {
         super(entityType, level);
@@ -172,7 +171,6 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
         tag.putInt("friendlyTimer", this.friendlyTimer);
         tag.putInt("recentlyFedTimer", this.recentlyFedTimer);
         tag.putBoolean("searchingForGift", this.searchingForGift);
-        tag.putBoolean("buryingLoot", this.buryingLoot);
     }
 
     @Override
@@ -184,7 +182,6 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
         this.friendlyTimer = tag.getInt("friendlyTimer");
         this.recentlyFedTimer = tag.getInt("recentlyFedTimer");
         this.searchingForGift = tag.getBoolean("searchingForGift");
-        this.buryingLoot = tag.getBoolean("buryingLoot");
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -361,7 +358,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected @NotNull InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
-        if (this.isSubmerged() || this.isDiggingDown() || this.isDiggingUp() || this.isDiving() || searchingForGift || buryingLoot) return InteractionResult.FAIL;
+        if (this.isSubmerged() || this.isDiggingDown() || this.isDiggingUp() || this.isDiving() || searchingForGift || !this.carryingItem.isEmpty()) return InteractionResult.FAIL;
 
         ItemStack itemStack = player.getItemInHand(hand);
 
@@ -399,9 +396,6 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
             this.gameEvent(GameEvent.ENTITY_INTERACT);
             float pitch = Mth.randomBetween(this.random, 0.9f, 1.2f);
             this.playSound(SoundModule.SAND_SNAPPER_HAPPY.get(), 1.0f, pitch);
-
-            // Activate the BuryLootGoal
-            this.buryingLoot = true;
 
             return InteractionResult.SUCCESS;
         }
