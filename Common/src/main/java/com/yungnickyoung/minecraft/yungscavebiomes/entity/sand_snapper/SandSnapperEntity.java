@@ -209,7 +209,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new BuryLootGoal(this, 2, 1, 120));
-        this.goalSelector.addGoal(1, new GiftLootGoal(this, 60));
+        this.goalSelector.addGoal(1, new GiftLootGoal(this, 2, 1, 120));
         this.goalSelector.addGoal(2, new SnapperTemptGoal(this, 1.0, 2.5f, 10f));
         this.goalSelector.addGoal(3, new EatPeachGoal(this, 16.0f, 4.0f, 1.0f, 1.5f));
         this.goalSelector.addGoal(4, new RunFromPlayerGoal(this, 8.0f, 1.25, 2.0));
@@ -362,7 +362,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
 
         ItemStack itemStack = player.getItemInHand(hand);
 
-        if (itemStack.is(ItemModule.PRICKLY_PEACH_ITEM.get())) {
+        if (itemStack.is(ItemModule.PRICKLY_PEACH_ITEM.get()) && this.recentlyFedTimer <= 0) {
             if (this.level().isClientSide) {
                 return InteractionResult.CONSUME;
             }
