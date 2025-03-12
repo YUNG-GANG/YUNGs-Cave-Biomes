@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class DecoratedPotRendererMixin {
     @Inject(method = "getMaterial", at = @At("HEAD"), cancellable = true)
     private static void yungscavebiomes_renderCustomPotteryMaterial(Item item, CallbackInfoReturnable<Material> cir) {
-        Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatternsModule.getResourceKey(item));
+        Material material = Sheets.getDecoratedPotMaterial(DecoratedPotPatternsModule.getResourceKeyForItem(item));
         if (material != null) {
             cir.setReturnValue(material);
         }

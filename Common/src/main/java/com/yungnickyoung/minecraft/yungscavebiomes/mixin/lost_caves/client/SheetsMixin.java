@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(Sheets.class)
@@ -21,15 +22,17 @@ public abstract class SheetsMixin {
     }
 
     @Unique
-    private static final Map<ResourceKey<String>, Material> CUSTOM_DECORATED_POT_MATERIALS = Map.ofEntries(
-            Map.entry(DecoratedPotPatternsModule.HOURGLASS, createDecoratedPotMaterial(DecoratedPotPatternsModule.HOURGLASS)),
-            Map.entry(DecoratedPotPatternsModule.CLOCK, createDecoratedPotMaterial(DecoratedPotPatternsModule.CLOCK))
-    );
+    private static final Map<ResourceKey<String>, Material> CUSTOM_DECORATED_POT_MATERIALS = new HashMap<>();
 
     @Inject(method = "getDecoratedPotMaterial", at = @At("HEAD"), cancellable = true)
     private static void yungscavebiomes_createCustomPotteryMaterials(ResourceKey<String> key, CallbackInfoReturnable<Material> cir) {
         if (key == null) return;
-        if (CUSTOM_DECORATED_POT_MATERIALS.containsKey(key)) {
+        if (DecoratedPotPatternsModule.isCustomRegisteredKey(key)) {
+            // Cache the material so we don't have to create it again
+            if (!CUSTOM_DECORATED_POT_MATERIALS.containsKey(key)) {
+                CUSTOM_DECORATED_POT_MATERIALS.put(key, createDecoratedPotMaterial(key));
+            }
+
             cir.setReturnValue(CUSTOM_DECORATED_POT_MATERIALS.get(key));
         }
     }
