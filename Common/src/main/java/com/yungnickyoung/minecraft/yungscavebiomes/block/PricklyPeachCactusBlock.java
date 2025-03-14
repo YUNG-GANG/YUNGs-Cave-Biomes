@@ -83,6 +83,13 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
+    public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
+        if (!blockState.canSurvive(serverLevel, blockPos)) {
+            serverLevel.destroyBlock(blockPos, true);
+        }
+    }
+
+    @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
         if (isMaxAge(blockState) || hasFruit(blockState)) {
             return;
@@ -144,9 +151,9 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     @Override
     public BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState, LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
         if (!currState.canSurvive(levelAccessor, currPos)) {
-            levelAccessor.destroyBlock(currPos, true);
+            levelAccessor.scheduleTick(currPos, this, 1);
         }
-        return currState;
+        return super.updateShape(currState, neighborDirection, neighborBlockState, levelAccessor, currPos, neighborPos);
     }
 
     @Override
