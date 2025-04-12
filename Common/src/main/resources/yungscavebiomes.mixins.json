@@ -35,7 +35,6 @@
     "marble_caves.NoiseChunkMixin"
   ],
   "client": [
-    "lost_caves.client.SpriteResourceLoaderMixin",
     "lost_caves.client.SpriteResourceLoaderMixin$PalettedPermutationsAccessor",
     "debug.DebugRendererMixin",
     "lost_caves.client.SpriteResourceLoaderMixin",
