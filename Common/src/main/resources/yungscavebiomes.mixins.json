@@ -35,15 +35,14 @@
     "marble_caves.NoiseChunkMixin"
   ],
   "client": [
-    "accessor.PalettedPermutationsAccessor",
-    "accessor.SpriteResourceLoaderAccessor",
     "debug.DebugRendererMixin",
-    "lost_caves.client.SpriteResourceLoaderMixin",
     "lost_caves.client.ClientLevelMixin",
     "lost_caves.client.ClientPacketListenerMixin",
     "lost_caves.client.DecoratedPotRendererMixin",
     "lost_caves.client.LocalPlayerMixin",
-    "lost_caves.client.SheetsMixin"
+    "lost_caves.client.SheetsMixin",
+    "lost_caves.client.SpriteResourceLoaderMixin",
+    "lost_caves.client.SpriteResourceLoaderMixin$PalettedPermutationsAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
