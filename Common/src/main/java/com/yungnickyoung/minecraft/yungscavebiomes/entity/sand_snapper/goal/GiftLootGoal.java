@@ -111,13 +111,13 @@ public class GiftLootGoal extends Goal {
             diggingTimer--;
             if (diggingTimer == 0) {
                 // Spawn loot
-                LootTable lootTable = this.sandSnapper.getServer().getLootData().getLootTable(LootTableModule.SAND_SNAPPER_LOOT);
+                LootTable lootTable = this.sandSnapper.getServer().reloadableRegistries().getLootTable(LootTableModule.SAND_SNAPPER_LOOT);
                 LootParams lootParams = new LootParams.Builder((ServerLevel) this.sandSnapper.level())
                         .withParameter(LootContextParams.ORIGIN, this.sandSnapper.position())
                         .withParameter(LootContextParams.THIS_ENTITY, this.sandSnapper)
                         .create(LootContextParamSets.GIFT);
                 ObjectArrayList<ItemStack> lootChoices = lootTable.getRandomItems(lootParams, new Random().nextLong());
-                ItemStack loot = lootChoices.isEmpty() ? ItemStack.EMPTY : lootChoices.get(0);
+                ItemStack loot = lootChoices.isEmpty() ? ItemStack.EMPTY : lootChoices.getFirst();
                 spawnLoot(loot);
                 this.isDone = true;
             } else if (diggingTimer == diggingDuration / 2) {

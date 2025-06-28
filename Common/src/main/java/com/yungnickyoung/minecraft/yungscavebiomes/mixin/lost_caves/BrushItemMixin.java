@@ -36,7 +36,7 @@ public abstract class BrushItemMixin {
                 boolean brushed = blockEntity.brush(level.getGameTime(), player, blockHitResult.getDirection());
                 if (brushed) {
                     EquipmentSlot brushSlot = itemStack.equals(player.getItemBySlot(EquipmentSlot.OFFHAND)) ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
-                    itemStack.hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(brushSlot));
+                    itemStack.hurtAndBreak(1, entity, brushSlot);
                 }
             }
         }

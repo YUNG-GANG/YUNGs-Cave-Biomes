@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.MapCodec;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,6 +38,8 @@ import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<IceSheetBlock> CODEC = simpleCodec(IceSheetBlock::new);
+
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty GLOWING = BlockStateProperties.LIT;
     public static final IntegerProperty GROWTH_DISTANCE = BlockStateProperties.AGE_3;
@@ -49,6 +52,11 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
                 .setValue(GLOWING, false)
                 .setValue(WATERLOGGED, false)
                 .setValue(GROWTH_DISTANCE, 0));
+    }
+
+    @Override
+    protected MapCodec<? extends MultifaceBlock> codec() {
+        return CODEC;
     }
 
     @Override

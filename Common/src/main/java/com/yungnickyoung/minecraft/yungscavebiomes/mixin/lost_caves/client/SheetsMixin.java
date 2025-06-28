@@ -4,6 +4,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.DecoratedPotPatternsMo
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Mixin(Sheets.class)
 public abstract class SheetsMixin {
     @Shadow
-    private static Material createDecoratedPotMaterial(ResourceKey<String> $$0) {
+    private static Material createDecoratedPotMaterial(ResourceLocation $$0) {
         return null;
     }
 
@@ -30,7 +31,7 @@ public abstract class SheetsMixin {
         if (DecoratedPotPatternsModule.isCustomRegisteredKey(key)) {
             // Cache the material so we don't have to create it again
             if (!CUSTOM_DECORATED_POT_MATERIALS.containsKey(key)) {
-                CUSTOM_DECORATED_POT_MATERIALS.put(key, createDecoratedPotMaterial(key));
+                CUSTOM_DECORATED_POT_MATERIALS.put(key, createDecoratedPotMaterial(key.location()));
             }
 
             cir.setReturnValue(CUSTOM_DECORATED_POT_MATERIALS.get(key));

@@ -16,9 +16,10 @@ import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SandBlock;
+import net.minecraft.world.level.block.ColoredFallingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -88,12 +89,13 @@ public class BlockModule {
             .withItem(Item.Properties::new);
 
     @AutoRegister("ancient_sand")
-    public static final AutoRegisterBlock ANCIENT_SAND = AutoRegisterBlock.of(() -> new SandBlock(0xd1b482, BlockBehaviour.Properties
-                    .of()
-                    .mapColor(MapColor.SAND)
-                    .strength(0.5f)
-                    .instrument(NoteBlockInstrument.SNARE)
-                    .sound(SoundType.SAND)))
+    public static final AutoRegisterBlock ANCIENT_SAND = AutoRegisterBlock.of(() -> new ColoredFallingBlock(new ColorRGBA(0xd1b482),
+                    BlockBehaviour.Properties
+                            .of()
+                            .mapColor(MapColor.SAND)
+                            .strength(0.5f)
+                            .instrument(NoteBlockInstrument.SNARE)
+                            .sound(SoundType.SAND)))
             .withItem(Item.Properties::new);
 
     @AutoRegister("suspicious_ancient_sand")
@@ -107,6 +109,17 @@ public class BlockModule {
                     SoundEvents.BRUSH_SAND,
                     SoundEvents.BRUSH_SAND_COMPLETED))
             .withItem(Item.Properties::new);
+//    public static final AutoRegisterBlock SUSPICIOUS_ANCIENT_SAND = AutoRegisterBlock.of(() -> new BrushableBlock(ANCIENT_SAND.get(),
+//                    SoundEvents.BRUSH_SAND,
+//                    SoundEvents.BRUSH_SAND_COMPLETED,
+//                    BlockBehaviour.Properties
+//                            .of()
+//                            .mapColor(MapColor.SAND)
+//                            .instrument(NoteBlockInstrument.SNARE)
+//                            .strength(0.25F)
+//                            .sound(SoundType.SUSPICIOUS_SAND)
+//                            .pushReaction(PushReaction.DESTROY)))
+//            .withItem(Item.Properties::new);
 
     @AutoRegister("ancient_sandstone")
     public static final AutoRegisterBlock ANCIENT_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties

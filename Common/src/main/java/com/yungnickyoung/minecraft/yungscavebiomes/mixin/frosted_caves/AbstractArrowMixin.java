@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,8 +37,9 @@ public abstract class AbstractArrowMixin extends Entity {
     public void yungscavebiomes_tippedArrowOnHitBlockSpawnIceSheets(BlockHitResult blockHitResult, CallbackInfo ci) {
         if (!this.level().isClientSide && isArrow(this)) {
             Arrow arrow = asArrow(this);
-            for (MobEffectInstance mobEffectInstance : ((ArrowAccessor) arrow).getPotion().getEffects()) {
-                if (mobEffectInstance.getEffect() != MobEffectModule.FROZEN_EFFECT.get()) {
+            PotionContents potionContents = ((ArrowAccessor) arrow).callGetPotionContents();
+            for (MobEffectInstance mobEffectInstance : potionContents.getAllEffects()) {
+                if (!mobEffectInstance.getEffect().is(MobEffectModule.FROZEN_EFFECT.getHolder())) {
                     continue;
                 }
 
@@ -56,8 +58,9 @@ public abstract class AbstractArrowMixin extends Entity {
     public void yungscavebiomes_tippedArrowOnHitEntitySpawnIceSheets(EntityHitResult entityHitResult, CallbackInfo ci) {
         if (!this.level().isClientSide && isArrow(this)) {
             Arrow arrow = asArrow(this);
-            for (MobEffectInstance mobEffectInstance : ((ArrowAccessor) arrow).getPotion().getEffects()) {
-                if (mobEffectInstance.getEffect() != MobEffectModule.FROZEN_EFFECT.get()) {
+            PotionContents potionContents = ((ArrowAccessor) arrow).callGetPotionContents();
+            for (MobEffectInstance mobEffectInstance : potionContents.getAllEffects()) {
+                if (!mobEffectInstance.getEffect().is(MobEffectModule.FROZEN_EFFECT.getHolder())) {
                     continue;
                 }
 

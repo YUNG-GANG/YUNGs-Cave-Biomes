@@ -5,13 +5,15 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.PotionModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,8 +38,12 @@ public abstract class ThrownPotionMixin extends ThrowableItemProjectile {
     protected void yungscavebiomes_onFrostSplashPotionHit(HitResult hitResult, CallbackInfo ci) {
         if (!this.level().isClientSide && !this.level().dimensionType().ultraWarm()) {
             ItemStack itemStack = this.getItem();
-            Potion potion = PotionUtils.getPotion(itemStack);
-            if (potion == PotionModule.FROST_POTION.get() || potion == PotionModule.STRONG_FROST_POTION.get()) {
+            PotionContents potionContents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+            if (potionContents.potion().isEmpty()) {
+                return;
+            }
+            Holder<Potion> potion = potionContents.potion().get();
+            if (potion.is(PotionModule.FROST_POTION.getHolder()) || potion.is(PotionModule.STRONG_FROST_POTION.getHolder())) {
                 // Determine hit pos
                 BlockPos originPos = null;
                 if (hitResult.getType() == HitResult.Type.BLOCK) {
@@ -53,8 +59,8 @@ public abstract class ThrownPotionMixin extends ThrowableItemProjectile {
                 BlockPos.MutableBlockPos currPos = originPos.mutable();
                 BlockPos.MutableBlockPos mutable = currPos.mutable();
 
-                int attemptDistance = potion == PotionModule.FROST_POTION.get() ? 3 : 4;
-                int maxDist = potion == PotionModule.FROST_POTION.get() ? 8 : 14;
+                int attemptDistance = potion == PotionModule.FROST_POTION.getHolder() ? 3 : 4;
+                int maxDist = potion == PotionModule.FROST_POTION.getHolder() ? 8 : 14;
 
                 // Create AOE freeze
                 for (int x = -attemptDistance; x <= attemptDistance; x++) {

@@ -12,7 +12,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapp
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.SpawnPlacementsAccessor;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -24,6 +24,7 @@ public class EntityTypeModule {
             .of(() -> AutoRegisterEntityType.Builder
                     .of(IceCubeEntity::new, MobCategory.MONSTER)
                     .sized(1.6f, 1.5f)
+                    .eyeHeight(0.15f)
                     .clientTrackingRange(10)
                     .build())
             .attributes(IceCubeEntity::createAttributes);
@@ -40,7 +41,7 @@ public class EntityTypeModule {
     @AutoRegister("icicle")
     public static final AutoRegisterEntityType<IcicleProjectileEntity> ICICLE = AutoRegisterEntityType
             .of(() -> AutoRegisterEntityType.Builder
-                    .of(IcicleProjectileEntity::new, MobCategory.MISC)
+                    .<IcicleProjectileEntity>of(IcicleProjectileEntity::new, MobCategory.MISC)
                     .sized(0.5f, 0.5f)
                     .clientTrackingRange(4)
                     .updateInterval(20)
@@ -57,7 +58,7 @@ public class EntityTypeModule {
     public static final AutoRegisterBlockEntityType<SuspiciousAncientSandBlockEntity> SUSPICIOUS_ANCIENT_SAND = AutoRegisterBlockEntityType
             .of(() -> AutoRegisterBlockEntityType.Builder
                     .of(SuspiciousAncientSandBlockEntity::new, BlockModule.SUSPICIOUS_ANCIENT_SAND.get())
-                    .build(null));
+                    .build());
 
     /**
      * Methods with the AutoRegister annotations will be executed after registration.
@@ -68,7 +69,7 @@ public class EntityTypeModule {
      */
     @AutoRegister("init")
     private static void init() {
-        SpawnPlacementsAccessor.callRegister(ICE_CUBE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        SpawnPlacementsAccessor.callRegister(SAND_SNAPPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+        SpawnPlacementsAccessor.callRegister(ICE_CUBE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        SpawnPlacementsAccessor.callRegister(SAND_SNAPPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
     }
 }

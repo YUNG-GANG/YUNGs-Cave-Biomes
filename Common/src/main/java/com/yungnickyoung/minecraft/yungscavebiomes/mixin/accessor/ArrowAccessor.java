@@ -2,11 +2,13 @@ package com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor;
 
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Arrow.class)
 public interface ArrowAccessor {
-    @Accessor
-    Potion getPotion();
+    @Invoker("getPotionContents")
+    PotionContents callGetPotionContents();
 }

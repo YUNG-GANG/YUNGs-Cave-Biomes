@@ -6,10 +6,13 @@ import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.ServerLevelAcc
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.CriteriaModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Data class for storing sandstorm data on the server.
@@ -64,6 +67,13 @@ public class SandstormServerData extends SavedData {
      * This is used for syncing sandstorm particle wind direction to clients.
      */
     private long sandstormSeed;
+
+    public static Factory<SandstormServerData> factory(ServerLevel serverLevel) {
+        return new Factory<>(
+                () -> new SandstormServerData(serverLevel),
+                (tag, registries) -> new SandstormServerData(serverLevel, tag),
+                DataFixTypes.LEVEL);
+    }
 
     public SandstormServerData(ServerLevel serverLevel) {
         this.serverLevel = serverLevel;
@@ -156,7 +166,7 @@ public class SandstormServerData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compoundTag) {
+    public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.@NotNull Provider registries) {
         compoundTag.putBoolean("isSandstormActive", this.isSandstormActive);
         compoundTag.putLong("sandstormSeed", this.sandstormSeed);
         compoundTag.putInt("sandstormTime", this.currSandstormTicks);

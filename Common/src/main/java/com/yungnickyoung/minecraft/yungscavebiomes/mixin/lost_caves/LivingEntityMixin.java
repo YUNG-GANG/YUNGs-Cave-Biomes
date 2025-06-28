@@ -4,6 +4,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.MobEffectModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,11 +31,11 @@ public abstract class LivingEntityMixin extends Entity {
     private static final int BUFFETED_EFFECT_REAPPLY_THRESHOLD = 60; // In ticks
 
     @Shadow
-    @Nullable
-    public abstract MobEffectInstance getEffect(MobEffect mobEffect);
+    public abstract boolean addEffect(MobEffectInstance mobEffectInstance);
 
     @Shadow
-    public abstract boolean addEffect(MobEffectInstance mobEffectInstance);
+    @Nullable
+    public abstract MobEffectInstance getEffect(Holder<MobEffect> $$0);
 
     public LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -54,9 +55,9 @@ public abstract class LivingEntityMixin extends Entity {
                 && ((ISandstormServerDataProvider) serverLevel).getSandstormServerData().isSandstormActive()
                 && this.level().getBiome(this.blockPosition()).is(BiomeModule.LOST_CAVES)
         ) {
-            MobEffectInstance buffetedEffect = this.getEffect(MobEffectModule.BUFFETED_EFFECT.get());
+            MobEffectInstance buffetedEffect = this.getEffect(MobEffectModule.BUFFETED_EFFECT.getHolder());
             if (buffetedEffect == null || buffetedEffect.getDuration() < BUFFETED_EFFECT_REAPPLY_THRESHOLD) {
-                this.addEffect(new MobEffectInstance(MobEffectModule.BUFFETED_EFFECT.get(), BUFFETED_EFFECT_DURATION, 0, false, false, true));
+                this.addEffect(new MobEffectInstance(MobEffectModule.BUFFETED_EFFECT.getHolder(), BUFFETED_EFFECT_DURATION, 0, false, false, true));
             }
         }
     }

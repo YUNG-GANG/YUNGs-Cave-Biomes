@@ -1,12 +1,15 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterParticleType;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import org.jetbrains.annotations.NotNull;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ParticleTypeModule {
@@ -28,12 +31,17 @@ public class ParticleTypeModule {
 
     private static class BlockParticleType extends ParticleType<BlockParticleOption> {
         protected BlockParticleType() {
-            super(false, BlockParticleOption.DESERIALIZER);
+            super(false);
         }
 
         @Override
-        public Codec<BlockParticleOption> codec() {
+        public @NotNull MapCodec<BlockParticleOption> codec() {
             return BlockParticleOption.codec(this);
+        }
+
+        @Override
+        public @NotNull StreamCodec<? super RegistryFriendlyByteBuf, BlockParticleOption> streamCodec() {
+            return BlockParticleOption.streamCodec(this);
         }
     }
 }

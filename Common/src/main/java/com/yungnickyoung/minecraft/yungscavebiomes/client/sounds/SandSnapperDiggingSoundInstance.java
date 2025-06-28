@@ -5,7 +5,6 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 
 public class SandSnapperDiggingSoundInstance extends AbstractTickableSoundInstance {
     private final SandSnapperEntity sandSnapper;

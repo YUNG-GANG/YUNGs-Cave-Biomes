@@ -16,10 +16,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -37,10 +35,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 public class IceCubeEntity extends Monster {
     private static final EntityDataAccessor<Boolean> IS_LEAPING = SynchedEntityData.defineId(IceCubeEntity.class, EntityDataSerializers.BOOLEAN);
@@ -70,7 +67,7 @@ public class IceCubeEntity extends Monster {
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, MagmaCube.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Blaze.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(4, new IceCubeLeapGoal(this, 0.4f));
-        this.goalSelector.addGoal(5, new IceCubeAttackGoal(this, 1.0, 1.0f, false));
+        this.goalSelector.addGoal(5, new IceCubeAttackGoal(this, 1.0, false));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -101,9 +98,9 @@ public class IceCubeEntity extends Monster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(IS_LEAPING, false);
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(IS_LEAPING, false);
     }
 
     public void setLeaping(boolean leaping) {
@@ -185,7 +182,7 @@ public class IceCubeEntity extends Monster {
     }
 
     @Override
-    protected void jumpFromGround() {
+    public void jumpFromGround() {
         Vec3 vec3 = this.getDeltaMovement();
         this.setDeltaMovement(vec3.x, this.getJumpPower(), vec3.z);
         this.hasImpulse = true;
@@ -204,6 +201,15 @@ public class IceCubeEntity extends Monster {
     @Override
     public void setTicksFrozen(int $$0) {
         // Ice Cubes can't be frozen
+    }
+
+//    public boolean isWithinMeleeAttackRange(LivingEntity target) {
+//        return this.getBbWidth() * this.getBbWidth() + target.getBbWidth();
+//    }
+
+    @Override
+    protected @NotNull AABB getAttackBoundingBox() {
+        return super.getAttackBoundingBox();
     }
 
     public int getJumpDelay() {
@@ -232,18 +238,14 @@ public class IceCubeEntity extends Monster {
 
     protected void dealDamage(LivingEntity livingEntity) {
         if (this.isAlive()) {
-            if (this.distanceToSqr(livingEntity) < 2.5 && this.hasLineOfSight(livingEntity) && livingEntity.hurt(this.damageSources().mobAttack(this), this.getAttackDamage())) {
-                this.playSound(SoundEvents.SLIME_ATTACK, 1.0f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
-                this.doEnchantDamageEffects(this, livingEntity);
-                livingEntity.setTicksFrozen(livingEntity.getTicksFrozen() + 200);
+            if (this.distanceToSqr(livingEntity) < 2.5 && this.hasLineOfSight(livingEntity)) {
+                DamageSource damageSource = this.damageSources().mobAttack(this);
+                if (livingEntity.hurt(damageSource, this.getAttackDamage())) {
+                    this.playSound(SoundEvents.SLIME_ATTACK, 1.0f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
+                    livingEntity.setTicksFrozen(livingEntity.getTicksFrozen() + 200);
+                }
             }
         }
-    }
-
-    @Override
-    @ParametersAreNonnullByDefault
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-        return 0.15f;
     }
 
     protected float getAttackDamage() {

@@ -24,10 +24,9 @@ public class YungsCaveBiomesCommon {
         DEBUG_RENDERING = DEBUG_RENDERING && Services.PLATFORM.isDevelopmentEnvironment();
 
         YungAutoRegister.scanPackageForAnnotations("com.yungnickyoung.minecraft.yungscavebiomes");
-        Services.MODULES.loadModules();
     }
 
     public static ResourceLocation id(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 }

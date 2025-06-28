@@ -1,0 +1,33 @@
+{
+  "yungscavebiomes:root": {
+    "criteria": {
+      "always": "2025-06-27 03:53:21 -0400"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2025-06-27 03:53:21 -0400"
+    },
+    "done": true
+  },
+  "yungscavebiomes:lost_caves": {
+    "criteria": {
+      "lost_caves": "2025-06-27 03:53:21 -0400"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:beach": "2025-06-27 03:53:21 -0400"
+    },
+    "done": false
+  },
+  "yungscavebiomes:frosted_caves": {
+    "criteria": {
+      "frosted_caves": "2025-06-27 03:53:21 -0400"
+    },
+    "done": true
+  },
+  "DataVersion": 3955
+}

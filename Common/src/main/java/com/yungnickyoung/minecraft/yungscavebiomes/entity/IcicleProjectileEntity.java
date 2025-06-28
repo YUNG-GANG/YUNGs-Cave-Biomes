@@ -4,7 +4,6 @@ import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.AbstractArrowA
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
@@ -18,26 +17,30 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
-public class IcicleProjectileEntity extends AbstractArrow {
-    private boolean hit;
+import javax.annotation.Nullable;
 
-    public IcicleProjectileEntity(EntityType<? extends AbstractArrow> entityType, Level level) {
-        super(EntityTypeModule.ICICLE.get(), level);
-        this.setBaseDamage(1.0); // Regular arrows deal 2 damage
+public class IcicleProjectileEntity extends AbstractArrow {
+    public IcicleProjectileEntity(EntityType<IcicleProjectileEntity> entityType, Level level) {
+        super(entityType, level);
+        this.setBaseDamage(1.5); // Regular arrows deal 2 damage
+        this.pickup = Pickup.DISALLOWED;
+        this.setSoundEvent(SoundEvents.GLASS_BREAK);
     }
 
-    private IcicleProjectileEntity(Level level, LivingEntity livingEntity) {
-        super(EntityTypeModule.ICICLE.get(), livingEntity, level);
-        this.setBaseDamage(1.0);
+    public IcicleProjectileEntity(Level level, LivingEntity shooter, ItemStack arrowItemStack, @Nullable ItemStack weaponItemStack) {
+        super(EntityTypeModule.ICICLE.get(), shooter, level, arrowItemStack, weaponItemStack);
+        this.pickup = Pickup.DISALLOWED;
+        this.setSoundEvent(SoundEvents.GLASS_BREAK);
     }
 
     @Override
     protected @NotNull ItemStack getPickupItem() {
-        return new ItemStack(BlockModule.ICICLE.get().asItem());
+        return new ItemStack(BlockModule.ICICLE.get());
     }
 
-    public static IcicleProjectileEntity create(Level level, LivingEntity livingEntity) {
-        return new IcicleProjectileEntity(level, livingEntity);
+    @Override
+    protected @NotNull ItemStack getDefaultPickupItem() {
+        return new ItemStack(BlockModule.ICICLE.get());
     }
 
     @Override
@@ -52,11 +55,10 @@ public class IcicleProjectileEntity extends AbstractArrow {
 //        this.inGround = true;
 //        this.shakeTime = 7;
         this.setCritArrow(false);
-        this.setPierceLevel((byte)0);
+//        this.setPierceLevel((byte)0);
         this.setSoundEvent(SoundEvents.ARROW_HIT);
-        this.setShotFromCrossbow(false);
+//        this.setShotFromCrossbow(false);
         ((AbstractArrowAccessor) this).callResetPiercedEntities();
-        this.hit = true;
         if (this.level() instanceof ServerLevel serverLevel) {
             Services.PLATFORM.sendIcicleProjectileShatterS2CPacket(serverLevel, this.position());
         }
@@ -75,15 +77,5 @@ public class IcicleProjectileEntity extends AbstractArrow {
     @Override
     public void tick() {
         super.tick();
-    }
-
-    public void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
-        super.addAdditionalSaveData(compoundTag);
-        compoundTag.putBoolean("hit", this.hit);
-    }
-
-    public void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
-        super.readAdditionalSaveData(compoundTag);
-        this.hit = compoundTag.getBoolean("hit");
     }
 }

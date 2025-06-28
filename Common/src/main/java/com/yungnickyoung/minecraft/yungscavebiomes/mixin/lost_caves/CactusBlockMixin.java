@@ -19,22 +19,22 @@ public abstract class CactusBlockMixin {
     /**
      * Allow cactus blocks to be placed on ancient sand.
      */
-    @Inject(method = "canSurvive", at = @At("TAIL"), cancellable = true)
-    public void yungscavebiomes_allowCactusOnAncientSand(BlockState blockState, LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
-        BlockState blockStateBelow = levelReader.getBlockState(blockPos.below());
-        BlockState blockStateAbove = levelReader.getBlockState(blockPos.above());
-        if (blockStateBelow.is(BlockModule.ANCIENT_SAND.get()) && !blockStateAbove.liquid()) {
-            cir.setReturnValue(true);
-        }
-    }
+//    @Inject(method = "canSurvive", at = @At("TAIL"), cancellable = true)
+//    public void yungscavebiomes_allowCactusOnAncientSand(BlockState blockState, LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
+//        BlockState blockStateBelow = levelReader.getBlockState(blockPos.below());
+//        BlockState blockStateAbove = levelReader.getBlockState(blockPos.above());
+//        if (blockStateBelow.is(BlockModule.ANCIENT_SAND.get()) && !blockStateAbove.liquid()) {
+//            cir.setReturnValue(true);
+//        }
+//    }
 
     /**
      * Make Sand Snappers immune to cactus damage.
      */
-    @Inject(method = "entityInside", at = @At("HEAD"), cancellable = true)
-    public void yungscavebiomes_snappersDontTakeCactusDamage(BlockState $$0, Level $$1, BlockPos $$2, Entity entity, CallbackInfo ci) {
-        if (entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
-            ci.cancel();
-        }
-    }
+//    @Inject(method = "entityInside", at = @At("HEAD"), cancellable = true)
+//    public void yungscavebiomes_snappersDontTakeCactusDamage(BlockState $$0, Level $$1, BlockPos $$2, Entity entity, CallbackInfo ci) {
+//        if (entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
+//            ci.cancel();
+//        }
+//    }
 }

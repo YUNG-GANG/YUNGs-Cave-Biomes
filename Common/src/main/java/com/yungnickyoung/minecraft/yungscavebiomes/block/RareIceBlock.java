@@ -4,12 +4,15 @@ import com.yungnickyoung.minecraft.yungscavebiomes.block.entity.RareIceBlockEnti
 import com.yungnickyoung.minecraft.yungscavebiomes.module.CriteriaModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -33,7 +36,10 @@ public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     @Override
     public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack, boolean bl) {
         super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack, bl);
-        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, itemStack) == 0) {
+        Holder<Enchantment> silkTouch = serverLevel.registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT)
+                .getHolderOrThrow(Enchantments.SILK_TOUCH);
+        if (EnchantmentHelper.getItemEnchantmentLevel(silkTouch, itemStack) == 0) {
             int xp = 15 + serverLevel.random.nextInt(20) + serverLevel.random.nextInt(20);
             this.popExperience(serverLevel, blockPos, xp);
         }

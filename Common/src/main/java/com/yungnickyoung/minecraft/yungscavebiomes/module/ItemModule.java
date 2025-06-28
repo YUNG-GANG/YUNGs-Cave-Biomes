@@ -23,7 +23,7 @@ public class ItemModule {
                 new Item.Properties()
                         .food(new FoodProperties.Builder()
                                 .nutrition(4)
-                                .saturationMod(0.3F)
+                                .saturationModifier(0.3F)
                                 .build())));
 
     @AutoRegister("ancient_armor_trim_smithing_template")

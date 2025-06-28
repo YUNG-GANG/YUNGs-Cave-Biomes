@@ -2,14 +2,13 @@ package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
-import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
+import com.yungnickyoung.minecraft.yungscavebiomes.network.payload.IcicleShatterS2CPayload;
+import com.yungnickyoung.minecraft.yungscavebiomes.network.payload.SandstormSyncS2CPayload;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -40,34 +39,30 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
     @Override
     public void sendIcicleProjectileShatterS2CPacket(ServerLevel level, Vec3 pos) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeDouble(pos.x());
-        buf.writeDouble(pos.y());
-        buf.writeDouble(pos.z());
-        for (ServerPlayer player : PlayerLookup.tracking(level, BlockPos.containing(pos))) {
-            ServerPlayNetworking.send(player, NetworkModuleFabric.ICICLE_SHATTER_ID, buf);
-        }
+        IcicleShatterS2CPayload payload = new IcicleShatterS2CPayload(pos.x(), pos.y(), pos.z());
+        PlayerLookup.tracking(level, BlockPos.containing(pos))
+                .forEach(player -> ServerPlayNetworking.send(player, payload));
     }
 
     @Override
     public void syncSandstormDataToClients(SandstormServerData sandstormServerData) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(sandstormServerData.isSandstormActive());
-        buf.writeInt(sandstormServerData.getCurrSandstormTicks());
-        buf.writeLong(sandstormServerData.getSeed());
-        buf.writeInt(sandstormServerData.getTotalSandstormDurationTicks());
+        SandstormSyncS2CPayload payload = new SandstormSyncS2CPayload(
+                sandstormServerData.isSandstormActive(),
+                sandstormServerData.getCurrSandstormTicks(),
+                sandstormServerData.getSeed(),
+                sandstormServerData.getTotalSandstormDurationTicks());
         PlayerLookup.world(sandstormServerData.getServerLevel())
-                .forEach(player -> ServerPlayNetworking.send(player, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf));
+                .forEach(player -> ServerPlayNetworking.send(player, payload));
     }
 
     @Override
     public void syncSandstormDataToPlayer(SandstormServerData sandstormServerData, ServerPlayer serverPlayer) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(sandstormServerData.isSandstormActive());
-        buf.writeInt(sandstormServerData.getCurrSandstormTicks());
-        buf.writeLong(sandstormServerData.getSeed());
-        buf.writeInt(sandstormServerData.getTotalSandstormDurationTicks());
-        ServerPlayNetworking.send(serverPlayer, NetworkModuleFabric.SANDSTORM_SYNC_ID, buf);
+        SandstormSyncS2CPayload payload = new SandstormSyncS2CPayload(
+                sandstormServerData.isSandstormActive(),
+                sandstormServerData.getCurrSandstormTicks(),
+                sandstormServerData.getSeed(),
+                sandstormServerData.getTotalSandstormDurationTicks());
+        ServerPlayNetworking.send(serverPlayer, payload);
     }
 
     @Override

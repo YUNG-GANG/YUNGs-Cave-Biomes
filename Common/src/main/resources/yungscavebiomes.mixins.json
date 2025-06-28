@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "yungscavebiomes.refmap.json",
   "mixins": [
-    "NoiseBasedChunkGenerator",
+    "NoiseBasedChunkGeneratorMixin",
+    "NoiseChunkMixin",
     "accessor.AbstractArrowAccessor",
     "accessor.AbstractCauldronBlockAccessor",
     "accessor.ArrowAccessor",
@@ -42,7 +43,7 @@
     "lost_caves.client.LocalPlayerMixin",
     "lost_caves.client.SheetsMixin",
     "lost_caves.client.SpriteResourceLoaderMixin",
-    "lost_caves.client.SpriteResourceLoaderMixin$PalettedPermutationsAccessor"
+    "lost_caves.client.accessor.PalettedPermutationsAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

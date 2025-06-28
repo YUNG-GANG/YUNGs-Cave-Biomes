@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class IceCubeRenderer extends MobRenderer<IceCubeEntity, IceCubeModel<IceCubeEntity>> {
     public static final ResourceLocation RESOURCE_LOCATION = YungsCaveBiomesCommon.id("textures/entity/ice_cube/ice_cube.png");
@@ -29,7 +30,7 @@ public class IceCubeRenderer extends MobRenderer<IceCubeEntity, IceCubeModel<Ice
     }
 
     @Override
-    public ResourceLocation getTextureLocation(IceCubeEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull IceCubeEntity entity) {
         return RESOURCE_LOCATION;
     }
 }

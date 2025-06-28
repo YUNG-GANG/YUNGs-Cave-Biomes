@@ -20,12 +20,13 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
 
 public class YungsCaveBiomesClientFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         YungsCaveBiomesClientCommon.init(); // Run loader-independent client-side logic
-        NetworkModuleFabric.registerS2CPackets();
+        NetworkModuleFabric.registerS2CHandlers();
 
         // Block rendering
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.ICICLE.get(), RenderType.cutout());

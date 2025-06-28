@@ -19,12 +19,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -46,15 +48,17 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     public static final byte HEART_PARTICLES_EVENT = 7;
@@ -166,7 +170,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
         super.addAdditionalSaveData(tag);
         ItemStack itemStack = this.carryingItem;
         if (!itemStack.isEmpty()) {
-            tag.put("carryingItemStack", itemStack.save(new CompoundTag()));
+            tag.put("carryingItemStack", itemStack.save(this.registryAccess()));
         }
         tag.putInt("friendlyTimer", this.friendlyTimer);
         tag.putInt("recentlyFedTimer", this.recentlyFedTimer);
@@ -177,7 +181,8 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("carryingItemStack")) {
-            this.carryingItem = ItemStack.of(tag.getCompound("carryingItemStack"));
+            CompoundTag carryingItemTag = tag.getCompound("carryingItemStack");
+            this.carryingItem = ItemStack.parseOptional(this.registryAccess(), carryingItemTag);
         }
         this.friendlyTimer = tag.getInt("friendlyTimer");
         this.recentlyFedTimer = tag.getInt("recentlyFedTimer");
@@ -193,16 +198,16 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(EMERGING, false);
-        this.entityData.define(DIVING, false);
-        this.entityData.define(SUBMERGED, false);
-        this.entityData.define(LOOKING_AT_PLAYER, false);
-        this.entityData.define(DIGGING_DOWN, false);
-        this.entityData.define(DIGGING_UP, false);
-        this.entityData.define(EATING, false);
-        this.entityData.define(FORCE_SPAWN_DIG_PARTICLES, false);
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(EMERGING, false);
+        builder.define(DIVING, false);
+        builder.define(SUBMERGED, false);
+        builder.define(LOOKING_AT_PLAYER, false);
+        builder.define(DIGGING_DOWN, false);
+        builder.define(DIGGING_UP, false);
+        builder.define(EATING, false);
+        builder.define(FORCE_SPAWN_DIG_PARTICLES, false);
     }
 
     @Override
@@ -219,14 +224,14 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public @NotNull EntityDimensions getDimensions(@NotNull Pose pose) {
+    public @NotNull EntityDimensions getDefaultDimensions(@NotNull Pose pose) {
         if (this.isEmerging() || this.isDiving() || this.isDiggingUp() || this.isDiggingDown()) {
             return EntityDimensions.fixed(0.4f, 0.7f);
         } else if (this.isSubmerged()) {
             return EntityDimensions.fixed(0.01f, 0.01f);
         }
 
-        return super.getDimensions(pose);
+        return super.getDefaultDimensions(pose);
     }
 
     @Override
@@ -473,8 +478,12 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
-        if (this.isSubmerged() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !source.isCreativePlayer())
-            return true;
+        if (this.isSubmerged() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !source.isCreativePlayer()) {
+            return true; // Invulnerable while submerged
+        }
+        if (source.is(DamageTypes.CACTUS)) {
+            return true; // Invulnerable to cactus damage
+        }
         return super.isInvulnerableTo(source);
     }
 
@@ -497,7 +506,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
         Vec3 movement = this.getDeltaMovement();
         if (this.level().isClientSide() && this.isSubmerged()) {
             if (movement.horizontalDistance() > 0.01F || this.forceSpawnDigParticlesHolder) {
-                float width = this.getDimensions(this.getPose()).width * 0.8F;
+                float width = this.getDimensions(this.getPose()).width() * 0.8F;
                 Vector3d particlePos = new Vector3d(
                         this.getX() + (this.random.nextDouble() - 0.5) * (double) width,
                         this.getY() + 0.1,
@@ -516,8 +525,9 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    protected void dropCustomDeathLoot(DamageSource $$0, int $$1, boolean $$2) {
-        super.dropCustomDeathLoot($$0, $$1, $$2);
+    @ParametersAreNonnullByDefault
+    protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource damageSource, boolean $$2) {
+        super.dropCustomDeathLoot(serverLevel, damageSource, $$2);
         this.spawnAtLocation(this.carryingItem);
     }
 

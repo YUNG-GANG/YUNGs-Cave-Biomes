@@ -1,6 +1,8 @@
 package com.yungnickyoung.minecraft.yungscavebiomes;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.event.PlayerJoinHandler;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.ConfigModuleFabric;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.NetworkModuleFabric;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.CaveBiomeRegion;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -12,6 +14,8 @@ public class YungsCaveBiomesFabric implements ModInitializer, TerraBlenderApi {
     @Override
     public void onInitialize() {
         YungsCaveBiomesCommon.init();
+        ConfigModuleFabric.init();
+        NetworkModuleFabric.init();
         ServerEntityEvents.ENTITY_LOAD.register(new PlayerJoinHandler());
     }
 

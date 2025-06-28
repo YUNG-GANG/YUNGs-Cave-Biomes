@@ -14,7 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class SuspiciousAncientSandBlock extends BrushableBlock {
     public SuspiciousAncientSandBlock(Properties properties, SoundEvent brushingSound, SoundEvent brushingCompleteSound) {
-        super(BlockModule.ANCIENT_SAND.get(), properties, brushingSound, brushingCompleteSound);
+        super(BlockModule.ANCIENT_SAND.get(), brushingSound, brushingCompleteSound, properties);
     }
 
     @Override

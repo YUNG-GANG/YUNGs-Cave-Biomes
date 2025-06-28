@@ -15,10 +15,10 @@ public abstract class DeadBushBlockMixin {
     /**
      * Allow dead bush blocks to be placed on ancient sand.
      */
-    @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
-    public void yungscavebiomes_placeDeadBushOnAncientSand(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
-        if (blockState.is(BlockModule.ANCIENT_SAND.get())) {
-            cir.setReturnValue(true);
-        }
-    }
+//    @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
+//    public void yungscavebiomes_placeDeadBushOnAncientSand(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
+//        if (blockState.is(BlockModule.ANCIENT_SAND.get())) {
+//            cir.setReturnValue(true);
+//        }
+//    }
 }

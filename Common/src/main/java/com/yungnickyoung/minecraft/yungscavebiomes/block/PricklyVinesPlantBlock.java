@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
+import com.mojang.serialization.MapCodec;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
@@ -22,10 +23,17 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
+    public static final MapCodec<PricklyVinesPlantBlock> CODEC = simpleCodec(PricklyVinesPlantBlock::new);
+
     public static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
 
     public PricklyVinesPlantBlock(BlockBehaviour.Properties properties) {
         super(properties, Direction.DOWN, SHAPE, false);
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends GrowingPlantBodyBlock> codec() {
+        return CODEC;
     }
 
     @Override

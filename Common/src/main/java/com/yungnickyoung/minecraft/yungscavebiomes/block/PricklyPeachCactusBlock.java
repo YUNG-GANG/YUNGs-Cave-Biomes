@@ -14,11 +14,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -36,6 +38,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -59,27 +62,29 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    protected @NotNull ItemInteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (!isMaxAge(blockState) && itemStack.is(Items.BONE_MEAL)) {
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+        }
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected @NotNull InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult hitResult) {
         // Harvest peach if available
         if (blockState.getValue(FRUIT)) {
-            popFruit(level, blockPos, new ItemStack(ItemModule.PRICKLY_PEACH_ITEM.get(), 1));
+            popFruit(level, blockPos);
             float volume = Mth.randomBetween(level.random, 0.8f, 1.2f);
             level.playSound(null, blockPos, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, volume);
             level.setBlock(blockPos, blockState.setValue(FRUIT, false).setValue(AGE, 0), 2);
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        } else {
-            // Hurt player if nothing in hand
-            ItemStack itemInHand = player.getItemInHand(interactionHand);
-            if (itemInHand.isEmpty()) {
-                player.hurt(level.damageSources().cactus(), 1.0f);
-                if (player instanceof ServerPlayer serverPlayer) {
-                    CriteriaModule.INTERACT_EMPTY_PRICKLY_CACTUS.trigger(serverPlayer);
-                }
-                return InteractionResult.sidedSuccess(level.isClientSide);
+        } else if (player.getMainHandItem().isEmpty()){
+            // Hurt player
+            player.hurt(level.damageSources().cactus(), 1.0f);
+            if (player instanceof ServerPlayer serverPlayer) {
+                CriteriaModule.INTERACT_EMPTY_PRICKLY_CACTUS.trigger(serverPlayer);
             }
         }
-
-        return InteractionResult.PASS;
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
@@ -91,6 +96,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
 
     @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
+        // If cactus is at max age or has fruit, no need to age further
         if (isMaxAge(blockState) || hasFruit(blockState)) {
             return;
         }
@@ -100,7 +106,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
             int newAge = blockState.getValue(AGE) + 1;
             BlockState newBlockState = blockState.setValue(AGE, newAge);
 
-            // Chance of growing fruit
+            // Chance of growing fruit, or force grow if cactus is at max age
             if (random.nextDouble() < BERRY_CHANCE || newAge == MAX_AGE) {
                 newBlockState = newBlockState.setValue(FRUIT, true);
             }
@@ -118,7 +124,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
         return blockState.hasProperty(FRUIT) && !blockState.getValue(FRUIT);
     }
 
@@ -129,16 +135,16 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
 
     @Override
     public void performBonemeal(ServerLevel serverLevel, RandomSource random, BlockPos blockPos, BlockState blockState) {
-        serverLevel.setBlock(blockPos, blockState.setValue(FRUIT, true), 2);
+        serverLevel.setBlock(blockPos, blockState.setValue(FRUIT, true).setValue(AGE, MAX_AGE), 2);
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+    public @NotNull VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         return COLLISION_SHAPE;
     }
 
     @Override
-    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+    public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         return OUTLINE_SHAPE;
     }
 
@@ -149,7 +155,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
-    public BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState, LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState, LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
         if (!currState.canSurvive(levelAccessor, currPos)) {
             levelAccessor.scheduleTick(currPos, this, 1);
         }
@@ -165,7 +171,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
-    public boolean isPathfindable(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, PathComputationType pathComputationType) {
+    public boolean isPathfindable(BlockState blockState, PathComputationType pathComputationType) {
         return false;
     }
 
@@ -182,8 +188,8 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
         return blockState.hasProperty(FRUIT) && blockState.getValue(FRUIT);
     }
 
-    private static void popFruit(Level level, BlockPos $$1, ItemStack itemStack) {
-        if (!level.isClientSide && !itemStack.isEmpty() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+    private static void popFruit(Level level, BlockPos $$1) {
+        if (!level.isClientSide && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             double x = (double) $$1.getX() + 0.5;
             double y = (double) $$1.getY() + 0.5 - (EntityType.ITEM.getHeight() / 2.0F);
             double z = (double) $$1.getZ() + 0.5;
@@ -209,7 +215,8 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
             y += yOffset;
             z += zOffset;
 
-            ItemEntity itemEntity = new ItemEntity(level, x, y, z, itemStack, dx, dy, dz);
+            ItemStack fruitItemStack = new ItemStack(ItemModule.PRICKLY_PEACH_ITEM.get(), 1);
+            ItemEntity itemEntity = new ItemEntity(level, x, y, z, fruitItemStack, dx, dy, dz);
             itemEntity.setDefaultPickUpDelay();
             level.addFreshEntity(itemEntity);
         }

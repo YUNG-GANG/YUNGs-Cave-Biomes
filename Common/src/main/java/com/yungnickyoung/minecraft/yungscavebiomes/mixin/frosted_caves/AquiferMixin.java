@@ -48,7 +48,7 @@ public abstract class AquiferMixin implements Aquifer {
             // Change lava to water if Frosted Caves is found
             Optional<ResourceKey<Biome>> biomeKey = biomes.getResourceKey(biome.value());
             if (biomeKey.isPresent() && biomeKey.get() == BiomeModule.FROSTED_CAVES) {
-                int originalLevel = original.fluidLevel;
+                int originalLevel = original.fluidLevel; // access-widened
                 cir.setReturnValue(new FluidStatus(originalLevel, Blocks.WATER.defaultBlockState()));
             }
         }

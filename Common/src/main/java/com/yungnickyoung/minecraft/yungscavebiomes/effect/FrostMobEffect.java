@@ -20,16 +20,18 @@ public class FrostMobEffect extends InstantenousMobEffect {
         this.maxFreezeTicks = maxFreezeTicks;
     }
 
-    public void applyEffectTick(@NotNull LivingEntity livingEntity, int amplifier) {
+    @Override
+    public boolean applyEffectTick(@NotNull LivingEntity livingEntity, int amplifier) {
         // Ignore in spectator and peaceful mode
         if (livingEntity instanceof ServerPlayer serverPlayer) {
             if (serverPlayer.isSpectator() || serverPlayer.serverLevel().getDifficulty() == Difficulty.PEACEFUL) {
-                return;
+                return true;
             }
         }
         int frozenTicks = Math.max(minFreezeTicks * (amplifier + 1), livingEntity.getTicksFrozen() + additionalFreezeTicks * (amplifier + 1));
         frozenTicks = Math.min(frozenTicks, maxFreezeTicks * (amplifier + 1));
         livingEntity.setTicksFrozen(frozenTicks);
+        return true;
     }
 
     @Override

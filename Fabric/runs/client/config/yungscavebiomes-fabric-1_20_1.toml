@@ -1,0 +1,50 @@
+[config.lostCaves]
+enableSandstorms = true
+extraSandstormParticles = true
+minSandstormDuration = 120
+maxSandstormDuration = 600
+minTimeBetweenSandstorms = 1200
+maxTimeBetweenSandstorms = 2400
+
+[config.lostCaves.noiseParameters]
+temperatureMin = 0.55
+temperatureMax = 1.0
+humidityMin = -1.0
+humidityMax = 0.6
+continentalnessMin = 0.3
+continentalnessMax = 1.0
+erosionMin = -1.0
+erosionMax = 1.0
+depthMin = 0.2
+depthMax = 0.9
+weirdnessMin = -1.0
+weirdnessMax = 1.0
+offset = 0.0
+[config.frostedCaves.noiseParameters]
+temperatureMin = -1.0
+temperatureMax = -0.7
+humidityMin = -1.0
+humidityMax = 1.0
+continentalnessMin = -0.19
+continentalnessMax = 1.0
+erosionMin = -1.0
+erosionMax = 1.0
+depthMin = 0.2
+depthMax = 0.9
+weirdnessMin = -1.0
+weirdnessMax = 1.0
+offset = 0.0
+[config.other.vanillaBiomeModifications.dripstoneCaves]
+temperatureMin = -0.7
+temperatureMax = 1.0
+humidityMin = -1.0
+humidityMax = 1.0
+continentalnessMin = 0.8
+continentalnessMax = 1.0
+erosionMin = -1.0
+erosionMax = 1.0
+depthMin = 0.2
+depthMax = 0.9
+weirdnessMin = -1.0
+weirdnessMax = 1.0
+offset = 0.0

@@ -20,7 +20,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "onEffectRemoved", at = @At("HEAD"))
     private void yungscavebiomes_resetFrostTicksWhenClearingEffect(MobEffectInstance effectInstance, CallbackInfo ci) {
         if (!this.level().isClientSide()) {
-            if (effectInstance.getEffect().equals(MobEffectModule.FROZEN_EFFECT.get())) {
+            if (effectInstance.getEffect().equals(MobEffectModule.FROZEN_EFFECT.getHolder())) {
                 this.setTicksFrozen(1);
             }
         }

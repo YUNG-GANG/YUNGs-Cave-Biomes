@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "minecraft:sandstone"
-  },
-  "result": "yungscavebiomes:layered_sandstone",
-  "count": 1
-}

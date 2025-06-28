@@ -9,9 +9,9 @@ import java.util.Set;
 
 @Mixin(Path.class)
 public interface PathAccessor {
-    @Accessor
-    Set<Target> getTargetNodes();
-
-    @Accessor
-    void setTargetNodes(Set<Target> targetNodes);
+//    @Accessor
+//    Set<Target> getTargetNodes();
+//
+//    @Accessor
+//    void setTargetNodes(Set<Target> targetNodes);
 }
