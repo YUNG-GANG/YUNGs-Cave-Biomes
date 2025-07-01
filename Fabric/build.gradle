@@ -64,7 +64,13 @@ dependencies {
 
 processResources {
     filesMatching("**/${mod_id}.accesswidener") {
-        duplicatesStrategy = DuplicatesStrategy.WARN
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
+
+sourcesJar {
+    filesMatching("**/${mod_id}.accesswidener") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }
 

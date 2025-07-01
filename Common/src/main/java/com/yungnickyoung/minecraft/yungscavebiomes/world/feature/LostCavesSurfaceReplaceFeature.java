@@ -18,9 +18,8 @@ import java.util.List;
 
 /**
  * Handles the placement of layered ancient sandstone in the walls/ceiling as well as
- * ancient sand & ancient sandstone in the floor. Similar to {@link ThreeLayerNoisySphereReplaceFeature}, but with
+ * ancient sand and ancient sandstone in the floor. Similar to {@link ThreeLayerNoisySphereReplaceFeature}, but with
  * hardcoded settings and behaviors.
- *
  * This feature is specific to the Lost Caves, meaning it is not reusable for other biomes.
  * While that is typically undesirable, I figured creating a generalized solution
  * would be over-engineering. We can always generalize this in the future if we find ourselves wanting
