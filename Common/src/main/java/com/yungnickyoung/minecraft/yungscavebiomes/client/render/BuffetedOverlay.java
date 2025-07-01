@@ -3,27 +3,39 @@ package com.yungnickyoung.minecraft.yungscavebiomes.client.render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.MobEffectModule;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
-public class BuffetedOverlay {
+public class BuffetedOverlay implements LayeredDraw.Layer {
+    private static BuffetedOverlay INSTANCE;
+    public static BuffetedOverlay getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new BuffetedOverlay();
+        }
+        return INSTANCE;
+    }
+
     private static final ResourceLocation OVERLAY_TEXTURE = YungsCaveBiomesCommon.id("textures/overlay/buffeted_overlay.png");
     private static final int MAX_TICKS = 200;
     private static final float MAX_OPACITY = 1.0f;
     private static final float MIN_COLOR = 0.1f;
     private static final float MAX_COLOR = 0.9f;
 
-    private static int ticks;
-    private static float color = 0.5f;
+    private int ticks;
+    private float color = 0.5f;
 
     /**
      * Renders the Buffeted overlay on the player's screen, with variable opacity depending
      * on the remaining duration of the effect.
      */
-    public static void render(GuiGraphics guiGraphics, float partialTicks) {
+    public void render(@NotNull GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+        float partialTicks = deltaTracker.getGameTimeDeltaPartialTick(false);
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
 
@@ -49,44 +61,9 @@ public class BuffetedOverlay {
             color += .003f * colorDiff;
             color = Mth.clamp(color, MIN_COLOR, MAX_COLOR);
 
-//            renderOverlay(opacity, screenWidth, screenHeight, color);
             renderTextureOverlay(guiGraphics, color, color, color, opacity);
         }
     }
-
-    /**
-     * Taken from vanilla's Gui class.
-     */
-//    private static void renderOverlay(float opacity, int screenWidth, int screenHeight, float color) {
-//        RenderSystem.disableDepthTest();
-//        RenderSystem.depthMask(false);
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-//        RenderSystem.setShaderColor(color, color, color, opacity);
-//        RenderSystem.setShaderTexture(0, TEXTURE);
-//        Tesselator tesselator = Tesselator.getInstance();
-//        tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-//        bufferbuilder
-//                .vertex(0.0D, screenHeight, -90.0D)
-//                .uv(0.0F, 1.0F)
-//                .endVertex();
-//        bufferbuilder
-//                .vertex(screenWidth, screenHeight, -90.0D)
-//                .uv(1.0F, 1.0F)
-//                .endVertex();
-//        bufferbuilder
-//                .vertex(screenWidth, 0.0D, -90.0D)
-//                .uv(1.0F, 0.0F)
-//                .endVertex();
-//        bufferbuilder
-//                .vertex(0.0D, 0.0D, -90.0D)
-//                .uv(0.0F, 0.0F)
-//                .endVertex();
-//        tesselator.end();
-//        RenderSystem.depthMask(true);
-//        RenderSystem.enableDepthTest();
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-//    }
 
     // Taken from vanilla's Gui class
     private static void renderTextureOverlay(GuiGraphics guiGraphics, float r, float g, float b, float alpha) {

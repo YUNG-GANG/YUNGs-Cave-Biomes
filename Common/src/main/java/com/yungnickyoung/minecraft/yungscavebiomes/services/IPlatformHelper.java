@@ -1,10 +1,13 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
+import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterItem;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Supplier;
@@ -41,4 +44,6 @@ public interface IPlatformHelper {
     Supplier<Item> getSandSnapperSpawnEggItem();
 
     Block getPottedPricklyPeachCactusBlock();
+
+    ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, AutoRegisterItem potterySherdItem);
 }

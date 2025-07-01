@@ -56,4 +56,4 @@ plugins {
 }
 
 rootProject.name = 'yungscavebiomes'
-include("Common", "Fabric")
+include("Common", "Fabric", "NeoForge")

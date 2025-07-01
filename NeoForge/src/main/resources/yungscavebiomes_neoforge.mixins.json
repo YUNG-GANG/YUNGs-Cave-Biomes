@@ -1,6 +1,5 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "com.yungnickyoung.minecraft.yungscavebiomes.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "yungscavebiomes.refmap.json",
@@ -9,7 +8,7 @@
   "injectors": {
     "defaultRequire": 1
   },
+  "minVersion": "0.8",
   "client": [
-    "client.GuiMixinFabric"
   ]
 }

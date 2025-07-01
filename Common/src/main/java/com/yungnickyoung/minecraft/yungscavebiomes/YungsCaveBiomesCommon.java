@@ -15,6 +15,9 @@ public class YungsCaveBiomesCommon {
 
     public static final ConfigModule CONFIG = new ConfigModule();
 
+    // TODO - change this whenever updating to a new Minecraft version
+    public static final String MC_VERSION_STRING = "1_21_1";
+
     public static boolean MARBLE_CAVES_ENABLED = false; // Rest in peace. Maybe one day...
     public static boolean DEBUG_LOG = false;
     public static boolean DEBUG_RENDERING = false;
