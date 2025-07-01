@@ -23,5 +23,8 @@ bin/
 
 # other
 run/
+runs/
 logs/
+libs/
+NeoForge/
 CHANGELOG.md
