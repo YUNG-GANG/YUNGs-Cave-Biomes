@@ -26,7 +26,6 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 @Mod(value = YungsCaveBiomesCommon.MOD_ID, dist = Dist.CLIENT)
 public class YungsCaveBiomesClientNeoForge {
     public YungsCaveBiomesClientNeoForge(IEventBus eventBus, ModContainer container) {
-        YungsCaveBiomesCommon.LOGGER.info("YOOOOO");
         YungsCaveBiomesClientCommon.init();
         eventBus.addListener(YungsCaveBiomesClientNeoForge::registerLayerDefinitions);
         eventBus.addListener(YungsCaveBiomesClientNeoForge::registerRenderers);
