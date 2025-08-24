@@ -60,7 +60,7 @@
   "item.yungscavebiomes.clock_pottery_sherd": "Гончарний черепок «Годинник»",
 
   "effect.yungscavebiomes.frost": "Обмороження",
-  "effect.yungscavebiomes.frost.description": "Уповільнює рух та завдає шкоду періодично",
+  "effect.yungscavebiomes.frost.description": "Уповільнює рух та періодично завдає шкоду",
   "effect.yungscavebiomes.buffeted": "Окутаний піском",
   "effect.yungscavebiomes.buffeted.description": "Уповільнює рух і звужує поле зору",
   "item.minecraft.potion.effect.yungscavebiomes.frost": "Зілля обмороження",
