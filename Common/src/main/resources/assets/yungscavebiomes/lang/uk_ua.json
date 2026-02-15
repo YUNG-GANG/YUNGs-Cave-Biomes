@@ -138,5 +138,8 @@
   "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.config.other.vanillaBiomeModifications.dripstoneCaves.depthMax": "Максимальна глибина",
   "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.config.other.vanillaBiomeModifications.dripstoneCaves.weirdnessMin": "Мінімальна дивність",
   "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.config.other.vanillaBiomeModifications.dripstoneCaves.weirdnessMax": "Максимальна дивність",
-  "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.config.other.vanillaBiomeModifications.dripstoneCaves.offset": "Зміщення"
+  "text.autoconfig.yungscavebiomes-fabric-1_20_1.option.config.other.vanillaBiomeModifications.dripstoneCaves.offset": "Зміщення",
+
+  "modmenu.descriptionTranslation.yungscavebiomes": "Додає нові печерні біоми подібні стандартній грі й підземний вміст!",
+  "fml.menu.mods.info.description.yungscavebiomes": "Додає нові печерні біоми подібні стандартній грі й підземний вміст!"
 }
