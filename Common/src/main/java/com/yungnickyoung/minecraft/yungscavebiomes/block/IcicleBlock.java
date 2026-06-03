@@ -14,7 +14,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -112,7 +112,10 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     @Override
     public void onProjectileHit(Level level, @NotNull BlockState blockState, BlockHitResult blockHitResult, @NotNull Projectile projectile) {
         BlockPos blockPos = blockHitResult.getBlockPos();
-        if (!level.isClientSide && projectile.mayInteract(level, blockPos) && projectile instanceof AbstractArrow && projectile.getDeltaMovement().length() > 0.4) {
+        if (level instanceof ServerLevel serverLevel
+            && projectile.mayInteract(serverLevel, blockPos)
+            && projectile instanceof AbstractArrow
+            && projectile.getDeltaMovement().length() > 0.4) {
             level.destroyBlock(blockPos, true);
         }
     }
@@ -176,7 +179,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
             default -> voxelShape = TIP_SHAPE;
         }
 
-        Vec3 vec3 = blockState.getOffset(blockGetter, blockPos);
+        Vec3 vec3 = blockState.getOffset(blockPos);
         return voxelShape.move(vec3.x, 0.0, vec3.z);
     }
 

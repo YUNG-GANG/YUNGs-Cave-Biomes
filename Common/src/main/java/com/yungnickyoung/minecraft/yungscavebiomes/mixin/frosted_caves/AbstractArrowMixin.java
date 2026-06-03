@@ -10,8 +10,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -35,7 +35,7 @@ public abstract class AbstractArrowMixin extends Entity {
      */
     @Inject(method = "onHitBlock", at = @At("RETURN"))
     public void yungscavebiomes_tippedArrowOnHitBlockSpawnIceSheets(BlockHitResult blockHitResult, CallbackInfo ci) {
-        if (!this.level().isClientSide && isArrow(this)) {
+        if (!this.level().isClientSide() && isArrow(this)) {
             Arrow arrow = asArrow(this);
             PotionContents potionContents = ((ArrowAccessor) arrow).callGetPotionContents();
             for (MobEffectInstance mobEffectInstance : potionContents.getAllEffects()) {
@@ -56,7 +56,7 @@ public abstract class AbstractArrowMixin extends Entity {
      */
     @Inject(method = "onHitEntity", at = @At("RETURN"))
     public void yungscavebiomes_tippedArrowOnHitEntitySpawnIceSheets(EntityHitResult entityHitResult, CallbackInfo ci) {
-        if (!this.level().isClientSide && isArrow(this)) {
+        if (!this.level().isClientSide() && isArrow(this)) {
             Arrow arrow = asArrow(this);
             PotionContents potionContents = ((ArrowAccessor) arrow).callGetPotionContents();
             for (MobEffectInstance mobEffectInstance : potionContents.getAllEffects()) {

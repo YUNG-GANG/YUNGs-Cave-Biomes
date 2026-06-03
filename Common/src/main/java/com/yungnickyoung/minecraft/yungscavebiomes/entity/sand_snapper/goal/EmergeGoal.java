@@ -4,6 +4,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapp
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -115,6 +116,6 @@ public class EmergeGoal extends Goal {
 
     private List<Player> getPlayersInRange(float range) {
         AABB searchBox = this.sandSnapper.getBoundingBox().inflate(range, 4.0f, range);
-        return this.sandSnapper.level().getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
+        return ((ServerLevel) this.sandSnapper.level()).getNearbyPlayers(TargetingConditions.DEFAULT, this.sandSnapper, searchBox);
     }
 }

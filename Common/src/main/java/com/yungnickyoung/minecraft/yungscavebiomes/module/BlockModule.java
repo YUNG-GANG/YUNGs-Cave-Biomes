@@ -78,7 +78,7 @@ public class BlockModule {
                     .mapColor(MapColor.ICE)
                     .friction(0.98f)
                     .noOcclusion()
-                    .noCollission()
+                    .noCollision()
                     .strength(0.3f)
                     .lightLevel(blockState -> blockState.getValue(BlockStateProperties.LIT) ? 4 : 0)
                     .randomTicks()
@@ -235,7 +235,7 @@ public class BlockModule {
                     .of()
                     .mapColor(MapColor.PLANT)
                     .randomTicks()
-                    .noCollission()
+                    .noCollision()
                     .instabreak()
                     .pushReaction(PushReaction.DESTROY)
                     .sound(SoundType.WEEPING_VINES)))
@@ -245,7 +245,7 @@ public class BlockModule {
     public static final AutoRegisterBlock PRICKLY_VINES_PLANT = AutoRegisterBlock.of(() -> new PricklyVinesPlantBlock(BlockBehaviour.Properties
             .of()
             .mapColor(MapColor.PLANT)
-            .noCollission()
+            .noCollision()
             .instabreak()
             .pushReaction(PushReaction.DESTROY)
             .sound(SoundType.WEEPING_VINES)));

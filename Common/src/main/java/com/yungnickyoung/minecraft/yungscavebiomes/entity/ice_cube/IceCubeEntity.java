@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -35,6 +36,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -86,15 +89,15 @@ public class IceCubeEntity extends Monster {
     }
 
     @Override
-    public void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
+    public void addAdditionalSaveData(@NotNull ValueOutput compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putBoolean("wasOnGround", this.wasOnGround);
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
+    public void readAdditionalSaveData(@NotNull ValueInput compoundTag) {
         super.readAdditionalSaveData(compoundTag);
-        this.wasOnGround = compoundTag.getBoolean("wasOnGround");
+        this.wasOnGround = compoundTag.getBooleanOr("wasOnGround", false);
     }
 
     @Override
@@ -185,7 +188,7 @@ public class IceCubeEntity extends Monster {
     public void jumpFromGround() {
         Vec3 vec3 = this.getDeltaMovement();
         this.setDeltaMovement(vec3.x, this.getJumpPower(), vec3.z);
-        this.hasImpulse = true;
+        this.needsSync = true;
     }
 
     @Override
@@ -206,11 +209,6 @@ public class IceCubeEntity extends Monster {
 //    public boolean isWithinMeleeAttackRange(LivingEntity target) {
 //        return this.getBbWidth() * this.getBbWidth() + target.getBbWidth();
 //    }
-
-    @Override
-    protected @NotNull AABB getAttackBoundingBox() {
-        return super.getAttackBoundingBox();
-    }
 
     public int getJumpDelay() {
         return this.random.nextInt(20) + 10;
@@ -237,10 +235,10 @@ public class IceCubeEntity extends Monster {
     }
 
     protected void dealDamage(LivingEntity livingEntity) {
-        if (this.isAlive()) {
+        if (this.isAlive() && this.level() instanceof ServerLevel serverLevel) {
             if (this.distanceToSqr(livingEntity) < 2.5 && this.hasLineOfSight(livingEntity)) {
                 DamageSource damageSource = this.damageSources().mobAttack(this);
-                if (livingEntity.hurt(damageSource, this.getAttackDamage())) {
+                if (livingEntity.hurtServer(serverLevel, damageSource, this.getAttackDamage())) {
                     this.playSound(SoundEvents.SLIME_ATTACK, 1.0f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 1.0f);
                     livingEntity.setTicksFrozen(livingEntity.getTicksFrozen() + 200);
                 }
@@ -305,7 +303,7 @@ public class IceCubeEntity extends Monster {
             this.operation = Operation.MOVE_TO;
         }
 
-        public void tick() {
+        @Override public void tick() {
             this.mob.setYRot(this.rotlerp(this.mob.getYRot(), this.yRot, 90.0F));
             this.mob.yHeadRot = this.mob.getYRot();
             this.mob.yBodyRot = this.mob.getYRot();

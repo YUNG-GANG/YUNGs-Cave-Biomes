@@ -5,6 +5,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.ISandstormServerDataProvider;
 import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,7 +49,7 @@ public class RunFromPlayerGoal extends Goal {
         this.speedModifier = speedModifier;
         this.submergedSpeedModifier = submergedSpeedModifier;
         this.pathNav = sandSnapper.getNavigation();
-        this.avoidEntityTargeting = TargetingConditions.forCombat().range(maxDist).selector(avoidEntityPredicate);
+        this.avoidEntityTargeting = TargetingConditions.forCombat().range(maxDist).selector((livingEntity, _) -> avoidEntityPredicate.test(livingEntity));
         this.refreshPathTimer = adjustedTickDelay(REFRESH_PATH_INTERVAL);
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
@@ -100,7 +101,7 @@ public class RunFromPlayerGoal extends Goal {
             return false;
         }
 
-        this.playerToAvoid = this.sandSnapper.level().getNearestEntity(
+        this.playerToAvoid = ((ServerLevel)this.sandSnapper.level()).getNearestEntity(
                 this.sandSnapper.level()
                         .getEntitiesOfClass(Player.class, this.sandSnapper.getBoundingBox().inflate(this.maxDist, 3.0, this.maxDist), p -> true),
                 this.avoidEntityTargeting,

@@ -8,6 +8,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.util.Mth;
 
+//todo replace with environment attributes
 public class SandstormFogRenderer {
     /**
      * The current fog level. 0 is no fog, 1 is full fog.

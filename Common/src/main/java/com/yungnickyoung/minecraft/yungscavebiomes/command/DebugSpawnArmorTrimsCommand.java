@@ -5,12 +5,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Pair;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.TrimPatternsModule;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.util.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -20,29 +20,31 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.armortrim.ArmorTrim;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimMaterials;
-import net.minecraft.world.item.armortrim.TrimPattern;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterials;
+import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.Level;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.ToIntFunction;
 
 public class DebugSpawnArmorTrimsCommand {
-    private static final Map<Pair<Holder<ArmorMaterial>, EquipmentSlot>, Item> MATERIAL_AND_SLOT_TO_ITEM = Util.make(Maps.newHashMap(), $$0 -> {
-        $$0.put(Pair.of(ArmorMaterials.IRON_CHAIN, EquipmentSlot.HEAD), Items.IRON_CHAINMAIL_HELMET);
-        $$0.put(Pair.of(ArmorMaterials.IRON_CHAIN, EquipmentSlot.CHEST), Items.IRON_CHAINMAIL_CHESTPLATE);
-        $$0.put(Pair.of(ArmorMaterials.IRON_CHAIN, EquipmentSlot.LEGS), Items.IRON_CHAINMAIL_LEGGINGS);
-        $$0.put(Pair.of(ArmorMaterials.IRON_CHAIN, EquipmentSlot.FEET), Items.IRON_CHAINMAIL_BOOTS);
+    private static final Map<Pair<ArmorMaterial, EquipmentSlot>, Item> MATERIAL_AND_SLOT_TO_ITEM = Util.make(Maps.newHashMap(), $$0 -> {
+        $$0.put(Pair.of(ArmorMaterials.CHAINMAIL, EquipmentSlot.HEAD), Items.CHAINMAIL_HELMET);
+        $$0.put(Pair.of(ArmorMaterials.CHAINMAIL, EquipmentSlot.CHEST), Items.CHAINMAIL_CHESTPLATE);
+        $$0.put(Pair.of(ArmorMaterials.CHAINMAIL, EquipmentSlot.LEGS), Items.CHAINMAIL_LEGGINGS);
+        $$0.put(Pair.of(ArmorMaterials.CHAINMAIL, EquipmentSlot.FEET), Items.CHAINMAIL_BOOTS);
         $$0.put(Pair.of(ArmorMaterials.IRON, EquipmentSlot.HEAD), Items.IRON_HELMET);
         $$0.put(Pair.of(ArmorMaterials.IRON, EquipmentSlot.CHEST), Items.IRON_CHESTPLATE);
         $$0.put(Pair.of(ArmorMaterials.IRON, EquipmentSlot.LEGS), Items.IRON_LEGGINGS);
@@ -59,53 +61,53 @@ public class DebugSpawnArmorTrimsCommand {
         $$0.put(Pair.of(ArmorMaterials.DIAMOND, EquipmentSlot.CHEST), Items.DIAMOND_CHESTPLATE);
         $$0.put(Pair.of(ArmorMaterials.DIAMOND, EquipmentSlot.LEGS), Items.DIAMOND_LEGGINGS);
         $$0.put(Pair.of(ArmorMaterials.DIAMOND, EquipmentSlot.FEET), Items.DIAMOND_BOOTS);
-        $$0.put(Pair.of(ArmorMaterials.TURTLE, EquipmentSlot.HEAD), Items.TURTLE_HELMET);
+        $$0.put(Pair.of(ArmorMaterials.TURTLE_SCUTE, EquipmentSlot.HEAD), Items.TURTLE_HELMET);
     });
 
-    private static final Map<ArmorMaterial, Map<EquipmentSlot, Item>> MAP = Util.make(Maps.newHashMap(), map -> {
+    private static final Map<ArmorMaterial, Map<EquipmentSlot, Item>> ARMOR_MAP = Util.make(Maps.newHashMap(), map -> {
         Map<EquipmentSlot, Item> chainMap = Util.make(Maps.newHashMap(), m -> {
-            m.put(EquipmentSlot.HEAD, Items.IRON_CHAINMAIL_HELMET);
-            m.put(EquipmentSlot.CHEST, Items.IRON_CHAINMAIL_CHESTPLATE);
-            m.put(EquipmentSlot.LEGS, Items.IRON_CHAINMAIL_LEGGINGS);
-            m.put(EquipmentSlot.FEET, Items.IRON_CHAINMAIL_BOOTS);
+            m.put(EquipmentSlot.HEAD, Items.CHAINMAIL_HELMET);
+            m.put(EquipmentSlot.CHEST, Items.CHAINMAIL_CHESTPLATE);
+            m.put(EquipmentSlot.LEGS, Items.CHAINMAIL_LEGGINGS);
+            m.put(EquipmentSlot.FEET, Items.CHAINMAIL_BOOTS);
         });
-        map.put(ArmorMaterials.IRON_CHAIN.value(), chainMap);
+        map.put(ArmorMaterials.CHAINMAIL, chainMap);
         Map<EquipmentSlot, Item> ironMap = Util.make(Maps.newHashMap(), m -> {
             m.put(EquipmentSlot.HEAD, Items.IRON_HELMET);
             m.put(EquipmentSlot.CHEST, Items.IRON_CHESTPLATE);
             m.put(EquipmentSlot.LEGS, Items.IRON_LEGGINGS);
             m.put(EquipmentSlot.FEET, Items.IRON_BOOTS);
         });
-        map.put(ArmorMaterials.IRON.value(), ironMap);
+        map.put(ArmorMaterials.IRON, ironMap);
         Map<EquipmentSlot, Item> goldMap = Util.make(Maps.newHashMap(), m -> {
             m.put(EquipmentSlot.HEAD, Items.GOLDEN_HELMET);
             m.put(EquipmentSlot.CHEST, Items.GOLDEN_CHESTPLATE);
             m.put(EquipmentSlot.LEGS, Items.GOLDEN_LEGGINGS);
             m.put(EquipmentSlot.FEET, Items.GOLDEN_BOOTS);
         });
-        map.put(ArmorMaterials.GOLD.value(), goldMap);
+        map.put(ArmorMaterials.GOLD, goldMap);
         Map<EquipmentSlot, Item> netheriteMap = Util.make(Maps.newHashMap(), m -> {
             m.put(EquipmentSlot.HEAD, Items.NETHERITE_HELMET);
             m.put(EquipmentSlot.CHEST, Items.NETHERITE_CHESTPLATE);
             m.put(EquipmentSlot.LEGS, Items.NETHERITE_LEGGINGS);
             m.put(EquipmentSlot.FEET, Items.NETHERITE_BOOTS);
         });
-        map.put(ArmorMaterials.NETHERITE.value(), netheriteMap);
+        map.put(ArmorMaterials.NETHERITE, netheriteMap);
         Map<EquipmentSlot, Item> diamondMap = Util.make(Maps.newHashMap(), m -> {
             m.put(EquipmentSlot.HEAD, Items.DIAMOND_HELMET);
             m.put(EquipmentSlot.CHEST, Items.DIAMOND_CHESTPLATE);
             m.put(EquipmentSlot.LEGS, Items.DIAMOND_LEGGINGS);
             m.put(EquipmentSlot.FEET, Items.DIAMOND_BOOTS);
         });
-        map.put(ArmorMaterials.DIAMOND.value(), diamondMap);
+        map.put(ArmorMaterials.DIAMOND, diamondMap);
         Map<EquipmentSlot, Item> turtleMap = Util.make(Maps.newHashMap(), m -> {
             m.put(EquipmentSlot.HEAD, Items.TURTLE_HELMET);
         });
-        map.put(ArmorMaterials.TURTLE.value(), turtleMap);
+        map.put(ArmorMaterials.TURTLE_SCUTE, turtleMap);
     });
 
     private static Item getArmorItem(ArmorMaterial material, EquipmentSlot slot) {
-        Map<EquipmentSlot, Item> slotMap = MAP.get(material);
+        Map<EquipmentSlot, Item> slotMap = ARMOR_MAP.get(material);
         if (slotMap != null) {
             return slotMap.get(slot);
         }
@@ -135,7 +137,7 @@ public class DebugSpawnArmorTrimsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext ctx, Commands.CommandSelection selection) {
         dispatcher.register(
                 Commands.literal("ycb_armor_trims")
-                        .requires(source -> source.hasPermission(2))
+                        .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .executes(context -> spawnArmorTrims(context.getSource(), context.getSource().getPlayerOrException()))
         );
     }
@@ -143,8 +145,8 @@ public class DebugSpawnArmorTrimsCommand {
     private static int spawnArmorTrims(CommandSourceStack source, Player player) {
         Level level = player.level();
         NonNullList<ArmorTrim> armorTrims = NonNullList.create();
-        Registry<TrimPattern> trimPatternRegistry = level.registryAccess().registryOrThrow(Registries.TRIM_PATTERN);
-        Registry<TrimMaterial> trimMaterialRegistry = level.registryAccess().registryOrThrow(Registries.TRIM_MATERIAL);
+        Registry<TrimPattern> trimPatternRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
+        Registry<TrimMaterial> trimMaterialRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_MATERIAL);
 
         trimPatternRegistry.stream()
                 .filter(pattern -> pattern.assetId().getNamespace().equals(YungsCaveBiomesCommon.MOD_ID))
@@ -156,15 +158,14 @@ public class DebugSpawnArmorTrimsCommand {
                 );
 
         BlockPos pos = player.blockPosition().relative(player.getDirection(), 5);
-        Registry<ArmorMaterial> armorMaterialRegistry = source.registryAccess().registryOrThrow(Registries.ARMOR_MATERIAL);
-        int numMats = armorMaterialRegistry.size() - 1;
+        int numMats = ARMOR_MAP.size() - 1;
         double $$8 = 3.0;
         int trimIndex = 0;
         int materialIndex = 0;
 
         for (ArmorTrim trim : armorTrims) {
-            for (ArmorMaterial material : armorMaterialRegistry) {
-                if (material != ArmorMaterials.LEATHER.value()) {
+            for (ArmorMaterial material : ARMOR_MAP.keySet()) {
+                if (material != ArmorMaterials.LEATHER) {
                     double x = (double) pos.getX() + 0.5 - (double) (trimIndex % trimMaterialRegistry.size()) * 3.0;
                     double y = (double) pos.getY() + 0.5 + (double) (materialIndex % numMats) * 3.0;
                     double z = (double) pos.getZ() + 0.5 + (double) (trimIndex / trimMaterialRegistry.size() * 10);
@@ -173,21 +174,23 @@ public class DebugSpawnArmorTrimsCommand {
                     armorStand.setNoGravity(true);
 
                     for (EquipmentSlot slot : EquipmentSlot.values()) {
-//                        Item armorItem = MATERIAL_AND_SLOT_TO_ITEM.get(Pair.of(material, slot));
                         Item armorItem = getArmorItem(material, slot);
                         if (armorItem != null) {
                             ItemStack armorItemStack = new ItemStack(armorItem);
                             armorItemStack.set(DataComponents.TRIM, trim);
                             armorStand.setItemSlot(slot, armorItemStack);
 
-                            if (armorItem instanceof ArmorItem $$20) {
-                                if ($$20.getMaterial() == ArmorMaterials.TURTLE) {
-                                    armorStand.setCustomName(
-                                            trim.pattern().value().copyWithStyle(trim.material()).copy().append(" ").append(trim.material().value().description())
-                                    );
-                                    armorStand.setCustomNameVisible(true);
-                                    continue;
-                                }
+                            if (Optional.ofNullable(armorItemStack.get(DataComponents.EQUIPPABLE))
+                                    .flatMap(Equippable::assetId)
+                                    .filter(EquipmentAssets.TURTLE_SCUTE::equals)
+                                    .isPresent()) {
+                                armorStand.setCustomName(
+                                        trim.pattern().value().copyWithStyle(trim.material()).copy()
+                                                .append(" ")
+                                                .append(trim.material().value().description())
+                                );
+                                armorStand.setCustomNameVisible(true);
+                                continue;
                             }
 
                             armorStand.setInvisible(true);

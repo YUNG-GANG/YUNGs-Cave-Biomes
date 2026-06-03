@@ -9,8 +9,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -25,18 +25,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ThrownPotion.class)
-public abstract class ThrownPotionMixin extends ThrowableItemProjectile {
-    public ThrownPotionMixin(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
+@Mixin(AbstractThrownPotion.class)
+public abstract class AbstractThrownPotionMixin extends ThrowableItemProjectile {
+    public AbstractThrownPotionMixin(EntityType<? extends ThrowableItemProjectile> entityType, Level level) {
         super(entityType, level);
     }
 
     /**
      * Makes frost splash potions spawn ice sheets on impact.
      */
-    @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ThrownPotion;discard()V", ordinal = 0))
+    @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/throwableitemprojectile/AbstractThrownPotion;discard()V", ordinal = 0))
     protected void yungscavebiomes_onFrostSplashPotionHit(HitResult hitResult, CallbackInfo ci) {
-        if (!this.level().isClientSide && !this.level().dimensionType().ultraWarm()) {
+        if (!this.level().isClientSide() && !this.level().dimensionType().ultraWarm()) { //todo replace ultraWarm with env attr check
             ItemStack itemStack = this.getItem();
             PotionContents potionContents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
             if (potionContents.potion().isEmpty()) {

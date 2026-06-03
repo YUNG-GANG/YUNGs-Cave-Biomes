@@ -24,6 +24,8 @@ import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -141,7 +143,7 @@ public class SuspiciousAncientSandBlockEntity extends BlockEntity {
                 double $$6 = (double) $$5.getX() + 0.5 * $$2 + $$3;
                 double $$7 = (double) $$5.getY() + 0.5 + (double) (EntityType.ITEM.getHeight() / 2.0F);
                 double $$8 = (double) $$5.getZ() + 0.5 * $$2 + $$3;
-                ItemEntity $$9 = new ItemEntity(this.level, $$6, $$7, $$8, this.item.split(this.level.random.nextInt(21) + 10));
+                ItemEntity $$9 = new ItemEntity(this.level, $$6, $$7, $$8, this.item.split(this.level.getRandom().nextInt(21) + 10));
                 $$9.setDeltaMovement(Vec3.ZERO);
                 this.level.addFreshEntity($$9);
                 this.item = ItemStack.EMPTY;
@@ -173,17 +175,18 @@ public class SuspiciousAncientSandBlockEntity extends BlockEntity {
         }
     }
 
-    private boolean tryLoadLootTable(CompoundTag tag) {
-        if (tag.contains(LOOT_TABLE_TAG, 8)) {
-            this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(tag.getString("LootTable")));
-            this.lootTableSeed = tag.getLong(LOOT_TABLE_SEED_TAG);
+    private boolean tryLoadLootTable(ValueInput tag) {
+        var lootTableTag = tag.getString(LOOT_TABLE_TAG);
+        if (lootTableTag.isPresent()) {
+            this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(lootTableTag.get()));
+            this.lootTableSeed = tag.getLongOr(LOOT_TABLE_SEED_TAG, 0);
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
-    private boolean trySaveLootTable(CompoundTag $$0) {
+    private boolean trySaveLootTable(ValueOutput $$0) {
         if (this.lootTable == null) {
             return false;
         } else {
@@ -204,35 +207,35 @@ public class SuspiciousAncientSandBlockEntity extends BlockEntity {
         }
 
         if (!this.item.isEmpty()) {
-            $$1.put("item", this.item.save($$0));
+            $$1.store("item", ItemStack.CODEC, this.item);
         }
 
         return $$1;
     }
 
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+    @Override public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void loadAdditional(@NotNull CompoundTag $$0, HolderLookup.@NotNull Provider $$1) {
-        super.loadAdditional($$0, $$1);
-        if (!this.tryLoadLootTable($$0) && $$0.contains(ITEM_TAG)) {
-            this.item = ItemStack.parse($$1, $$0.getCompound(ITEM_TAG)).orElse(ItemStack.EMPTY);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        if (!this.tryLoadLootTable(input)) {
+            this.item = input.read(ITEM_TAG, ItemStack.CODEC).orElse(ItemStack.EMPTY);
         } else {
             this.item = ItemStack.EMPTY;
         }
 
-        if ($$0.contains(HIT_DIRECTION_TAG)) {
-            this.hitDirection = Direction.values()[$$0.getInt(HIT_DIRECTION_TAG)];
-        }
+        input.getInt(HIT_DIRECTION_TAG)
+                .map(i -> Direction.values()[i])
+                .ifPresent(d -> this.hitDirection = d);
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag $$0, HolderLookup.@NotNull Provider $$1) {
-        super.saveAdditional($$0, $$1);
-        if (!this.trySaveLootTable($$0) && !this.item.isEmpty()) {
-            $$0.put(ITEM_TAG, this.item.save($$1));
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        if (!this.trySaveLootTable(output) && !this.item.isEmpty()) {
+            output.store(ITEM_TAG, ItemStack.CODEC, this.item);
         }
     }
 

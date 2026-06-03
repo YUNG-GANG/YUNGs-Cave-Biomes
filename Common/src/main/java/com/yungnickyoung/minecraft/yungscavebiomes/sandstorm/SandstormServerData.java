@@ -84,12 +84,12 @@ public class SandstormServerData extends SavedData {
 
     public SandstormServerData(ServerLevel serverLevel, CompoundTag compoundTag) {
         this(serverLevel);
-        this.isSandstormActive = compoundTag.getBoolean("isSandstormActive");
-        this.sandstormSeed = compoundTag.getLong("sandstormSeed");
-        this.currSandstormTicks = compoundTag.getInt("sandstormTime");
-        this.cooldownTicks = compoundTag.getInt("sandstormCooldown");
-        this.totalSandstormDurationTicks = compoundTag.getInt("totalSandstormDuration");
-        this.totalSandstormCooldownTicks = compoundTag.getInt("totalSandstormCooldown");
+        this.isSandstormActive = compoundTag.getBooleanOr("isSandstormActive", false);
+        this.sandstormSeed = compoundTag.getLongOr("sandstormSeed", 0);
+        this.currSandstormTicks = compoundTag.getIntOr("sandstormTime", 0);
+        this.cooldownTicks = compoundTag.getIntOr("sandstormCooldown", 0);
+        this.totalSandstormDurationTicks = compoundTag.getIntOr("totalSandstormDuration", 0);
+        this.totalSandstormCooldownTicks = compoundTag.getIntOr("totalSandstormCooldown", 0);
     }
 
     /**

@@ -62,13 +62,13 @@ public class LostCavesAmbientSoundsHandler implements AmbientSoundHandler {
         if (this.inLostCaves) {
             // Set sandstorm sound
             if (sandstormClientData.isSandstormActive()
-                    && !this.lostCavesSound.getLocation().equals(sandstormAmbientSound)) {
+                    && !this.lostCavesSound.getIdentifier().equals(sandstormAmbientSound)) {
                 changeAmbientsound(SoundModule.SANDSTORM_AMBIENT_LOST_CAVES.get());
             }
 
             // Set regular sound
             if (!sandstormClientData.isSandstormActive()
-                    && !this.lostCavesSound.getLocation().equals(regularAmbientSound)) {
+                    && !this.lostCavesSound.getIdentifier().equals(regularAmbientSound)) {
                 changeAmbientsound(SoundModule.AMBIENT_LOST_CAVES.get());
             }
         }

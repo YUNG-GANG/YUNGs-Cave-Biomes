@@ -5,32 +5,31 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 
-
-public class IceShatterParticle extends TextureSheetParticle {
+public class IceShatterParticle extends SingleQuadParticle {
     private final float uo;
     private final float vo;
 
-    public IceShatterParticle(ClientLevel clientLevel, double xo, double yo, double zo) {
-        super(clientLevel, xo, yo, zo, 0.0, 0.0, 0.0);
-        this.setSprite(Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getParticleIcon(Blocks.ICE.defaultBlockState()));
+    public IceShatterParticle(ClientLevel clientLevel, double xo, double yo, double zo, RandomSource random) {
+        super(clientLevel, xo, yo, zo, 0.0, 0.0, 0.0, Minecraft.getInstance().getModelManager().getBlockStateModelSet().getParticleMaterial(Blocks.ICE.defaultBlockState()).sprite());
         this.gravity = 1f;
         this.friction = 0.9f; // acceleration
         this.xd *= random.nextFloat() * 8f;
         this.zd *= random.nextFloat() * 8f;
         this.yd *= random.nextFloat() * 8f;
         this.quadSize /= 5.0F;
-        this.lifetime = Mth.randomBetweenInclusive(this.random, 20, 40);
-        this.uo = this.random.nextFloat();
-        this.vo = this.random.nextFloat();
+        this.lifetime = Mth.randomBetweenInclusive(random, 20, 40);
+        this.uo = random.nextFloat();
+        this.vo = random.nextFloat();
     }
 
-    @Override
-    public @NotNull ParticleRenderType getRenderType() {
-        return ParticleRenderType.TERRAIN_SHEET;
+    @Override protected Layer getLayer() {
+        return Layer.OPAQUE_TERRAIN;
     }
 
     @Override
@@ -54,8 +53,8 @@ public class IceShatterParticle extends TextureSheetParticle {
     }
 
     @Override
-    public int getLightColor(float f) {
-        int lightAtPos = super.getLightColor(f);
+    public int getLightCoords(float f) {
+        int lightAtPos = super.getLightCoords(f);
         int k = lightAtPos >> 16 & 0xFF;
         return 0xF0 | k << 16;
     }
@@ -68,10 +67,16 @@ public class IceShatterParticle extends TextureSheetParticle {
         }
 
         @Override
-        
-        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel,
-                                       double xo, double yo, double zo, double dx, double dy, double dz){
-            return new IceShatterParticle(clientLevel, xo, yo, zo);
+        public @Nullable Particle createParticle(final SimpleParticleType simpleParticleType,
+                                                 final ClientLevel clientLevel,
+                                                 final double xo,
+                                                 final double yo,
+                                                 final double zo,
+                                                 final double dx,
+                                                 final double dy,
+                                                 final double dz,
+                                                 final RandomSource randomSource) {
+            return new IceShatterParticle(clientLevel, xo, yo, zo, randomSource);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -42,7 +43,7 @@ public class SnapperTemptGoal extends Goal {
             this.cooldownTimer--;
             return false;
         } else {
-            this.player = this.sandSnapper.level().getNearestPlayer(this.targetingConditions, this.sandSnapper);
+            this.player = ((ServerLevel) this.sandSnapper.level()).getNearestPlayer(this.targetingConditions, this.sandSnapper);
             return this.player != null;
         }
     }
@@ -79,7 +80,7 @@ public class SnapperTemptGoal extends Goal {
         this.cooldownTimer = reducedTickDelay(COOLDOWN);
     }
 
-    private boolean isHoldingTemptingItem(LivingEntity livingEntity) {
+    private boolean isHoldingTemptingItem(LivingEntity livingEntity, ServerLevel serverLevel) {
         return this.items.test(livingEntity.getMainHandItem()) || this.items.test(livingEntity.getOffhandItem());
     }
 }

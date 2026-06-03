@@ -1,5 +1,13 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper;
 
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.util.GeckoLibUtil;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.BuryLootGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EatPeachGoal;
@@ -44,20 +52,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
-
 
 
 public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
@@ -67,8 +67,8 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     public static final byte BURY_LOOT_PARTICLES_EVENT_GRAVEL = 10;
 
     // ANIMATION DATA
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private final RawAnimation EMERGE_PLAYER = RawAnimation.begin().thenPlay("look").thenPlay("look_loop");
+    private final AnimatableInstanceCache cache         = GeckoLibUtil.createInstanceCache(this);
+    private final RawAnimation            EMERGE_PLAYER = RawAnimation.begin().thenPlay("look").thenPlay("look_loop");
     private final RawAnimation EMERGE = RawAnimation.begin().thenPlay("look_turn_head");
     private final RawAnimation DIVE = RawAnimation.begin().thenPlay("diveback");
     private final RawAnimation SWIM = RawAnimation.begin().thenPlay("swim");
@@ -166,11 +166,11 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
+    public void addAdditionalSaveData(@NotNull ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         ItemStack itemStack = this.carryingItem;
         if (!itemStack.isEmpty()) {
-            tag.put("carryingItemStack", itemStack.save(this.registryAccess()));
+            tag.store("carryingItemStack", ItemStack.CODEC, itemStack);
         }
         tag.putInt("friendlyTimer", this.friendlyTimer);
         tag.putInt("recentlyFedTimer", this.recentlyFedTimer);
@@ -178,15 +178,12 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("carryingItemStack")) {
-            CompoundTag carryingItemTag = tag.getCompound("carryingItemStack");
-            this.carryingItem = ItemStack.parseOptional(this.registryAccess(), carryingItemTag);
-        }
-        this.friendlyTimer = tag.getInt("friendlyTimer");
-        this.recentlyFedTimer = tag.getInt("recentlyFedTimer");
-        this.searchingForGift = tag.getBoolean("searchingForGift");
+        tag.read("carryingItemStack", ItemStack.CODEC).ifPresent(is -> this.carryingItem = is);
+        this.friendlyTimer = tag.getIntOr("friendlyTimer", 0);
+        this.recentlyFedTimer = tag.getIntOr("recentlyFedTimer", 0);
+        this.searchingForGift = tag.getBooleanOr("searchingForGift", false);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -239,7 +236,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
         super.onSyncedDataUpdated(dataAccessor);
 
         if (dataAccessor.equals(EMERGING)) {
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 AnimationController<?> controller = this.getAnimatableInstanceCache()
                         .getManagerForId(this.getId())
                         .getAnimationControllers()
@@ -287,7 +284,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             // Update timers
             if (this.aboveGroundTimer > 0) {
                 this.aboveGroundTimer--;
@@ -368,7 +365,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
         ItemStack itemStack = player.getItemInHand(hand);
 
         if (itemStack.is(ItemModule.PRICKLY_PEACH_ITEM.get()) && this.recentlyFedTimer <= 0) {
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 return InteractionResult.CONSUME;
             }
             if (!player.getAbilities().instabuild) {
@@ -387,7 +384,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
 
             return InteractionResult.SUCCESS;
         } else if (!itemStack.isEmpty() && !itemStack.is(ItemModule.PRICKLY_PEACH_ITEM.get())) {
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 return InteractionResult.CONSUME;
             }
 
@@ -477,14 +474,14 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public boolean isInvulnerableTo(@NotNull DamageSource source) {
+    public boolean isInvulnerableTo(ServerLevel serverLevel, @NotNull DamageSource source) {
         if (this.isSubmerged() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !source.isCreativePlayer()) {
             return true; // Invulnerable while submerged
         }
         if (source.is(DamageTypes.CACTUS)) {
             return true; // Invulnerable to cactus damage
         }
-        return super.isInvulnerableTo(source);
+        return super.isInvulnerableTo(serverLevel, source);
     }
 
     @Override
@@ -528,7 +525,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     
     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource damageSource, boolean $$2) {
         super.dropCustomDeathLoot(serverLevel, damageSource, $$2);
-        this.spawnAtLocation(this.carryingItem);
+        this.spawnAtLocation(serverLevel, this.carryingItem);
     }
 
     @Override

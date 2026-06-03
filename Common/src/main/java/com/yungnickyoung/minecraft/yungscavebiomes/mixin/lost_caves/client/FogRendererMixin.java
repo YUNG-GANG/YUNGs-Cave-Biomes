@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+//todo replace me with environment attribute
 /**
  * Mixin to handle rendering of the sandstorm fog in Lost Caves.
  * This is a module-specific mixin because Forge uses its own setupFog method.

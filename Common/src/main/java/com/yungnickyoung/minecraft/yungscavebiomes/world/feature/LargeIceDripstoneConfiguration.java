@@ -3,21 +3,23 @@ package com.yungnickyoung.minecraft.yungscavebiomes.world.feature;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.valueproviders.FloatProvider;
+import net.minecraft.util.valueproviders.FloatProviders;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
 public class LargeIceDripstoneConfiguration implements FeatureConfiguration {
     public static final Codec<LargeIceDripstoneConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             (Codec.intRange(1, 512).fieldOf("floor_to_ceiling_search_range")).orElse(30).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.floorToCeilingSearchRange),
-            (IntProvider.codec(1, 60).fieldOf("column_radius")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.columnRadius),
-            (FloatProvider.codec(0.0f, 20.0f).fieldOf("height_scale")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.heightScale),
+            (IntProviders.codec(1, 60).fieldOf("column_radius")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.columnRadius),
+            (FloatProviders.codec(0.0f, 20.0f).fieldOf("height_scale")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.heightScale),
             (Codec.floatRange(0.1f, 1.0f).fieldOf("max_column_radius_to_cave_height_ratio")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.maxColumnRadiusToCaveHeightRatio),
-            (FloatProvider.codec(0.1f, 10.0f).fieldOf("stalactite_bluntness")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.stalactiteBluntness),
-            (FloatProvider.codec(0.1f, 10.0f).fieldOf("stalagmite_bluntness")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.stalagmiteBluntness),
-            (FloatProvider.codec(0.0f, 2.0f).fieldOf("wind_speed")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.windSpeed),
+            (FloatProviders.codec(0.1f, 10.0f).fieldOf("stalactite_bluntness")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.stalactiteBluntness),
+            (FloatProviders.codec(0.1f, 10.0f).fieldOf("stalagmite_bluntness")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.stalagmiteBluntness),
+            (FloatProviders.codec(0.0f, 2.0f).fieldOf("wind_speed")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.windSpeed),
             (Codec.intRange(0, 100).fieldOf("min_radius_for_wind")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.minRadiusForWind),
             (Codec.floatRange(0.0f, 5.0f).fieldOf("min_bluntness_for_wind")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.minBluntnessForWind),
-            (FloatProvider.codec(0.0f, 6.2832f).fieldOf("angle")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.angle),
+            (FloatProviders.codec(0.0f, 6.2832f).fieldOf("angle")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.angle),
             (Codec.floatRange(0.0f, 1.0f).fieldOf("rare_ice_chance")).forGetter(largeDripstoneConfiguration -> largeDripstoneConfiguration.rareIceChance)
     ).apply(instance, LargeIceDripstoneConfiguration::new));
 

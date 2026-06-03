@@ -48,7 +48,7 @@ public abstract class LivingEntityMixin extends Entity {
     public void yungscavebiomes_buffetEntitiesInSandstorm(CallbackInfo ci) {
         if (YungsCaveBiomesCommon.CONFIG.lostCaves.enableSandstorms
                 && this.isPlayer(this)
-                && !this.level().isClientSide
+                && !this.level().isClientSide()
                 && !this.isSpectator()
                 && this.tickCount % 10 == 0
                 && this.level() instanceof ServerLevel serverLevel

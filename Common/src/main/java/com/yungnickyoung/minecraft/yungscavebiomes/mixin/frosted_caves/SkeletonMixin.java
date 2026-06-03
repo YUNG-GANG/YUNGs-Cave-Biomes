@@ -2,8 +2,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.mixin.frosted_caves;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +21,7 @@ public abstract class SkeletonMixin extends AbstractSkeleton {
      */
     @Inject(method = "tick", at = @At("HEAD"))
     private void yungscavebiomes_transformSkeletonsInFrostedCaves(CallbackInfo ci) {
-        if (!this.level().isClientSide
+        if (!this.level().isClientSide()
                 && this.isAlive()
                 && !this.isNoAi()
                 && this.level().getBiome(this.blockPosition()).is(BiomeModule.FROSTED_CAVES)) {

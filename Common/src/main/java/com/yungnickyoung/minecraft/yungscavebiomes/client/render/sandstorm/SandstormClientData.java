@@ -197,7 +197,7 @@ public class SandstormClientData {
         pos.set(Mth.floor(particlePos.x), Mth.floor(particlePos.y), Mth.floor(particlePos.z));
         BlockState blockState = clientLevel.getBlockState(pos);
         if (blockState.isAir()) {
-            clientLevel.addParticle((ParticleOptions) ParticleTypeModule.SANDSTORM.get(), overrideLimiter,
+            clientLevel.addParticle((ParticleOptions) ParticleTypeModule.SANDSTORM.get(), overrideLimiter, false,
                     particlePos.x, particlePos.y, particlePos.z,
                     0.0, 0.0, 0.0);
         }
