@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.AbstractThrownPotion;
@@ -36,7 +37,7 @@ public abstract class AbstractThrownPotionMixin extends ThrowableItemProjectile 
      */
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/throwableitemprojectile/AbstractThrownPotion;discard()V", ordinal = 0))
     protected void yungscavebiomes_onFrostSplashPotionHit(HitResult hitResult, CallbackInfo ci) {
-        if (!this.level().isClientSide() && !this.level().dimensionType().ultraWarm()) { //todo replace ultraWarm with env attr check
+        if (!this.level().isClientSide() && !this.level().environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, hitResult.getLocation())) {
             ItemStack itemStack = this.getItem();
             PotionContents potionContents = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
             if (potionContents.potion().isEmpty()) {
