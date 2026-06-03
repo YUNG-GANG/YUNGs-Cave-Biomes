@@ -5,7 +5,6 @@ import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterBlockEn
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterEntityType;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.entity.RareIceBlockEntity;
-import com.yungnickyoung.minecraft.yungscavebiomes.block.entity.SuspiciousAncientSandBlockEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.IcicleProjectileEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
@@ -53,12 +52,6 @@ public class EntityTypeModule {
             .of(() -> AutoRegisterBlockEntityType.Builder
                     .of(RareIceBlockEntity::new, BlockModule.RARE_ICE.get())
                     .build(null));
-
-    @AutoRegister("suspicious_ancient_sand")
-    public static final AutoRegisterBlockEntityType<SuspiciousAncientSandBlockEntity> SUSPICIOUS_ANCIENT_SAND = AutoRegisterBlockEntityType
-            .of(() -> AutoRegisterBlockEntityType.Builder
-                    .of(SuspiciousAncientSandBlockEntity::new, BlockModule.SUSPICIOUS_ANCIENT_SAND.get())
-                    .build());
 
     /**
      * Methods with the AutoRegister annotations will be executed after registration.

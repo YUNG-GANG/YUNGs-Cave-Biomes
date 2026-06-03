@@ -20,6 +20,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.Snap
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.SoundModule;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -59,12 +60,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import java.util.function.ToIntFunction;
+
 
 public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     public static final byte HEART_PARTICLES_EVENT = 7;
     public static final byte BURY_LOOT_PARTICLES_EVENT_SAND = 8;
     public static final byte BURY_LOOT_PARTICLES_EVENT_ANCIENT_SAND = 9;
     public static final byte BURY_LOOT_PARTICLES_EVENT_GRAVEL = 10;
+
+    public static byte getBuryLootParticlesEvent(Block block) {
+        if (block == Blocks.SUSPICIOUS_GRAVEL) {
+            return BURY_LOOT_PARTICLES_EVENT_GRAVEL;
+        } else if (block == BlockModule.SUSPICIOUS_ANCIENT_SAND.get()) {
+            return BURY_LOOT_PARTICLES_EVENT_ANCIENT_SAND;
+        } else {
+            return BURY_LOOT_PARTICLES_EVENT_SAND;
+        }
+    }
 
     // ANIMATION DATA
     private final AnimatableInstanceCache cache         = GeckoLibUtil.createInstanceCache(this);

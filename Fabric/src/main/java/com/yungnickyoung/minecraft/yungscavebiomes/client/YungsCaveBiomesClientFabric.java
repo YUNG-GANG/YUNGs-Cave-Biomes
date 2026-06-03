@@ -39,7 +39,7 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(BlockModule.PRICKLY_VINES_PLANT.get(), RenderType.cutout());
 
         // Block Entity rendering
-        BlockEntityRenderers.register(EntityTypeModule.SUSPICIOUS_ANCIENT_SAND.get(), SuspiciousAncientSandBlockRenderer::new);
+        BlockEntityRenderers.register(EntityTypeModule.SUSPICIOUS_ANCIENT_SAND.get(), BrushableBlockRenderer::new);
 
         // Entity rendering
         EntityRendererRegistry.register(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);
