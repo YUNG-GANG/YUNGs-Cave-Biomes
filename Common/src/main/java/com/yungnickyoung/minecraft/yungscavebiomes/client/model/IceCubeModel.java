@@ -2,6 +2,8 @@ package com.yungnickyoung.minecraft.yungscavebiomes.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderState;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -11,15 +13,14 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 
 
 
-public class IceCubeModel<T extends IceCubeEntity> extends EntityModel<T> {
-    private final ModelPart root;
-
+public class IceCubeModel<S extends IceCubeRenderState> extends EntityModel<S> {
     public IceCubeModel(ModelPart root) {
-        this.root = root.getChild("bb_main");
+        super(root.getChild("bb_main"));
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -32,18 +33,11 @@ public class IceCubeModel<T extends IceCubeEntity> extends EntityModel<T> {
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
-    @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entity.getLeaping()) {
+    @Override public void setupAnim(final S state) {
+        if (state.leaping) {
             this.root.yRot += 9 * Mth.DEG_TO_RAD;
         } else {
             this.root.yRot = 0;
         }
-    }
-
-    @Override
-    
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
-        root.render(poseStack, buffer, packedLight, packedOverlay);
     }
 }
