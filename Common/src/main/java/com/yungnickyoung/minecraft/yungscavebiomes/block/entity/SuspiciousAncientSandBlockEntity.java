@@ -11,7 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -175,7 +175,7 @@ public class SuspiciousAncientSandBlockEntity extends BlockEntity {
 
     private boolean tryLoadLootTable(CompoundTag tag) {
         if (tag.contains(LOOT_TABLE_TAG, 8)) {
-            this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.parse(tag.getString("LootTable")));
+            this.lootTable = ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(tag.getString("LootTable")));
             this.lootTableSeed = tag.getLong(LOOT_TABLE_SEED_TAG);
             return true;
         } else {

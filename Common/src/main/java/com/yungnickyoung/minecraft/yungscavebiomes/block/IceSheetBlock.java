@@ -27,7 +27,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +36,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-@ParametersAreNonnullByDefault
+
 public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<IceSheetBlock> CODEC = simpleCodec(IceSheetBlock::new);
 

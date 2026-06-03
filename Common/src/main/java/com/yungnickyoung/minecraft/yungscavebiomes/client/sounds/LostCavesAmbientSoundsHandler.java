@@ -10,7 +10,7 @@ import net.minecraft.client.resources.sounds.AmbientSoundHandler;
 import net.minecraft.client.resources.sounds.BiomeAmbientSoundsHandler;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
@@ -21,8 +21,8 @@ import net.minecraft.world.level.biome.BiomeManager;
  * depending on whether a sandstorm is active.
  */
 public class LostCavesAmbientSoundsHandler implements AmbientSoundHandler {
-    private static final ResourceLocation regularAmbientSound = YungsCaveBiomesCommon.id("ambient.lost_caves.loop");
-    private static final ResourceLocation sandstormAmbientSound = YungsCaveBiomesCommon.id("ambient.lost_caves.sandstorm_loop");
+    private static final Identifier regularAmbientSound = YungsCaveBiomesCommon.id("ambient.lost_caves.loop");
+    private static final Identifier sandstormAmbientSound = YungsCaveBiomesCommon.id("ambient.lost_caves.sandstorm_loop");
 
     private final LocalPlayer player;
     private final SoundManager soundManager;

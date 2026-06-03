@@ -6,7 +6,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapp
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
@@ -17,7 +17,7 @@ public class SandSnapperRenderer extends GeoEntityRenderer<SandSnapperEntity> {
     }
 
     @Override
-    public RenderType getRenderType(SandSnapperEntity entity, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+    public RenderType getRenderType(SandSnapperEntity entity, Identifier texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
         return RenderType.entityCutoutNoCull(texture);
     }
 

@@ -20,9 +20,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+
+
 public class PricklyVinesBlock extends GrowingPlantHeadBlock {
     public static final MapCodec<PricklyVinesBlock> CODEC = simpleCodec(PricklyVinesBlock::new);
 

@@ -8,7 +8,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.recipe.vanilla.IJeiBrewingRecipe;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
@@ -18,13 +18,13 @@ import java.util.List;
 
 @JeiPlugin
 public class YungsCaveBiomesJEIPluginNeoForge implements IModPlugin {
-    private static final ResourceLocation PLUGIN_UID = YungsCaveBiomesCommon.id("jei_plugin");
+    private static final Identifier PLUGIN_UID = YungsCaveBiomesCommon.id("jei_plugin");
 
     public YungsCaveBiomesJEIPluginNeoForge() {
     }
 
     @Override
-    public @NotNull ResourceLocation getPluginUid() {
+    public @NotNull Identifier getPluginUid() {
         return PLUGIN_UID;
     }
 

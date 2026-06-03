@@ -10,7 +10,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+
 
 public class LostCavesAmbientParticle extends TextureSheetParticle {
     private final float rotSpeed;
@@ -75,7 +75,7 @@ public class LostCavesAmbientParticle extends TextureSheetParticle {
         }
 
         @Override
-        @ParametersAreNonnullByDefault
+        
         public Particle createParticle(SimpleParticleType type, ClientLevel clientLevel,
                                        double xo, double yo, double zo, double dx, double dy, double dz) {
             int color = 0xd1b482;

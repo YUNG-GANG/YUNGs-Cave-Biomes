@@ -24,9 +24,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+
+
 public class FrostLilyBlock extends BushBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<FrostLilyBlock> CODEC = simpleCodec(FrostLilyBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

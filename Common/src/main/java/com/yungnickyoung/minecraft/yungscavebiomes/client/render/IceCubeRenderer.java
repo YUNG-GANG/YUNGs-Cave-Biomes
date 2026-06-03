@@ -7,12 +7,12 @@ import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 public class IceCubeRenderer extends MobRenderer<IceCubeEntity, IceCubeModel<IceCubeEntity>> {
-    public static final ResourceLocation RESOURCE_LOCATION = YungsCaveBiomesCommon.id("textures/entity/ice_cube/ice_cube.png");
+    public static final Identifier RESOURCE_LOCATION = YungsCaveBiomesCommon.id("textures/entity/ice_cube/ice_cube.png");
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(YungsCaveBiomesCommon.id("ice_cube"), "main");
 
     public IceCubeRenderer(EntityRendererProvider.Context context) {
@@ -30,7 +30,7 @@ public class IceCubeRenderer extends MobRenderer<IceCubeEntity, IceCubeModel<Ice
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull IceCubeEntity entity) {
+    public @NotNull Identifier getTextureLocation(@NotNull IceCubeEntity entity) {
         return RESOURCE_LOCATION;
     }
 }

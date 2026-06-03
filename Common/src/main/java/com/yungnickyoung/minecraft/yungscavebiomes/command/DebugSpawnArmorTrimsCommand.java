@@ -5,7 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Pair;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.TrimPatternsModule;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -39,10 +39,10 @@ import java.util.function.ToIntFunction;
 
 public class DebugSpawnArmorTrimsCommand {
     private static final Map<Pair<Holder<ArmorMaterial>, EquipmentSlot>, Item> MATERIAL_AND_SLOT_TO_ITEM = Util.make(Maps.newHashMap(), $$0 -> {
-        $$0.put(Pair.of(ArmorMaterials.CHAIN, EquipmentSlot.HEAD), Items.CHAINMAIL_HELMET);
-        $$0.put(Pair.of(ArmorMaterials.CHAIN, EquipmentSlot.CHEST), Items.CHAINMAIL_CHESTPLATE);
-        $$0.put(Pair.of(ArmorMaterials.CHAIN, EquipmentSlot.LEGS), Items.CHAINMAIL_LEGGINGS);
-        $$0.put(Pair.of(ArmorMaterials.CHAIN, EquipmentSlot.FEET), Items.CHAINMAIL_BOOTS);
+        $$0.put(Pair.of(ArmorMaterials.IRON_CHAIN, EquipmentSlot.HEAD), Items.IRON_CHAINMAIL_HELMET);
+        $$0.put(Pair.of(ArmorMaterials.IRON_CHAIN, EquipmentSlot.CHEST), Items.IRON_CHAINMAIL_CHESTPLATE);
+        $$0.put(Pair.of(ArmorMaterials.IRON_CHAIN, EquipmentSlot.LEGS), Items.IRON_CHAINMAIL_LEGGINGS);
+        $$0.put(Pair.of(ArmorMaterials.IRON_CHAIN, EquipmentSlot.FEET), Items.IRON_CHAINMAIL_BOOTS);
         $$0.put(Pair.of(ArmorMaterials.IRON, EquipmentSlot.HEAD), Items.IRON_HELMET);
         $$0.put(Pair.of(ArmorMaterials.IRON, EquipmentSlot.CHEST), Items.IRON_CHESTPLATE);
         $$0.put(Pair.of(ArmorMaterials.IRON, EquipmentSlot.LEGS), Items.IRON_LEGGINGS);
@@ -64,12 +64,12 @@ public class DebugSpawnArmorTrimsCommand {
 
     private static final Map<ArmorMaterial, Map<EquipmentSlot, Item>> MAP = Util.make(Maps.newHashMap(), map -> {
         Map<EquipmentSlot, Item> chainMap = Util.make(Maps.newHashMap(), m -> {
-            m.put(EquipmentSlot.HEAD, Items.CHAINMAIL_HELMET);
-            m.put(EquipmentSlot.CHEST, Items.CHAINMAIL_CHESTPLATE);
-            m.put(EquipmentSlot.LEGS, Items.CHAINMAIL_LEGGINGS);
-            m.put(EquipmentSlot.FEET, Items.CHAINMAIL_BOOTS);
+            m.put(EquipmentSlot.HEAD, Items.IRON_CHAINMAIL_HELMET);
+            m.put(EquipmentSlot.CHEST, Items.IRON_CHAINMAIL_CHESTPLATE);
+            m.put(EquipmentSlot.LEGS, Items.IRON_CHAINMAIL_LEGGINGS);
+            m.put(EquipmentSlot.FEET, Items.IRON_CHAINMAIL_BOOTS);
         });
-        map.put(ArmorMaterials.CHAIN.value(), chainMap);
+        map.put(ArmorMaterials.IRON_CHAIN.value(), chainMap);
         Map<EquipmentSlot, Item> ironMap = Util.make(Maps.newHashMap(), m -> {
             m.put(EquipmentSlot.HEAD, Items.IRON_HELMET);
             m.put(EquipmentSlot.CHEST, Items.IRON_CHESTPLATE);

@@ -96,7 +96,7 @@ public class SandstormServerData extends SavedData {
      * Starts a new sandstorm.
      */
     public void start() {
-        YungsCaveBiomesCommon.LOGGER.debug("Starting sandstorm in {}", serverLevel.dimension().location());
+        YungsCaveBiomesCommon.LOGGER.debug("Starting sandstorm in {}", serverLevel.dimension().identifier());
 
         // Determine new sandstorm duration and mark sandstorm as active
         resetSandstormTimeAndTotalDuration();
@@ -112,7 +112,7 @@ public class SandstormServerData extends SavedData {
      * Stops the current sandstorm.
      */
     public void stop() {
-        YungsCaveBiomesCommon.LOGGER.debug("STOPPING SANDSTORM in {}", serverLevel.dimension().location());
+        YungsCaveBiomesCommon.LOGGER.debug("STOPPING SANDSTORM in {}", serverLevel.dimension().identifier());
 
         // Initialize new cooldown and mark sandstorm as inactive
         resetSandstormCooldownAndTotalCoolDown();
@@ -131,7 +131,7 @@ public class SandstormServerData extends SavedData {
     public void tick() {
         if (YungsCaveBiomesCommon.DEBUG_LOG) {
             YungsCaveBiomesCommon.LOGGER.info("Sandstorm {} >> {} / {} time, {} / {} cooldown",
-                    this.serverLevel.dimension().location(),
+                    this.serverLevel.dimension().identifier(),
                     this.currSandstormTicks, this.totalSandstormDurationTicks,
                     this.cooldownTicks, this.totalSandstormCooldownTicks);
         }

@@ -40,9 +40,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+
+
 public class PricklyPeachCactusBlock extends Block implements BonemealableBlock {
     public static final BooleanProperty FRUIT = BlockStateProperties.BERRIES;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_25;

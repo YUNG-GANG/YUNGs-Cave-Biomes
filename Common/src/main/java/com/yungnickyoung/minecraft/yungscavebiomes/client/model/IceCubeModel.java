@@ -13,7 +13,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+
 
 public class IceCubeModel<T extends IceCubeEntity> extends EntityModel<T> {
     private final ModelPart root;
@@ -42,7 +42,7 @@ public class IceCubeModel<T extends IceCubeEntity> extends EntityModel<T> {
     }
 
     @Override
-    @ParametersAreNonnullByDefault
+    
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int packedColor) {
         root.render(poseStack, buffer, packedLight, packedOverlay);
     }

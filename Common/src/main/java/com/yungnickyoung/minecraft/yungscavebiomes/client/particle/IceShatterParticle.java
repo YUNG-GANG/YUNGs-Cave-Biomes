@@ -8,7 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+
 
 public class IceShatterParticle extends TextureSheetParticle {
     private final float uo;
@@ -68,7 +68,7 @@ public class IceShatterParticle extends TextureSheetParticle {
         }
 
         @Override
-        @ParametersAreNonnullByDefault
+        
         public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel,
                                        double xo, double yo, double zo, double dx, double dy, double dz){
             return new IceShatterParticle(clientLevel, xo, yo, zo);

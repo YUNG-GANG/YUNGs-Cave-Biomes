@@ -19,9 +19,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+
+
 public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
     public static final MapCodec<PricklyVinesPlantBlock> CODEC = simpleCodec(PricklyVinesPlantBlock::new);
 

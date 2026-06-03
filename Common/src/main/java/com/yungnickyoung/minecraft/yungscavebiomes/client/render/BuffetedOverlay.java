@@ -5,10 +5,10 @@ import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.MobEffectModule;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ public class BuffetedOverlay implements LayeredDraw.Layer {
         return INSTANCE;
     }
 
-    private static final ResourceLocation OVERLAY_TEXTURE = YungsCaveBiomesCommon.id("textures/overlay/buffeted_overlay.png");
+    private static final Identifier OVERLAY_TEXTURE = YungsCaveBiomesCommon.id("textures/overlay/buffeted_overlay.png");
     private static final int MAX_TICKS = 200;
     private static final float MAX_OPACITY = 1.0f;
     private static final float MIN_COLOR = 0.1f;
@@ -34,7 +34,7 @@ public class BuffetedOverlay implements LayeredDraw.Layer {
      * Renders the Buffeted overlay on the player's screen, with variable opacity depending
      * on the remaining duration of the effect.
      */
-    public void render(@NotNull GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+    public void render(@NotNull GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
         float partialTicks = deltaTracker.getGameTimeDeltaPartialTick(false);
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
@@ -66,7 +66,7 @@ public class BuffetedOverlay implements LayeredDraw.Layer {
     }
 
     // Taken from vanilla's Gui class
-    private static void renderTextureOverlay(GuiGraphics guiGraphics, float r, float g, float b, float alpha) {
+    private static void renderTextureOverlay(GuiGraphicsExtractor guiGraphics, float r, float g, float b, float alpha) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();

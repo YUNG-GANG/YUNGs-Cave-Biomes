@@ -16,7 +16,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -97,7 +97,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
     @Override
     public ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, AutoRegisterItem potterySherdItem) {
-        ResourceLocation resourceLocation = YungsCaveBiomesCommon.id(name);
+        Identifier resourceLocation = YungsCaveBiomesCommon.id(name);
 
         // Register
         ResourceKey<DecoratedPotPattern> resourceKey = ResourceKey.create(Registries.DECORATED_POT_PATTERN, resourceLocation);

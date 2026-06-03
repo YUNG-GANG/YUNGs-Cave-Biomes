@@ -6,7 +6,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.terrablender.CaveBiomeRegionParameters;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import terrablender.api.Region;
@@ -15,7 +15,7 @@ import terrablender.api.RegionType;
 import java.util.function.Consumer;
 
 public class CaveBiomeRegion extends Region {
-    public CaveBiomeRegion(ResourceLocation name, RegionType type, int weight) {
+    public CaveBiomeRegion(Identifier name, RegionType type, int weight) {
         super(name, type, weight);
     }
 

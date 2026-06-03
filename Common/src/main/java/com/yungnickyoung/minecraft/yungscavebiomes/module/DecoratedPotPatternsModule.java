@@ -8,7 +8,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 
@@ -33,7 +33,7 @@ public class DecoratedPotPatternsModule {
             "clock_pottery_pattern", ItemModule.CLOCK_POTTERY_SHERD);
 
 //    private static ResourceKey<DecoratedPotPattern> create(String name, AutoRegisterItem autoRegisterItem) {
-//        ResourceLocation resourceLocation = YungsCaveBiomesCommon.id(name);
+//        Identifier resourceLocation = YungsCaveBiomesCommon.id(name);
 //
 //        // Register
 //        ResourceKey<DecoratedPotPattern> resourceKey = ResourceKey.create(Registries.DECORATED_POT_PATTERN, resourceLocation);

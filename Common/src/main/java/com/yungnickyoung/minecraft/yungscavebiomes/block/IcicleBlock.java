@@ -43,12 +43,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 
-@ParametersAreNonnullByDefault
+
 public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlock {
     public static final EnumProperty<DripstoneThickness> THICKNESS = BlockStateProperties.DRIPSTONE_THICKNESS;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

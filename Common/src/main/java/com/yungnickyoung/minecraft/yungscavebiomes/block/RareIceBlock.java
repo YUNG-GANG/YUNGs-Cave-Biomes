@@ -25,9 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEventListener;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+
+
 public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     public RareIceBlock(Properties properties) {
         super(properties);

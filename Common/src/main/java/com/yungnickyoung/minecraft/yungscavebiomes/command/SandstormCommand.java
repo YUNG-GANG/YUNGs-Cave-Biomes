@@ -23,12 +23,12 @@ public class SandstormCommand {
         if (action.equals("start")) {
             SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) commandSource.getLevel()).getSandstormServerData();
             sandstormServerData.start();
-            commandSource.sendSuccess(() -> Component.translatable("command.sandstorm.start", commandSource.getLevel().dimension().location().toString()), false);
+            commandSource.sendSuccess(() -> Component.translatable("command.sandstorm.start", commandSource.getLevel().dimension().identifier().toString()), false);
             return 1;
         } else if (action.equals("stop")) {
             SandstormServerData sandstorm = ((ISandstormServerDataProvider) commandSource.getLevel()).getSandstormServerData();
             sandstorm.stop();
-            commandSource.sendSuccess(() -> Component.translatable("command.sandstorm.stop", commandSource.getLevel().dimension().location().toString()), false);
+            commandSource.sendSuccess(() -> Component.translatable("command.sandstorm.stop", commandSource.getLevel().dimension().identifier().toString()), false);
             return 1;
         } else {
             commandSource.sendFailure(Component.literal("Unrecognized action."));

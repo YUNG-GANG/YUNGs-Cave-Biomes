@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.yungscavebiomes.client.model;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.cache.object.GeoBone;
@@ -11,22 +11,22 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SandSnapperModel extends GeoModel<SandSnapperEntity> {
-    private static final ResourceLocation MODEL = YungsCaveBiomesCommon.id("geo/sand_snapper/sand_snapper.geo.json");
-    private static final ResourceLocation TEXTURE = YungsCaveBiomesCommon.id("textures/entity/sand_snapper/sand_snapper.png");
-    private static final ResourceLocation ANIMATION = YungsCaveBiomesCommon.id("animations/sand_snapper/sand_snapper.animation.json");
+    private static final Identifier MODEL = YungsCaveBiomesCommon.id("geo/sand_snapper/sand_snapper.geo.json");
+    private static final Identifier TEXTURE = YungsCaveBiomesCommon.id("textures/entity/sand_snapper/sand_snapper.png");
+    private static final Identifier ANIMATION = YungsCaveBiomesCommon.id("animations/sand_snapper/sand_snapper.animation.json");
 
     @Override
-    public ResourceLocation getModelResource(SandSnapperEntity sandSnapper) {
+    public Identifier getModelResource(SandSnapperEntity sandSnapper) {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureResource(SandSnapperEntity sandSnapper) {
+    public Identifier getTextureResource(SandSnapperEntity sandSnapper) {
         return TEXTURE;
     }
 
     @Override
-    public ResourceLocation getAnimationResource(SandSnapperEntity sandSnapper) {
+    public Identifier getAnimationResource(SandSnapperEntity sandSnapper) {
         return ANIMATION;
     }
 

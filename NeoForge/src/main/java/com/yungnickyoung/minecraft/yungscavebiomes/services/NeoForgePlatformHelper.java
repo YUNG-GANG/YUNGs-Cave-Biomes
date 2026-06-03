@@ -12,7 +12,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.sandstorm.SandstormServerData
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -45,7 +45,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public boolean isDevelopmentEnvironment() {
-        return !FMLLoader.isProduction();
+        return !FMLLoader.getCurrent().isProduction();
     }
 
     @Override
@@ -110,7 +110,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, AutoRegisterItem potterySherdItem) {
-        ResourceLocation resourceLocation = YungsCaveBiomesCommon.id(name);
+        Identifier resourceLocation = YungsCaveBiomesCommon.id(name);
 
         // Register
         DecoratedPotPatternsModuleNeoForge.queueForRegistration(resourceLocation);

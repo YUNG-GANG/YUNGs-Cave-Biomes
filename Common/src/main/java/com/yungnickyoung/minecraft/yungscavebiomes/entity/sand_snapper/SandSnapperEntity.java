@@ -58,7 +58,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+
 
 public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     public static final byte HEART_PARTICLES_EVENT = 7;
@@ -525,7 +525,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    @ParametersAreNonnullByDefault
+    
     protected void dropCustomDeathLoot(ServerLevel serverLevel, DamageSource damageSource, boolean $$2) {
         super.dropCustomDeathLoot(serverLevel, damageSource, $$2);
         this.spawnAtLocation(this.carryingItem);
