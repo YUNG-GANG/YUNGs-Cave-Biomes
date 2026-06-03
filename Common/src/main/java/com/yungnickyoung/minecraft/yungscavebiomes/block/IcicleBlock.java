@@ -375,7 +375,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     private static void spawnDripParticle(Level level, BlockPos blockPos, BlockState blockState, Fluid fluid) {
-        Vec3 vec3 = blockState.getOffset(level, blockPos);
+        Vec3 vec3 = blockState.getOffset(blockPos);
         double d = 0.0625;
         double x = (double) blockPos.getX() + 0.5 + vec3.x;
         double y = (double) ((float) (blockPos.getY() + 1) - 0.6875f) - d;

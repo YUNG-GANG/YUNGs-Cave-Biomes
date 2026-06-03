@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -53,12 +54,12 @@ public class PricklyVinesBlock extends GrowingPlantHeadBlock {
     }
 
     @Override
-    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+    protected void entityInside(final BlockState state, final Level level, final BlockPos pos, final Entity entity, final InsideBlockEffectApplier effectApplier, final boolean isPrecise) {
         if (!(entity instanceof LivingEntity) || entity.getType() == EntityType.FOX || entity.getType() == EntityType.BEE || entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
             return;
         }
-        entity.makeStuckInBlock(blockState, new Vec3(0.8f, 0.75, 0.8f));
-        if (!(level.isClientSide || blockState.getValue(AGE) <= 0 || entity.xOld == entity.getX() && entity.zOld == entity.getZ())) {
+        entity.makeStuckInBlock(state, new Vec3(0.8f, 0.75, 0.8f));
+        if (!(level.isClientSide() || state.getValue(AGE) <= 0 || entity.xOld == entity.getX() && entity.zOld == entity.getZ())) {
             double d = Math.abs(entity.getX() - entity.xOld);
             double e = Math.abs(entity.getZ() - entity.zOld);
             if (d >= (double) 0.003f || e >= (double) 0.003f) {

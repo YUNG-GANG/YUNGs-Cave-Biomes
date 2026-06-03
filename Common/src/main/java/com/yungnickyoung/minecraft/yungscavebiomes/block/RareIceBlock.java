@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEventListener;
 
 import javax.annotation.Nullable;
-
+import java.util.Optional;
 
 
 public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
@@ -36,11 +36,10 @@ public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     @Override
     public void spawnAfterBreak(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack, boolean bl) {
         super.spawnAfterBreak(blockState, serverLevel, blockPos, itemStack, bl);
-        Holder<Enchantment> silkTouch = serverLevel.registryAccess()
-                .registryOrThrow(Registries.ENCHANTMENT)
-                .getHolderOrThrow(Enchantments.SILK_TOUCH);
-        if (EnchantmentHelper.getItemEnchantmentLevel(silkTouch, itemStack) == 0) {
-            int xp = 15 + serverLevel.random.nextInt(20) + serverLevel.random.nextInt(20);
+        Optional<Holder.Reference<Enchantment>> silkTouch = serverLevel.registryAccess()
+                .get(Enchantments.SILK_TOUCH);
+        if (silkTouch.filter(e -> EnchantmentHelper.getItemEnchantmentLevel(e, itemStack) != 0).isEmpty()) {
+            int xp = 15 + serverLevel.getRandom().nextInt(20) + serverLevel.getRandom().nextInt(20);
             this.popExperience(serverLevel, blockPos, xp);
         }
     }
@@ -48,7 +47,7 @@ public class RareIceBlock extends HalfTransparentBlock implements EntityBlock {
     @Override
     public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
         super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             CriteriaModule.BREAK_ENCHANTED_ICE.trigger((ServerPlayer) player);
         }
     }
