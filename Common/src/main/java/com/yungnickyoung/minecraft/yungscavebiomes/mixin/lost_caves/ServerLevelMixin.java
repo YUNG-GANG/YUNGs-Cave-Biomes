@@ -7,14 +7,13 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.SavedDataStorage;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.level.storage.WritableLevelData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,18 +33,16 @@ import java.util.function.Supplier;
  */
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelMixin extends Level implements ISandstormServerDataProvider {
-    @Unique
-    private static final String SANDSTORMS_DATA_NAME = "sandstorms";
+    protected ServerLevelMixin(final WritableLevelData levelData, final ResourceKey<Level> dimension, final RegistryAccess registryAccess, final Holder<DimensionType> dimensionTypeRegistration, final boolean isClientSide, final boolean isDebug, final long biomeZoomSeed, final int maxChainedNeighborUpdates) {
+        super(
+                levelData, dimension, registryAccess, dimensionTypeRegistration, isClientSide, isDebug, biomeZoomSeed,
+                maxChainedNeighborUpdates);
+    }
+
+    @Shadow public abstract SavedDataStorage getDataStorage();
 
     @Unique
     private SandstormServerData sandstormServerData;
-
-    @Shadow
-    public abstract DimensionDataStorage getDataStorage();
-
-    protected ServerLevelMixin(WritableLevelData $$0, ResourceKey<Level> $$1, RegistryAccess $$2, Holder<DimensionType> $$3, Supplier<ProfilerFiller> $$4, boolean $$5, boolean $$6, long $$7, int $$8) {
-        super($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8);
-    }
 
     @Override
     @Unique
@@ -54,13 +51,13 @@ public abstract class ServerLevelMixin extends Level implements ISandstormServer
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void yungscavebiomes_initSandstorm(MinecraftServer $$0, Executor $$1, LevelStorageSource.LevelStorageAccess $$2, ServerLevelData $$3, ResourceKey $$4, LevelStem $$5, ChunkProgressListener $$6, boolean $$7, long $$8, List $$9, boolean $$10, RandomSequences $$11, CallbackInfo ci) {
-        this.sandstormServerData = this.getDataStorage().computeIfAbsent(SandstormServerData.factory(_this()), SANDSTORMS_DATA_NAME);
+    private void yungscavebiomes_initSandstorm(final MinecraftServer server, final Executor executor, final LevelStorageSource.LevelStorageAccess levelStorage, final ServerLevelData levelData, final ResourceKey dimension, final LevelStem levelStem, final boolean isDebug, final long biomeZoomSeed, final List customSpawners, final boolean tickTime, final CallbackInfo ci) {
+        this.sandstormServerData = this.getDataStorage().computeIfAbsent(SandstormServerData.TYPE);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void yungscavebiomes_tickSandstorm(BooleanSupplier $$0, CallbackInfo ci) {
-        this.sandstormServerData.tick();
+        this.sandstormServerData.tick(_this());
     }
 
     @Unique
