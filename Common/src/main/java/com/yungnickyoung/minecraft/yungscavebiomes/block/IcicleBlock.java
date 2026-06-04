@@ -17,10 +17,7 @@ import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -76,31 +73,39 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Override
-    public BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState,
-                                  LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
+    protected BlockState updateShape(final BlockState state,
+                                     final LevelReader level,
+                                     final ScheduledTickAccess ticks,
+                                     final BlockPos pos,
+                                     final Direction directionToNeighbour,
+                                     final BlockPos neighbourPos,
+                                     final BlockState neighbourState,
+                                     final RandomSource random) {
         // Schedule fluid tick if waterlogged
-        if (currState.getValue(WATERLOGGED)) {
-            levelAccessor.scheduleTick(currPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+        if (state.getValue(WATERLOGGED) && level instanceof ServerLevel serverLevel) {
+            serverLevel.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
         // We only care about vertical direction updates for icicles
-        if (neighborDirection != Direction.UP && neighborDirection != Direction.DOWN) {
-            return currState;
+        if (directionToNeighbour != Direction.UP && directionToNeighbour != Direction.DOWN) {
+            return state;
         }
 
         // No need to update if tick on this block is already scheduled
-        if (levelAccessor.getBlockTicks().hasScheduledTick(currPos, this)) {
-            return currState;
+        if (level instanceof ServerLevel serverLevel && serverLevel.getBlockTicks().hasScheduledTick(pos, this)) {
+            return state;
         }
 
         // Schedule fall tick if block above is no longer valid support
-        if (neighborDirection == Direction.UP && !this.canSurvive(currState, levelAccessor, currPos)) {
-            levelAccessor.scheduleTick(currPos, this, 2);
-            return currState;
+        if (directionToNeighbour == Direction.UP && !this.canSurvive(state, level, pos)) {
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.scheduleTick(pos, this, 2);
+            }
+            return state;
         }
 
-        DripstoneThickness thickness = calculateIcicleThickness(levelAccessor, currPos);
-        return currState.setValue(THICKNESS, thickness);
+        DripstoneThickness thickness = calculateIcicleThickness(level, pos);
+        return state.setValue(THICKNESS, thickness);
     }
 
     /**
