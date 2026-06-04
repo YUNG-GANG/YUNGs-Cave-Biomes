@@ -7,6 +7,7 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.state.AnimationTest;
 import com.geckolib.util.GeckoLibUtil;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.BuryLootGoal;
@@ -255,7 +256,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
                         .getAnimationControllers()
                         .get("generalController");
                 if (controller != null) {
-                    controller.forceAnimationReset();
+                    controller.reset();
                 }
             }
 
@@ -696,36 +697,36 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
         this.panicSoundCooldownTimer = PANIC_SOUND_COOLDOWN;
     }
 
-    private <E extends GeoAnimatable> PlayState generalPredicate(AnimationState<E> event) {
+    private <E extends GeoAnimatable> PlayState generalPredicate(AnimationTest<E> event) {
         if (this.isEmerging()) {
             if (this.isLookingAtPlayer()) {
-                event.getController().setAnimation(EMERGE_PLAYER);
+                event.controller().setAnimation(EMERGE_PLAYER);
             } else {
-                event.getController().setAnimation(EMERGE);
+                event.controller().setAnimation(EMERGE);
             }
             return PlayState.CONTINUE;
         } else if (this.isEating()) {
-            event.getController().setAnimation(EAT);
+            event.controller().setAnimation(EAT);
             return PlayState.CONTINUE;
         } else if (this.isDiving()) {
-            event.getController().setAnimation(DIVE);
+            event.controller().setAnimation(DIVE);
             return PlayState.CONTINUE;
         } else if (this.isDiggingDown()) {
-            event.getController().setAnimation(DIG_DOWN);
+            event.controller().setAnimation(DIG_DOWN);
             return PlayState.CONTINUE;
         } else if (this.isDiggingUp()) {
-            event.getController().setAnimation(DIG_UP);
+            event.controller().setAnimation(DIG_UP);
             return PlayState.CONTINUE;
         } else if (event.isMoving()) {
             if (this.isSubmerged()) {
-                event.getController().setAnimation(SWIM);
+                event.controller().setAnimation(SWIM);
             } else {
-                event.getController().setAnimation(WALK);
+                event.controller().setAnimation(WALK);
             }
             return PlayState.CONTINUE;
         }
 
-        event.getController().forceAnimationReset();
+        event.controller().reset();
 
         return PlayState.STOP;
     }
@@ -739,13 +740,11 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this,
-                "generalController",
-                0,
+        controllers.add(new AnimationController<>("generalController",
                 this::generalPredicate));
     }
 
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
+    @Override public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
 }
