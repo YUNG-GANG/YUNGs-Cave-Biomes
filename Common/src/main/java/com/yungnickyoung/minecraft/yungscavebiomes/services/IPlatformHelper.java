@@ -37,7 +37,7 @@ public interface IPlatformHelper {
 
     void sendIcicleProjectileShatterS2CPacket(ServerLevel serverLevel, Vec3 pos);
 
-    void syncSandstormDataToClients(SandstormServerData sandstormServerData);
+    void syncSandstormDataToClients(SandstormServerData sandstormServerData, final ServerLevel level);
     void syncSandstormDataToPlayer(SandstormServerData sandstormServerData, ServerPlayer serverPlayer);
 
     Supplier<Item> getIceCubeSpawnEggItem();

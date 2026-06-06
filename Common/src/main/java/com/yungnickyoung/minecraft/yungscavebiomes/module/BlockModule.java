@@ -14,6 +14,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.block.RareIceBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.SuspiciousAncientSandBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ColorRGBA;
@@ -26,6 +27,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+
+import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class BlockModule {
@@ -42,8 +45,9 @@ public class BlockModule {
                     .offsetType(BlockBehaviour.OffsetType.XZ)
                     .instrument(NoteBlockInstrument.CHIME)
                     .isRedstoneConductor((blockState, blockGetter, blockPos) -> false)
-                    .sound(SoundType.GLASS)))
-            .withItem(Item.Properties::new);
+                    .sound(SoundType.GLASS)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("icicle")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("icicle"))));
 
     @AutoRegister("frost_lily")
     public static final AutoRegisterBlock FROST_LILY = AutoRegisterBlock.of(() -> new FrostLilyBlock(BlockBehaviour.Properties
@@ -55,8 +59,9 @@ public class BlockModule {
                     .pushReaction(PushReaction.DESTROY)
                     .lightLevel(blockState -> 10)
                     .offsetType(BlockBehaviour.OffsetType.XZ)
-                    .sound(SoundType.GLASS)))
-            .withItem(() -> new Item.Properties().stacksTo(16));
+                    .sound(SoundType.GLASS)
+            .setId(ResourceKey.create(Registries.BLOCK, id("frost_lily")))))
+            .withItem(() -> new Item.Properties().stacksTo(16).setId(ResourceKey.create(Registries.ITEM, id("frost_lily"))));
 
     @AutoRegister("rare_ice")
     public static final AutoRegisterBlock RARE_ICE = AutoRegisterBlock.of(() -> new RareIceBlock(BlockBehaviour.Properties
@@ -69,8 +74,9 @@ public class BlockModule {
                     .strength(3f)
                     .instrument(NoteBlockInstrument.CHIME)
                     .isRedstoneConductor((blockState, blockGetter, blockPos) -> false)
-                    .sound(SoundType.GLASS)))
-            .withItem(Item.Properties::new);
+                    .sound(SoundType.GLASS)
+            .setId(ResourceKey.create(Registries.BLOCK, id("rare_ice")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("rare_ice"))));
 
     @AutoRegister("ice_sheet")
     public static final AutoRegisterBlock ICE_SHEET = AutoRegisterBlock.of(() -> new IceSheetBlock(BlockBehaviour.Properties
@@ -85,8 +91,10 @@ public class BlockModule {
                     .isValidSpawn((state, world, pos, entityType) -> true)
                     .isRedstoneConductor((blockState, blockGetter, blockPos) -> false)
                     .pushReaction(PushReaction.DESTROY)
-                    .sound(SoundType.GLASS)))
-            .withItem(Item.Properties::new);
+                    .sound(SoundType.GLASS)
+            .setId(ResourceKey.create(Registries.BLOCK, id("ice_sheet")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("ice_sheet"))));
+
 
     @AutoRegister("ancient_sand")
     public static final AutoRegisterBlock ANCIENT_SAND = AutoRegisterBlock.of(() -> new ColoredFallingBlock(new ColorRGBA(0xd1b482),
@@ -95,8 +103,10 @@ public class BlockModule {
                             .mapColor(MapColor.SAND)
                             .strength(0.5f)
                             .instrument(NoteBlockInstrument.SNARE)
-                            .sound(SoundType.SAND)))
-            .withItem(Item.Properties::new);
+                            .sound(SoundType.SAND)
+                            .setId(ResourceKey.create(Registries.BLOCK, id("ancient_sand")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("ancient_sand"))));
+
 
     @AutoRegister("suspicious_ancient_sand")
     public static final AutoRegisterBlock SUSPICIOUS_ANCIENT_SAND = AutoRegisterBlock.of(() -> new SuspiciousAncientSandBlock(BlockBehaviour.Properties
@@ -105,10 +115,11 @@ public class BlockModule {
                     .instrument(NoteBlockInstrument.SNARE)
                     .strength(0.25F)
                     .sound(SoundType.SUSPICIOUS_SAND)
-                    .pushReaction(PushReaction.DESTROY),
+                    .pushReaction(PushReaction.DESTROY)
+            .setId(ResourceKey.create(Registries.BLOCK, id("suspicious_ancient_sand"))),
                     SoundEvents.BRUSH_SAND,
                     SoundEvents.BRUSH_SAND_COMPLETED))
-            .withItem(Item.Properties::new);
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("suspicious_ancient_sand"))));
 //    public static final AutoRegisterBlock SUSPICIOUS_ANCIENT_SAND = AutoRegisterBlock.of(() -> new BrushableBlock(ANCIENT_SAND.get(),
 //                    SoundEvents.BRUSH_SAND,
 //                    SoundEvents.BRUSH_SAND_COMPLETED,
@@ -127,7 +138,9 @@ public class BlockModule {
                     .mapColor(MapColor.SAND)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.8f)))
+                    .strength(0.8f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("ancient_sandstone")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("ancient_sandstone"))))
             .withStairs()
             .withSlab()
             .withWall()
@@ -139,8 +152,10 @@ public class BlockModule {
                     .mapColor(MapColor.SAND)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.5f)))
-            .withItem(Item.Properties::new);
+                    .strength(0.5f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("brittle_ancient_sandstone")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("brittle_ancient_sandstone"))));
+
 
     @AutoRegister("brittle_sandstone")
     public static final AutoRegisterBlock BRITTLE_SANDSTONE = AutoRegisterBlock.of(() -> new BrittleSandstoneBlock(14406560, BlockBehaviour.Properties
@@ -148,8 +163,9 @@ public class BlockModule {
                     .mapColor(MapColor.SAND)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.5f)))
-            .withItem(Item.Properties::new);
+                    .strength(0.5f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("brittle_sandstone")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("brittle_sandstone"))));
 
     @AutoRegister("brittle_red_sandstone")
     public static final AutoRegisterBlock BRITTLE_RED_SANDSTONE = AutoRegisterBlock.of(() -> new BrittleSandstoneBlock(11098145, BlockBehaviour.Properties
@@ -157,8 +173,9 @@ public class BlockModule {
                     .mapColor(MapColor.COLOR_ORANGE)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.5f)))
-            .withItem(Item.Properties::new);
+                    .strength(0.5f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("brittle_red_sandstone")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("brittle_red_sandstone"))));
 
     @AutoRegister("cut_ancient_sandstone")
     public static final AutoRegisterBlock CUT_ANCIENT_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
@@ -166,9 +183,10 @@ public class BlockModule {
                     .mapColor(MapColor.SAND)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.8f)))
+                    .strength(0.8f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("cut_ancient_sandstone")))))
             .withSlab()
-            .withItem(Item.Properties::new);
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("cut_ancient_sandstone"))));
 
     @AutoRegister("chiseled_ancient_sandstone")
     public static final AutoRegisterBlock CHISELED_ANCIENT_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
@@ -176,8 +194,9 @@ public class BlockModule {
                     .mapColor(MapColor.SAND)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.8f)))
-            .withItem(Item.Properties::new);
+                    .strength(0.8f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("chiseled_ancient_sandstone")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("chiseled_ancient_sandstone"))));
 
     @AutoRegister("smooth_ancient_sandstone")
     public static final AutoRegisterBlock SMOOTH_ANCIENT_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
@@ -185,10 +204,11 @@ public class BlockModule {
                     .mapColor(MapColor.SAND)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.8f)))
+                    .strength(0.8f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("smooth_ancient_sandstone")))))
             .withStairs()
             .withSlab()
-            .withItem(Item.Properties::new);
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("smooth_ancient_sandstone"))));
 
     @AutoRegister("layered_ancient_sandstone")
     public static final AutoRegisterBlock LAYERED_ANCIENT_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
@@ -196,8 +216,9 @@ public class BlockModule {
                     .mapColor(MapColor.SAND)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.8f)))
-            .withItem(Item.Properties::new);
+                    .strength(0.8f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("layered_ancient_sandstone")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("layered_ancient_sandstone"))));
 
     @AutoRegister("layered_sandstone")
     public static final AutoRegisterBlock LAYERED_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
@@ -205,8 +226,9 @@ public class BlockModule {
                     .mapColor(MapColor.SAND)
                     .requiresCorrectToolForDrops()
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(0.8f)))
-            .withItem(Item.Properties::new);
+                    .strength(0.8f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("layered_sandstone")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("layered_sandstone"))));
 
     @AutoRegister("layered_red_sandstone")
     public static final AutoRegisterBlock LAYERED_RED_SANDSTONE = AutoRegisterBlock.of(() -> new Block(BlockBehaviour.Properties
@@ -214,8 +236,9 @@ public class BlockModule {
                     .mapColor(MapColor.COLOR_ORANGE)
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .requiresCorrectToolForDrops()
-                    .strength(0.8f)))
-            .withItem(Item.Properties::new);
+                    .strength(0.8f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("layered_red_sandstone")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("layered_red_sandstone"))));
 
     @AutoRegister("prickly_peach_cactus")
     public static final AutoRegisterBlock PRICKLY_PEACH_CACTUS = AutoRegisterBlock.of(() -> new PricklyPeachCactusBlock(BlockBehaviour.Properties
@@ -224,8 +247,9 @@ public class BlockModule {
                     .randomTicks()
                     .sound(SoundType.WOOL)
                     .pushReaction(PushReaction.DESTROY)
-                    .strength(0.4f)))
-            .withItem(Item.Properties::new);
+                    .strength(0.4f)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("prickly_peach_cactus")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("prickly_peach_cactus"))));
 
     @AutoRegister("potted_prickly_peach_cactus")
     public static final AutoRegisterBlock POTTED_PRICKLY_PEACH_CACTUS = AutoRegisterBlock.of(() -> Services.PLATFORM.getPottedPricklyPeachCactusBlock());
@@ -238,8 +262,9 @@ public class BlockModule {
                     .noCollision()
                     .instabreak()
                     .pushReaction(PushReaction.DESTROY)
-                    .sound(SoundType.WEEPING_VINES)))
-            .withItem(Item.Properties::new);
+                    .sound(SoundType.WEEPING_VINES)
+                    .setId(ResourceKey.create(Registries.BLOCK, id("prickly_vines")))))
+            .withItem(() -> new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("prickly_vines"))));
 
     @AutoRegister("prickly_vines_plant")
     public static final AutoRegisterBlock PRICKLY_VINES_PLANT = AutoRegisterBlock.of(() -> new PricklyVinesPlantBlock(BlockBehaviour.Properties
@@ -248,14 +273,15 @@ public class BlockModule {
             .noCollision()
             .instabreak()
             .pushReaction(PushReaction.DESTROY)
-            .sound(SoundType.WEEPING_VINES)));
+            .sound(SoundType.WEEPING_VINES)
+            .setId(ResourceKey.create(Registries.BLOCK, id("prickly_vines_plant")))));
 
     public static final TagKey<Block> SAND_SNAPPER_BLOCKS = TagKey.create(Registries.BLOCK,
-            YungsCaveBiomesCommon.id("sand_snapper_blocks"));
+            id("sand_snapper_blocks"));
 
     public static final TagKey<Block> ICE_SHEET_FEATURE_AVOID = TagKey.create(Registries.BLOCK,
-            YungsCaveBiomesCommon.id("ice_sheet_feature_avoid"));
+            id("ice_sheet_feature_avoid"));
 
     public static final TagKey<Block> CREEPING_ICE_GLOWS_ON = TagKey.create(Registries.BLOCK,
-            YungsCaveBiomesCommon.id("creeping_ice_glows_on"));
+            id("creeping_ice_glows_on"));
 }

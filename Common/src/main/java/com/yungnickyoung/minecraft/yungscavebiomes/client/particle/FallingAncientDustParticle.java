@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.particle;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.block.BrittleSandstoneBlock;
+import net.minecraft.Optionull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -83,8 +84,9 @@ public class FallingAncientDustParticle extends SingleQuadParticle {
                 return null;
             }
             BlockPos blockPos = BlockPos.containing(xo, yo, zo);
-            int color = Minecraft.getInstance().getBlockColors().getTintSource(blockState, 0)
-                    .colorInWorld(blockState, clientLevel,  blockPos);
+            int color = Optionull.mapOrDefault(Minecraft.getInstance().getBlockColors().getTintSource(blockState, 0),
+                    ts -> ts.colorInWorld(blockState, clientLevel,  blockPos),
+                    0xFFFFFFFF);
             if (blockState.getBlock() instanceof BrittleSandstoneBlock) {
                 color = ((BrittleSandstoneBlock) blockState.getBlock()).getDustColor();
             }

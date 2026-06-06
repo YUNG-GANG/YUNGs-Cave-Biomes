@@ -63,7 +63,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void syncSandstormDataToClients(SandstormServerData sandstormServerData) {
+    public void syncSandstormDataToClients(SandstormServerData sandstormServerData, final ServerLevel level) {
         SandstormSyncS2CPayload payload = new SandstormSyncS2CPayload(
                 sandstormServerData.isSandstormActive(),
                 sandstormServerData.getCurrSandstormTicks(),

@@ -9,11 +9,15 @@ import com.yungnickyoung.minecraft.yungscavebiomes.entity.IcicleProjectileEntity
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.SpawnPlacementsAccessor;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
+
+import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class EntityTypeModule {
@@ -25,7 +29,7 @@ public class EntityTypeModule {
                     .sized(1.6f, 1.5f)
                     .eyeHeight(0.15f)
                     .clientTrackingRange(10)
-                    .build())
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, id("ice_cube"))))
             .attributes(IceCubeEntity::createAttributes);
 
     @AutoRegister("sand_snapper")
@@ -34,7 +38,7 @@ public class EntityTypeModule {
                     .of(SandSnapperEntity::new, MobCategory.MONSTER)
                     .sized(0.9f, 0.5f)
                     .clientTrackingRange(10)
-                    .build())
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, id("sand_snapper"))))
             .attributes(SandSnapperEntity::createAttributes);
 
     @AutoRegister("icicle")
@@ -44,14 +48,14 @@ public class EntityTypeModule {
                     .sized(0.5f, 0.5f)
                     .clientTrackingRange(4)
                     .updateInterval(20)
-                    .build());
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, id("icicle"))));
 
     /* BlockEntities */
     @AutoRegister("rare_ice")
     public static final AutoRegisterBlockEntityType<RareIceBlockEntity> RARE_ICE = AutoRegisterBlockEntityType
             .of(() -> AutoRegisterBlockEntityType.Builder
                     .of(RareIceBlockEntity::new, BlockModule.RARE_ICE.get())
-                    .build(null));
+                    .build());
 
     /**
      * Methods with the AutoRegister annotations will be executed after registration.

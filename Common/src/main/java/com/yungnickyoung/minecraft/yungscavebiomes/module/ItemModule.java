@@ -6,9 +6,14 @@ import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterUtils;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.item.PricklyPeachItem;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SmithingTemplateItem;
+
+import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
 
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class ItemModule {
@@ -24,18 +29,19 @@ public class ItemModule {
                         .food(new FoodProperties.Builder()
                                 .nutrition(4)
                                 .saturationModifier(0.3F)
-                                .build())));
+                                .build())
+                        .setId(ResourceKey.create(Registries.ITEM, id("prickly_peach")))));
 
     @AutoRegister("ancient_armor_trim_smithing_template")
     public static final AutoRegisterItem ANCIENT_ARMOR_TRIM_SMITHING_TEMPLATE = AutoRegisterItem.of(() ->
-            SmithingTemplateItem.createArmorTrimTemplate(TrimPatternsModule.ANCIENT)
+            SmithingTemplateItem.createArmorTrimTemplate(new Item.Properties().rarity(Rarity.RARE).setId(ResourceKey.create(Registries.ITEM, id("ancient_armor_trim_smithing_template"))))
     );
 
     @AutoRegister("hourglass_pottery_sherd")
-    public static final AutoRegisterItem HOURGLASS_POTTERY_SHERD = AutoRegisterItem.of(() -> new Item(new Item.Properties()));
+    public static final AutoRegisterItem HOURGLASS_POTTERY_SHERD = AutoRegisterItem.of(() -> new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("hourglass_pottery_sherd")))));
 
     @AutoRegister("clock_pottery_sherd")
-    public static final AutoRegisterItem CLOCK_POTTERY_SHERD = AutoRegisterItem.of(() -> new Item(new Item.Properties()));
+    public static final AutoRegisterItem CLOCK_POTTERY_SHERD = AutoRegisterItem.of(() -> new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id("clock_pottery_sherd")))));
 
     /**
      * Methods with the AutoRegister annotations will be executed after registration.

@@ -30,7 +30,7 @@ public class BuffetedOverlay {
      * Renders the Buffeted overlay on the player's screen, with variable opacity depending
      * on the remaining duration of the effect.
      */
-    public void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
+    public void extract(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) {
             return;

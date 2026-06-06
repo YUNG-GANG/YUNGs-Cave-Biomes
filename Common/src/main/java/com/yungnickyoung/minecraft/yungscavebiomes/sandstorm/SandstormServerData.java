@@ -9,14 +9,11 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.CriteriaModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
-import org.jetbrains.annotations.NotNull;
 
 import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
 
@@ -114,7 +111,7 @@ public class SandstormServerData extends SavedData {
                 .asLong();
         this.isSandstormActive = true;
 
-        this.syncToClients();
+        this.syncToClients(level);
     }
 
     /**
@@ -134,7 +131,7 @@ public class SandstormServerData extends SavedData {
             }
         });
 
-        this.syncToClients();
+        this.syncToClients(level);
     }
 
     public void tick(ServerLevel level) {
@@ -173,7 +170,7 @@ public class SandstormServerData extends SavedData {
 
         // Sync to clients every few seconds
         if (this.timeSinceSync > SYNC_INTERVAL) {
-            this.syncToClients();
+            this.syncToClients(level);
             if (YungsCaveBiomesCommon.DEBUG_LOG) {
                 YungsCaveBiomesCommon.LOGGER.info("Force syncing sandstorm...");
             }
@@ -206,8 +203,8 @@ public class SandstormServerData extends SavedData {
         this.cooldownTicks = this.totalSandstormCooldownTicks;
     }
 
-    private void syncToClients() {
-        Services.PLATFORM.syncSandstormDataToClients(this);
+    private void syncToClients(final ServerLevel level) {
+        Services.PLATFORM.syncSandstormDataToClients(this, level);
         this.timeSinceSync = 0;
         this.setDirty();
     }

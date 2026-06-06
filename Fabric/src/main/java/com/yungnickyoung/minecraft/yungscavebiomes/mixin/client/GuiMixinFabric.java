@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Gui.class)
 public abstract class GuiMixinFabric {
-    @Inject(method = "renderCameraOverlays", at = @At(value = "RETURN"))
+    @Inject(method = "extractCameraOverlays", at = @At(value = "RETURN"))
     public void yungscavebiomes_renderBufferedOverlay(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        BuffetedOverlay.getInstance().render(guiGraphics, deltaTracker);
+        BuffetedOverlay.INSTANCE.extract(guiGraphics, deltaTracker);
     }
 }

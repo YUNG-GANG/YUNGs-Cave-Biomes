@@ -167,7 +167,7 @@ public class IceSheetBlock extends MultifaceSpreadeableBlock implements SimpleWa
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(GLOWING, WATERLOGGED, GROWTH_DISTANCE);
+        builder.add(GLOWING, GROWTH_DISTANCE);
     }
 //
 //    private static boolean canAttachTo(BlockGetter blockGetter, Direction direction, BlockPos blockPos, BlockState blockState) {

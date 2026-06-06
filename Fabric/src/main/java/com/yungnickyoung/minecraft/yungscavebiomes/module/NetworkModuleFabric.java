@@ -9,8 +9,8 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 
 public class NetworkModuleFabric {
     public static void init() {
-        PayloadTypeRegistry.playS2C().register(SandstormSyncS2CPayload.TYPE, SandstormSyncS2CPayload.STREAM_CODEC);
-        PayloadTypeRegistry.playS2C().register(IcicleShatterS2CPayload.TYPE, IcicleShatterS2CPayload.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(SandstormSyncS2CPayload.TYPE, SandstormSyncS2CPayload.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(IcicleShatterS2CPayload.TYPE, IcicleShatterS2CPayload.STREAM_CODEC);
     }
 
     public static void registerS2CHandlers() {
