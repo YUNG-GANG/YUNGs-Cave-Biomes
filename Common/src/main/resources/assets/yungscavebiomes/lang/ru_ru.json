@@ -72,6 +72,7 @@
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Стрела заморозки",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Стрела заморозки",
   "trim_pattern.yungscavebiomes.ancient": "Отделка «Древность»",
+  "item.yungscavebiomes.ancient_armor_trim_smithing_template": "Отделка «Древность»",
 
   "death.attack.prickly_vines": "%1$s был до смерти проткнут колючими лианами",
   "death.attack.prickly_vines.player": "%1$s был до смерти проткнут колючими лианами, спасаясь от %2$s",

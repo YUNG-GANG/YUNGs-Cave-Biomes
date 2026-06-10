@@ -71,6 +71,7 @@
 	"item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "冰霜之箭",
 	"item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "冰霜之箭",
 	"trim_pattern.yungscavebiomes.ancient": "远古盔甲纹饰",
+	"item.yungscavebiomes.ancient_armor_trim_smithing_template": "远古盔甲纹饰",
 
 	"death.attack.prickly_vines": "%1$s被刺藤戳死",
 	"death.attack.prickly_vines.player": "%1$s在试图逃离%2$s时被刺藤戳死",

@@ -72,6 +72,7 @@
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Flecha de Escarcha",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Flecha de Escarcha",
   "trim_pattern.yungscavebiomes.ancient": "Plantilla de Armadura Antigua",
+  "item.yungscavebiomes.ancient_armor_trim_smithing_template": "Plantilla de Armadura Antigua",
 
   "death.attack.prickly_vines": "%1$s fue pinchado hasta la muerte por enredaderas espinosas",
   "death.attack.prickly_vines.player": "%1$s fue pinchado hasta la muerte por enredaderas espinosas mientras intentaba escapar de %2$s",
