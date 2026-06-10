@@ -5,6 +5,7 @@ import com.geckolib.renderer.GeoEntityRenderer;
 import com.geckolib.renderer.base.BoneSnapshots;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.RenderPassInfo;
+import com.yungnickyoung.minecraft.yungscavebiomes.client.model.SandSnapperModel;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -14,13 +15,12 @@ import org.jspecify.annotations.Nullable;
 
 import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
 
-//todo register me
 public class SandSnapperRenderer<R extends LivingEntityRenderState & GeoRenderState> extends GeoEntityRenderer<SandSnapperEntity, R> {
     private static final DataTicket<Boolean> IS_LOOKING_AT_PLAYER = DataTicket.create(id("is_looking_at_player").toString(), Boolean.class);
     private static final DataTicket<Boolean> IS_SUBMERGED         = DataTicket.create(id("is_submerged").toString(), Boolean.class);
 
     public SandSnapperRenderer(final EntityRendererProvider.Context context, final EntityType<? extends SandSnapperEntity> entityType) {
-        super(context, entityType);
+        super(context, new SandSnapperModel());
     }
 
     @Override
