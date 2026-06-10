@@ -12,7 +12,7 @@ public class PlayerJoinHandler {
      */
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) serverPlayer.serverLevel()).getSandstormServerData();
+            SandstormServerData sandstormServerData = ((ISandstormServerDataProvider) serverPlayer.level()).getSandstormServerData();
             Services.PLATFORM.syncSandstormDataToPlayer(sandstormServerData, serverPlayer);
         }
     }

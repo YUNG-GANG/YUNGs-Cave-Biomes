@@ -5,9 +5,23 @@ plugins {
     id 'com.modrinth.minotaur'
 }
 
+repositories {
+    maven { url = "https://maven.minecraftforge.net/" } // for terrablender
+}
+
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     implementation "com.yungnickyoung.minecraft.yungsapi:YungsApi:${mc_version}-NeoForge-${yungsapi_version}"
+
+    // Geckolib
+    implementation ("com.geckolib:geckolib-neoforge-${mc_version}:${geckolib_version}")
+
+    // Terrablender
+    implementation ("com.github.glitchfiend:TerraBlender-neoforge:${mc_version}-${terrablender_version}")
+
+    // JEI
+    compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
 }
 
 neoForge {

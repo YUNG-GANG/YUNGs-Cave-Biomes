@@ -16,6 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
@@ -27,10 +28,11 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
+
+import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
@@ -69,7 +71,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
                 sandstormServerData.getCurrSandstormTicks(),
                 sandstormServerData.getSeed(),
                 sandstormServerData.getTotalSandstormDurationTicks());
-        PacketDistributor.sendToPlayersInDimension(sandstormServerData.getServerLevel(), payload);
+        PacketDistributor.sendToPlayersInDimension(level, payload);
     }
 
     @Override
@@ -84,14 +86,12 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public Supplier<Item> getIceCubeSpawnEggItem() {
-        return () -> new DeferredSpawnEggItem(() -> EntityTypeModule.ICE_CUBE.get(), 0xA4C4FC, 0xE4ECFC,
-                new Item.Properties());
+        return () -> new SpawnEggItem(new Item.Properties().spawnEgg(EntityTypeModule.ICE_CUBE.get()).setId(ResourceKey.create(Registries.ITEM, id("ice_cube_spawn_egg"))));
     }
 
     @Override
     public Supplier<Item> getSandSnapperSpawnEggItem() {
-        return () -> new DeferredSpawnEggItem(() -> EntityTypeModule.SAND_SNAPPER.get(), 0xBA852F, 0xCFAC55,
-                new Item.Properties());
+        return () -> new SpawnEggItem(new Item.Properties().spawnEgg(EntityTypeModule.SAND_SNAPPER.get()).setId(ResourceKey.create(Registries.ITEM, id("sand_snapper_spawn_egg"))));
     }
 
     @Override
