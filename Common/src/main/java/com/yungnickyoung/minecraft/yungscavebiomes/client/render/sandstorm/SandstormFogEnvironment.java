@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.fog.environment.AtmosphericFogEnvironment;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.ARGB;
@@ -16,8 +17,12 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.material.FogType;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
+
 public class SandstormFogEnvironment extends FogEnvironment {
     private static final int FOG_COLOR = ARGB.colorFromFloat(1f, 0.8f, 0.5f, 0.15f);
+
+    private final AtmosphericFogEnvironment wrapped = new AtmosphericFogEnvironment();
 
     /**
      * The current fog level. 0 is no fog, 1 is full fog.
@@ -27,6 +32,7 @@ public class SandstormFogEnvironment extends FogEnvironment {
 
     @Override
     public void setupFog(final FogData fog, final Camera camera, final ClientLevel level, final float renderDistance, final DeltaTracker deltaTracker) {
+        this.wrapped.setupFog(fog, camera, level, renderDistance, deltaTracker);
         this.updateFogState(camera, level, deltaTracker);
         if (this.fogLevel > 0) {
             fog.environmentalStart = Mth.lerp((float) this.fogLevel, fog.environmentalStart, -4f);
@@ -37,15 +43,19 @@ public class SandstormFogEnvironment extends FogEnvironment {
 
     @Override
     public int getBaseColor(final ClientLevel level, final Camera camera, final int renderDistance, final float partialTicks) {
+        int base = this.wrapped.getBaseColor(level, camera, renderDistance, partialTicks);
         if (this.fogLevel > 0) {
-            return ARGB.srgbLerp((float) this.fogLevel, -1, FOG_COLOR);
+            return ARGB.srgbLerp((float) this.fogLevel, base, FOG_COLOR);
         } else {
-            return -1;
+            return base;
         }
     }
 
     @Override public boolean isApplicable(@Nullable final FogType fogType, final Entity entity) {
-        return fogType == FogType.ATMOSPHERIC;
+        return Objects.equals(fogType, FogType.ATMOSPHERIC) && (
+               this.fogLevel > 0 ||
+                       (entity.level().getBiome(entity.blockPosition()).is(BiomeModule.LOST_CAVES)
+               && ((ISandstormClientDataProvider) entity.level()).getSandstormClientData().isSandstormActive()));
     }
 
     private void updateFogState(final Camera camera, final ClientLevel level, final DeltaTracker deltaTracker) {
@@ -58,7 +68,11 @@ public class SandstormFogEnvironment extends FogEnvironment {
         } else {
             targetFogLevel = 0f;
         }
-        this.fogLevel = this.fogLevel + targetFogLevel * deltaTicks * 0.02f;
+
+        this.fogLevel = this.fogLevel + (targetFogLevel - this.fogLevel) * deltaTicks * 0.02f;
+        if (this.fogLevel <= 0.005) {
+            this.fogLevel = 0.0;
+        }
 
         // Reset fog if player is dead so it doesn't persist on respawn
         // todo really, this should be done once when the respawn packet is sent.

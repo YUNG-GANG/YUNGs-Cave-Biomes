@@ -6,6 +6,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
+import net.minecraft.client.renderer.fog.environment.WaterFogEnvironment;
 import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,6 +27,16 @@ public abstract class FogRendererMixin {
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void yungscavebiomes_setupLostCavesFog(final CallbackInfo ci) {
-        FOG_ENVIRONMENTS.add(new SandstormFogEnvironment());
+        boolean added = false;
+        for (var iter = FOG_ENVIRONMENTS.listIterator(); iter.hasNext();) {
+            if (iter.next() instanceof WaterFogEnvironment) {
+                iter.add(new SandstormFogEnvironment());
+                added = true;
+                break;
+            }
+        }
+        if (!added) {
+            FOG_ENVIRONMENTS.add(new SandstormFogEnvironment());
+        }
     }
 }
