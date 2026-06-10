@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "minecraft:diamond"
-    },
-    "C": {
-      "item": "yungscavebiomes:ancient_sandstone"
-    },
-    "S": {
-      "item": "yungscavebiomes:ancient_armor_trim_smithing_template"
-    }
+    "#": "minecraft:diamond",
+    "C": "yungscavebiomes:ancient_sandstone",
+    "S": "yungscavebiomes:ancient_armor_trim_smithing_template"
   },
   "pattern": [
     "#S#",

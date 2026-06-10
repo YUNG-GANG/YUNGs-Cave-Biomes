@@ -1,8 +1,6 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "yungscavebiomes:ancient_sandstone"
-  },
+  "ingredient": "yungscavebiomes:ancient_sandstone",
   "result": {
     "id": "yungscavebiomes:cut_ancient_sandstone_slab",
     "count": 2

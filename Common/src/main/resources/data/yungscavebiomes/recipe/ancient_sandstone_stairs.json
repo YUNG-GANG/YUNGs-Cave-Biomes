@@ -7,15 +7,9 @@
   ],
   "key": {
     "#": [
-      {
-        "item": "yungscavebiomes:ancient_sandstone"
-      },
-      {
-        "item": "yungscavebiomes:chiseled_ancient_sandstone"
-      },
-      {
-        "item": "yungscavebiomes:cut_ancient_sandstone"
-      }
+      "yungscavebiomes:ancient_sandstone",
+      "yungscavebiomes:chiseled_ancient_sandstone",
+      "yungscavebiomes:cut_ancient_sandstone"
     ]
   },
   "result": {

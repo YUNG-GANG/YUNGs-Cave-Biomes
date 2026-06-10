@@ -7,13 +7,9 @@
   ],
   "key": {
     "#": [
-      {
-        "item": "yungscavebiomes:ancient_sand"
-      }
+      "yungscavebiomes:ancient_sand"
     ],
-    "X": {
-      "item": "minecraft:gunpowder"
-    }
+    "X": "minecraft:gunpowder"
   },
   "result": {
     "id": "minecraft:tnt"

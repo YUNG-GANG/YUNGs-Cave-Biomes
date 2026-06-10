@@ -5,12 +5,8 @@
     "X"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:sandstone"
-    },
-    "X": {
-      "item": "minecraft:sand"
-    }
+    "#": "minecraft:sandstone",
+    "X": "minecraft:sand"
   },
   "result": {
     "id": "yungscavebiomes:brittle_sandstone",
