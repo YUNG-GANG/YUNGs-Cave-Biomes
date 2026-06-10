@@ -14,6 +14,8 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 
 public class YungsCaveBiomesClientFabric implements ClientModInitializer {
@@ -24,7 +26,7 @@ public class YungsCaveBiomesClientFabric implements ClientModInitializer {
 
         // Block rendering
         // Block Entity rendering
-        //todo test if works okay
+        BlockEntityRenderers.register(EntityTypeModule.BRUSHABLE.get(), BrushableBlockRenderer::new);
 
         // Entity rendering
         EntityRenderers.register(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);

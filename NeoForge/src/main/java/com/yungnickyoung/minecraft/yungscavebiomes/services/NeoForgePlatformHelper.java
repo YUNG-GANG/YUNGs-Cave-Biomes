@@ -103,7 +103,8 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
                         .of()
                         .instabreak()
                         .noOcclusion()
-                        .pushReaction(PushReaction.DESTROY));
+                        .pushReaction(PushReaction.DESTROY)
+                        .setId(ResourceKey.create(Registries.BLOCK, id("potted_prickly_peach_cactus"))));
         ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(YungsCaveBiomesCommon.id("prickly_peach_cactus"), () -> flowerPotBlock);
         return flowerPotBlock;
     }

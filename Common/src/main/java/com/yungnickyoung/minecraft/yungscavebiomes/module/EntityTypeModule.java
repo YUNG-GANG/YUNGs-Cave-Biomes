@@ -4,6 +4,7 @@ import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterBlockEntityType;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterEntityType;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
+import com.yungnickyoung.minecraft.yungscavebiomes.block.SuspiciousAncientSandBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.entity.RareIceBlockEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.IcicleProjectileEntity;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.ice_cube.IceCubeEntity;
@@ -15,6 +16,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.block.BrushableBlock;
+import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
@@ -55,6 +58,12 @@ public class EntityTypeModule {
     public static final AutoRegisterBlockEntityType<RareIceBlockEntity> RARE_ICE = AutoRegisterBlockEntityType
             .of(() -> AutoRegisterBlockEntityType.Builder
                     .of(RareIceBlockEntity::new, BlockModule.RARE_ICE.get())
+                    .build());
+
+    @AutoRegister("brushable")
+    public static final AutoRegisterBlockEntityType<BrushableBlockEntity> BRUSHABLE = AutoRegisterBlockEntityType
+            .of(() -> AutoRegisterBlockEntityType.Builder
+                    .of(SuspiciousAncientSandBlock::createBlockEntity, BlockModule.SUSPICIOUS_ANCIENT_SAND.get())
                     .build());
 
     /**

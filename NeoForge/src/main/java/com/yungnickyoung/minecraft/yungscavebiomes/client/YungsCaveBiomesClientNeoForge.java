@@ -12,6 +12,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectil
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.SandSnapperRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
+import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -43,6 +44,7 @@ public class YungsCaveBiomesClientNeoForge {
         event.registerEntityRenderer(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
         event.registerEntityRenderer(EntityTypeModule.SAND_SNAPPER.get(), ctx -> new SandSnapperRenderer<>(ctx, EntityTypeModule.SAND_SNAPPER.get()));
         event.registerEntityRenderer(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);
+        event.registerBlockEntityRenderer(EntityTypeModule.BRUSHABLE.get(), BrushableBlockRenderer::new);
     }
 
     private static void registerParticleFactories(RegisterParticleProvidersEvent event) {
