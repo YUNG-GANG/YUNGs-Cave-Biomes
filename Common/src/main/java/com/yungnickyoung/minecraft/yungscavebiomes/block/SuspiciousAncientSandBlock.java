@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.block;
 
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
+import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.BrushableBlock;
@@ -23,7 +24,7 @@ public class SuspiciousAncientSandBlock extends BrushableBlock {
     }
 
     public static BrushableBlockEntity createBlockEntity(final BlockPos worldPosition, final BlockState blockState) {
-        return ScopedValue.where(BRUSHABLE_BE_TYPE, BlockEntityType.BRUSHABLE_BLOCK)
+        return ScopedValue.where(BRUSHABLE_BE_TYPE, EntityTypeModule.BRUSHABLE.get())
                 .call(() -> new BrushableBlockEntity(worldPosition, blockState));
     }
 }
