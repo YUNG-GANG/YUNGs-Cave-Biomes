@@ -20,9 +20,12 @@ public abstract class BlockMixin {
      */
     @Inject(method = "shouldRenderFace", at = @At("HEAD"), cancellable = true)
     private static void yungscavebiomes_cancelRareIceRender(final BlockState blockState, final BlockState neighborState, final Direction direction, final CallbackInfoReturnable<Boolean> cir) {
-        //todo test me. i removed the if rare ice and other block is sturdy on opposite face then don't render as I think that's equivalent to vanilla logic
         if (blockState.is(Blocks.ICE)) {
             if (neighborState.is(BlockModule.RARE_ICE.get())) {
+                cir.setReturnValue(false);
+            }
+        } else if (blockState.is(BlockModule.RARE_ICE.get())) {
+            if (neighborState.is(Blocks.ICE)) {
                 cir.setReturnValue(false);
             }
         }
