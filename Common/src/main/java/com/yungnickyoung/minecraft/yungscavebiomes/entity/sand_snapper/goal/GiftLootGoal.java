@@ -111,7 +111,7 @@ public class GiftLootGoal extends Goal {
             diggingTimer--;
             if (diggingTimer == 0) {
                 // Spawn loot
-                LootTable lootTable = this.sandSnapper.getServer().reloadableRegistries().getLootTable(LootTableModule.SAND_SNAPPER_LOOT);
+                LootTable lootTable = ((ServerLevel)this.sandSnapper.level()).getServer().reloadableRegistries().getLootTable(LootTableModule.SAND_SNAPPER_LOOT);
                 LootParams lootParams = new LootParams.Builder((ServerLevel) this.sandSnapper.level())
                         .withParameter(LootContextParams.ORIGIN, this.sandSnapper.position())
                         .withParameter(LootContextParams.THIS_ENTITY, this.sandSnapper)

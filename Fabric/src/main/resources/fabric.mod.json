@@ -45,7 +45,7 @@
   "accessWidener": "yungscavebiomes.accesswidener",
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
-    "fabric": ">=${fabric_version}",
+    "fabric-api": ">=${fabric_version}",
     "minecraft": ">=${mc_version}",
     "cloth-config2": ">=${clothconfig_version_fabric}",
     "java": ">=21",

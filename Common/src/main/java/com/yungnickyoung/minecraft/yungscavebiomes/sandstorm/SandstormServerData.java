@@ -1,30 +1,41 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.sandstorm;
 
 import com.google.common.hash.Hashing;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.ServerLevelAccessor;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BiomeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.CriteriaModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.SharedConstants;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.saveddata.SavedDataType;
+
+import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
 
 /**
  * Data class for storing sandstorm data on the server.
  * An instance of this data is attached to each ServerLevel and is responsible for managing sandstorm state in that level.
  */
 public class SandstormServerData extends SavedData {
-    private static final int SYNC_INTERVAL = 60; // Force sync to clients every 3 seconds
-
-    /**
-     * The server level this data is associated with.
-     */
-    private final ServerLevel serverLevel;
+    private static final int                                          SYNC_INTERVAL = 3 * SharedConstants.TICKS_PER_SECOND;
+    private static final Codec<SandstormServerData>                   CODEC         = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.BOOL.optionalFieldOf("isSandstormActive", false).forGetter(s -> s.isSandstormActive),
+            Codec.LONG.optionalFieldOf("sandstormSeed", 0L).forGetter(s -> s.sandstormSeed),
+            Codec.INT.optionalFieldOf("sandstormTime", 0).forGetter(s -> s.currSandstormTicks),
+            Codec.INT.optionalFieldOf("sandstormCooldown", 0).forGetter(s -> s.cooldownTicks),
+            Codec.INT.optionalFieldOf("totalSandstormDuration", 0).forGetter(s -> s.totalSandstormDurationTicks),
+            Codec.INT.optionalFieldOf("totalSandstormCooldown", 0).forGetter(s -> s.totalSandstormCooldownTicks)
+    ).apply(instance, SandstormServerData::new));
+    public static final SavedDataType<? extends SandstormServerData> TYPE          = new SavedDataType<>(
+            id("sandstorm"),
+            SandstormServerData::new,
+            CODEC,
+            DataFixTypes.LEVEL);
 
     /**
      * Time since last sync to clients, in ticks.
@@ -68,72 +79,73 @@ public class SandstormServerData extends SavedData {
      */
     private long sandstormSeed;
 
-    public static Factory<SandstormServerData> factory(ServerLevel serverLevel) {
-        return new Factory<>(
-                () -> new SandstormServerData(serverLevel),
-                (tag, registries) -> new SandstormServerData(serverLevel, tag),
-                DataFixTypes.LEVEL);
+    /**
+     * Whether the above values should be reset on next tick.
+     */
+    private boolean shouldInitialise;
+
+    private SandstormServerData() {
+        this.shouldInitialise = true;
     }
 
-    public SandstormServerData(ServerLevel serverLevel) {
-        this.serverLevel = serverLevel;
-        this.resetSandstormTimeAndTotalDuration();
-        this.resetSandstormCooldownAndTotalCoolDown();
-        this.setDirty();
-    }
-
-    public SandstormServerData(ServerLevel serverLevel, CompoundTag compoundTag) {
-        this(serverLevel);
-        this.isSandstormActive = compoundTag.getBoolean("isSandstormActive");
-        this.sandstormSeed = compoundTag.getLong("sandstormSeed");
-        this.currSandstormTicks = compoundTag.getInt("sandstormTime");
-        this.cooldownTicks = compoundTag.getInt("sandstormCooldown");
-        this.totalSandstormDurationTicks = compoundTag.getInt("totalSandstormDuration");
-        this.totalSandstormCooldownTicks = compoundTag.getInt("totalSandstormCooldown");
+    private SandstormServerData(final boolean isSandstormActive, final long sandstormSeed, final int currSandstormTicks, final int cooldownTicks, final int totalSandstormDurationTicks, final int totalSandstormCooldownTicks) {
+        this.shouldInitialise = false;
+        this.isSandstormActive = isSandstormActive;
+        this.sandstormSeed = sandstormSeed;
+        this.currSandstormTicks = currSandstormTicks;
+        this.cooldownTicks = cooldownTicks;
+        this.totalSandstormDurationTicks = totalSandstormDurationTicks;
+        this.totalSandstormCooldownTicks = totalSandstormCooldownTicks;
     }
 
     /**
      * Starts a new sandstorm.
      */
-    public void start() {
-        YungsCaveBiomesCommon.LOGGER.debug("Starting sandstorm in {}", serverLevel.dimension().location());
+    public void start(ServerLevel level) {
+        YungsCaveBiomesCommon.LOGGER.debug("Starting sandstorm in {}", level.dimension().identifier());
 
         // Determine new sandstorm duration and mark sandstorm as active
-        resetSandstormTimeAndTotalDuration();
+        this.resetSandstormTimeAndTotalDuration(level);
         this.sandstormSeed = Hashing.sha256()
-                .hashLong(this.sandstormSeed + ((ServerLevelAccessor) serverLevel).getServerLevelData().getGameTime())
+                .hashLong(this.sandstormSeed + ((ServerLevelAccessor) level).getServerLevelData().getGameTime())
                 .asLong();
         this.isSandstormActive = true;
 
-        syncToClients();
+        this.syncToClients(level);
     }
 
     /**
      * Stops the current sandstorm.
      */
-    public void stop() {
-        YungsCaveBiomesCommon.LOGGER.debug("STOPPING SANDSTORM in {}", serverLevel.dimension().location());
+    public void stop(ServerLevel level) {
+        YungsCaveBiomesCommon.LOGGER.debug("STOPPING SANDSTORM in {}", level.dimension().identifier());
 
         // Initialize new cooldown and mark sandstorm as inactive
-        resetSandstormCooldownAndTotalCoolDown();
+        this.resetSandstormCooldownAndTotalCoolDown(level);
         this.isSandstormActive = false;
 
         // Trigger sandstorm end criteria for all players in the server level if they are in the Lost Caves biome
-        this.serverLevel.players().forEach(player -> {
-            if (!player.isSpectator() && serverLevel.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES)) {
+        level.players().forEach(player -> {
+            if (!player.isSpectator() && level.getBiome(player.blockPosition()).is(BiomeModule.LOST_CAVES)) {
                 CriteriaModule.SANDSTORM_END.trigger(player);
             }
         });
 
-        syncToClients();
+        this.syncToClients(level);
     }
 
-    public void tick() {
+    public void tick(ServerLevel level) {
         if (YungsCaveBiomesCommon.DEBUG_LOG) {
             YungsCaveBiomesCommon.LOGGER.info("Sandstorm {} >> {} / {} time, {} / {} cooldown",
-                    this.serverLevel.dimension().location(),
+                    level.dimension().identifier(),
                     this.currSandstormTicks, this.totalSandstormDurationTicks,
                     this.cooldownTicks, this.totalSandstormCooldownTicks);
+        }
+
+        if (this.shouldInitialise) {
+            this.resetSandstormTimeAndTotalDuration(level);
+            this.resetSandstormCooldownAndTotalCoolDown(level);
+            this.setDirty();
         }
 
         ++this.timeSinceSync;
@@ -144,7 +156,7 @@ public class SandstormServerData extends SavedData {
 
             // Sandstorm time runs out -> reset sandstorm timer & disable sandstorm
             if (this.currSandstormTicks <= 0) {
-                this.stop();
+                this.stop(level);
             }
         } else {
             // Sandstorm is not active -> decrement cooldown timer
@@ -152,28 +164,17 @@ public class SandstormServerData extends SavedData {
 
             // Cooldown runs out -> reset cooldown timer & start new sandstorm
             if (this.cooldownTicks <= 0) {
-                this.start();
+                this.start(level);
             }
         }
 
         // Sync to clients every few seconds
         if (this.timeSinceSync > SYNC_INTERVAL) {
-            syncToClients();
+            this.syncToClients(level);
             if (YungsCaveBiomesCommon.DEBUG_LOG) {
                 YungsCaveBiomesCommon.LOGGER.info("Force syncing sandstorm...");
             }
         }
-    }
-
-    @Override
-    public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.@NotNull Provider registries) {
-        compoundTag.putBoolean("isSandstormActive", this.isSandstormActive);
-        compoundTag.putLong("sandstormSeed", this.sandstormSeed);
-        compoundTag.putInt("sandstormTime", this.currSandstormTicks);
-        compoundTag.putInt("sandstormCooldown", this.cooldownTicks);
-        compoundTag.putInt("totalSandstormDuration", this.totalSandstormDurationTicks);
-        compoundTag.putInt("totalSandstormCooldown", this.totalSandstormCooldownTicks);
-        return compoundTag;
     }
 
     /**
@@ -181,12 +182,12 @@ public class SandstormServerData extends SavedData {
      * This new value is randomly selected between the min and max sandstorm duration values in the config.
      * The sandstorm time is then initialized to this new total duration.
      */
-    private void resetSandstormTimeAndTotalDuration() {
+    private void resetSandstormTimeAndTotalDuration(ServerLevel level) {
         this.totalSandstormDurationTicks = Mth.randomBetweenInclusive(
-                this.serverLevel.getRandom(),
+                level.getRandom(),
                 YungsCaveBiomesCommon.CONFIG.lostCaves.minSandstormDuration,
                 YungsCaveBiomesCommon.CONFIG.lostCaves.maxSandstormDuration) * 20;
-        this.currSandstormTicks = totalSandstormDurationTicks;
+        this.currSandstormTicks = this.totalSandstormDurationTicks;
     }
 
     /**
@@ -194,22 +195,18 @@ public class SandstormServerData extends SavedData {
      * This new value is randomly selected between the min and max time between sandstorms values in the config.
      * The sandstorm cooldown is then initialized to this new total cooldown.
      */
-    private void resetSandstormCooldownAndTotalCoolDown() {
+    private void resetSandstormCooldownAndTotalCoolDown(ServerLevel level) {
         this.totalSandstormCooldownTicks = Mth.randomBetweenInclusive(
-                this.serverLevel.getRandom(),
+                level.getRandom(),
                 YungsCaveBiomesCommon.CONFIG.lostCaves.minTimeBetweenSandstorms,
                 YungsCaveBiomesCommon.CONFIG.lostCaves.maxTimeBetweenSandstorms) * 20;
-        this.cooldownTicks = totalSandstormCooldownTicks;
+        this.cooldownTicks = this.totalSandstormCooldownTicks;
     }
 
-    private void syncToClients() {
-        Services.PLATFORM.syncSandstormDataToClients(this);
+    private void syncToClients(final ServerLevel level) {
+        Services.PLATFORM.syncSandstormDataToClients(this, level);
         this.timeSinceSync = 0;
         this.setDirty();
-    }
-
-    public ServerLevel getServerLevel() {
-        return this.serverLevel;
     }
 
     public boolean isSandstormActive() {

@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.effect;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.InstantenousMobEffect;
@@ -21,10 +22,10 @@ public class FrostMobEffect extends InstantenousMobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(@NotNull LivingEntity livingEntity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel level, @NotNull LivingEntity livingEntity, int amplifier) {
         // Ignore in spectator and peaceful mode
         if (livingEntity instanceof ServerPlayer serverPlayer) {
-            if (serverPlayer.isSpectator() || serverPlayer.serverLevel().getDifficulty() == Difficulty.PEACEFUL) {
+            if (serverPlayer.isSpectator() || level.getDifficulty() == Difficulty.PEACEFUL) {
                 return true;
             }
         }
@@ -32,10 +33,5 @@ public class FrostMobEffect extends InstantenousMobEffect {
         frozenTicks = Math.min(frozenTicks, maxFreezeTicks * (amplifier + 1));
         livingEntity.setTicksFrozen(frozenTicks);
         return true;
-    }
-
-    @Override
-    public void applyInstantenousEffect(Entity areaCloud, Entity areaCloudThrower, @NotNull LivingEntity target, int amplifier, double damage) {
-        this.applyEffectTick(target, amplifier);
     }
 }

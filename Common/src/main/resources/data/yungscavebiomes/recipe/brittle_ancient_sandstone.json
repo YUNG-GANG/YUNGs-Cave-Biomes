@@ -5,12 +5,8 @@
     "X"
   ],
   "key": {
-    "#": {
-      "item": "yungscavebiomes:ancient_sandstone"
-    },
-    "X": {
-      "item": "yungscavebiomes:ancient_sand"
-    }
+    "#": "yungscavebiomes:ancient_sandstone",
+    "X": "yungscavebiomes:ancient_sand"
   },
   "result": {
     "id": "yungscavebiomes:brittle_ancient_sandstone",

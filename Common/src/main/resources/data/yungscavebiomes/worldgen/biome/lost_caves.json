@@ -27,21 +27,16 @@
       "probability": 0.0015
     }
   },
-  "carvers": {
-    "air": [
-      "minecraft:cave",
-      "minecraft:cave_extra_underground",
-      "minecraft:canyon"
-    ]
-  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:cave_extra_underground",
+    "minecraft:canyon"
+  ],
   "features": [
-    // RAW_GENERATION
     [
     ],
-    // LAKES
     [
     ],
-    // LOCAL_MODIFICATIONS
     [
       "minecraft:amethyst_geode",
       "yungscavebiomes:lost_caves/brittle_sandstone_ceiling_patch",
@@ -54,16 +49,12 @@
       "yungscavebiomes:lost_caves/prickly_vines",
       "yungscavebiomes:lost_caves/layered_sandstone_pillar"
     ],
-    // UNDERGROUND_STRUCTURES,
     [
       "minecraft:monster_room",
       "minecraft:monster_room_deep"
     ],
-    // SURFACE_STRUCTURES
     [],
-    // STRONGHOLDS
     [],
-    // UNDERGROUND_ORES
     [
       "minecraft:ore_dirt",
       "minecraft:ore_gravel",
@@ -94,21 +85,17 @@
       "minecraft:disk_clay",
       "minecraft:disk_gravel"
     ],
-    // UNDERGROUND_DECORATION
     [
     ],
-    // FLUID_SPRINGS
     [
       "minecraft:spring_water",
       "minecraft:spring_lava"
     ],
-    // VEGETAL_DECORATION
     [
       "minecraft:glow_lichen",
       "minecraft:brown_mushroom_normal",
       "minecraft:red_mushroom_normal"
     ],
-    // TOP_LAYER_MODIFICATION
     [
     ]
   ],

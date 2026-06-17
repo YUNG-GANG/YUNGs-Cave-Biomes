@@ -29,17 +29,16 @@ public abstract class ClientLevelMixin extends Level implements ISandstormClient
     @Unique
     private final SandstormClientData sandstormClientData = new SandstormClientData();
 
+    protected ClientLevelMixin(final WritableLevelData levelData, final ResourceKey<Level> dimension, final RegistryAccess registryAccess, final Holder<DimensionType> dimensionTypeRegistration, final boolean isClientSide, final boolean isDebug, final long biomeZoomSeed, final int maxChainedNeighborUpdates) {
+        super(
+                levelData, dimension, registryAccess, dimensionTypeRegistration, isClientSide, isDebug, biomeZoomSeed,
+                maxChainedNeighborUpdates);
+    }
+
     @Override
     @Unique
     public SandstormClientData getSandstormClientData() {
         return sandstormClientData;
-    }
-
-    @Shadow
-    public abstract void addParticle(ParticleOptions p_104706_, double p_104707_, double p_104708_, double p_104709_, double p_104710_, double p_104711_, double p_104712_);
-
-    protected ClientLevelMixin(WritableLevelData $$0, ResourceKey<Level> $$1, RegistryAccess $$2, Holder<DimensionType> $$3, Supplier<ProfilerFiller> $$4, boolean $$5, boolean $$6, long $$7, int $$8) {
-        super($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))

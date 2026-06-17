@@ -42,7 +42,7 @@ public abstract class NoiseBasedChunkGeneratorMixin extends ChunkGenerator {
         NoiseChunk nc = chunkAccess.getOrCreateNoiseChunk(ca -> this.createNoiseChunk(ca, structureManager, blender, randomState));
 
         ((NoiseSamplerBiomeHolder) nc).setBiomeSource(this.biomeSource);
-        ((NoiseSamplerBiomeHolder) nc).setBiomeRegistry(((StructureManagerAccessor) structureManager).getLevel().registryAccess().registryOrThrow(Registries.BIOME));
+        ((NoiseSamplerBiomeHolder) nc).setBiomeRegistry(((StructureManagerAccessor) structureManager).getLevel().registryAccess().lookupOrThrow(Registries.BIOME));
         ((NoiseSamplerBiomeHolder) nc).setClimateSampler(((NoiseChunkAccessor) nc).callCachedClimateSampler(randomState.router(), this.settings.value().spawnTarget()));
         ((NoiseSamplerBiomeHolder) nc).setWorldSeed(((StructureManagerAccessor) structureManager).getWorldOptions().seed());
     }

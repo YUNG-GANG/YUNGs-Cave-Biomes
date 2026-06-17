@@ -16,7 +16,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -29,6 +29,8 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Supplier;
+
+import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
 
 public class FabricPlatformHelper implements IPlatformHelper {
     @Override
@@ -54,13 +56,13 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public void syncSandstormDataToClients(SandstormServerData sandstormServerData) {
+    public void syncSandstormDataToClients(SandstormServerData sandstormServerData, final ServerLevel level) {
         SandstormSyncS2CPayload payload = new SandstormSyncS2CPayload(
                 sandstormServerData.isSandstormActive(),
                 sandstormServerData.getCurrSandstormTicks(),
                 sandstormServerData.getSeed(),
                 sandstormServerData.getTotalSandstormDurationTicks());
-        PlayerLookup.world(sandstormServerData.getServerLevel())
+        PlayerLookup.level(level)
                 .forEach(player -> ServerPlayNetworking.send(player, payload));
     }
 
@@ -76,14 +78,12 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
     @Override
     public Supplier<Item> getIceCubeSpawnEggItem() {
-        return () -> new SpawnEggItem(EntityTypeModule.ICE_CUBE.get(), 0xA4C4FC, 0xE4ECFC,
-                new Item.Properties());
+        return () -> new SpawnEggItem(new Item.Properties().spawnEgg(EntityTypeModule.ICE_CUBE.get()).setId(ResourceKey.create(Registries.ITEM, id("ice_cube_spawn_egg"))));
     }
 
     @Override
     public Supplier<Item> getSandSnapperSpawnEggItem() {
-        return () -> new SpawnEggItem(EntityTypeModule.SAND_SNAPPER.get(), 0xBA852F, 0xCFAC55,
-                new Item.Properties());
+        return () -> new SpawnEggItem(new Item.Properties().spawnEgg(EntityTypeModule.SAND_SNAPPER.get()).setId(ResourceKey.create(Registries.ITEM, id("sand_snapper_spawn_egg"))));
     }
 
     @Override
@@ -92,12 +92,13 @@ public class FabricPlatformHelper implements IPlatformHelper {
                 .of()
                 .instabreak()
                 .noOcclusion()
-                .pushReaction(PushReaction.DESTROY));
+                .pushReaction(PushReaction.DESTROY)
+                .setId(ResourceKey.create(Registries.BLOCK, id("potted_prickly_peach_cactus"))));
     }
 
     @Override
     public ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, AutoRegisterItem potterySherdItem) {
-        ResourceLocation resourceLocation = YungsCaveBiomesCommon.id(name);
+        Identifier resourceLocation = id(name);
 
         // Register
         ResourceKey<DecoratedPotPattern> resourceKey = ResourceKey.create(Registries.DECORATED_POT_PATTERN, resourceLocation);

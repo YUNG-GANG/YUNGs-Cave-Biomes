@@ -10,10 +10,9 @@ import com.yungnickyoung.minecraft.yungscavebiomes.client.render.BuffetedOverlay
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IceCubeRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.IcicleProjectileRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.client.render.SandSnapperRenderer;
-import com.yungnickyoung.minecraft.yungscavebiomes.client.render.SuspiciousAncientSandBlockRenderer;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ParticleTypeModule;
-import net.minecraft.client.gui.LayeredDraw;
+import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -34,8 +33,7 @@ public class YungsCaveBiomesClientNeoForge {
     }
 
     private static void registerOverlays(RegisterGuiLayersEvent event) {
-        LayeredDraw.Layer buffetedOverlay = BuffetedOverlay.getInstance();
-        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, YungsCaveBiomesCommon.id("buffeted"), buffetedOverlay);
+        event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, YungsCaveBiomesCommon.id("buffeted"), BuffetedOverlay.INSTANCE::extract);
     }
 
     private static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -44,9 +42,9 @@ public class YungsCaveBiomesClientNeoForge {
 
     private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityTypeModule.ICE_CUBE.get(), IceCubeRenderer::new);
-        event.registerEntityRenderer(EntityTypeModule.SAND_SNAPPER.get(), SandSnapperRenderer::new);
+        event.registerEntityRenderer(EntityTypeModule.SAND_SNAPPER.get(), ctx -> new SandSnapperRenderer<>(ctx, EntityTypeModule.SAND_SNAPPER.get()));
         event.registerEntityRenderer(EntityTypeModule.ICICLE.get(), IcicleProjectileRenderer::new);
-        event.registerBlockEntityRenderer(EntityTypeModule.SUSPICIOUS_ANCIENT_SAND.get(), SuspiciousAncientSandBlockRenderer::new);
+        event.registerBlockEntityRenderer(EntityTypeModule.BRUSHABLE.get(), BrushableBlockRenderer::new);
     }
 
     private static void registerParticleFactories(RegisterParticleProvidersEvent event) {

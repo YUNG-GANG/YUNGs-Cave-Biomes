@@ -8,16 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.MultifaceBlock;
-import net.minecraft.world.level.block.MultifaceSpreader;
-import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -25,9 +17,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.redstone.Orientation;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,8 +30,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-@ParametersAreNonnullByDefault
-public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBlock {
+
+public class IceSheetBlock extends MultifaceSpreadeableBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<IceSheetBlock> CODEC = simpleCodec(IceSheetBlock::new);
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -54,15 +48,14 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
                 .setValue(GROWTH_DISTANCE, 0));
     }
 
-    @Override
-    protected MapCodec<? extends MultifaceBlock> codec() {
+    @Override public MapCodec<? extends MultifaceSpreadeableBlock> codec() {
         return CODEC;
     }
 
     @Override
     public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource random) {
         // Melt
-        if (random.nextFloat() < 0.25f && serverLevel.getBrightness(LightLayer.BLOCK, blockPos) > 12 - blockState.getLightBlock(serverLevel, blockPos)) {
+        if (random.nextFloat() < 0.25f && serverLevel.getBrightness(LightLayer.BLOCK, blockPos) > 12 - blockState.getLightDampening()) {
             serverLevel.removeBlock(blockPos, false);
         }
 
@@ -77,7 +70,7 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
 
     @Override
     public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource random) {
-        if (level.getBrightness(LightLayer.BLOCK, blockPos) > 12 - blockState.getLightBlock(level, blockPos) && random.nextFloat() < 0.2f) {
+        if (level.getBrightness(LightLayer.BLOCK, blockPos) > 12 - blockState.getLightDampening() && random.nextFloat() < 0.2f) {
             // TODO - melting particle
 //            Vec3 vec3 = blockState.getOffset(level, blockPos);
 //            double x = (double) blockPos.getX() + 0.5 + vec3.x;
@@ -88,11 +81,11 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    public BlockState updateShape(BlockState thisState, Direction directionToNeighbor, BlockState neighborState, LevelAccessor levelAccessor, BlockPos thisPos, BlockPos neighborPos) {
-        if (thisState.getValue(WATERLOGGED)) {
-            levelAccessor.scheduleTick(thisPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+    protected BlockState updateShape(final BlockState state, final LevelReader level, final ScheduledTickAccess ticks, final BlockPos pos, final Direction directionToNeighbour, final BlockPos neighbourPos, final BlockState neighbourState, final RandomSource random) {
+        if (state.getValue(WATERLOGGED) && level instanceof ServerLevel serverLevel) {
+            serverLevel.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(thisState, directionToNeighbor, neighborState, levelAccessor, thisPos, neighborPos);
+        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override
@@ -125,14 +118,19 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         return updatedState;
     }
 
+    private MultifaceSpreader spreader() {
+        return this.spreader;
+    }
+
     @Override
     public @NotNull MultifaceSpreader getSpreader() {
         return this.spreader;
     }
 
+
     @Override
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block neighborBlock, BlockPos neighborPos, boolean bl) {
-        if (level.isClientSide) {
+    protected void neighborChanged(final BlockState state, final Level level, final BlockPos pos, final Block block, @Nullable final Orientation orientation, final boolean movedByPiston) {
+        if (level.isClientSide()) {
             return;
         }
 
@@ -140,12 +138,12 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         for (Map.Entry<Direction, BooleanProperty> entry : PipeBlock.PROPERTY_BY_DIRECTION.entrySet()) {
             Direction direction = entry.getKey();
             BooleanProperty property = entry.getValue();
-            if (blockState.getValue(property)) {
-                BlockPos adjacentPos = blockPos.relative(direction);
+            if (state.getValue(property)) {
+                BlockPos adjacentPos = pos.relative(direction);
                 BlockState adjacentBlock = level.getBlockState(adjacentPos);
                 if (adjacentBlock.is(BlockModule.CREEPING_ICE_GLOWS_ON)) {
-                    if (!blockState.getValue(GLOWING)) {
-                        level.setBlock(blockPos, blockState.setValue(GLOWING, true), 2);
+                    if (!state.getValue(GLOWING)) {
+                        level.setBlock(pos, state.setValue(GLOWING, true), 2);
                     }
                     return;
                 }
@@ -153,8 +151,8 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
         }
 
         // Make ice sheet stop glowing if not attached to ore
-        if (blockState.getValue(GLOWING)) {
-            level.setBlock(blockPos, blockState.setValue(GLOWING, false), 2);
+        if (state.getValue(GLOWING)) {
+            level.setBlock(pos, state.setValue(GLOWING, false), 2);
         }
     }
 
@@ -169,7 +167,7 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
     @Override
     protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(GLOWING, WATERLOGGED, GROWTH_DISTANCE);
+        builder.add(GLOWING, GROWTH_DISTANCE);
     }
 //
 //    private static boolean canAttachTo(BlockGetter blockGetter, Direction direction, BlockPos blockPos, BlockState blockState) {
@@ -287,7 +285,7 @@ public class IceSheetBlock extends MultifaceBlock implements SimpleWaterloggedBl
 
     private boolean canSpreadInto(LevelAccessor levelAccessor, BlockState blockState, BlockPos blockPos, BlockState spreadOriginBlockState) {
         return (blockState.isAir() || (blockState.is(this) && blockState.getValue(GROWTH_DISTANCE) < spreadOriginBlockState.getValue(GROWTH_DISTANCE)) || blockState.is(Blocks.WATER) && blockState.getFluidState().isSource())
-                && levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) <= 12 - blockState.getLightBlock(levelAccessor, blockPos);
+                && levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) <= 12 - blockState.getLightDampening();
     }
 
 //    private static boolean hasFace(BlockState blockState, Direction direction) {

@@ -46,8 +46,8 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
 
         // Determine column radius
         int maxColumnRadius = (int) ((float) range.height() * config.maxColumnRadiusToCaveHeightRatio);
-        maxColumnRadius = Mth.clamp(maxColumnRadius, config.columnRadius.getMinValue(), config.columnRadius.getMaxValue());
-        int columnRadius = Mth.randomBetweenInclusive(random, config.columnRadius.getMinValue(), maxColumnRadius);
+        maxColumnRadius = Mth.clamp(maxColumnRadius, config.columnRadius.minInclusive(), config.columnRadius.maxInclusive());
+        int columnRadius = Mth.randomBetweenInclusive(random, config.columnRadius.minInclusive(), maxColumnRadius);
 
         // Create stalactite and stalagmite objects
         LargeIceDripstone stalactite = makeIceDripstone(origin.atY(range.ceiling() - 1), false, random, columnRadius, config.stalactiteBluntness, config.heightScale);

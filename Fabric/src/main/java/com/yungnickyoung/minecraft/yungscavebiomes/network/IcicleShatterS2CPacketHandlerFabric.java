@@ -10,9 +10,10 @@ public class IcicleShatterS2CPacketHandlerFabric {
         context.client().execute(() -> {
             if (context.client().level != null) {
                 RandomSource random = context.client().level.getRandom();
-                for (int i = 0; i < random.nextInt(5) + 10; i++) {
+                int count = random.nextInt(5) + 10;
+                for (int i = 0; i < count; i++) {
                     context.client().particleEngine.add(new IceShatterParticle(context.client().level,
-                            payload.x(), payload.y(), payload.z()));
+                            payload.x(), payload.y(), payload.z(), random));
                 }
             }
         });

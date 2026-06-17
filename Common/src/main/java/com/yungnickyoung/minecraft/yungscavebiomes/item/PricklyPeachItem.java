@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+
 
 public class PricklyPeachItem extends Item {
     public PricklyPeachItem(Properties properties) {
@@ -16,7 +16,7 @@ public class PricklyPeachItem extends Item {
     }
 
     @Override
-    @ParametersAreNonnullByDefault
+    
     public @NotNull ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
         ItemStack retVal = super.finishUsingItem(itemStack, level, livingEntity);
         if (livingEntity instanceof ServerPlayer serverPlayer) {

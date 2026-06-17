@@ -14,6 +14,6 @@ public class DamageTypeModule {
     public static final ResourceKey<DamageType> FALLING_ICICLE = ResourceKey.create(Registries.DAMAGE_TYPE, YungsCaveBiomesCommon.id("falling_icicle"));
 
     public static DamageSource of(RegistryAccess registryAccess, ResourceKey<DamageType> key) {
-        return new DamageSource(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key));
+        return new DamageSource(registryAccess.getOrThrow(key));
     }
 }

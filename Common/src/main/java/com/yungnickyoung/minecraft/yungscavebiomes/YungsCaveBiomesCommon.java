@@ -4,7 +4,7 @@ import com.yungnickyoung.minecraft.yungsapi.api.YungAutoRegister;
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ConfigModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +16,7 @@ public class YungsCaveBiomesCommon {
     public static final ConfigModule CONFIG = new ConfigModule();
 
     // TODO - change this whenever updating to a new Minecraft version
-    public static final String MC_VERSION_STRING = "1_21_1";
+    public static final String MC_VERSION_STRING = "26_1_1";
 
     public static boolean MARBLE_CAVES_ENABLED = false; // Rest in peace. Maybe one day...
     public static boolean DEBUG_LOG = false;
@@ -29,7 +29,7 @@ public class YungsCaveBiomesCommon {
         YungAutoRegister.scanPackageForAnnotations("com.yungnickyoung.minecraft.yungscavebiomes");
     }
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 }

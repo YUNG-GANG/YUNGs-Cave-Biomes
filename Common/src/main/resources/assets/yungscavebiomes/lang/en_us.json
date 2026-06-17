@@ -72,7 +72,7 @@
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.frost": "Arrow of Frost",
   "item.minecraft.tipped_arrow.effect.yungscavebiomes.strong_frost": "Arrow of Frost",
   "trim_pattern.yungscavebiomes.ancient": "Ancient Armor Trim",
-  "item.yungscavebiomes.ancient_armor_trim_smithing_template": "Smithing Template",
+  "item.yungscavebiomes.ancient_armor_trim_smithing_template": "Ancient Armor Trim",
 
   "death.attack.prickly_vines": "%1$s was poked to death by prickly vines",
   "death.attack.prickly_vines.player": "%1$s was poked to death by prickly vines whilst trying to escape %2$s",

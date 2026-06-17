@@ -5,9 +5,7 @@
     "##"
   ],
   "key": {
-    "#": {
-      "item": "yungscavebiomes:ancient_sandstone"
-    }
+    "#": "yungscavebiomes:ancient_sandstone"
   },
   "result": {
     "id": "yungscavebiomes:cut_ancient_sandstone",

@@ -1,48 +1,26 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.client.model;
 
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.base.GeoRenderState;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapperEntity;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.model.data.EntityModelData;
+import net.minecraft.resources.Identifier;
 
 public class SandSnapperModel extends GeoModel<SandSnapperEntity> {
-    private static final ResourceLocation MODEL = YungsCaveBiomesCommon.id("geo/sand_snapper/sand_snapper.geo.json");
-    private static final ResourceLocation TEXTURE = YungsCaveBiomesCommon.id("textures/entity/sand_snapper/sand_snapper.png");
-    private static final ResourceLocation ANIMATION = YungsCaveBiomesCommon.id("animations/sand_snapper/sand_snapper.animation.json");
+    private static final Identifier MODEL = YungsCaveBiomesCommon.id("sand_snapper/sand_snapper");
+    private static final Identifier TEXTURE = YungsCaveBiomesCommon.id("textures/entity/sand_snapper/sand_snapper.png");
+    private static final Identifier ANIMATION = YungsCaveBiomesCommon.id("sand_snapper/sand_snapper");
 
-    @Override
-    public ResourceLocation getModelResource(SandSnapperEntity sandSnapper) {
+    @Override public Identifier getModelResource(final GeoRenderState renderState) {
         return MODEL;
     }
 
-    @Override
-    public ResourceLocation getTextureResource(SandSnapperEntity sandSnapper) {
+    @Override public Identifier getTextureResource(final GeoRenderState renderState) {
         return TEXTURE;
     }
 
     @Override
-    public ResourceLocation getAnimationResource(SandSnapperEntity sandSnapper) {
+    public Identifier getAnimationResource(SandSnapperEntity sandSnapper) {
         return ANIMATION;
-    }
-
-    @Override
-    public void setCustomAnimations(SandSnapperEntity animatable, long instanceId, AnimationState<SandSnapperEntity> animationState) {
-        super.setCustomAnimations(animatable, instanceId, animationState);
-
-        if (!animatable.isLookingAtPlayer()) return;
-
-        GeoBone head = this.getAnimationProcessor().getBone("neck");
-
-        if (head != null) {
-            EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-
-            head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
-            head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
-        }
     }
 }

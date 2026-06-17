@@ -5,9 +5,11 @@ import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.chat.ChatAbilities;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.AmbientSoundHandler;
 import net.minecraft.stats.StatsCounter;
+import net.minecraft.world.entity.player.Input;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,8 +25,8 @@ public class LocalPlayerMixin {
     @Shadow @Final private List<AmbientSoundHandler> ambientSoundHandlers;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void yungscavebiomes_addLostCavesAmbientSoundHandler(Minecraft $$0, ClientLevel $$1, ClientPacketListener $$2, StatsCounter $$3, ClientRecipeBook $$4, boolean $$5, boolean $$6, CallbackInfo ci) {
-        this.ambientSoundHandlers.add(new LostCavesAmbientSoundsHandler(_this(), $$0.getSoundManager(), $$1.getBiomeManager()));
+    public void yungscavebiomes_addLostCavesAmbientSoundHandler(final Minecraft minecraft, final ClientLevel level, final ClientPacketListener connection, final StatsCounter stats, final ClientRecipeBook recipeBook, final Input lastSentInput, final boolean wasSprinting, final ChatAbilities chatAbilities, final CallbackInfo ci) {
+        this.ambientSoundHandlers.add(new LostCavesAmbientSoundsHandler(_this(), minecraft.getSoundManager(), level.getBiomeManager()));
     }
 
     @Unique

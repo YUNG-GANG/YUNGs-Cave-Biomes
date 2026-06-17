@@ -6,8 +6,10 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -19,9 +21,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+
+
 public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
     public static final MapCodec<PricklyVinesPlantBlock> CODEC = simpleCodec(PricklyVinesPlantBlock::new);
 
@@ -42,16 +44,16 @@ public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
     }
 
     @Override
-    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+    protected void entityInside(final BlockState state, final Level level, final BlockPos pos, final Entity entity, final InsideBlockEffectApplier effectApplier, final boolean isPrecise) {
         if (!(entity instanceof LivingEntity) || entity.getType() == EntityType.FOX || entity.getType() == EntityType.BEE || entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
             return;
         }
-        entity.makeStuckInBlock(blockState, new Vec3(0.8f, 0.75, 0.8f));
-        if (!(level.isClientSide || entity.xOld == entity.getX() && entity.zOld == entity.getZ())) {
+        entity.makeStuckInBlock(state, new Vec3(0.8f, 0.75, 0.8f));
+        if (level instanceof ServerLevel serverLevel && (entity.xOld != entity.getX() || entity.zOld != entity.getZ())) {
             double d = Math.abs(entity.getX() - entity.xOld);
             double e = Math.abs(entity.getZ() - entity.zOld);
             if (d >= (double) 0.003f || e >= (double) 0.003f) {
-                entity.hurt(DamageTypeModule.of(level.registryAccess(), DamageTypeModule.PRICKLY_VINES), 1.0f);
+                entity.hurtServer(serverLevel, DamageTypeModule.of(level.registryAccess(), DamageTypeModule.PRICKLY_VINES), 1.0f);
             }
         }
     }

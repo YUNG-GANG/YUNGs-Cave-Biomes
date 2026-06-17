@@ -11,16 +11,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Collection;
+
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
     public LivingEntityMixin(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
     }
 
-    @Inject(method = "onEffectRemoved", at = @At("HEAD"))
-    private void yungscavebiomes_resetFrostTicksWhenClearingEffect(MobEffectInstance effectInstance, CallbackInfo ci) {
+    @Inject(method = "onEffectsRemoved", at = @At("HEAD"))
+    private void yungscavebiomes_resetFrostTicksWhenClearingEffect(final Collection<MobEffectInstance> effects, final CallbackInfo ci) {
         if (!this.level().isClientSide()) {
-            if (effectInstance.getEffect().equals(MobEffectModule.FROZEN_EFFECT.getHolder())) {
+            if (effects.stream().anyMatch(e -> e.is(MobEffectModule.FROZEN_EFFECT.getHolder()))) {
                 this.setTicksFrozen(1);
             }
         }

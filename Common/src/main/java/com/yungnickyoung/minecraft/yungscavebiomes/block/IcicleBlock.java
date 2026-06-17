@@ -14,13 +14,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -43,12 +40,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 
-@ParametersAreNonnullByDefault
+
 public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlock {
     public static final EnumProperty<DripstoneThickness> THICKNESS = BlockStateProperties.DRIPSTONE_THICKNESS;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -76,31 +73,39 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     @Override
-    public BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState,
-                                  LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
+    protected BlockState updateShape(final BlockState state,
+                                     final LevelReader level,
+                                     final ScheduledTickAccess ticks,
+                                     final BlockPos pos,
+                                     final Direction directionToNeighbour,
+                                     final BlockPos neighbourPos,
+                                     final BlockState neighbourState,
+                                     final RandomSource random) {
         // Schedule fluid tick if waterlogged
-        if (currState.getValue(WATERLOGGED)) {
-            levelAccessor.scheduleTick(currPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+        if (state.getValue(WATERLOGGED) && level instanceof ServerLevel serverLevel) {
+            serverLevel.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
         // We only care about vertical direction updates for icicles
-        if (neighborDirection != Direction.UP && neighborDirection != Direction.DOWN) {
-            return currState;
+        if (directionToNeighbour != Direction.UP && directionToNeighbour != Direction.DOWN) {
+            return state;
         }
 
         // No need to update if tick on this block is already scheduled
-        if (levelAccessor.getBlockTicks().hasScheduledTick(currPos, this)) {
-            return currState;
+        if (level instanceof ServerLevel serverLevel && serverLevel.getBlockTicks().hasScheduledTick(pos, this)) {
+            return state;
         }
 
         // Schedule fall tick if block above is no longer valid support
-        if (neighborDirection == Direction.UP && !this.canSurvive(currState, levelAccessor, currPos)) {
-            levelAccessor.scheduleTick(currPos, this, 2);
-            return currState;
+        if (directionToNeighbour == Direction.UP && !this.canSurvive(state, level, pos)) {
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.scheduleTick(pos, this, 2);
+            }
+            return state;
         }
 
-        DripstoneThickness thickness = calculateIcicleThickness(levelAccessor, currPos);
-        return currState.setValue(THICKNESS, thickness);
+        DripstoneThickness thickness = calculateIcicleThickness(level, pos);
+        return state.setValue(THICKNESS, thickness);
     }
 
     /**
@@ -112,7 +117,10 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     @Override
     public void onProjectileHit(Level level, @NotNull BlockState blockState, BlockHitResult blockHitResult, @NotNull Projectile projectile) {
         BlockPos blockPos = blockHitResult.getBlockPos();
-        if (!level.isClientSide && projectile.mayInteract(level, blockPos) && projectile instanceof AbstractArrow && projectile.getDeltaMovement().length() > 0.4) {
+        if (level instanceof ServerLevel serverLevel
+            && projectile.mayInteract(serverLevel, blockPos)
+            && projectile instanceof AbstractArrow
+            && projectile.getDeltaMovement().length() > 0.4) {
             level.destroyBlock(blockPos, true);
         }
     }
@@ -176,7 +184,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
             default -> voxelShape = TIP_SHAPE;
         }
 
-        Vec3 vec3 = blockState.getOffset(blockGetter, blockPos);
+        Vec3 vec3 = blockState.getOffset(blockPos);
         return voxelShape.move(vec3.x, 0.0, vec3.z);
     }
 
@@ -372,7 +380,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     private static void spawnDripParticle(Level level, BlockPos blockPos, BlockState blockState, Fluid fluid) {
-        Vec3 vec3 = blockState.getOffset(level, blockPos);
+        Vec3 vec3 = blockState.getOffset(blockPos);
         double d = 0.0625;
         double x = (double) blockPos.getX() + 0.5 + vec3.x;
         double y = (double) ((float) (blockPos.getY() + 1) - 0.6875f) - d;

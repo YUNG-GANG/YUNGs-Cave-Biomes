@@ -6,9 +6,7 @@
     "###"
   ],
   "key": {
-    "#": {
-      "item": "yungscavebiomes:smooth_ancient_sandstone"
-    }
+    "#": "yungscavebiomes:smooth_ancient_sandstone"
   },
   "result": {
     "id": "yungscavebiomes:smooth_ancient_sandstone_stairs",

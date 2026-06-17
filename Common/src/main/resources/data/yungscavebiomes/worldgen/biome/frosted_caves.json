@@ -21,21 +21,16 @@
       "replace_current_music": false
     }
   },
-  "carvers": {
-    "air": [
-      "minecraft:cave",
-      "minecraft:cave_extra_underground",
-      "minecraft:canyon"
-    ]
-  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:cave_extra_underground",
+    "minecraft:canyon"
+  ],
   "features": [
-    // RAW_GENERATION
     [
     ],
-    // LAKES
     [
     ],
-    // LOCAL_MODIFICATIONS
     [
       "minecraft:amethyst_geode",
       "yungscavebiomes:frosted_caves/large_icicle",
@@ -48,16 +43,12 @@
       "yungscavebiomes:frosted_caves/water_surface_ice_fragment_2",
       "yungscavebiomes:frosted_caves/icicles"
     ],
-    // UNDERGROUND_STRUCTURES,
     [
       "minecraft:monster_room",
       "minecraft:monster_room_deep"
     ],
-    // SURFACE_STRUCTURES
     [],
-    // STRONGHOLDS
     [],
-    // UNDERGROUND_ORES
     [
       "minecraft:ore_dirt",
       "minecraft:ore_gravel",
@@ -88,17 +79,13 @@
       "minecraft:disk_clay",
       "minecraft:disk_gravel"
     ],
-    // UNDERGROUND_DECORATION
     [
     ],
-    // FLUID_SPRINGS
     [
       "minecraft:spring_water"
     ],
-    // VEGETAL_DECORATION
     [
     ],
-    // TOP_LAYER_MODIFICATION
     [
       "minecraft:freeze_top_layer",
       "yungscavebiomes:frosted_caves/ice_sheet_replace",

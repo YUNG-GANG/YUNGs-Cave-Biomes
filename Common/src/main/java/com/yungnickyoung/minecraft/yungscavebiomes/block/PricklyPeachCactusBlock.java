@@ -14,18 +14,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -34,15 +30,16 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+
+
 public class PricklyPeachCactusBlock extends Block implements BonemealableBlock {
     public static final BooleanProperty FRUIT = BlockStateProperties.BERRIES;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_25;
@@ -62,11 +59,11 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
-    protected @NotNull ItemInteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected @NotNull InteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!isMaxAge(blockState) && itemStack.is(Items.BONE_MEAL)) {
-            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.SUCCESS;
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     @Override
@@ -74,7 +71,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
         // Harvest peach if available
         if (blockState.getValue(FRUIT)) {
             popFruit(level, blockPos);
-            float volume = Mth.randomBetween(level.random, 0.8f, 1.2f);
+            float volume = Mth.randomBetween(level.getRandom(), 0.8f, 1.2f);
             level.playSound(null, blockPos, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, volume);
             level.setBlock(blockPos, blockState.setValue(FRUIT, false).setValue(AGE, 0), 2);
         } else if (player.getMainHandItem().isEmpty()){
@@ -84,7 +81,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
                 CriteriaModule.INTERACT_EMPTY_PRICKLY_CACTUS.trigger(serverPlayer);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS_SERVER;
     }
 
     @Override
@@ -155,15 +152,17 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState currState, Direction neighborDirection, BlockState neighborBlockState, LevelAccessor levelAccessor, BlockPos currPos, BlockPos neighborPos) {
-        if (!currState.canSurvive(levelAccessor, currPos)) {
-            levelAccessor.scheduleTick(currPos, this, 1);
+    protected BlockState updateShape(BlockState currState, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
+        if (!currState.canSurvive(level, pos)) {
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.scheduleTick(pos, this, 1);
+            }
         }
-        return super.updateShape(currState, neighborDirection, neighborBlockState, levelAccessor, currPos, neighborPos);
+        return super.updateShape(currState, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override
-    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
             return; // Sand snapper is immune to prickly cactus
         }
@@ -189,24 +188,24 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     }
 
     private static void popFruit(Level level, BlockPos $$1) {
-        if (!level.isClientSide && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+        if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(GameRules.BLOCK_DROPS)) {
             double x = (double) $$1.getX() + 0.5;
             double y = (double) $$1.getY() + 0.5 - (EntityType.ITEM.getHeight() / 2.0F);
             double z = (double) $$1.getZ() + 0.5;
 
-            double xOffset = Mth.nextDouble(level.random, 0.20, 0.25);
+            double xOffset = Mth.nextDouble(level.getRandom(), 0.20, 0.25);
             double yOffset = 0.25;
-            double zOffset = Mth.nextDouble(level.random, 0.20, 0.25);
+            double zOffset = Mth.nextDouble(level.getRandom(), 0.20, 0.25);
 
-            double dx = Mth.nextDouble(level.random, 0.075, 0.1);
+            double dx = Mth.nextDouble(level.getRandom(), 0.075, 0.1);
             double dy = 0.2;
-            double dz = Mth.nextDouble(level.random, 0.075, 0.1);
+            double dz = Mth.nextDouble(level.getRandom(), 0.075, 0.1);
 
-            if (level.random.nextBoolean()) {
+            if (level.getRandom().nextBoolean()) {
                 xOffset *= -1;
                 dx *= -1;
             }
-            if (level.random.nextBoolean()) {
+            if (level.getRandom().nextBoolean()) {
                 zOffset *= -1;
                 dz *= -1;
             }

@@ -5,19 +5,20 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
-public class LostCavesAmbientParticle extends TextureSheetParticle {
+
+public class LostCavesAmbientParticle extends SingleQuadParticle {
     private final float rotSpeed;
     private final SpriteSet sprites;
 
-    LostCavesAmbientParticle(ClientLevel clientLevel, double xo, double yo, double zo, float r, float g, float b, SpriteSet spriteSet) {
-        super(clientLevel, xo, yo, zo);
+    LostCavesAmbientParticle(ClientLevel clientLevel, double xo, double yo, double zo, float r, float g, float b, SpriteSet spriteSet, RandomSource randomSource) {
+        super(clientLevel, xo, yo, zo, spriteSet.first());
         this.sprites = spriteSet;
         this.rCol = r;
         this.gCol = g;
@@ -30,20 +31,19 @@ public class LostCavesAmbientParticle extends TextureSheetParticle {
         this.rotSpeed = ((float) Math.random() - 0.5f) * 0.1f;
         this.roll = (float) Math.random() * ((float) Math.PI * 2);
         this.setParticleSpeed(
-                Mth.lerp(clientLevel.random.nextDouble(), -0.05, 0.05),
-                Mth.lerp(clientLevel.random.nextDouble(), -0.05, 0.05),
-                Mth.lerp(clientLevel.random.nextDouble(), -0.05, 0.05)
+                Mth.lerp(randomSource.nextDouble(), -0.05, 0.05),
+                Mth.lerp(randomSource.nextDouble(), -0.05, 0.05),
+                Mth.lerp(randomSource.nextDouble(), -0.05, 0.05)
         );
-    }
-
-    @Override
-    public @NotNull ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override
     public float getQuadSize(float f) {
         return this.quadSize * Mth.clamp(((float) this.age + f) / (float) this.lifetime * 32.0f, 0.0f, 1.0f);
+    }
+
+    @Override protected Layer getLayer() {
+        return Layer.OPAQUE;
     }
 
     @Override
@@ -75,14 +75,15 @@ public class LostCavesAmbientParticle extends TextureSheetParticle {
         }
 
         @Override
-        @ParametersAreNonnullByDefault
+        
         public Particle createParticle(SimpleParticleType type, ClientLevel clientLevel,
-                                       double xo, double yo, double zo, double dx, double dy, double dz) {
+                                       double xo, double yo, double zo, double dx, double dy, double dz,
+                                       RandomSource randomSource) {
             int color = 0xd1b482;
             float r = (float) (color >> 16 & 0xFF) / 255.0f;
             float g = (float) (color >> 8 & 0xFF) / 255.0f;
             float b = (float) (color & 0xFF) / 255.0f;
-            return new LostCavesAmbientParticle(clientLevel, xo, yo, zo, r, g, b, this.spriteSet);
+            return new LostCavesAmbientParticle(clientLevel, xo, yo, zo, r, g, b, this.spriteSet, randomSource);
         }
     }
 }

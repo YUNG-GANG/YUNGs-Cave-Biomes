@@ -1,8 +1,6 @@
 {
   "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "yungscavebiomes:ancient_sandstone"
-  },
+  "ingredient": "yungscavebiomes:ancient_sandstone",
   "result": {
     "id": "yungscavebiomes:smooth_ancient_sandstone",
     "count": 1
