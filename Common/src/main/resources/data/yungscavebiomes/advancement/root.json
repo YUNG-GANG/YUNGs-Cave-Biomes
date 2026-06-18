@@ -12,7 +12,7 @@
     "show_toast": false,
     "announce_to_chat": false,
     "hidden": true,
-    "background": "yungscavebiomes:textures/block/layered_ancient_sandstone.png"
+    "background": "yungscavebiomes:block/layered_ancient_sandstone"
   },
   "criteria": {
     "always": {
