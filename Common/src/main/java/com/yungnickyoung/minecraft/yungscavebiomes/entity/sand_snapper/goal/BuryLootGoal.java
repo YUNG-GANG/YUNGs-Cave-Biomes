@@ -15,11 +15,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 
 public class BuryLootGoal extends Goal {
@@ -27,6 +29,9 @@ public class BuryLootGoal extends Goal {
             Blocks.SAND, Blocks.SUSPICIOUS_SAND,
             Blocks.GRAVEL, Blocks.SUSPICIOUS_GRAVEL,
             BlockModule.ANCIENT_SAND.get(), BlockModule.SUSPICIOUS_ANCIENT_SAND.get());
+    private static final List<BlockEntityType<BrushableBlockEntity>> SUSPICIOUS_BE_TYPES = List.of(
+            EntityTypeModule.BRUSHABLE.get(),
+            BlockEntityType.BRUSHABLE_BLOCK);
 
     private static final double            MAX_ALLOWED_SQR_DISTANCE_TO_TARGET = 100.0;
 
@@ -120,7 +125,9 @@ public class BuryLootGoal extends Goal {
                 if (suspiciousised != null) {
                     sandSnapper.level().broadcastEntityEvent(sandSnapper, SandSnapperEntity.getBuryLootParticlesEvent(suspiciousised));
                     sandSnapper.level().setBlock(sandSnapper.getOnPos(), suspiciousised.defaultBlockState(), Block.UPDATE_ALL);
-                    sandSnapper.level().getBlockEntity(sandSnapper.getOnPos(), BlockEntityType.BRUSHABLE_BLOCK)
+                    SUSPICIOUS_BE_TYPES.stream()
+                            .flatMap(type -> sandSnapper.level().getBlockEntity(sandSnapper.getOnPos(), type).stream())
+                            .findFirst()
                             .ifPresentOrElse(blockEntity -> {
                                 ((BrushableBlockEntityAccessor) blockEntity).setItem(sandSnapper.carryingItem);
                                 sandSnapper.carryingItem = ItemStack.EMPTY;
