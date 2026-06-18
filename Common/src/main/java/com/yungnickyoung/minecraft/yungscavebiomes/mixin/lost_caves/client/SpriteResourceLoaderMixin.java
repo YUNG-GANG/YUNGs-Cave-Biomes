@@ -25,10 +25,11 @@ public abstract class SpriteResourceLoaderMixin {
     private static void yungscavebiomes_addAncientArmorTrimTextures(ResourceManager resourceManager, Identifier id, CallbackInfoReturnable<SpriteSourceList> cir) {
         if (id.equals(Identifier.withDefaultNamespace("armor_trims"))) {
             for (SpriteSource source : ((SpriteResourceLoaderMixin) (Object) cir.getReturnValue()).getSources()) {
-                if (source instanceof PalettedPermutationsAccessor palettedPermutations && palettedPermutations.getPaletteKey().equals(Identifier.withDefaultNamespace("trims/color_palettes/trim_palette"))) {
+                if (source instanceof PalettedPermutationsAccessor palettedPermutations
+                    && palettedPermutations.getPaletteKey().equals(Identifier.withDefaultNamespace("trims/color_palettes/trim_palette"))) {
                     List<Identifier> textures = new ArrayList<>(palettedPermutations.getTextures());
-                    textures.add(YungsCaveBiomesCommon.id("trims/models/armor/ancient"));
-                    textures.add(YungsCaveBiomesCommon.id("trims/models/armor/ancient_leggings"));
+                    textures.add(YungsCaveBiomesCommon.id("trims/entity/humanoid/ancient"));
+                    textures.add(YungsCaveBiomesCommon.id("trims/entity/humanoid_leggings/ancient"));
                     palettedPermutations.setTextures(ImmutableList.copyOf(textures));
                 }
             }
