@@ -15,11 +15,11 @@ import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.
 public class PotionModule {
     @AutoRegister("frost")
     public static final AutoRegisterPotion FROST_POTION = AutoRegisterPotion
-            .of(() -> new Potion(id("frost").toString(), new MobEffectInstance(MobEffectModule.FROZEN_EFFECT.getHolder(), 0, 0, false, true, false)));
+            .of(() -> new Potion(id("frost").toLanguageKey(), new MobEffectInstance(MobEffectModule.FROZEN_EFFECT.getHolder(), 0, 0, false, true, false)));
 
     @AutoRegister("strong_frost")
     public static final AutoRegisterPotion STRONG_FROST_POTION = AutoRegisterPotion
-            .of(() -> new Potion(id("strong_frost").toString(), new MobEffectInstance(MobEffectModule.FROZEN_EFFECT.getHolder(), 0, 1, false, true, false)));
+            .of(() -> new Potion(id("strong_frost").toLanguageKey(), new MobEffectInstance(MobEffectModule.FROZEN_EFFECT.getHolder(), 0, 1, false, true, false)));
 
     /**
      * Methods with the AutoRegister annotations will be executed after registration.
