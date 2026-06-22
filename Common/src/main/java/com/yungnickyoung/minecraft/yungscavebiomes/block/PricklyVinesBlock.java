@@ -6,6 +6,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 public class PricklyVinesBlock extends GrowingPlantHeadBlock {
+    static final float HURT_SPEED_THRESHOLD = 0.003F;
     public static final MapCodec<PricklyVinesBlock> CODEC = simpleCodec(PricklyVinesBlock::new);
 
     protected static final VoxelShape SHAPE = Block.box(4.0, 9.0, 4.0, 12.0, 16.0, 12.0);
@@ -59,11 +61,17 @@ public class PricklyVinesBlock extends GrowingPlantHeadBlock {
             return;
         }
         entity.makeStuckInBlock(state, new Vec3(0.8f, 0.75, 0.8f));
-        if (!(level.isClientSide() || state.getValue(AGE) <= 0 || entity.xOld == entity.getX() && entity.zOld == entity.getZ())) {
-            double d = Math.abs(entity.getX() - entity.xOld);
-            double e = Math.abs(entity.getZ() - entity.zOld);
-            if (d >= (double) 0.003f || e >= (double) 0.003f) {
-                entity.hurt(DamageTypeModule.of(level.registryAccess(), DamageTypeModule.PRICKLY_VINES), 1.0f);
+        if (level instanceof ServerLevel serverLevel) {
+            if (state.getValue(AGE) != 0) {
+                Vec3 movement = entity.isClientAuthoritative() ? entity.getKnownMovement()
+                                                               : entity.oldPosition().subtract(entity.position());
+                if (movement.horizontalDistanceSqr() > (double)0.0F) {
+                    double xs = Math.abs(movement.x());
+                    double zs = Math.abs(movement.z());
+                    if (xs >= HURT_SPEED_THRESHOLD || zs >= HURT_SPEED_THRESHOLD) {
+                        entity.hurtServer(serverLevel, DamageTypeModule.of(level.registryAccess(), DamageTypeModule.PRICKLY_VINES), 1.0f);
+                    }
+                }
             }
         }
     }

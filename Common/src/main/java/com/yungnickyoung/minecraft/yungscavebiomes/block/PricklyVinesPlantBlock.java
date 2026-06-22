@@ -49,11 +49,15 @@ public class PricklyVinesPlantBlock extends GrowingPlantBodyBlock {
             return;
         }
         entity.makeStuckInBlock(state, new Vec3(0.8f, 0.75, 0.8f));
-        if (level instanceof ServerLevel serverLevel && (entity.xOld != entity.getX() || entity.zOld != entity.getZ())) {
-            double d = Math.abs(entity.getX() - entity.xOld);
-            double e = Math.abs(entity.getZ() - entity.zOld);
-            if (d >= (double) 0.003f || e >= (double) 0.003f) {
-                entity.hurtServer(serverLevel, DamageTypeModule.of(level.registryAccess(), DamageTypeModule.PRICKLY_VINES), 1.0f);
+        if (level instanceof ServerLevel serverLevel) {
+            Vec3 movement = entity.isClientAuthoritative() ? entity.getKnownMovement()
+                                                           : entity.oldPosition().subtract(entity.position());
+            if (movement.horizontalDistanceSqr() > (double)0.0F) {
+                double xs = Math.abs(movement.x());
+                double zs = Math.abs(movement.z());
+                if (xs >= PricklyVinesBlock.HURT_SPEED_THRESHOLD || zs >= PricklyVinesBlock.HURT_SPEED_THRESHOLD) {
+                    entity.hurtServer(serverLevel, DamageTypeModule.of(level.registryAccess(), DamageTypeModule.PRICKLY_VINES), 1.0f);
+                }
             }
         }
     }

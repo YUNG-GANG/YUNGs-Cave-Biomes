@@ -166,7 +166,9 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
         if (entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
             return; // Sand snapper is immune to prickly cactus
         }
-        entity.hurt(level.damageSources().cactus(), 1.0f);
+        if (level instanceof ServerLevel serverLevel) {
+            entity.hurtServer(serverLevel, level.damageSources().cactus(), 1.0f);
+        }
     }
 
     @Override
