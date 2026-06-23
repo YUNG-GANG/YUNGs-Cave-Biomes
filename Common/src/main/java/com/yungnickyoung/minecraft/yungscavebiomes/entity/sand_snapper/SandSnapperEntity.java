@@ -9,6 +9,7 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.state.AnimationTest;
 import com.geckolib.util.GeckoLibUtil;
+import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.block.PricklyPeachCactusBlock;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.BuryLootGoal;
 import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.goal.EatPeachGoal;
@@ -33,13 +34,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -49,6 +53,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -243,6 +248,12 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
         }
 
         return super.getDefaultDimensions(pose);
+    }
+
+    public static boolean checkSpawnRules(EntityType<? extends Mob> type, LevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random) {
+        BlockPos below = pos.below();
+//        YungsCaveBiomesCommon.LOGGER.info("Spawning for reason: {}", spawnReason);
+        return EntitySpawnReason.isSpawner(spawnReason) || level.getBlockState(below).isValidSpawn(level, below, type);
     }
 
     @Override
@@ -544,7 +555,7 @@ public class SandSnapperEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean requiresCustomPersistence() {
-        return super.requiresCustomPersistence() || !this.carryingItem.isEmpty();
+        return super.requiresCustomPersistence() || !this.carryingItem.isEmpty() || this.hasCustomName();
     }
 
     public boolean isOnCactusEatCooldown() {

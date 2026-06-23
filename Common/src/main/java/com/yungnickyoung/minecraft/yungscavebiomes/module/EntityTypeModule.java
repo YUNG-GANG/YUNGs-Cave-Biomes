@@ -12,11 +12,9 @@ import com.yungnickyoung.minecraft.yungscavebiomes.entity.sand_snapper.SandSnapp
 import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.SpawnPlacementsAccessor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -76,6 +74,6 @@ public class EntityTypeModule {
     @AutoRegister("init")
     private static void init() {
         SpawnPlacementsAccessor.callRegister(ICE_CUBE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-        SpawnPlacementsAccessor.callRegister(SAND_SNAPPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+        SpawnPlacementsAccessor.callRegister(SAND_SNAPPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SandSnapperEntity::checkSpawnRules);
     }
 }
