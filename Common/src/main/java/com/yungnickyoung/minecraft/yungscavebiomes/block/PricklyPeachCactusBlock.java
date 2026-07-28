@@ -5,6 +5,8 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.ItemModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -192,7 +194,7 @@ public class PricklyPeachCactusBlock extends Block implements BonemealableBlock 
     private static void popFruit(Level level, BlockPos $$1) {
         if (level instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(GameRules.BLOCK_DROPS)) {
             double x = (double) $$1.getX() + 0.5;
-            double y = (double) $$1.getY() + 0.5 - (EntityType.ITEM.getHeight() / 2.0F);
+            double y = (double) $$1.getY() + 0.5 - (BuiltInRegistries.ENTITY_TYPE.get(Identifier.fromNamespaceAndPath("minecraft", "item")).orElseThrow().value().getHeight() / 2.0F);
             double z = (double) $$1.getZ() + 0.5;
 
             double xOffset = Mth.nextDouble(level.getRandom(), 0.20, 0.25);

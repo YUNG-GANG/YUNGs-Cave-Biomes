@@ -67,7 +67,7 @@ public class IceSheetFeature extends Feature<IceSheetConfiguration> {
                     if (blockState.is(BlockModule.ICE_SHEET.get())) {
                         blockState = blockState.setValue(IceSheetBlock.GROWTH_DISTANCE, 3);
                         worldGenLevel.setBlock(blockPos, blockState, Block.UPDATE_ALL);
-                        worldGenLevel.getChunk(blockPos).markPosForPostprocessing(blockPos);
+                        worldGenLevel.getChunk(blockPos).markPosForPostProcessing(blockPos);
                     }
                 }
             }

@@ -15,35 +15,35 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Column;
-import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.SpeleothemUtils;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SpeleothemClusterConfiguration;
 
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration> {
-    public IcicleClusterFeature(Codec<DripstoneClusterConfiguration> codec) {
+public class IcicleClusterFeature extends Feature<SpeleothemClusterConfiguration> {
+    public IcicleClusterFeature(Codec<SpeleothemClusterConfiguration> codec) {
         super(codec);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<DripstoneClusterConfiguration> featurePlaceContext) {
+    public boolean place(FeaturePlaceContext<SpeleothemClusterConfiguration> featurePlaceContext) {
         WorldGenLevel worldGenLevel = featurePlaceContext.level();
         BlockPos origin = featurePlaceContext.origin();
-        DripstoneClusterConfiguration config = featurePlaceContext.config();
+        SpeleothemClusterConfiguration config = featurePlaceContext.config();
         RandomSource random = featurePlaceContext.random();
         if (!DripstoneIceUtils.isEmpty(worldGenLevel, origin)) {
             return false;
         } else {
-            int height = config.height.sample(random);
-            float wetness = config.wetness.sample(random);
-            float density = config.density.sample(random);
+            int height = config.height().sample(random);
+            float wetness = config.wetness().sample(random);
+            float density = config.density().sample(random);
 
             // Ellipse
-            int uRadius = config.radius.sample(random);
-            int vRadius = config.radius.sample(random);
+            int uRadius = config.radius().sample(random);
+            int vRadius = config.radius().sample(random);
             int uvRadiusMax = Math.max(uRadius, vRadius);
             float angle = random.nextFloat() * Mth.TWO_PI;
             float rx = Mth.cos(angle), rz = Mth.sin(angle);
@@ -74,9 +74,9 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
                              double chance,
                              int height,
                              float density,
-                             DripstoneClusterConfiguration config
+                             SpeleothemClusterConfiguration config
     ) {
-        Optional<Column> columnOptional = Column.scan(worldGenLevel, blockPos, config.floorToCeilingSearchRange, DripstoneUtils::isEmptyOrWater, DripstoneUtils::isDripstoneBaseOrLava);
+        Optional<Column> columnOptional = Column.scan(worldGenLevel, blockPos, config.floorToCeilingSearchRange(), SpeleothemUtils::isEmptyOrWater, state -> state.is(Blocks.DRIPSTONE_BLOCK) || state.is(Blocks.LAVA));
         if (columnOptional.isEmpty()) return;
 
         OptionalInt ceilingOptional = columnOptional.get().getCeiling();
@@ -101,7 +101,7 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
             boolean bl2 = random.nextDouble() < chance;
             int o;
             if (ceilingOptional.isPresent() && bl2 && !this.isLava(worldGenLevel, blockPos.atY(ceilingOptional.getAsInt()))) {
-                int thickness = config.dripstoneBlockLayerThickness.sample(random);
+                int thickness = config.speleothemBlockLayerThickness().sample(random);
                 this.replaceBlocksWithPackedIce(worldGenLevel, blockPos.atY(ceilingOptional.getAsInt()), thickness, Direction.UP);
                 int n;
                 if (adjustedFloorOptional.isPresent()) {
@@ -119,10 +119,10 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
             boolean n = random.nextDouble() < chance;
             int m;
             if (adjustedFloorOptional.isPresent() && n && !this.isLava(worldGenLevel, blockPos.atY(adjustedFloorOptional.getAsInt()))) {
-                int thickness = config.dripstoneBlockLayerThickness.sample(random);
+                int thickness = config.speleothemBlockLayerThickness().sample(random);
                 this.replaceBlocksWithPackedIce(worldGenLevel, blockPos.atY(adjustedFloorOptional.getAsInt()), thickness, Direction.DOWN);
                 if (ceilingOptional.isPresent()) {
-                    m = Math.max(0, o + Mth.randomBetweenInclusive(random, -config.maxStalagmiteStalactiteHeightDiff, config.maxStalagmiteStalactiteHeightDiff));
+                    m = Math.max(0, o + Mth.randomBetweenInclusive(random, -config.maxStalagmiteStalactiteHeightDiff(), config.maxStalagmiteStalactiteHeightDiff()));
                 } else {
                     m = this.getDripstoneHeight(random, xOffset, zOffset, density, height, config);
                 }
@@ -157,13 +157,13 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
         return levelReader.getBlockState(blockPos).is(Blocks.LAVA);
     }
 
-    private int getDripstoneHeight(RandomSource random, int xOffset, int zOffset, float density, int height, DripstoneClusterConfiguration config) {
+    private int getDripstoneHeight(RandomSource random, int xOffset, int zOffset, float density, int height, SpeleothemClusterConfiguration config) {
         if (random.nextFloat() > density) {
             return 0;
         } else {
             int l = Math.abs(xOffset) + Math.abs(zOffset);
-            float g = (float)Mth.clampedMap(l, 0.0, config.maxDistanceFromCenterAffectingHeightBias, (double)height / 2.0, 0.0);
-            return (int)randomBetweenBiased(random, 0.0F, (float)height, g, (float)config.heightDeviation);
+            float g = (float)Mth.clampedMap(l, 0.0, config.maxDistanceFromCenterAffectingHeightBias(), (double)height / 2.0, 0.0);
+            return (int)randomBetweenBiased(random, 0.0F, (float)height, g, (float)config.heightDeviation());
         }
     }
 
@@ -199,11 +199,11 @@ public class IcicleClusterFeature extends Feature<DripstoneClusterConfiguration>
         }
     }
 
-    private float getChanceOfStalagmiteOrStalactite(float ellipseDensity, float uvRadiusMax, DripstoneClusterConfiguration config) {
+    private float getChanceOfStalagmiteOrStalactite(float ellipseDensity, float uvRadiusMax, SpeleothemClusterConfiguration config) {
         return Mth.clampedMap(ellipseDensity * (uvRadiusMax * uvRadiusMax),
                 (uvRadiusMax * uvRadiusMax),
-                config.maxDistanceFromEdgeAffectingChanceOfDripstoneColumn,
-                config.chanceOfDripstoneColumnAtMaxDistanceFromCenter,
+                config.maxDistanceFromEdgeAffectingChanceOfSpeleothem(),
+                config.chanceOfSpeleothemAtMaxDistanceFromCenter(),
                 1.0F);
     }
 

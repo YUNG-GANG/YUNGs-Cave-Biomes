@@ -5,6 +5,8 @@ import com.yungnickyoung.minecraft.yungscavebiomes.mixin.accessor.BrushableBlock
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -31,7 +33,7 @@ public class BuryLootGoal extends Goal {
             BlockModule.ANCIENT_SAND.get(), BlockModule.SUSPICIOUS_ANCIENT_SAND.get());
     private static final List<BlockEntityType<BrushableBlockEntity>> SUSPICIOUS_BE_TYPES = List.of(
             EntityTypeModule.BRUSHABLE.get(),
-            BlockEntityType.BRUSHABLE_BLOCK);
+            (BlockEntityType<BrushableBlockEntity>) BuiltInRegistries.BLOCK_ENTITY_TYPE.get(Identifier.fromNamespaceAndPath("minecraft", "brushable")).orElseThrow().value());
 
     private static final double            MAX_ALLOWED_SQR_DISTANCE_TO_TARGET = 100.0;
 
@@ -189,7 +191,7 @@ public class BuryLootGoal extends Goal {
         if (!sandSnapper.carryingItem.isEmpty()) {
             BlockPos spawnPos = this.sandSnapper.blockPosition();
             double x = (double) spawnPos.getX() + 0.5;
-            double y = (double) spawnPos.getY() + 0.5 - (EntityType.ITEM.getHeight() / 2.0F);
+            double y = (double) spawnPos.getY() + 0.5 - (BuiltInRegistries.ENTITY_TYPE.get(Identifier.fromNamespaceAndPath("minecraft", "item")).orElseThrow().value().getHeight() / 2.0F);
             double z = (double) spawnPos.getZ() + 0.5;
 
             RandomSource random = this.sandSnapper.getRandom();

@@ -122,6 +122,11 @@ public class MarbleCavesInterpolationSlideDensityFunction implements DensityFunc
     }
 
     @Override
+    public DensityFunction mapChildren(Visitor visitor) {
+        return this;
+    }
+
+    @Override
     public double minValue() {
         return 0.0;
     }

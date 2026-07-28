@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DripstoneThickness;
+import net.minecraft.world.level.block.state.properties.SpeleothemThickness;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -47,7 +47,7 @@ import java.util.function.Predicate;
 
 
 public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlock {
-    public static final EnumProperty<DripstoneThickness> THICKNESS = BlockStateProperties.DRIPSTONE_THICKNESS;
+    public static final EnumProperty<SpeleothemThickness> THICKNESS = BlockStateProperties.SPELEOTHEM_THICKNESS;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape BASE_SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
@@ -58,7 +58,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     public IcicleBlock(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(THICKNESS, DripstoneThickness.TIP)
+                .setValue(THICKNESS, SpeleothemThickness.TIP)
                 .setValue(WATERLOGGED, false));
     }
 
@@ -104,7 +104,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
             return state;
         }
 
-        DripstoneThickness thickness = calculateIcicleThickness(level, pos);
+        SpeleothemThickness thickness = calculateIcicleThickness(level, pos);
         return state.setValue(THICKNESS, thickness);
     }
 
@@ -167,7 +167,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
         boolean isWaterlogged = levelAccessor.getFluidState(blockPlaceContext.getClickedPos()).getType() == Fluids.WATER;
 
         // Determine thickness
-        DripstoneThickness thickness = calculateIcicleThickness(levelAccessor, blockPlaceContext.getClickedPos());
+        SpeleothemThickness thickness = calculateIcicleThickness(levelAccessor, blockPlaceContext.getClickedPos());
         if (thickness == null) return null;
 
         return this.defaultBlockState().setValue(THICKNESS, thickness).setValue(WATERLOGGED, isWaterlogged);
@@ -175,7 +175,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
 
     @Override
     public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        DripstoneThickness thickness = blockState.getValue(THICKNESS);
+        SpeleothemThickness thickness = blockState.getValue(THICKNESS);
         VoxelShape voxelShape;
         switch (thickness) {
             case BASE -> voxelShape = BASE_SHAPE;
@@ -249,8 +249,8 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
 
     private static boolean isTip(BlockState blockState) {
         if (!blockState.is(BlockModule.ICICLE.get())) return false;
-        DripstoneThickness thickness = blockState.getValue(THICKNESS);
-        return thickness == DripstoneThickness.TIP;
+        SpeleothemThickness thickness = blockState.getValue(THICKNESS);
+        return thickness == SpeleothemThickness.TIP;
     }
 
     private static boolean isTop(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
@@ -280,14 +280,14 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
         return Optional.empty();
     }
 
-    private static DripstoneThickness calculateIcicleThickness(LevelReader levelReader, BlockPos blockPos) {
+    private static SpeleothemThickness calculateIcicleThickness(LevelReader levelReader, BlockPos blockPos) {
         BlockState blockBelow = levelReader.getBlockState(blockPos.relative(Direction.DOWN));
         BlockState blockAbove = levelReader.getBlockState(blockPos.relative(Direction.UP));
 
-        if (!blockBelow.is(BlockModule.ICICLE.get())) return DripstoneThickness.TIP;
-        if (blockBelow.getValue(THICKNESS) == DripstoneThickness.TIP) return DripstoneThickness.FRUSTUM;
-        if (!blockAbove.is(BlockModule.ICICLE.get())) return DripstoneThickness.BASE;
-        return DripstoneThickness.MIDDLE;
+        if (!blockBelow.is(BlockModule.ICICLE.get())) return SpeleothemThickness.TIP;
+        if (blockBelow.getValue(THICKNESS) == SpeleothemThickness.TIP) return SpeleothemThickness.FRUSTUM;
+        if (!blockAbove.is(BlockModule.ICICLE.get())) return SpeleothemThickness.BASE;
+        return SpeleothemThickness.MIDDLE;
     }
 
     private static void spawnFallingIcicle(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos) {
@@ -346,10 +346,10 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
      */
     private static void growIcicle(ServerLevel serverLevel, BlockPos tipPos) {
         BlockPos belowTipBlock = tipPos.below();
-        createIcicle(serverLevel, belowTipBlock, DripstoneThickness.TIP);
+        createIcicle(serverLevel, belowTipBlock, SpeleothemThickness.TIP);
     }
 
-    private static void createIcicle(LevelAccessor levelAccessor, BlockPos blockPos, DripstoneThickness thickness) {
+    private static void createIcicle(LevelAccessor levelAccessor, BlockPos blockPos, SpeleothemThickness thickness) {
         BlockState blockState = BlockModule.ICICLE.get().defaultBlockState()
                 .setValue(THICKNESS, thickness)
                 .setValue(WATERLOGGED, levelAccessor.getFluidState(blockPos).getType() == Fluids.WATER);
@@ -366,7 +366,7 @@ public class IcicleBlock extends Block implements Fallable, SimpleWaterloggedBlo
     }
 
     private static boolean canDrip(BlockState blockState) {
-        return blockState.getBlock() == BlockModule.ICICLE.get() && blockState.getValue(THICKNESS) == DripstoneThickness.TIP && !blockState.getValue(WATERLOGGED);
+        return blockState.getBlock() == BlockModule.ICICLE.get() && blockState.getValue(THICKNESS) == SpeleothemThickness.TIP && !blockState.getValue(WATERLOGGED);
     }
 
     private static Optional<Fluid> getFluidAboveIcicle(Level level, BlockPos blockPos) {
