@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Column;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.SpeleothemUtils;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.phys.Vec3;
@@ -38,7 +38,7 @@ public class LargeIceDripstoneFeature extends Feature<LargeIceDripstoneConfigura
 
         if (!DripstoneIceUtils.isEmptyOrWater(worldGenLevel, origin)) return false;
 
-        Optional<Column> optionalColumn = Column.scan(worldGenLevel, origin, config.floorToCeilingSearchRange, DripstoneUtils::isEmptyOrWater, DripstoneUtils::isDripstoneBaseOrLava);
+        Optional<Column> optionalColumn = Column.scan(worldGenLevel, origin, config.floorToCeilingSearchRange, SpeleothemUtils::isEmptyOrWater, state -> state.is(Blocks.DRIPSTONE_BLOCK) || state.is(Blocks.LAVA));
 
         // Only continue if column is valid Range with height >= 4
         if (optionalColumn.isEmpty() || !(optionalColumn.get() instanceof Column.Range range)) return false;

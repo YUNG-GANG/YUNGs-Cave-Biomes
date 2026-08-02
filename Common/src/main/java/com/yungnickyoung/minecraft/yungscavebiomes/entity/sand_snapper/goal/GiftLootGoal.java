@@ -5,6 +5,8 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.LootTableModule;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -172,7 +174,7 @@ public class GiftLootGoal extends Goal {
         if (!loot.isEmpty()) {
             BlockPos spawnPos = this.sandSnapper.blockPosition();
             double x = (double) spawnPos.getX() + 0.5;
-            double y = (double) spawnPos.getY() + 0.5 - (EntityType.ITEM.getHeight() / 2.0F);
+            double y = (double) spawnPos.getY() + 0.5 - (BuiltInRegistries.ENTITY_TYPE.get(Identifier.fromNamespaceAndPath("minecraft", "item")).orElseThrow().value().getHeight() / 2.0F);
             double z = (double) spawnPos.getZ() + 0.5;
 
             RandomSource random = this.sandSnapper.getRandom();

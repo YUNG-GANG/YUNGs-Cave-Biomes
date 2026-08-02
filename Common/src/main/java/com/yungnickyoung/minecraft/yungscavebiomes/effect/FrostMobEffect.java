@@ -3,13 +3,13 @@ package com.yungnickyoung.minecraft.yungscavebiomes.effect;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.InstantenousMobEffect;
+import net.minecraft.world.effect.InstantaneousMobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class FrostMobEffect extends InstantenousMobEffect {
+public class FrostMobEffect extends InstantaneousMobEffect {
     private final int minFreezeTicks;
     private final int additionalFreezeTicks;
     private final int maxFreezeTicks;

@@ -21,7 +21,7 @@ import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.ThreeLayerNoisy
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.ThreeLayerNoisySphereReplaceFeature;
 import com.yungnickyoung.minecraft.yungscavebiomes.world.feature.WaterSurfaceIceFragmentFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SpeleothemClusterConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 
@@ -31,7 +31,7 @@ public class FeatureModule {
     public static final Feature<LargeIceDripstoneConfiguration> LARGE_ICICLE = new LargeIceDripstoneFeature(LargeIceDripstoneConfiguration.CODEC);
 
     @AutoRegister("icicle_cluster")
-    public static final Feature<DripstoneClusterConfiguration> ICICLE_CLUSTER = new IcicleClusterFeature(DripstoneClusterConfiguration.CODEC);
+    public static final Feature<SpeleothemClusterConfiguration> ICICLE_CLUSTER = new IcicleClusterFeature(SpeleothemClusterConfiguration.CODEC);
 
     @AutoRegister("sphere_replace")
     public static final Feature<NoisySphereReplaceConfig> SPHERE_REPLACE = new NoisySphereReplaceFeature(NoisySphereReplaceConfig.CODEC);

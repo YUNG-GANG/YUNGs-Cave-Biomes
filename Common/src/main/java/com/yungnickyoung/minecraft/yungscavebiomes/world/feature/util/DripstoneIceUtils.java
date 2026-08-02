@@ -10,7 +10,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DripstoneThickness;
+import net.minecraft.world.level.block.state.properties.SpeleothemThickness;
 
 import java.util.function.Consumer;
 
@@ -77,19 +77,19 @@ public class DripstoneIceUtils {
 
     public static void buildBaseToTipColumn(Direction direction, int i, boolean bl, Consumer<BlockState> consumer) {
         if (i >= 3) {
-            consumer.accept(createIcicle(direction, DripstoneThickness.BASE));
+            consumer.accept(createIcicle(direction, SpeleothemThickness.BASE));
 
             for(int j = 0; j < i - 3; ++j) {
-                consumer.accept(createIcicle(direction, DripstoneThickness.MIDDLE));
+                consumer.accept(createIcicle(direction, SpeleothemThickness.MIDDLE));
             }
         }
 
         if (i >= 2) {
-            consumer.accept(createIcicle(direction, DripstoneThickness.FRUSTUM));
+            consumer.accept(createIcicle(direction, SpeleothemThickness.FRUSTUM));
         }
 
         if (i >= 1) {
-            consumer.accept(createIcicle(direction, bl ? DripstoneThickness.TIP_MERGE : DripstoneThickness.TIP));
+            consumer.accept(createIcicle(direction, bl ? SpeleothemThickness.TIP_MERGE : SpeleothemThickness.TIP));
         }
 
     }
@@ -114,7 +114,7 @@ public class DripstoneIceUtils {
         }
     }
 
-    private static BlockState createIcicle(Direction direction, DripstoneThickness dripstoneThickness) {
+    private static BlockState createIcicle(Direction direction, SpeleothemThickness dripstoneThickness) {
         return BlockModule.ICICLE.get().defaultBlockState().setValue(PointedDripstoneBlock.THICKNESS, dripstoneThickness);
     }
 

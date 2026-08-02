@@ -6,6 +6,8 @@ import com.yungnickyoung.minecraft.yungscavebiomes.module.DamageTypeModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -57,7 +59,7 @@ public class PricklyVinesBlock extends GrowingPlantHeadBlock {
 
     @Override
     protected void entityInside(final BlockState state, final Level level, final BlockPos pos, final Entity entity, final InsideBlockEffectApplier effectApplier, final boolean isPrecise) {
-        if (!(entity instanceof LivingEntity) || entity.getType() == EntityType.FOX || entity.getType() == EntityType.BEE || entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
+        if (!(entity instanceof LivingEntity) || entity.getType() == BuiltInRegistries.ENTITY_TYPE.get(Identifier.fromNamespaceAndPath("minecraft", "fox")).orElseThrow().value() || entity.getType() == BuiltInRegistries.ENTITY_TYPE.get(Identifier.fromNamespaceAndPath("minecraft", "bee")).orElseThrow().value() || entity.getType() == EntityTypeModule.SAND_SNAPPER.get()) {
             return;
         }
         entity.makeStuckInBlock(state, new Vec3(0.8f, 0.75, 0.8f));

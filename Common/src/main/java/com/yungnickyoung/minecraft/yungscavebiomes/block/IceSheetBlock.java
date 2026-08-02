@@ -274,7 +274,7 @@ public class IceSheetBlock extends MultifaceSpreadeableBlock implements SimpleWa
             newBlockState = newBlockState.setValue(GROWTH_DISTANCE, spreadOriginBlockState.getValue(GROWTH_DISTANCE) - 1);
 
             if (bl) {
-                levelAccessor.getChunk(blockPos).markPosForPostprocessing(blockPos);
+                levelAccessor.getChunk(blockPos).markPosForPostProcessing(blockPos);
             }
 
             return levelAccessor.setBlock(blockPos, newBlockState, 2);
