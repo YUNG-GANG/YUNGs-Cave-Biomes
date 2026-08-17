@@ -1,7 +1,6 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.services;
 
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterItem;
-import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.BlockModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.DecoratedPotPatternsModule;
 import com.yungnickyoung.minecraft.yungscavebiomes.module.EntityTypeModule;
@@ -97,7 +96,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, AutoRegisterItem potterySherdItem) {
+    public ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, ResourceKey<Item> potterySherdItem) {
         Identifier resourceLocation = id(name);
 
         // Register
@@ -106,7 +105,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
         // Add the resource key and item to relevant data structures
         DecoratedPotPatternsModule.ALL_PATTERNS.add(resourceKey);
-        DecoratedPotPatternsModule.RESOUCE_KEY_BY_ITEM.put(potterySherdItem.get(), resourceKey);
+        DecoratedPotPatternsModule.RESOURCE_KEY_BY_ITEM.put(potterySherdItem, resourceKey);
 
         return resourceKey;
 

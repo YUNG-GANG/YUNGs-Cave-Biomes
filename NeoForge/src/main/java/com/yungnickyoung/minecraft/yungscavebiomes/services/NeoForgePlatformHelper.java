@@ -110,7 +110,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, AutoRegisterItem potterySherdItem) {
+    public ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, ResourceKey<Item> potterySherdItem) {
         Identifier resourceLocation = YungsCaveBiomesCommon.id(name);
 
         // Register
@@ -119,7 +119,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
         // Add the resource key and item to relevant data structures
         ResourceKey<DecoratedPotPattern> resourceKey = ResourceKey.create(Registries.DECORATED_POT_PATTERN, resourceLocation);
         DecoratedPotPatternsModule.ALL_PATTERNS.add(resourceKey);
-        DecoratedPotPatternsModule.RESOUCE_KEY_BY_ITEM.put(potterySherdItem.get(), resourceKey);
+        DecoratedPotPatternsModule.RESOURCE_KEY_BY_ITEM.put(potterySherdItem, resourceKey);
 
         return resourceKey;
     }

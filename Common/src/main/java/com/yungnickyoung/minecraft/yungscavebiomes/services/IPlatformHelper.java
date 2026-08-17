@@ -45,5 +45,5 @@ public interface IPlatformHelper {
 
     Block getPottedPricklyPeachCactusBlock();
 
-    ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, AutoRegisterItem potterySherdItem);
+    ResourceKey<DecoratedPotPattern> registerDecoratedPotPattern(String name, ResourceKey<Item> potterySherdItem);
 }

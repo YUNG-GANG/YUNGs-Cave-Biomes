@@ -20,7 +20,7 @@ public abstract class DecoratedPotRendererMixin {
     @Inject(method = "getSideSprite", at = @At("HEAD"), cancellable = true)
     private static void yungscavebiomes_renderCustomPotteryMaterial(Optional<Item> item, CallbackInfoReturnable<SpriteId> cir) {
         if (item.isPresent()) {
-            ResourceKey<DecoratedPotPattern> resourceKey = DecoratedPotPatternsModule.getResourceKeyForItem(item.get());
+            ResourceKey<DecoratedPotPattern> resourceKey = DecoratedPotPatternsModule.getResourceKeyForItem(item.get().builtInRegistryHolder());
             var sprite = Sheets.getDecoratedPotSprite(resourceKey);
             if (sprite != null) {
                 cir.setReturnValue(sprite);

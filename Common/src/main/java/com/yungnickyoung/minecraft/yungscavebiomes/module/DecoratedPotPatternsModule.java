@@ -1,54 +1,39 @@
 package com.yungnickyoung.minecraft.yungscavebiomes.module;
 
 import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegister;
-import com.yungnickyoung.minecraft.yungsapi.api.autoregister.AutoRegisterItem;
 import com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon;
 import com.yungnickyoung.minecraft.yungscavebiomes.services.Services;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static com.yungnickyoung.minecraft.yungscavebiomes.YungsCaveBiomesCommon.id;
+
 @AutoRegister(YungsCaveBiomesCommon.MOD_ID)
 public class DecoratedPotPatternsModule {
-    public static final Set<ResourceKey<DecoratedPotPattern>> ALL_PATTERNS = new HashSet<>();
-    public static final Map<Item, ResourceKey<DecoratedPotPattern>> RESOUCE_KEY_BY_ITEM = new HashMap<>();
+    public static final Set<ResourceKey<DecoratedPotPattern>>                    ALL_PATTERNS         = new HashSet<>();
+    public static final Map<ResourceKey<Item>, ResourceKey<DecoratedPotPattern>> RESOURCE_KEY_BY_ITEM = new HashMap<>();
 
     @AutoRegister("_ignored")
     public static void init() {}
 
     public static final ResourceKey<DecoratedPotPattern> HOURGLASS = Services.PLATFORM.registerDecoratedPotPattern(
-            "hourglass_pottery_pattern", ItemModule.HOURGLASS_POTTERY_SHERD);
+            "hourglass_pottery_pattern", ResourceKey.create(Registries.ITEM, id("hourglass_pottery_sherd")));
 
     public static final ResourceKey<DecoratedPotPattern> CLOCK = Services.PLATFORM.registerDecoratedPotPattern(
-            "clock_pottery_pattern", ItemModule.CLOCK_POTTERY_SHERD);
-
-//    private static ResourceKey<DecoratedPotPattern> create(String name, AutoRegisterItem autoRegisterItem) {
-//        Identifier resourceLocation = YungsCaveBiomesCommon.id(name);
-//
-//        // Register
-//        ResourceKey<DecoratedPotPattern> resourceKey = ResourceKey.create(Registries.DECORATED_POT_PATTERN, resourceLocation);
-//        Registry.register(BuiltInRegistries.DECORATED_POT_PATTERN, resourceKey, new DecoratedPotPattern(resourceLocation));
-//
-//        // Add the resource key and item to relevant data structures
-//        ALL_PATTERNS.add(resourceKey);
-//        RESOUCE_KEY_BY_ITEM.put(autoRegisterItem.get(), resourceKey);
-//
-//        return resourceKey;
-//    }
+            "clock_pottery_pattern", ResourceKey.create(Registries.ITEM, id("clock_pottery_sherd")));
 
     @Nullable
-    public static ResourceKey<DecoratedPotPattern> getResourceKeyForItem(Item item) {
-        return RESOUCE_KEY_BY_ITEM.get(item);
+    public static ResourceKey<DecoratedPotPattern> getResourceKeyForItem(Holder.Reference<Item> item) {
+        return RESOURCE_KEY_BY_ITEM.get(item.key());
     }
 
     public static boolean isCustomRegisteredKey(ResourceKey<String> key) {
